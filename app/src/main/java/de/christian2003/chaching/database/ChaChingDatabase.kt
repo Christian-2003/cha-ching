@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import de.christian2003.chaching.database.converter.LocalDateConverter
 import de.christian2003.chaching.database.converter.LocalDateTimeConverter
 import de.christian2003.chaching.database.entities.Transfer
 
@@ -13,7 +14,7 @@ import de.christian2003.chaching.database.entities.Transfer
  * Database for the Cha-Ching app.
  */
 @Database(entities = [Transfer::class], version = 1, exportSchema = false)
-@TypeConverters(LocalDateTimeConverter::class)
+@TypeConverters(LocalDateTimeConverter::class, LocalDateConverter::class)
 abstract class ChaChingDatabase: RoomDatabase() {
 
 	/**

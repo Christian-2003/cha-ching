@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TransferDao {
 
-	@Query("SELECT * FROM transfers ORDER BY timestamp DESC")
+	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
 	fun selectAllTransfersSortedByDate(): Flow<List<Transfer>>
 
 
