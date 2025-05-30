@@ -8,12 +8,13 @@ import androidx.room.TypeConverters
 import de.christian2003.chaching.database.converter.LocalDateConverter
 import de.christian2003.chaching.database.converter.LocalDateTimeConverter
 import de.christian2003.chaching.database.entities.Transfer
+import de.christian2003.chaching.database.entities.Type
 
 
 /**
  * Database for the Cha-Ching app.
  */
-@Database(entities = [Transfer::class], version = 1, exportSchema = false)
+@Database(entities = [Transfer::class, Type::class], version = 1, exportSchema = false)
 @TypeConverters(LocalDateTimeConverter::class, LocalDateConverter::class)
 abstract class ChaChingDatabase: RoomDatabase() {
 
@@ -21,6 +22,11 @@ abstract class ChaChingDatabase: RoomDatabase() {
 	 * DAO through which to access the transfers.
 	 */
 	abstract val transferDao: TransferDao
+
+	/**
+	 * DAO through which to access the transfer types.
+	 */
+	abstract val typeDao: TypeDao
 
 
 	companion object {

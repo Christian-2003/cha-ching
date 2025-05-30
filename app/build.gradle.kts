@@ -6,12 +6,12 @@ plugins {
 
 android {
 	namespace = "de.christian2003.chaching"
-	compileSdk = 34
+	compileSdk = 35
 
 	defaultConfig {
 		applicationId = "de.christian2003.chaching"
 		minSdk = 34
-		targetSdk = 34
+		targetSdk = 35
 		versionCode = 1
 		versionName = "0.0.1"
 

@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">ChaChing</string>
+    <string name="confirm_delete">Confirm deletion</string>
+
+
+    <string name="transfers_title">Your transfers</string>
+    <string name="transfers_emptyPlaceholder_title">No data to show</string>
+    <string name="transfers_emptyPlaceholder_subtitle">Available transfers are shown here</string>
+
+
+    <string name="types_title">Configure types</string>
+    <string name="types_emptyPlaceholder_title">No data to show</string>
+    <string name="types_emptyPlaceholder_subtitle">Available types are shown here</string>
+    <string name="types_listTitle">Your types</string>
+    <string name="types_help">Types define which type of income you can manage. You can add new types.</string>
+
+
+    <string name="type_unnamed">Unnamed type %1$d</string>
+    <string name="type_namePlaceholder">Name</string>
+    <string name="type_button_createType">Create type</string>
+    <string name="type_button_saveType">Save type</string>
+    <string name="type_help_create">Enter the name for the type.</string>
+    <string name="type_confirmDelete">Deleting %1$s will also delete all transfers associated. Are you sure you want to delete this type?</string>
+
+
+    <!-- Error messages -->
+    <string name="error_emptyText">This field cannot be empty</string>
+
+
+    <!-- Button texts -->
+    <string name="button_createNewTransfer">Create new transfer</string>
+    <string name="button_createNewType">Create new type</string>
+    <string name="button_dismissHelp">Do not show again</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_cancel">Cancel</string>
 </resources>

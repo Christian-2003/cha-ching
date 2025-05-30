@@ -17,7 +17,9 @@ import de.christian2003.chaching.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-	viewModel: MainViewModel
+	viewModel: MainViewModel,
+	onNavigateToTransfers: () -> Unit,
+	onNavigateToTypes: () -> Unit
 ) {
 	Scaffold(
 		topBar = {
@@ -35,15 +37,15 @@ fun MainScreen(
 				.padding(innerPadding)
 				.fillMaxSize()
 		) {
-			Text(
-				text = "Hello, World!"
-			)
 			Button(
-				onClick = {
-
-				}
+				onClick = onNavigateToTransfers
 			) {
-				Text("Click me")
+				Text("Show Transfers List")
+			}
+			Button(
+				onClick = onNavigateToTypes
+			) {
+				Text("Show Types List")
 			}
 		}
 	}

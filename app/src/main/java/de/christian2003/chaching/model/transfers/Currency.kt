@@ -1,9 +1,13 @@
 package de.christian2003.chaching.model.transfers
 
-enum class Currency {
+enum class Currency(
 
-	USD,
+	val symbol: String
 
-	EUR
+) {
+
+	USD("USD"),
+
+	EUR("EUR")
 
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Space between UI elements -->
+    <dimen name="padding_vertical">12dp</dimen>
+    <dimen name="padding_horizontal">8dp</dimen>
+
+    <!-- Space between screen edge and app content -->
+    <dimen name="margin_horizontal">16dp</dimen>
+
+    <!-- Sizes for images -->
+    <dimen name="image_emptyPlaceholder">192dp</dimen>
+    <dimen name="image_xs">24dp</dimen>
+
+</resources>

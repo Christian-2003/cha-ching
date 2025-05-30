@@ -4,8 +4,10 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import de.christian2003.chaching.database.entities.Transfer
+import de.christian2003.chaching.database.entities.TransferWithType
 import kotlinx.coroutines.flow.Flow
 
 
@@ -14,6 +16,11 @@ interface TransferDao {
 
 	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
 	fun selectAllTransfersSortedByDate(): Flow<List<Transfer>>
+
+
+	@Transaction
+	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
+	fun selectAllTransfersWithTypeSortedByDate(): Flow<List<TransferWithType>>
 
 
 	@Insert
