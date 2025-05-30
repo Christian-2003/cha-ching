@@ -20,6 +20,8 @@ import de.christian2003.chaching.database.ChaChingRepository
 import de.christian2003.chaching.ui.theme.ChaChingTheme
 import de.christian2003.chaching.view.main.MainScreen
 import de.christian2003.chaching.view.main.MainViewModel
+import de.christian2003.chaching.view.transfer.TransferScreen
+import de.christian2003.chaching.view.transfer.TransferViewModel
 import de.christian2003.chaching.view.transfers.TransfersScreen
 import de.christian2003.chaching.view.transfers.TransfersViewModel
 import de.christian2003.chaching.view.type.TypeScreen
@@ -50,7 +52,9 @@ fun ChaChing() {
 
 	val mainViewModel: MainViewModel = viewModel()
 	val transfersViewModel: TransfersViewModel = viewModel()
+	val transferViewModel: TransferViewModel = viewModel()
 	val typesViewModel: TypesViewModel = viewModel()
+	val typeViewModel: TypeViewModel = viewModel()
 
 	ChaChingTheme {
 		NavHost(
@@ -79,10 +83,32 @@ fun ChaChing() {
 						navController.navigateUp()
 					},
 					onCreateTransfer = {
-
+						navController.navigate("transfer/")
 					},
 					onEditTransfer = { transferId ->
+						navController.navigate("transfer/$transferId")
+					}
+				)
+			}
 
+
+			composable(
+				route = "transfer/{transferId}",
+				arguments = listOf(
+					navArgument("transferId") { type = NavType.StringType }
+				)
+			) { backStackEntry ->
+				val transferId: UUID? = try {
+					UUID.fromString(backStackEntry.arguments!!.getString("transferId"))
+				} catch (_: Exception) {
+					null
+				}
+
+				transferViewModel.init(repository, transferId)
+				TransferScreen(
+					viewModel = transferViewModel,
+					onNavigateUp = {
+						navController.navigateUp()
 					}
 				)
 			}
@@ -111,14 +137,12 @@ fun ChaChing() {
 					navArgument("typeId") { type = NavType.StringType }
 				)
 			) { backStackEntry ->
-				Log.d("MainActivity", "composable type/id called")
 				val typeId: UUID? = try {
 					UUID.fromString(backStackEntry.arguments!!.getString("typeId"))
-				} catch (e: Exception) {
+				} catch (_: Exception) {
 					null
 				}
 
-				val typeViewModel: TypeViewModel = viewModel()
 				typeViewModel.init(repository, typeId)
 				TypeScreen(
 					viewModel = typeViewModel,

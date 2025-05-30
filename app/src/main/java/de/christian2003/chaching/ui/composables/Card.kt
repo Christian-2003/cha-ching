@@ -41,9 +41,6 @@ fun Card(
 ) {
     Column(
         modifier = modifier
-            .padding(
-                vertical = dimensionResource(R.dimen.padding_vertical)
-            )
             .clip(MaterialTheme.shapes.extraLarge)
             .background(backgroundColor)
             .padding(

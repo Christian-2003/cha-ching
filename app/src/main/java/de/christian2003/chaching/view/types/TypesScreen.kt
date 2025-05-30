@@ -37,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.ui.composables.Headline
@@ -114,7 +115,12 @@ fun TypesScreen(
                         }
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = dimensionResource(R.dimen.margin_horizontal),
+                                    vertical = dimensionResource(R.dimen.padding_vertical)
+                                )
                         ) {
                             Button(
                                 onClick = onCreateType
@@ -189,6 +195,8 @@ private fun TypeListItem(
             text = type.name,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
         )
         Box {

@@ -8,6 +8,9 @@
     <string name="transfers_emptyPlaceholder_subtitle">Available transfers are shown here</string>
 
 
+    <string name="transfer_unnamed">Unnamed transfer %1$d</string>
+
+
     <string name="types_title">Configure types</string>
     <string name="types_emptyPlaceholder_title">No data to show</string>
     <string name="types_emptyPlaceholder_subtitle">Available types are shown here</string>

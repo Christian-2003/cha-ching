@@ -71,9 +71,7 @@ fun TransfersScreen(
                     subtitle = stringResource(R.string.transfers_emptyPlaceholder_subtitle),
                     painter = painterResource(R.drawable.el_transfers),
                     modifier = Modifier.fillMaxSize(),
-                    onButtonClick = {
-                        //TODO
-                    }
+                    onButtonClick = onCreateTransfer
                 ) {
                     Row {
                         Icon(
