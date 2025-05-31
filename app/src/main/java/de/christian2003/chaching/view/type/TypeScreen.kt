@@ -100,7 +100,7 @@ fun TypeScreen(
                 onValueChange = {
                     viewModel.name = it
                 },
-                label = stringResource(R.string.type_namePlaceholder),
+                label = stringResource(R.string.type_nameLabel),
                 modifier = Modifier.padding(
                     start = dimensionResource(R.dimen.margin_horizontal),
                     end = dimensionResource(R.dimen.margin_horizontal),

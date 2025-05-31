@@ -17,8 +17,8 @@ interface TypeDao {
     fun selectAllTypesSortedByDate(): Flow<List<Type>>
 
 
-    @Query("SELECT * FROM types WHERE typeId=:typeId")
-    suspend fun selectTypeById(typeId: UUID): Type
+    @Query("SELECT * FROM types WHERE typeId = :typeId")
+    suspend fun selectTypeById(typeId: UUID): Type?
 
 
     @Insert

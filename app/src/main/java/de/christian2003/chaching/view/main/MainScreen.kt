@@ -4,16 +4,12 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
@@ -33,7 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import de.christian2003.chaching.R
 import de.christian2003.chaching.database.entities.Type
-import java.nio.file.WatchEvent
+import java.util.UUID
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -41,7 +37,8 @@ import java.nio.file.WatchEvent
 fun MainScreen(
 	viewModel: MainViewModel,
 	onNavigateToTransfers: () -> Unit,
-	onNavigateToTypes: () -> Unit
+	onNavigateToTypes: () -> Unit,
+	onCreateTransfer: (UUID) -> Unit
 ) {
 	val allTypes: List<Type> by viewModel.allTypes.collectAsState(emptyList())
 	Scaffold(
@@ -58,7 +55,7 @@ fun MainScreen(
 			FabMenu(
 				types = allTypes,
 				onTypeClicked = { type ->
-
+					onCreateTransfer(type.typeId)
 				}
 			)
 		}

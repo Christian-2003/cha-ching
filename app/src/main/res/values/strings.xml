@@ -8,7 +8,11 @@
     <string name="transfers_emptyPlaceholder_subtitle">Available transfers are shown here</string>
 
 
-    <string name="transfer_unnamed">Unnamed transfer %1$d</string>
+    <string name="transfer_titleEdit">Edit transfer</string>
+    <string name="transfer_titleCreate">Create transfer</string>
+    <string name="transfer_valueDateLabel">Value date</string>
+    <string name="transfer_valueLabel">Value</string>
+    <string name="transfer_hoursWorkedLabel">Hours worked</string>
 
 
     <string name="types_title">Configure types</string>
@@ -19,7 +23,7 @@
 
 
     <string name="type_unnamed">Unnamed type %1$d</string>
-    <string name="type_namePlaceholder">Name</string>
+    <string name="type_nameLabel">Name</string>
     <string name="type_chooseIcon">Choose an icon</string>
     <string name="type_button_createType">Create type</string>
     <string name="type_button_saveType">Save type</string>
@@ -29,6 +33,7 @@
 
     <!-- Error messages -->
     <string name="error_emptyText">This field cannot be empty</string>
+    <string name="error_valueError">The number format is invalid</string>
 
 
     <!-- Button texts -->

@@ -1,6 +1,7 @@
 package de.christian2003.chaching.database
 
 import de.christian2003.chaching.database.entities.Transfer
+import de.christian2003.chaching.database.entities.TransferWithType
 import de.christian2003.chaching.database.entities.Type
 import java.util.UUID
 
@@ -17,6 +18,10 @@ class ChaChingRepository(
 	val allTypes = typeDao.selectAllTypesSortedByDate()
 
 
+	suspend fun selectTransferWithTypeById(transferId: UUID): TransferWithType? {
+		return transferDao.selectTransferWithTypeById(transferId)
+	}
+
 	suspend fun insertTransfer(transfer: Transfer) {
 		transferDao.insert(transfer)
 	}
@@ -29,7 +34,8 @@ class ChaChingRepository(
 		transferDao.update(transfer)
 	}
 
-	suspend fun selectTypeById(typeId: UUID): Type {
+
+	suspend fun selectTypeById(typeId: UUID): Type? {
 		return typeDao.selectTypeById(typeId)
 	}
 

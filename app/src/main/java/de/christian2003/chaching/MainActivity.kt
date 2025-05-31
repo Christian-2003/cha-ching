@@ -1,11 +1,9 @@
 package de.christian2003.chaching
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -70,6 +68,9 @@ fun ChaChing() {
 					},
 					onNavigateToTypes = {
 						navController.navigate("types")
+					},
+					onCreateTransfer = { typeId ->
+						navController.navigate("transfer/$typeId/")
 					}
 				)
 			}
@@ -82,29 +83,35 @@ fun ChaChing() {
 					onNavigateUp = {
 						navController.navigateUp()
 					},
-					onCreateTransfer = {
-						navController.navigate("transfer/")
+					onCreateTransfer = { typeId ->
+						navController.navigate("transfer/$typeId/")
 					},
-					onEditTransfer = { transferId ->
-						navController.navigate("transfer/$transferId")
+					onEditTransfer = { typeId, transferId ->
+						navController.navigate("transfer/$typeId/$transferId")
 					}
 				)
 			}
 
 
 			composable(
-				route = "transfer/{transferId}",
+				route = "transfer/{typeId}/{transferId}",
 				arguments = listOf(
+					navArgument("typeId") { type = NavType.StringType },
 					navArgument("transferId") { type = NavType.StringType }
 				)
 			) { backStackEntry ->
+				val typeId: UUID? = try {
+					UUID.fromString(backStackEntry.arguments!!.getString("typeId"))
+				} catch (_: Exception) {
+					return@composable
+				}
 				val transferId: UUID? = try {
 					UUID.fromString(backStackEntry.arguments!!.getString("transferId"))
 				} catch (_: Exception) {
 					null
 				}
 
-				transferViewModel.init(repository, transferId)
+				transferViewModel.init(repository, typeId!!, transferId)
 				TransferScreen(
 					viewModel = transferViewModel,
 					onNavigateUp = {

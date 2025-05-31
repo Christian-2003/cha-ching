@@ -13,16 +13,52 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import de.christian2003.chaching.R
 import kotlinx.coroutines.launch
 import androidx.compose.ui.unit.dp
+
+
+@Composable
+fun TextInput(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    prefixIcon: Painter? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    suffixLabel: String? = null,
+    trailingIcon: Painter? = null,
+    errorMessage: String? = null
+) {
+    var selection by remember { mutableStateOf(TextRange(value.length)) }
+    TextInput(
+        value = TextFieldValue(AnnotatedString(value), selection),
+        onValueChange = { textFieldValue ->
+            selection = textFieldValue.selection
+            onValueChange(textFieldValue.text)
+        },
+        label = label,
+        modifier = modifier,
+        prefixIcon = prefixIcon,
+        keyboardOptions = keyboardOptions,
+        suffixLabel = suffixLabel,
+        trailingIcon = trailingIcon,
+        errorMessage = errorMessage
+    )
+}
 
 
 /**
@@ -43,8 +79,8 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TextInput(
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
     prefixIcon: Painter? = null,

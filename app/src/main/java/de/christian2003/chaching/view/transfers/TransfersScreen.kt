@@ -37,8 +37,8 @@ import java.time.format.FormatStyle
 fun TransfersScreen(
     viewModel: TransfersViewModel,
     onNavigateUp: () -> Unit,
-    onCreateTransfer: () -> Unit,
-    onEditTransfer: (UUID) -> Unit
+    onCreateTransfer: (UUID) -> Unit,
+    onEditTransfer: (UUID, UUID) -> Unit
 ) {
     val transfers: List<TransferWithType> by viewModel.allTransfers.collectAsState(emptyList())
     Scaffold(
@@ -70,26 +70,14 @@ fun TransfersScreen(
                     title = stringResource(R.string.transfers_emptyPlaceholder_title),
                     subtitle = stringResource(R.string.transfers_emptyPlaceholder_subtitle),
                     painter = painterResource(R.drawable.el_transfers),
-                    modifier = Modifier.fillMaxSize(),
-                    onButtonClick = onCreateTransfer
-                ) {
-                    Row {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_add),
-                            contentDescription = "",
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.button_createNewTransfer)
-                        )
-                    }
-                }
+                    modifier = Modifier.fillMaxSize()
+                ) { }
             }
             else {
                 TransferList(
                     transfers = transfers,
                     onTransferClick = { transfer ->
-                        onEditTransfer(transfer.transfer.transferId)
+                        onEditTransfer(transfer.type.typeId, transfer.transfer.transferId)
                     }
                 )
             }
