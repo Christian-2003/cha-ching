@@ -34,6 +34,13 @@
     <string name="type_help_create">Enter the name for the type.</string>
 
 
+    <string name="settings_title">Settings</string>
+    <string name="settings_about_copyright">© %1$s Christian‑2003</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_data_typesTitle">All Types</string>
+    <string name="settings_data_typesInfo">Configure the types for which you can create transfers</string>
+
+
     <!-- Error messages -->
     <string name="error_emptyText">This field cannot be empty</string>
     <string name="error_valueError">The number format is invalid</string>

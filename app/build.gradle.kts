@@ -73,6 +73,7 @@ dependencies {
 	implementation(libs.compose.charts)
 	implementation(libs.apkupdater.library)
 	implementation(libs.androidx.core.splashscreen)
+	implementation(libs.coil.compose)
 
 	testImplementation(libs.junit)
 

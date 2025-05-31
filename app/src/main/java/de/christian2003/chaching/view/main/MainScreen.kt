@@ -13,6 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,6 +40,7 @@ import java.util.UUID
  * @param onNavigateToTransfers	Callback invoked to navigate to the transfers list.
  * @param onNavigateToTypes		Callback invoked to navigate to the types list.
  * @param onCreateTransfer		Callback invoked to create a new transfer.
+ * @param onNavigateToSettings	Callback invoked to navigate to the settings screen.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -46,7 +48,8 @@ fun MainScreen(
 	viewModel: MainViewModel,
 	onNavigateToTransfers: () -> Unit,
 	onNavigateToTypes: () -> Unit,
-	onCreateTransfer: (UUID) -> Unit
+	onCreateTransfer: (UUID) -> Unit,
+	onNavigateToSettings: () -> Unit
 ) {
 	val allTypes: List<Type> by viewModel.allTypes.collectAsState(emptyList())
 	Scaffold(
@@ -56,6 +59,16 @@ fun MainScreen(
 					Text(
 						text = stringResource(R.string.app_name)
 					)
+				},
+				actions = {
+					IconButton(
+						onClick = onNavigateToSettings
+					) {
+						Icon(
+							painter = painterResource(R.drawable.ic_settings),
+							contentDescription = ""
+						)
+					}
 				}
 			)
 		},

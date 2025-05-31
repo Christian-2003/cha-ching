@@ -18,6 +18,8 @@ import de.christian2003.chaching.database.ChaChingRepository
 import de.christian2003.chaching.ui.theme.ChaChingTheme
 import de.christian2003.chaching.view.main.MainScreen
 import de.christian2003.chaching.view.main.MainViewModel
+import de.christian2003.chaching.view.settings.SettingsScreen
+import de.christian2003.chaching.view.settings.SettingsViewModel
 import de.christian2003.chaching.view.transfer.TransferScreen
 import de.christian2003.chaching.view.transfer.TransferViewModel
 import de.christian2003.chaching.view.transfers.TransfersScreen
@@ -53,6 +55,7 @@ fun ChaChing() {
 	val transferViewModel: TransferViewModel = viewModel()
 	val typesViewModel: TypesViewModel = viewModel()
 	val typeViewModel: TypeViewModel = viewModel()
+	val settingsViewModel: SettingsViewModel = viewModel()
 
 	ChaChingTheme {
 		NavHost(
@@ -71,6 +74,9 @@ fun ChaChing() {
 					},
 					onCreateTransfer = { typeId ->
 						navController.navigate("transfer/$typeId/")
+					},
+					onNavigateToSettings = {
+						navController.navigate("settings")
 					}
 				)
 			}
@@ -152,6 +158,20 @@ fun ChaChing() {
 					viewModel = typeViewModel,
 					onNavigateUp = {
 						navController.navigateUp()
+					}
+				)
+			}
+
+
+			composable("settings") {
+				settingsViewModel.init()
+				SettingsScreen(
+					viewModel = settingsViewModel,
+					onNavigateUp = {
+						navController.navigateUp()
+					},
+					onNavigateToTypes = {
+						navController.navigate("types")
 					}
 				)
 			}

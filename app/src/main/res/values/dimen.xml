@@ -11,6 +11,10 @@
 
     <!-- Sizes for images -->
     <dimen name="image_emptyPlaceholder">192dp</dimen>
+    <dimen name="image_l">64dp</dimen>
+    <dimen name="image_m">48dp</dimen>
+    <dimen name="image_s">32dp</dimen>
     <dimen name="image_xs">24dp</dimen>
+    <dimen name="image_xxs">16dp</dimen>
 
 </resources>
