@@ -18,7 +18,9 @@ enum class HelpCards(
 
     CREATE_TYPE("help_type"),
 
-    TYPES_LIST("help_typesList");
+    TYPES_LIST("help_typesList"),
+
+    CREATE_TRANSFER("help_transfer");
 
 
     /**

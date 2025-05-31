@@ -13,7 +13,10 @@
     <string name="transfer_titleCreate">Create transfer</string>
     <string name="transfer_valueDateLabel">Value date</string>
     <string name="transfer_valueLabel">Value</string>
+    <string name="transfer_valueSuffix">USD</string>
     <string name="transfer_hoursWorkedLabel">Hours worked</string>
+    <string name="transfer_hoursWorkedSuffix">Hours</string>
+    <string name="transfer_help">Enter how much money you earned on a specific date.</string>
 
 
     <string name="types_title">Configure types</string>

@@ -1,6 +1,14 @@
 package de.christian2003.chaching.view.transfers
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -43,12 +51,18 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 
+/**
+ * Screen displays a list of all transfers available.
+ *
+ * @param viewModel         View model.
+ * @param onNavigateUp      Callback invoked to navigate up on the navigation stack.
+ * @param onEditTransfer    Callback invoked to navigate to the page to edit a transfer.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransfersScreen(
     viewModel: TransfersViewModel,
     onNavigateUp: () -> Unit,
-    onCreateTransfer: (UUID) -> Unit,
     onEditTransfer: (UUID, UUID) -> Unit
 ) {
     val transfers: List<TransferWithType> by viewModel.allTransfers.collectAsState(emptyList())
@@ -111,6 +125,13 @@ fun TransfersScreen(
 }
 
 
+/**
+ * Displays the list of transfers.
+ *
+ * @param transfers         List of transfers to display.
+ * @param onEditTransfer    Callback invoked to edit a transfer.
+ * @param onDeleteTransfer  Callback invoked to delete a transfer.
+ */
 @Composable
 private fun TransferList(
     transfers: List<TransferWithType>,
@@ -129,6 +150,13 @@ private fun TransferList(
 }
 
 
+/**
+ * Displays a single transfer as list item.
+ *
+ * @param transfer  Transfer to display.
+ * @param onEdit    Callback invoked to edit the transfer.
+ * @param onDelete  Callback invoked to delete the transfer.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun TransferListItem(
@@ -183,7 +211,11 @@ private fun TransferListItem(
                     )
             )
         }
-        AnimatedVisibility(isExpanded) {
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = expandVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(spring(Spring.DampingRatioMediumBouncy)),
+            exit = shrinkVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(spring(Spring.DampingRatioMediumBouncy))
+        ) {
             Row {
                 FilledIconButton(
                     onClick = {

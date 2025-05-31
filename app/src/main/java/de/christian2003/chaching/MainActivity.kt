@@ -83,9 +83,6 @@ fun ChaChing() {
 					onNavigateUp = {
 						navController.navigateUp()
 					},
-					onCreateTransfer = { typeId ->
-						navController.navigate("transfer/$typeId/")
-					},
 					onEditTransfer = { typeId, transferId ->
 						navController.navigate("transfer/$typeId/$transferId")
 					}

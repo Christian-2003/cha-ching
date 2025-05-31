@@ -32,6 +32,14 @@ import de.christian2003.chaching.database.entities.Type
 import java.util.UUID
 
 
+/**
+ * Screen displays the home screen once the user enters the app.
+ *
+ * @param viewModel				View model.
+ * @param onNavigateToTransfers	Callback invoked to navigate to the transfers list.
+ * @param onNavigateToTypes		Callback invoked to navigate to the types list.
+ * @param onCreateTransfer		Callback invoked to create a new transfer.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainScreen(
@@ -80,7 +88,12 @@ fun MainScreen(
 }
 
 
-
+/**
+ * Displays the floating action button and it'S menu.
+ *
+ * @param types			List of types to display in the FAB menu.
+ * @param onTypeClicked	Callback invoked once a type is clicked.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun FabMenu(

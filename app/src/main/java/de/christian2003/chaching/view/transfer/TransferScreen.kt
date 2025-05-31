@@ -1,5 +1,6 @@
 package de.christian2003.chaching.view.transfer
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
@@ -32,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import de.christian2003.chaching.R
+import de.christian2003.chaching.ui.composables.HelpCard
 import de.christian2003.chaching.ui.composables.TextInput
 import java.time.Instant
 import java.time.ZoneOffset
@@ -39,6 +41,12 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 
+/**
+ * Displays the screen through which a transfer can be configured.
+ *
+ * @param viewModel     View model.
+ * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferScreen(
@@ -73,6 +81,17 @@ fun TransferScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
         ) {
+            AnimatedVisibility(viewModel.isHelpCardVisible) {
+                HelpCard(
+                    text = stringResource(R.string.transfer_help),
+                    onDismiss = {
+                        viewModel.dismissHelpCard()
+                    },
+                    modifier = Modifier.padding(
+                        bottom = dimensionResource(R.dimen.padding_vertical)
+                    )
+                )
+            }
             TextInput(
                 value = viewModel.valueDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
                 onValueChange = { },
@@ -98,6 +117,7 @@ fun TransferScreen(
                 errorMessage = viewModel.valueErrorMessage,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 prefixIcon = painterResource(R.drawable.ic_money),
+                suffixLabel = stringResource(R.string.transfer_valueSuffix),
                 modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
             )
             TextInput(
@@ -109,6 +129,7 @@ fun TransferScreen(
                 errorMessage = viewModel.hoursWorkedErrorMessage,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 prefixIcon = painterResource(R.drawable.ic_time),
+                suffixLabel = stringResource(R.string.transfer_hoursWorkedSuffix),
                 modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
             )
             Button(
@@ -142,6 +163,13 @@ fun TransferScreen(
 }
 
 
+/**
+ * Displays a modal date picker.
+ *
+ * @param selectedMillis    Milliseconds of the date selected.
+ * @param onDateSelected    Callback invoked once a date is selected.
+ * @param onDismiss         Callback invoked to dismiss the dialog.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DatePickerModal(
