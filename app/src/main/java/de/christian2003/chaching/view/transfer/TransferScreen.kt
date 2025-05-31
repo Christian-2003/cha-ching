@@ -1,26 +1,42 @@
 package de.christian2003.chaching.view.transfer
 
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import de.christian2003.chaching.R
 import de.christian2003.chaching.ui.composables.TextInput
-import java.text.NumberFormat
-import java.util.Locale
-import kotlin.math.roundToInt
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +45,6 @@ fun TransferScreen(
     viewModel: TransferViewModel,
     onNavigateUp: () -> Unit
 ) {
-    val numberFormat: NumberFormat = NumberFormat.getInstance(Locale.getDefault())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -51,9 +66,29 @@ fun TransferScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
         ) {
+            TextInput(
+                value = viewModel.valueDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+                onValueChange = { },
+                label = stringResource(R.string.transfer_valueDateLabel),
+                keyboardOptions = KeyboardOptions(showKeyboardOnFocus = false),
+                prefixIcon = painterResource(R.drawable.ic_date),
+                modifier = Modifier.pointerInput(null) {
+                    awaitEachGesture {
+                        awaitFirstDown(pass = PointerEventPass.Initial)
+                        val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                        if (upEvent != null) {
+                            viewModel.isDatePickerVisible = true
+                        }
+                    }
+                }
+            )
             TextInput(
                 value = viewModel.value,
                 onValueChange = {
@@ -61,8 +96,83 @@ fun TransferScreen(
                 },
                 label = stringResource(R.string.transfer_valueLabel),
                 errorMessage = viewModel.valueErrorMessage,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                prefixIcon = painterResource(R.drawable.ic_money),
+                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
+            )
+            TextInput(
+                value = viewModel.hoursWorked,
+                onValueChange = {
+                    viewModel.updateHoursWorked(it)
+                },
+                label = stringResource(R.string.transfer_hoursWorkedLabel),
+                errorMessage = viewModel.hoursWorkedErrorMessage,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                prefixIcon = painterResource(R.drawable.ic_time),
+                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
+            )
+            Button(
+                onClick = {
+                    viewModel.save()
+                    onNavigateUp()
+                },
+                enabled = viewModel.isSavable,
+                modifier = Modifier
+                    .padding(vertical = dimensionResource(R.dimen.padding_vertical))
+                    .align(Alignment.End)
+            ) {
+                Text(stringResource(R.string.button_save))
+            }
+        }
+        if (viewModel.isDatePickerVisible) {
+            DatePickerModal(
+                selectedMillis = viewModel.valueDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
+                onDateSelected = { selectedMillis ->
+                    if (selectedMillis != null) {
+                        viewModel.valueDate = Instant.ofEpochMilli(selectedMillis).atZone(ZoneOffset.UTC).toLocalDate()
+                    }
+                    viewModel.isDatePickerVisible = false
+                },
+                onDismiss = {
+                    viewModel.isDatePickerVisible = false
+                }
             )
         }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DatePickerModal(
+    selectedMillis: Long,
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+    datePickerState.selectedDateMillis = selectedMillis
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDateSelected(datePickerState.selectedDateMillis)
+                }
+            ) {
+                Text(stringResource(R.string.button_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text(stringResource(R.string.button_cancel))
+            }
+        }
+    ) {
+        DatePicker(
+            state = datePickerState
+        )
     }
 }

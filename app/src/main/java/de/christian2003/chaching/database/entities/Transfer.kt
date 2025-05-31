@@ -20,15 +20,13 @@ import java.util.UUID
 )
 class Transfer(
 
-	val value: Int,
+	var value: Int,
 
-	val hoursWorked: Int,
+	var hoursWorked: Int,
 
-	val currency: Currency,
+	var isSalary: Boolean,
 
-	val isSalary: Boolean,
-
-	val valueDate: LocalDate,
+	var valueDate: LocalDate,
 
 	val type: UUID,
 
@@ -37,14 +35,14 @@ class Transfer(
 
 	val created: LocalDateTime = LocalDateTime.now(),
 
-	val edited: LocalDateTime = LocalDateTime.now()
+	var edited: LocalDateTime = LocalDateTime.now()
 
 ) {
 
 	fun getFormattedValue(): String {
 		val numberFormat = DecimalFormat("#,###.00")
-		val formattedNumber: String = numberFormat.format(value / 100)
-		return formattedNumber + " " + currency.symbol
+		val formattedNumber: String = numberFormat.format(value.toDouble() / 100)
+		return formattedNumber
 	}
 
 }

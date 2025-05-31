@@ -19,6 +19,7 @@ import java.time.LocalDate
 import java.util.Locale
 import java.util.UUID
 import de.christian2003.chaching.R
+import java.time.LocalDateTime
 
 
 class TransferViewModel(application: Application): AndroidViewModel(application) {
@@ -38,9 +39,15 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
 
     var hoursWorked: String by mutableStateOf("")
 
+    var hoursWorkedErrorMessage: String? by mutableStateOf(null)
+
     var valueDate: LocalDate by mutableStateOf(LocalDate.now())
 
+    var isDatePickerVisible: Boolean by mutableStateOf(false)
+
     var isCreating: Boolean = false
+
+    var isSavable: Boolean by mutableStateOf(false)
 
 
     fun init(repository: ChaChingRepository, typeId: UUID, transferId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
@@ -64,11 +71,13 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
             if (this@TransferViewModel.type.typeId != transferWithType.type.typeId) {
                 this@TransferViewModel.type = transferWithType.type
             }
-            val formattedValue = numberFormat.format(transferWithType.transfer.valueDate)
-            valueErrorMessage = null
+            val formattedValue = numberFormat.format(transferWithType.transfer.value.toDouble() / 100)
             value = TextFieldValue(formattedValue, TextRange(formattedValue.length))
+            valueErrorMessage = null
             hoursWorked = transferWithType.transfer.hoursWorked.toString()
+            hoursWorkedErrorMessage = null
             valueDate = transferWithType.transfer.valueDate
+            isSavable = true
         }
         else {
             //Create new transfer:
@@ -77,7 +86,9 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
             value = TextFieldValue("")
             valueErrorMessage = null
             hoursWorked = ""
+            hoursWorkedErrorMessage = null
             valueDate = LocalDate.now()
+            isSavable = false
         }
     }
 
@@ -86,11 +97,12 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
         if (value.text.isEmpty()) {
             this.value = value
             valueErrorMessage = getApplication<Application>().getString(R.string.error_emptyText)
+            updateIsSavable()
             return
         }
 
         try {
-            val valueAsDouble: Double = numberFormat.parse(value.text).toDouble()
+            val valueAsDouble: Double = numberFormat.parse(value.text)!!.toDouble()
 
             val lastCharEntered: Char = value.text[value.text.length - 1]
             if (lastCharEntered == ',' || lastCharEntered == '.') {
@@ -114,6 +126,78 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
         } catch (e: Exception) {
             this.value = value
             valueErrorMessage = getApplication<Application>().getString(R.string.error_valueError)
+        }
+        updateIsSavable()
+    }
+
+
+    fun updateHoursWorked(hoursWorked: String) {
+        this.hoursWorked = hoursWorked
+
+        if (hoursWorked.isEmpty()) {
+            hoursWorkedErrorMessage = null
+            updateIsSavable()
+            return
+        }
+
+        val i: Int? = hoursWorked.toIntOrNull()
+        hoursWorkedErrorMessage = if (i == null) {
+            getApplication<Application>().getString(R.string.error_hoursWorkedError)
+        } else {
+            null
+        }
+        updateIsSavable()
+    }
+
+
+    fun updateIsSavable() {
+        isSavable = valueErrorMessage == null && hoursWorkedErrorMessage == null && value.text.isNotEmpty()
+    }
+
+
+    fun save() = viewModelScope.launch(Dispatchers.IO) {
+        var value: Int? = try {
+            (numberFormat.parse(this@TransferViewModel.value.text)!!.toDouble() * 100).toInt()
+        } catch (_: Exception) {
+            null
+        }
+        var hoursWorked: Int? = if (this@TransferViewModel.hoursWorked.isNotEmpty()) {
+            try {
+                this@TransferViewModel.hoursWorked.toInt()
+            } catch (_: Exception) {
+                null
+            }
+        } else {
+            0
+        }
+
+        val application: Application = getApplication()
+        if (value == null) {
+            valueErrorMessage = application.getString(R.string.error_valueError)
+        }
+        if (hoursWorked == null) {
+            valueErrorMessage = application.getString(R.string.error_hoursWorkedError)
+        }
+        if (value == null || hoursWorked == null) {
+            return@launch
+        }
+
+        if (transfer == null) {
+            transfer = Transfer(
+                value = value,
+                hoursWorked = hoursWorked,
+                valueDate = valueDate,
+                isSalary = true,
+                type = type.typeId
+            )
+            repository.insertTransfer(transfer!!)
+        }
+        else {
+            transfer!!.value = value
+            transfer!!.hoursWorked = hoursWorked
+            transfer!!.valueDate = valueDate
+            transfer!!.edited = LocalDateTime.now()
+            repository.updateTransfer(transfer!!)
         }
     }
 

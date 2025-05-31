@@ -1,6 +1,5 @@
 package de.christian2003.chaching.ui.composables
 
-
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +40,8 @@ fun TextInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     suffixLabel: String? = null,
     trailingIcon: Painter? = null,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    enabled: Boolean = true
 ) {
     var selection by remember { mutableStateOf(TextRange(value.length)) }
     TextInput(
@@ -56,7 +56,8 @@ fun TextInput(
         keyboardOptions = keyboardOptions,
         suffixLabel = suffixLabel,
         trailingIcon = trailingIcon,
-        errorMessage = errorMessage
+        errorMessage = errorMessage,
+        enabled = enabled
     )
 }
 
@@ -87,7 +88,8 @@ fun TextInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     suffixLabel: String? = null,
     trailingIcon: Painter? = null,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    enabled: Boolean = true
 ) {
     val scope = rememberCoroutineScope()
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
@@ -152,7 +154,7 @@ fun TextInput(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .padding(
-                        top = 4.dp,
+                        top = 8.dp,
                         end = dimensionResource(R.dimen.padding_horizontal)
                     )
                     .size(dimensionResource(R.dimen.image_xs))
@@ -168,6 +170,7 @@ fun TextInput(
                 )
             },
             keyboardOptions = keyboardOptions,
+            enabled = enabled,
             suffix = suffixView,
             isError = errorMessage != null,
             trailingIcon = trailingIconView,

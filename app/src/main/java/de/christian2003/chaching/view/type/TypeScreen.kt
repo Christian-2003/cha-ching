@@ -128,9 +128,9 @@ fun TypeScreen(
             ) {
                 Text(
                     if (viewModel.isCreating) {
-                        stringResource(R.string.type_button_createType)
+                        stringResource(R.string.button_createType)
                     } else {
-                        stringResource(R.string.type_button_saveType)
+                        stringResource(R.string.button_save)
                     }
                 )
             }
