@@ -1,26 +1,49 @@
 package de.christian2003.chaching.view.main
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonMenu
+import androidx.compose.material3.FloatingActionButtonMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import de.christian2003.chaching.R
+import de.christian2003.chaching.database.entities.Type
+import java.nio.file.WatchEvent
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainScreen(
 	viewModel: MainViewModel,
 	onNavigateToTransfers: () -> Unit,
 	onNavigateToTypes: () -> Unit
 ) {
+	val allTypes: List<Type> by viewModel.allTypes.collectAsState(emptyList())
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(
@@ -28,6 +51,14 @@ fun MainScreen(
 					Text(
 						text = stringResource(R.string.app_name)
 					)
+				}
+			)
+		},
+		floatingActionButton = {
+			FabMenu(
+				types = allTypes,
+				onTypeClicked = { type ->
+
 				}
 			)
 		}
@@ -49,4 +80,58 @@ fun MainScreen(
 			}
 		}
 	}
+}
+
+
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun FabMenu(
+	types: List<Type>,
+	onTypeClicked: (Type) -> Unit
+) {
+	var isExpanded by remember { mutableStateOf(false) }
+	val iconAnimator by animateFloatAsState(
+		targetValue = if (isExpanded) { 0f } else { 45f },
+		animationSpec = spring(
+			dampingRatio = Spring.DampingRatioMediumBouncy
+		)
+	)
+
+	FloatingActionButtonMenu(
+		expanded = isExpanded,
+		button = {
+			ToggleFloatingActionButton(
+				checked = isExpanded,
+				onCheckedChange = {
+					isExpanded = !isExpanded
+				}
+			) {
+				Icon(
+					painter = painterResource(R.drawable.ic_cancel),
+					tint = if (isExpanded) { MaterialTheme.colorScheme.onPrimary } else { MaterialTheme.colorScheme.onPrimaryContainer },
+					contentDescription = "",
+					modifier = Modifier.rotate(iconAnimator)
+				)
+			}
+		}
+	) {
+		types.forEach { type ->
+			FloatingActionButtonMenuItem(
+				onClick = {
+					onTypeClicked(type)
+				},
+				text = {
+					Text(type.name)
+				},
+				icon = {
+					Icon(
+						painter = painterResource(type.icon.drawableResourceId),
+						contentDescription = ""
+					)
+				}
+			)
+		}
+	}
+
 }

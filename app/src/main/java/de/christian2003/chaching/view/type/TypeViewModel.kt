@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.graphics.drawable.IconCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.database.ChaChingRepository
@@ -15,6 +16,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import de.christian2003.chaching.R
 import de.christian2003.chaching.model.help.HelpCards
+import de.christian2003.chaching.model.transfers.TypeIcon
 
 
 /**
@@ -37,6 +39,11 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      * Name of the type.
      */
     var name: String by mutableStateOf("")
+
+    /**
+     * Icon selected by the user.
+     */
+    var icon: TypeIcon by mutableStateOf(TypeIcon.CURRENCY)
 
     /**
      * Placeholder for the name to show in the app bar in case the user removes the name.
@@ -73,11 +80,14 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             isCreating = false
             type = repository.selectTypeById(typeId)
             name = type!!.name
+            icon = type!!.icon
         }
         else {
             //Create new type:
+            type = null
             isCreating = true
             name = ""
+            icon = TypeIcon.CURRENCY
         }
     }
 
@@ -87,11 +97,12 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      */
     fun save() = viewModelScope.launch(Dispatchers.IO) {
         if (type == null) {
-            type = Type(name)
+            type = Type(name, icon)
             repository.insertType(type!!)
         }
         else {
             type!!.name = name
+            type!!.icon = icon
             type!!.edited = LocalDateTime.now()
             repository.updateType(type!!)
         }

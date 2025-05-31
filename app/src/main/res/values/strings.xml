@@ -20,6 +20,7 @@
 
     <string name="type_unnamed">Unnamed type %1$d</string>
     <string name="type_namePlaceholder">Name</string>
+    <string name="type_chooseIcon">Choose an icon</string>
     <string name="type_button_createType">Create type</string>
     <string name="type_button_saveType">Save type</string>
     <string name="type_help_create">Enter the name for the type.</string>

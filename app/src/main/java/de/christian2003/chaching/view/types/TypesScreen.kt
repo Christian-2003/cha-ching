@@ -191,6 +191,12 @@ private fun TypeListItem(
                 vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
+        Icon(
+            painter = painterResource(type.icon.drawableResourceId),
+            contentDescription = "",
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_horizontal))
+        )
         Text(
             text = type.name,
             style = MaterialTheme.typography.bodyLarge,

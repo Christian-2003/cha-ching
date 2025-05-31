@@ -1,17 +1,24 @@
 package de.christian2003.chaching.view.type
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -21,7 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
+import de.christian2003.chaching.model.transfers.TypeIcon
+import de.christian2003.chaching.ui.composables.Headline
 import de.christian2003.chaching.ui.composables.HelpCard
 import de.christian2003.chaching.ui.composables.TextInput
 
@@ -69,7 +79,6 @@ fun TypeScreen(
                 .fillMaxWidth()
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
-                .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -79,7 +88,11 @@ fun TypeScreen(
                     onDismiss = {
                         viewModel.dismissHelpCard()
                     },
-                    modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                    modifier = Modifier.padding(
+                        start = dimensionResource(R.dimen.margin_horizontal),
+                        end = dimensionResource(R.dimen.margin_horizontal),
+                        bottom = dimensionResource(R.dimen.padding_vertical),
+                    )
                 )
             }
             TextInput(
@@ -88,7 +101,18 @@ fun TypeScreen(
                     viewModel.name = it
                 },
                 label = stringResource(R.string.type_namePlaceholder),
-                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                modifier = Modifier.padding(
+                    start = dimensionResource(R.dimen.margin_horizontal),
+                    end = dimensionResource(R.dimen.margin_horizontal),
+                    bottom = dimensionResource(R.dimen.padding_vertical),
+                )
+            )
+            Headline(stringResource(R.string.type_chooseIcon))
+            TypeIconSelection(
+                selected = viewModel.icon,
+                onSelectedChange = { icon ->
+                    viewModel.icon = icon
+                }
             )
             Button(
                 onClick = {
@@ -96,6 +120,11 @@ fun TypeScreen(
                     onNavigateUp()
                 },
                 enabled = viewModel.name.isNotEmpty(),
+                modifier = Modifier.padding(
+                        vertical = dimensionResource(R.dimen.padding_vertical),
+                        horizontal = dimensionResource(R.dimen.margin_horizontal)
+                    )
+                    .align(Alignment.End)
             ) {
                 Text(
                     if (viewModel.isCreating) {
@@ -103,6 +132,57 @@ fun TypeScreen(
                     } else {
                         stringResource(R.string.type_button_saveType)
                     }
+                )
+            }
+        }
+    }
+}
+
+
+/**
+ * Displays (multiple) rows of icon buttons from which the user can select one icon for the type.
+ *
+ * @param selected          Icon selected currently.
+ * @param onSelectedChange  Callback invoked once the selection changes.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun TypeIconSelection(
+    selected: TypeIcon,
+    onSelectedChange: (TypeIcon) -> Unit
+) {
+    FlowRow(
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = dimensionResource(R.dimen.margin_horizontal),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical)
+            )
+    ) {
+        TypeIcon.entries.forEach { typeIcon ->
+            IconToggleButton(
+                checked = typeIcon == selected,
+                onCheckedChange = {
+                    if (it) {
+                        onSelectedChange(typeIcon)
+                    }
+                },
+                colors = IconButtonDefaults.iconToggleButtonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    checkedContainerColor = MaterialTheme.colorScheme.primary,
+                    checkedContentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(56.dp)
+            ) {
+                Icon(
+                    painter = painterResource(typeIcon.drawableResourceId),
+                    contentDescription = "",
+                    modifier = Modifier.size(36.dp)
                 )
             }
         }
