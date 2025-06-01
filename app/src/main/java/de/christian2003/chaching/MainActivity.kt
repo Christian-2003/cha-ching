@@ -16,6 +16,8 @@ import androidx.navigation.navArgument
 import de.christian2003.chaching.database.ChaChingDatabase
 import de.christian2003.chaching.database.ChaChingRepository
 import de.christian2003.chaching.ui.theme.ChaChingTheme
+import de.christian2003.chaching.view.licenses.LicensesScreen
+import de.christian2003.chaching.view.licenses.LicensesViewModel
 import de.christian2003.chaching.view.main.MainScreen
 import de.christian2003.chaching.view.main.MainViewModel
 import de.christian2003.chaching.view.settings.SettingsScreen
@@ -67,6 +69,7 @@ fun ChaChing() {
 	val typesViewModel: TypesViewModel = viewModel()
 	val typeViewModel: TypeViewModel = viewModel()
 	val settingsViewModel: SettingsViewModel = viewModel()
+	val licensesViewModel: LicensesViewModel = viewModel()
 
 	ChaChingTheme {
 		NavHost(
@@ -183,6 +186,20 @@ fun ChaChing() {
 					},
 					onNavigateToTypes = {
 						navController.navigate("types")
+					},
+					onNavigateToLicenses = {
+						navController.navigate("licenses")
+					}
+				)
+			}
+
+
+			composable("licenses") {
+				licensesViewModel.init()
+				LicensesScreen(
+					viewModel = licensesViewModel,
+					onNavigateUp = {
+						navController.navigateUp()
 					}
 				)
 			}

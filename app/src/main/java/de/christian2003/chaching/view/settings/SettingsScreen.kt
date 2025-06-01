@@ -1,6 +1,9 @@
 package de.christian2003.chaching.view.settings
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -32,22 +35,27 @@ import coil.compose.rememberAsyncImagePainter
 import de.christian2003.chaching.R
 import de.christian2003.chaching.ui.composables.Headline
 import java.time.LocalDate
+import androidx.core.net.toUri
 
 
 /**
  * Screen displays settings of the app.
  *
- * @param viewModel         View model.
- * @param onNavigateUp      Callback invoked to navigate up on the navigation stack.
- * @param onNavigateToTypes Callback invoked to navigate to the screen displaying the list of types.
+ * @param viewModel             View model.
+ * @param onNavigateUp          Callback invoked to navigate up on the navigation stack.
+ * @param onNavigateToTypes     Callback invoked to navigate to the screen displaying the list of types.
+ * @param onNavigateToLicenses  Callback invoked to navigate to the screen displaying licenses.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     onNavigateUp: () -> Unit,
-    onNavigateToTypes: () -> Unit
+    onNavigateToTypes: () -> Unit,
+    onNavigateToLicenses: () -> Unit
 ) {
+    val context: Context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -73,9 +81,11 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
+            //General
             GeneralSection()
             HorizontalDivider()
 
+            //Data
             Headline(
                 title = stringResource(R.string.settings_data),
                 indentToPrefixIcon = true
@@ -86,6 +96,52 @@ fun SettingsScreen(
                 onClick = onNavigateToTypes,
                 endIcon = painterResource(R.drawable.ic_next),
                 prefixIcon = painterResource(R.drawable.ic_types)
+            )
+            HorizontalDivider()
+
+            //About
+            Headline(
+                title = stringResource(R.string.settings_about),
+                indentToPrefixIcon = true
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_about_licensesTitle),
+                info = stringResource(R.string.settings_about_licensesInfo),
+                onClick = onNavigateToLicenses,
+                endIcon = painterResource(R.drawable.ic_next),
+                prefixIcon = painterResource(R.drawable.ic_license)
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_about_repoTitle),
+                info = stringResource(R.string.settings_about_repoInfo),
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/cha-ching".toUri())
+                    context.startActivity(intent)
+                },
+                endIcon = painterResource(R.drawable.ic_external),
+                prefixIcon = painterResource(R.drawable.ic_github)
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_about_issuesTitle),
+                info = stringResource(R.string.settings_about_issuesInfo),
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/cha-ching/issues".toUri())
+                    context.startActivity(intent)
+                },
+                endIcon = painterResource(R.drawable.ic_external),
+                prefixIcon = painterResource(R.drawable.ic_bug)
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_about_moreTitle),
+                info = stringResource(R.string.settings_about_moreInfo),
+                onClick = {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", context.packageName, null)
+                    intent.setData(uri)
+                    context.startActivity(intent)
+                },
+                endIcon = painterResource(R.drawable.ic_external),
+                prefixIcon = painterResource(R.drawable.ic_android)
             )
         }
     }
