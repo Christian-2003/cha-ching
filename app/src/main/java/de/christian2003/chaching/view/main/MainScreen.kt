@@ -51,7 +51,7 @@ fun MainScreen(
 	onCreateTransfer: (UUID) -> Unit,
 	onNavigateToSettings: () -> Unit
 ) {
-	val allTypes: List<Type> by viewModel.allTypes.collectAsState(emptyList())
+	val allTypes by viewModel.allTypes.collectAsState(emptyList())
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(

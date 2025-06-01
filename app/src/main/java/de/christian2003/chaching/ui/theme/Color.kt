@@ -1,5 +1,9 @@
 package de.christian2003.chaching.ui.theme
+
 import androidx.compose.ui.graphics.Color
+
+// Seed for Material theme builder: '#3D5F90'
+
 
 val primaryLight = Color(0xFF3D5F90)
 val onPrimaryLight = Color(0xFFFFFFFF)

@@ -15,8 +15,19 @@ import de.christian2003.chaching.database.entities.Type
 /**
  * Database for the Cha-Ching app.
  */
-@Database(entities = [Transfer::class, Type::class], version = 1, exportSchema = false)
-@TypeConverters(LocalDateTimeConverter::class, LocalDateConverter::class, TypeIconConverter::class)
+@Database(
+	entities = [
+		Transfer::class,
+		Type::class
+	],
+	version = 1,
+	exportSchema = false
+)
+@TypeConverters(
+	LocalDateTimeConverter::class,
+	LocalDateConverter::class,
+	TypeIconConverter::class
+)
 abstract class ChaChingDatabase: RoomDatabase() {
 
 	/**

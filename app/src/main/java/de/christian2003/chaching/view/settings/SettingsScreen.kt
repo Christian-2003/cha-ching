@@ -34,6 +34,13 @@ import de.christian2003.chaching.ui.composables.Headline
 import java.time.LocalDate
 
 
+/**
+ * Screen displays settings of the app.
+ *
+ * @param viewModel         View model.
+ * @param onNavigateUp      Callback invoked to navigate up on the navigation stack.
+ * @param onNavigateToTypes Callback invoked to navigate to the screen displaying the list of types.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -69,7 +76,10 @@ fun SettingsScreen(
             GeneralSection()
             HorizontalDivider()
 
-            Headline(stringResource(R.string.settings_data))
+            Headline(
+                title = stringResource(R.string.settings_data),
+                indentToPrefixIcon = true
+            )
             SettingsItemButton(
                 setting = stringResource(R.string.settings_data_typesTitle),
                 info = stringResource(R.string.settings_data_typesInfo),
@@ -151,6 +161,9 @@ private fun SettingsItemButton(
 }
 
 
+/**
+ * Displays the general information which contains info about the app.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun GeneralSection() {

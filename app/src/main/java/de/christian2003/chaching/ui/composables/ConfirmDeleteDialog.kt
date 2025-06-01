@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import de.christian2003.chaching.R
-import org.w3c.dom.Text
 
 
 /**

@@ -182,7 +182,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
 
             }
             valueErrorMessage = null
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             this.value = value
             valueErrorMessage = getApplication<Application>().getString(R.string.error_valueError)
         }

@@ -7,18 +7,36 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 
+/**
+ * Database entity for storing types.
+ */
 @Entity(tableName = "types")
 class Type(
 
+    /**
+     * Display name of the type.
+     */
     var name: String,
 
+    /**
+     * Icon of the type.
+     */
     var icon: TypeIcon,
 
+    /**
+     * UUID of the type.
+     */
     @PrimaryKey
     val typeId: UUID = UUID.randomUUID(),
 
+    /**
+     * Date time on which the type was created. This is for statistical purposes.
+     */
     val created: LocalDateTime = LocalDateTime.now(),
 
+    /**
+     * Date time on which the type was last edited. This is for statistical purposes.
+     */
     var edited: LocalDateTime = LocalDateTime.now()
 
 )

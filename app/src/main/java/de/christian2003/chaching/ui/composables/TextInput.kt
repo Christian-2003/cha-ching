@@ -30,6 +30,22 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.unit.dp
 
 
+/**
+ * Composable displays an outlined text field through which the user can edit a value.
+ *
+ * @param value             Value to edit.
+ * @param onValueChange     Callback invoked once the value changes.
+ * @param label             Label for the text field.
+ * @param modifier          Modifier.
+ * @param prefixIcon        Optional Icon to display in front of the text input.
+ * @param keyboardOptions   Optional keyboard options.
+ * @param suffixLabel       Optional suffix label to display within the text input.
+ * @param trailingIcon      Optional trailing icon to display within the text input. If the error
+ *                          message passed is not null, this icon will be replaced with an error
+ *                          icon.
+ * @param errorMessage      Error message to display.
+ * @param enabled           Whether the text input is enabled or not.
+ */
 @Composable
 fun TextInput(
     value: String,
@@ -76,6 +92,7 @@ fun TextInput(
  *                          message passed is not null, this icon will be replaced with an error
  *                          icon.
  * @param errorMessage      Error message to display.
+ * @param enabled           Whether the text input is enabled or not.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

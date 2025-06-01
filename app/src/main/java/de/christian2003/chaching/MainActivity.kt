@@ -31,8 +31,16 @@ import de.christian2003.chaching.view.types.TypesViewModel
 import java.util.UUID
 
 
+/**
+ * Main activity for the ChaChing app.
+ */
 class MainActivity : ComponentActivity() {
 
+	/**
+	 * Instantiates the app on state changes.
+	 *
+	 * @param savedInstanceState	State saved previously by the instance.
+	 */
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
@@ -44,6 +52,9 @@ class MainActivity : ComponentActivity() {
 }
 
 
+/**
+ * Root composable for the ChaChing-app.
+ */
 @Composable
 fun ChaChing() {
 	val navController: NavHostController = rememberNavController()

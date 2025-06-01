@@ -33,6 +33,7 @@ fun Headline(
     title: String,
     modifier: Modifier = Modifier,
     isEyecatcherVisible: Boolean = false,
+    indentToPrefixIcon: Boolean = false,
     endIcon: Painter? = null,
     onClick: (() -> Unit)? = null
 ) {
@@ -44,8 +45,14 @@ fun Headline(
                 onClick!!()
             }
             .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
+                start = if (indentToPrefixIcon) {
+                        dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal)
+                    } else {
+                        dimensionResource(R.dimen.margin_horizontal)
+                    },
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         Text(
