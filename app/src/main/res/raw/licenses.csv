@@ -7,14 +7,14 @@ Compose Material3 Components,1.4.0-alpha15,license_apache20,Apache 2.0
 Compose Navigation,2.8.3,license_apache20,Apache 2.0
 Compose Tooling,1.7.6,license_apache20,Apache 2.0
 Compose UI,1.7.6,license_apache20,Apache 2.0
-Core Kotlin Extensions,1.13.1,license_apache20,Apache 2.0
-Gson,2.11.0,license_apache20,Apache 2.0
+Core Kotlin Extensions,1.16.0,license_apache20,Apache 2.0
 Jetpack Compose Libraries BOM,2024.04.01,license_apache20,Apache 2.0
 Kotlinx Coroutines Android,1.9.0,license_apache20,Apache 2.0
-Lifecycle Kotlin Extensions,2.8.6,license_apache20,Apache 2.0
-Lifecycle ViewModel Compose,2.8.6,license_apache20,Apache 2.0
+Kotlinx Serialization JSON,1.8.0,license_apache20,Apache 2.0
+Lifecycle Kotlin Extensions,2.9.0,license_apache20,Apache 2.0
+Lifecycle ViewModel Compose,2.9.0,license_apache20,Apache 2.0
 Material Symbols / Material Icons,4.0.0,license_apache20,Apache 2.0
-Navigation Runtime Kotlin Extensions,2.8.3,license_apache20,Apache 2.0
+Navigation Runtime Kotlin Extensions,2.9.0,license_apache20,Apache 2.0
 Room Compiler,2.6.1,license_apache20,Apache 2.0
 Room Kotlin Extensions,2.6.1,license_apache20,Apache 2.0
 Room Runtime,2.6.1,license_apache20,Apache 2.0
