@@ -178,7 +178,7 @@ fun ChaChing() {
 
 
 			composable("settings") {
-				settingsViewModel.init()
+				settingsViewModel.init(repository)
 				SettingsScreen(
 					viewModel = settingsViewModel,
 					onNavigateUp = {

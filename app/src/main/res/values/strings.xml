@@ -36,6 +36,23 @@
 
     <string name="settings_title">Settings</string>
     <string name="settings_data">Data</string>
+    <string name="settings_data_exportTitle">Export data</string>
+    <string name="settings_data_exportInfo">Export data to JSON file</string>
+    <string name="settings_data_exportSuccess">Successfully exported data</string>
+    <string name="settings_data_exportError">Cannot export data</string>
+    <string name="settings_data_exportFilename">ChaChing-Export-%1$s.json</string>
+    <string name="settings_data_importTitle">Import data</string>
+    <string name="settings_data_importInfo">Import data from JSON file</string>
+    <string name="settings_data_importSuccess">Successfully imported data</string>
+    <string name="settings_data_importError">Cannot import data</string>
+    <string name="settings_data_importDialog_title">Select an option</string>
+    <string name="settings_data_importDialog_text">Select what you want to happen to your existing data</string>
+    <string name="settings_data_importDialog_deleteTitle">Delete existing data</string>
+    <string name="settings_data_importDialog_deleteInfo">Deletes all existing data before restoring the backup</string>
+    <string name="settings_data_importDialog_replaceTitle">Replace existing data</string>
+    <string name="settings_data_importDialog_replaceInfo">Imports data and replaces duplicates</string>
+    <string name="settings_data_importDialog_ignoreTitle">Ignore duplicates</string>
+    <string name="settings_data_importDialog_ignoreInfo">Imports data but does not restore duplicates</string>
     <string name="settings_data_typesTitle">All Types</string>
     <string name="settings_data_typesInfo">Configure the types for which you can create transfers</string>
     <string name="settings_about">About</string>
@@ -48,6 +65,7 @@
     <string name="settings_about_issuesInfo">Report issues on GitHub</string>
     <string name="settings_about_moreTitle">More info</string>
     <string name="settings_about_moreInfo">Show app in system settings</string>
+
 
     <string name="licenses_title">Licenses</string>
 
@@ -68,4 +86,5 @@
     <string name="button_confirm">Confirm</string>
     <string name="button_createType">Create type</string>
     <string name="button_save">Save</string>
+    <string name="button_import">Import</string>
 </resources>

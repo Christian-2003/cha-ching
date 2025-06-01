@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,6 +39,7 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.ui.composables.Headline
 import java.time.LocalDate
 import androidx.core.net.toUri
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -55,6 +59,33 @@ fun SettingsScreen(
     onNavigateToLicenses: () -> Unit
 ) {
     val context: Context = LocalContext.current
+    val exportSuccessMessage = stringResource(R.string.settings_data_exportSuccess)
+    val exportErrorMessage = stringResource(R.string.settings_data_exportError)
+    val importSuccessMessage = stringResource(R.string.settings_data_importSuccess)
+    val importErrorMessage = stringResource(R.string.settings_data_importError)
+    val exportFilename = stringResource(R.string.settings_data_exportFilename, LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+
+    val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.data != null && result.data!!.data != null) {
+            viewModel.exportDataToJsonFile(
+                uri = result.data!!.data!!,
+                onFinished = { success ->
+                    if (success) {
+                        Toast.makeText(context, exportSuccessMessage, Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(context, exportErrorMessage, Toast.LENGTH_LONG).show()
+                    }
+                }
+            )
+        }
+    }
+
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.data != null && result.data!!.data != null) {
+            viewModel.importUri = result.data!!.data!!
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -96,6 +127,29 @@ fun SettingsScreen(
                 onClick = onNavigateToTypes,
                 endIcon = painterResource(R.drawable.ic_next),
                 prefixIcon = painterResource(R.drawable.ic_types)
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_data_exportTitle),
+                info = stringResource(R.string.settings_data_exportInfo),
+                onClick = {
+                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    intent.setType("application/json")
+                    intent.putExtra(Intent.EXTRA_TITLE, exportFilename)
+                    exportLauncher.launch(intent)
+                },
+                prefixIcon = painterResource(R.drawable.ic_export)
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_data_importTitle),
+                info = stringResource(R.string.settings_data_importInfo),
+                onClick = {
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    intent.setType("application/json")
+                    importLauncher.launch(intent)
+                },
+                prefixIcon = painterResource(R.drawable.ic_import)
             )
             HorizontalDivider()
 
@@ -142,6 +196,29 @@ fun SettingsScreen(
                 },
                 endIcon = painterResource(R.drawable.ic_external),
                 prefixIcon = painterResource(R.drawable.ic_android)
+            )
+        }
+
+        if (viewModel.importUri != null) {
+            ImportDialog(
+                onDismiss = {
+                    viewModel.importUri = null
+                },
+                onConfirm = { importStrategy ->
+                    viewModel.importDataFromJsonFile(
+                        viewModel.importUri!!,
+                        importStrategy = importStrategy,
+                        onFinished = { success ->
+                            if (success) {
+                                Toast.makeText(context, importSuccessMessage, Toast.LENGTH_SHORT).show()
+                            }
+                            else {
+                                Toast.makeText(context, importErrorMessage, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    )
+                    viewModel.importUri = null
+                }
             )
         }
     }

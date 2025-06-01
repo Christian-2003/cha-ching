@@ -3,6 +3,7 @@ package de.christian2003.chaching.database
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -74,5 +75,15 @@ interface TransferDao {
 	 */
 	@Update
 	suspend fun update(transfer: Transfer)
+
+
+	@Query("DELETE FROM transfers")
+	suspend fun deleteAll()
+
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	suspend fun insertAndIgnore(transfers: List<Transfer>)
+
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	suspend fun insertAndReplace(transfers: List<Transfer>)
 
 }

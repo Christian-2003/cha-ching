@@ -3,6 +3,7 @@ package de.christian2003.chaching.database
 import de.christian2003.chaching.database.entities.Transfer
 import de.christian2003.chaching.database.entities.TransferWithType
 import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.model.backup.ImportStrategy
 import java.util.UUID
 
 
@@ -107,6 +108,33 @@ class ChaChingRepository(
 	 */
 	suspend fun updateType(type: Type) {
 		typeDao.update(type)
+	}
+
+
+	/**
+	 * Imports the types and transfers from the backup according to the import strategy.
+	 *
+	 * @param types				Types to import.
+	 * @param transfers			Transfers to import
+	 * @param importStrategy	Import strategy indicates how to handle existing data with the import.
+	 */
+	suspend fun importDataFromBackup(types: List<Type>, transfers: List<Transfer>, importStrategy: ImportStrategy) {
+		when (importStrategy) {
+			ImportStrategy.DELETE_EXISTING_DATA -> {
+				transferDao.deleteAll()
+				typeDao.deleteAll()
+				typeDao.insertAndIgnore(types)
+				transferDao.insertAndIgnore(transfers)
+			}
+			ImportStrategy.REPLACE_EXISTING_DATA -> {
+				typeDao.insertAndReplace(types)
+				transferDao.insertAndReplace(transfers)
+			}
+			ImportStrategy.IGNORE_EXISTING_DATA -> {
+				typeDao.insertAndIgnore(types)
+				transferDao.insertAndIgnore(transfers)
+			}
+		}
 	}
 
 }

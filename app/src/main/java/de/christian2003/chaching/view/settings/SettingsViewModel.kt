@@ -4,13 +4,61 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import de.christian2003.chaching.database.ChaChingRepository
+import de.christian2003.chaching.model.backup.ImportStrategy
+import de.christian2003.chaching.model.backup.SerializableAppData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 
 
 class SettingsViewModel(application: Application): AndroidViewModel(application) {
 
-    fun init() {
+    private lateinit var repository: ChaChingRepository
 
+
+    var importUri: Uri? by mutableStateOf(null)
+
+
+    fun init(repository: ChaChingRepository) {
+        this.repository = repository
+    }
+
+
+    fun exportDataToJsonFile(uri: Uri, onFinished: (Boolean) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        val data: SerializableAppData = SerializableAppData.toSerializableAppData(repository.allTypes.first(), repository.allTransfers.first().map { it.transfer })
+        val json = Json.encodeToString(data)
+        val result: Boolean = writeToFile(uri, json)
+        withContext(Dispatchers.Main) {
+            onFinished(result)
+        }
+    }
+
+
+    fun importDataFromJsonFile(uri: Uri, onFinished: (Boolean) -> Unit, importStrategy: ImportStrategy) = viewModelScope.launch(Dispatchers.IO) {
+        val json: String? = readFromFile(uri)
+        var success = false
+
+        if (json != null) {
+            try {
+                val data: SerializableAppData = Json.decodeFromString<SerializableAppData>(json)
+                repository.importDataFromBackup(data.toTypes(), data.toTransfers(), importStrategy)
+                success = true
+            } catch (_: Exception) {
+                success = false
+            }
+        }
+
+        withContext(Dispatchers.Main) {
+            onFinished(success)
+        }
     }
 
 

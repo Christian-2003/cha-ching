@@ -3,6 +3,7 @@ package de.christian2003.chaching.database
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import de.christian2003.chaching.database.entities.Type
@@ -60,5 +61,15 @@ interface TypeDao {
      */
     @Update
     suspend fun update(type: Type)
+
+
+    @Query("DELETE FROM types")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAndIgnore(types: List<Type>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAndReplace(types: List<Type>)
 
 }
