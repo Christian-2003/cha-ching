@@ -30,6 +30,8 @@
 
     <string name="type_unnamed">Unnamed type %1$d</string>
     <string name="type_nameLabel">Name</string>
+    <string name="type_hoursWorkedEditableTitle">Hours Worked editable</string>
+    <string name="type_hoursWorkedEditableText">Whether to enable the "Hours worked" input</string>
     <string name="type_chooseIcon">Choose an icon</string>
     <string name="type_help_create">Enter the name for the type.</string>
 

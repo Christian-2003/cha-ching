@@ -40,6 +40,11 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
     var name: String by mutableStateOf("")
 
     /**
+     * Whether the hoursWorked-field of transfers for this type shall be editable.
+     */
+    var isHoursWorkedEditable by mutableStateOf(true)
+
+    /**
      * Icon selected by the user.
      */
     var icon: TypeIcon by mutableStateOf(TypeIcon.CURRENCY)
@@ -79,6 +84,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             isCreating = false
             type = repository.selectTypeById(typeId)
             name = type!!.name
+            isHoursWorkedEditable = type!!.isHoursWorkedEditable
             icon = type!!.icon
         }
         else {
@@ -86,6 +92,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             type = null
             isCreating = true
             name = ""
+            isHoursWorkedEditable = true
             icon = TypeIcon.CURRENCY
         }
     }
@@ -95,15 +102,21 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      * Saves the type by either inserting a new type or updating the type in the database.
      */
     fun save() = viewModelScope.launch(Dispatchers.IO) {
+        var type: Type? = this@TypeViewModel.type
         if (type == null) {
-            type = Type(name, icon)
-            repository.insertType(type!!)
+            type = Type(
+                name = name,
+                icon = icon,
+                isHoursWorkedEditable = isHoursWorkedEditable
+            )
+            repository.insertType(type)
         }
         else {
-            type!!.name = name
-            type!!.icon = icon
-            type!!.edited = LocalDateTime.now()
-            repository.updateType(type!!)
+            type.name = name
+            type.icon = icon
+            type.isHoursWorkedEditable = isHoursWorkedEditable
+            type.edited = LocalDateTime.now()
+            repository.updateType(type)
         }
     }
 

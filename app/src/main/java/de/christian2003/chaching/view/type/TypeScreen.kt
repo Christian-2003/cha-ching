@@ -1,9 +1,11 @@
 package de.christian2003.chaching.view.type
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -34,6 +37,7 @@ import de.christian2003.chaching.model.transfers.TypeIcon
 import de.christian2003.chaching.ui.composables.Headline
 import de.christian2003.chaching.ui.composables.HelpCard
 import de.christian2003.chaching.ui.composables.TextInput
+import java.nio.file.WatchEvent
 
 
 /**
@@ -107,6 +111,14 @@ fun TypeScreen(
                     bottom = dimensionResource(R.dimen.padding_vertical),
                 )
             )
+            Checkbox(
+                checked = viewModel.isHoursWorkedEditable,
+                onCheckedChange = {
+                    viewModel.isHoursWorkedEditable = it
+                },
+                title = stringResource(R.string.type_hoursWorkedEditableTitle),
+                text = stringResource(R.string.type_hoursWorkedEditableText)
+            )
             Headline(stringResource(R.string.type_chooseIcon))
             TypeIconSelection(
                 selected = viewModel.icon,
@@ -132,6 +144,68 @@ fun TypeScreen(
                     } else {
                         stringResource(R.string.button_save)
                     }
+                )
+            }
+        }
+    }
+}
+
+
+/**
+ * Checkbox component for the app.
+ *
+ * @param checked           Whether the checkbox is checked.
+ * @param onCheckedChange   Callback invoked once the checked-state changes.
+ * @param title             Title for the checkbox.
+ * @param modifier          Modifier.
+ * @param text              Optional subtext describing the checkbox in greater detail.
+ */
+@Composable
+private fun Checkbox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    title: String,
+    modifier: Modifier = Modifier,
+    text: String? = null
+) {
+    var checkboxStartPadding = dimensionResource(R.dimen.margin_horizontal) - 12.dp
+    if (checkboxStartPadding < 0.dp) {
+        checkboxStartPadding = 0.dp
+    }
+    var checkboxEndPadding = dimensionResource(R.dimen.padding_horizontal) - 12.dp
+    if (checkboxEndPadding < 0.dp) {
+        checkboxEndPadding = 0.dp
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable {
+                onCheckedChange(!checked)
+            }
+            .padding(
+                start = checkboxStartPadding,
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical)
+            )
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.padding(end = checkboxEndPadding)
+        )
+        Column {
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.labelLarge
+            )
+            if (text != null) {
+                Text(
+                    text = text,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
         }

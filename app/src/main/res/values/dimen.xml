@@ -3,8 +3,8 @@
 <resources>
 
     <!-- Space between UI elements -->
-    <dimen name="padding_vertical">12dp</dimen>
-    <dimen name="padding_horizontal">8dp</dimen>
+    <dimen name="padding_vertical">8dp</dimen>
+    <dimen name="padding_horizontal">12dp</dimen>
 
     <!-- Space between screen edge and app content -->
     <dimen name="margin_horizontal">16dp</dimen>

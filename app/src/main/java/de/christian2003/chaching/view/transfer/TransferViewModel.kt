@@ -80,6 +80,11 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     var isDatePickerVisible: Boolean by mutableStateOf(false)
 
     /**
+     * Indicates whether the hoursWorked-field is visible.
+     */
+    var isHoursWorkedEditable: Boolean = false
+
+    /**
      * Indicates whether the screen is used to create a new transfer.
      */
     var isCreating: Boolean = false
@@ -113,6 +118,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
             return@launch
         }
         this@TransferViewModel.type = type
+        isHoursWorkedEditable = type.isHoursWorkedEditable
 
         if (transferId != null) {
             //Edit transfer:
@@ -124,6 +130,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
             transfer = transferWithType.transfer
             if (this@TransferViewModel.type.typeId != transferWithType.type.typeId) {
                 this@TransferViewModel.type = transferWithType.type
+                isHoursWorkedEditable = transferWithType.type.isHoursWorkedEditable
             }
             val formattedValue = numberFormat.format(transferWithType.transfer.value.toDouble() / 100)
             value = TextFieldValue(formattedValue, TextRange(formattedValue.length))

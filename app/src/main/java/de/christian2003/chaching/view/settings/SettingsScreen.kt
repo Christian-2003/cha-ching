@@ -268,7 +268,7 @@ private fun SettingsItemButton(
             }
             .padding(
                 horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical) / 2
+                vertical = dimensionResource(R.dimen.padding_vertical)
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {

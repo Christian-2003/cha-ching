@@ -30,6 +30,12 @@ class Type(
     val typeId: UUID = UUID.randomUUID(),
 
     /**
+     * Whether the hoursWorked-field of the transfers for this type can be edited.
+     */
+    var isHoursWorkedEditable: Boolean = true,
+
+
+    /**
      * Date time on which the type was created. This is for statistical purposes.
      */
     val created: LocalDateTime = LocalDateTime.now(),

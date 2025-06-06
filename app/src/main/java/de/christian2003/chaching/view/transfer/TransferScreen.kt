@@ -120,18 +120,20 @@ fun TransferScreen(
                 suffixLabel = stringResource(R.string.transfer_valueSuffix),
                 modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
             )
-            TextInput(
-                value = viewModel.hoursWorked,
-                onValueChange = {
-                    viewModel.updateHoursWorked(it)
-                },
-                label = stringResource(R.string.transfer_hoursWorkedLabel),
-                errorMessage = viewModel.hoursWorkedErrorMessage,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-                prefixIcon = painterResource(R.drawable.ic_time),
-                suffixLabel = stringResource(R.string.transfer_hoursWorkedSuffix),
-                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
-            )
+            if (viewModel.isHoursWorkedEditable) {
+                TextInput(
+                    value = viewModel.hoursWorked,
+                    onValueChange = {
+                        viewModel.updateHoursWorked(it)
+                    },
+                    label = stringResource(R.string.transfer_hoursWorkedLabel),
+                    errorMessage = viewModel.hoursWorkedErrorMessage,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                    prefixIcon = painterResource(R.drawable.ic_time),
+                    suffixLabel = stringResource(R.string.transfer_hoursWorkedSuffix),
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
+                )
+            }
             Button(
                 onClick = {
                     viewModel.save()

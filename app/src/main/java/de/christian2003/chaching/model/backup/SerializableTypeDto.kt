@@ -19,6 +19,9 @@ class SerializableTypeDto(
     @SerialName("icon")
     val icon: TypeIcon,
 
+    @SerialName("isHoursWorkedEditable")
+    val isHoursWorkedEditable: Boolean,
+
     @SerialName("id")
     @Serializable(with = UuidSerializer::class)
     val id: UUID,
@@ -37,6 +40,7 @@ class SerializableTypeDto(
         return Type(
             name = name,
             icon = icon,
+            isHoursWorkedEditable = isHoursWorkedEditable,
             typeId = id,
             created = created,
             edited = edited
@@ -50,6 +54,7 @@ class SerializableTypeDto(
             return SerializableTypeDto(
                 name = type.name,
                 icon = type.icon,
+                isHoursWorkedEditable = type.isHoursWorkedEditable,
                 id = type.typeId,
                 created = type.created,
                 edited = type.edited
