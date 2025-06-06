@@ -45,6 +45,7 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.database.entities.TransferWithType
 import de.christian2003.chaching.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.ui.composables.EmptyPlaceholder
+import de.christian2003.chaching.ui.composables.TransferListItem
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -94,7 +95,7 @@ fun TransfersScreen(
                     subtitle = stringResource(R.string.transfers_emptyPlaceholder_subtitle),
                     painter = painterResource(R.drawable.el_transfers),
                     modifier = Modifier.fillMaxSize()
-                ) { }
+                )
             }
             else {
                 TransferList(
@@ -143,107 +144,6 @@ private fun TransferList(
                 onEdit = onEditTransfer,
                 onDelete = onDeleteTransfer
             )
-        }
-    }
-}
-
-
-/**
- * Displays a single transfer as list item.
- *
- * @param transfer  Transfer to display.
- * @param onEdit    Callback invoked to edit the transfer.
- * @param onDelete  Callback invoked to delete the transfer.
- */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun TransferListItem(
-    transfer: TransferWithType,
-    onEdit: (TransferWithType) -> Unit,
-    onDelete: (TransferWithType) -> Unit
-) {
-    val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-    var isExpanded: Boolean by remember { mutableStateOf(false) }
-    Column(
-        horizontalAlignment = Alignment.End,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                isExpanded = !isExpanded
-            }
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
-            )
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
-            ) {
-                Text(
-                    text = transfer.type.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = transfer.transfer.valueDate.format(formatter),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Text(
-                text = stringResource(R.string.types_value, transfer.transfer.getFormattedValue()),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.extraLargeIncreased)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(
-                        vertical = 4.dp,
-                        horizontal = 12.dp
-                    )
-            )
-        }
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(spring(Spring.DampingRatioMediumBouncy)),
-            exit = shrinkVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(spring(Spring.DampingRatioMediumBouncy))
-        ) {
-            Row {
-                FilledIconButton(
-                    onClick = {
-                        onEdit(transfer)
-                    },
-                    colors = IconButtonDefaults.filledIconButtonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_edit),
-                        contentDescription = ""
-                    )
-                }
-                FilledIconButton(
-                    onClick = {
-                        onDelete(transfer)
-                    },
-                    colors = IconButtonDefaults.filledIconButtonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_delete),
-                        contentDescription = ""
-                    )
-                }
-            }
         }
     }
 }

@@ -3,6 +3,13 @@
     <string name="confirm_delete">Confirm deletion</string>
 
 
+    <string name="main_overview_total">Total income last 30 days</string>
+    <string name="main_overview_otherTypes">Other types</string>
+    <string name="main_recentTransfers">Recent transfers</string>
+    <string name="main_emptyPlaceholder_title">No data to show</string>
+    <string name="main_emptyPlaceholder_subtitle">Add transfers to unlock the full potential of Cha Ching</string>
+
+
     <string name="transfers_title">Your transfers</string>
     <string name="transfers_emptyPlaceholder_title">No data to show</string>
     <string name="transfers_emptyPlaceholder_subtitle">Available transfers are shown here</string>
@@ -103,4 +110,5 @@
     <string name="button_createType">Create type</string>
     <string name="button_save">Save</string>
     <string name="button_import">Import</string>
+    <string name="button_showAllTransfers">Show all transfers</string>
 </resources>

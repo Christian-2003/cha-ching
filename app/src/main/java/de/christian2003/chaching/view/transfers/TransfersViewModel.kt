@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.database.ChaChingRepository
 import de.christian2003.chaching.database.entities.TransferWithType
+import de.christian2003.chaching.model.transfers.OverviewCalcResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

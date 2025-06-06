@@ -10,6 +10,7 @@ import androidx.room.Update
 import de.christian2003.chaching.database.entities.Transfer
 import de.christian2003.chaching.database.entities.TransferWithType
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 import java.util.UUID
 
 
@@ -27,7 +28,6 @@ interface TransferDao {
 	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
 	fun selectAllTransfersSortedByDate(): Flow<List<Transfer>>
 
-
 	/**
 	 * Returns all transfers (with type) sorted by the value date.
 	 *
@@ -37,6 +37,14 @@ interface TransferDao {
 	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
 	fun selectAllTransfersWithTypeSortedByDate(): Flow<List<TransferWithType>>
 
+	/**
+	 * Returns the last three transfers (with type).
+	 *
+	 * @return	Last three transfers with type.
+	 */
+	@Transaction
+	@Query("SELECT * FROM transfers ORDER BY valueDate DESC LIMIT 3")
+	fun selectRecentTransfersWithType(): Flow<List<TransferWithType>>
 
 	/**
 	 * Returns the transfer (with type) of the ID passed. If no transfer with the ID specified
@@ -48,6 +56,17 @@ interface TransferDao {
 	@Transaction
 	@Query("SELECT * FROM transfers WHERE transferId = :transferId")
 	suspend fun selectTransferWithTypeById(transferId: UUID): TransferWithType?
+
+	/**
+	 * Returns all transfers (with type) in the range between the epoch days passed.
+	 *
+	 * @param startEpochDay	First epoch day of the range.
+	 * @param endEpochDay	Last epoch day of the range.
+	 * @return				All transfers in the range specified.
+	 */
+	@Transaction
+	@Query("SELECT * FROM transfers WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay")
+	suspend fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): List<TransferWithType>
 
 
 	/**

@@ -4,6 +4,7 @@ import de.christian2003.chaching.database.entities.Transfer
 import de.christian2003.chaching.database.entities.TransferWithType
 import de.christian2003.chaching.database.entities.Type
 import de.christian2003.chaching.model.backup.ImportStrategy
+import java.time.LocalDate
 import java.util.UUID
 
 
@@ -29,10 +30,13 @@ class ChaChingRepository(
 	 */
 	val allTransfers = transferDao.selectAllTransfersWithTypeSortedByDate()
 
+	val recentTransfers = transferDao.selectRecentTransfersWithType()
+
 	/**
 	 * List of all types sorted by date of creation.
 	 */
 	val allTypes = typeDao.selectAllTypesSortedByDate()
+
 
 
 	/**
@@ -43,6 +47,18 @@ class ChaChingRepository(
 	 */
 	suspend fun selectTransferWithTypeById(transferId: UUID): TransferWithType? {
 		return transferDao.selectTransferWithTypeById(transferId)
+	}
+
+	/**
+	 * Returns all transfers for the last thirty days.
+	 *
+	 * @param date	Current date (i.e. today).
+	 * @return		List of all transfers for the last 30 days.
+	 */
+	suspend fun selectTransfersForMonth(date: LocalDate): List<TransferWithType> {
+		val today: Long = date.toEpochDay()
+		val thirtyDaysAgo: Long = date.minusDays(30).toEpochDay()
+		return transferDao.selectTransfersWithValueDateRange(thirtyDaysAgo, today)
 	}
 
 	/**
