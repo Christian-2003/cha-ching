@@ -25,6 +25,16 @@ enum class TypeIcon(
 
     CREDIT(R.drawable.type_credit),
 
-    NOTE(R.drawable.type_note)
+    NOTE(R.drawable.type_note),
+
+    EDUCATION(R.drawable.type_education),
+
+    FAMILY(R.drawable.type_family),
+
+    HOME(R.drawable.type_home),
+
+    SHARES(R.drawable.type_shares),
+
+    VACATION(R.drawable.type_vacation)
 
 }
