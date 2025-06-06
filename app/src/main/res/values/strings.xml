@@ -8,6 +8,27 @@
     <string name="main_recentTransfers">Recent transfers</string>
     <string name="main_emptyPlaceholder_title">No data to show</string>
     <string name="main_emptyPlaceholder_subtitle">Add transfers to unlock the full potential of Cha Ching</string>
+    <string-array name="main_comparisons">
+        <item>This is as much as %1$s cups of coffee</item>
+        <item>You can buy %1$s ice cream cones with this much money</item>
+        <item>Are you interested in %1$s Big Macs?</item>
+        <item>You can buy %1$s Italian pizzas</item>
+        <item>This is enough for %1$s bars of chocolate</item>
+        <item>You can give %1$s people each an avocado</item>
+        <item>Enough for %1$s rolls of toilet paper</item>
+        <item>Do you ever need %1$s liters of milk?</item>
+        <item>Your local bakery might sell %1$s loafs of bread to you</item>
+        <item>That\'s enough to get %1$s cartons of eggs</item>
+        <item>This is as much as %1$s monthly Spotify subscriptions</item>
+        <item>You can buy %1$s move tickets with this much money</item>
+        <item>Are you interested in %1$s Germany-travel-tickets?</item>
+        <item>You can buy %1$s Japanese ramen</item>
+        <item>This is enough for %1$s tubes of toothpaste</item>
+        <item>You can give %1$s people each an apple</item>
+        <item>Enough for %1$s laundry detergent bottles</item>
+        <item>Do you ever need %1$s liters of soda?</item>
+        <item>That\'s enough to get %1$s packs of batteries</item>
+    </string-array>
 
 
     <string name="transfers_title">Your transfers</string>
@@ -30,7 +51,7 @@
     <string name="types_emptyPlaceholder_title">No data to show</string>
     <string name="types_emptyPlaceholder_subtitle">Available types are shown here</string>
     <string name="types_listTitle">Your types</string>
-    <string name="types_value">%1$s $</string>
+    <string name="types_value">$ %1$s</string>
     <string name="types_help">Types define which type of income you can manage. You can add new types.</string>
     <string name="types_confirmDelete">Deleting %1$s will also delete all transfers associated. Are you sure you want to delete this type?</string>
 

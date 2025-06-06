@@ -39,9 +39,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.database.entities.TransferWithType
@@ -212,6 +214,15 @@ private fun Overview(
 			)
 			Value(valueFormat.format(overviewCalcResult.totalValue.toDouble() / 100))
 		}
+		Text(
+			text = overviewCalcResult.overviewComparisonConnection.getLocalizedString(LocalContext.current, overviewCalcResult.totalValue),
+			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			style = MaterialTheme.typography.bodyMedium,
+			textAlign = TextAlign.Center,
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(top = dimensionResource(R.dimen.padding_vertical))
+		)
 		HorizontalDivider(
 			color = MaterialTheme.colorScheme.outline,
 			modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
@@ -268,7 +279,10 @@ private fun OverviewItem(
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
-		modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
+		modifier = Modifier.padding(
+			top = dimensionResource(R.dimen.padding_vertical),
+			end = dimensionResource(R.dimen.padding_horizontal)
+		)
 	) {
 		Text(
 			text = if (overviewCalcResultItem.type != null) { overviewCalcResultItem.type.name } else { stringResource(R.string.main_overview_otherTypes) },
@@ -279,7 +293,7 @@ private fun OverviewItem(
 				.padding(end = dimensionResource(R.dimen.padding_horizontal))
 		)
 		Text(
-			text = valueFormat.format(overviewCalcResultItem.value.toDouble() / 100),
+			text = stringResource(R.string.types_value, valueFormat.format(overviewCalcResultItem.value.toDouble() / 100)),
 			color = color,
 			style = MaterialTheme.typography.bodyMedium
 		)

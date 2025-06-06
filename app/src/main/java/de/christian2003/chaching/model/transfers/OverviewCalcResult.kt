@@ -22,6 +22,11 @@ class OverviewCalcResult(
     var totalValue: Int = 0
 
     /**
+     * Overview comparison connection to get some additional (useless) info to the user.
+     */
+    var overviewComparisonConnection: OverviewComparisonConnection
+
+    /**
      * Values by types.
      */
     var results: List<OverviewCalcResultItem>
@@ -36,6 +41,7 @@ class OverviewCalcResult(
         results.forEach { item ->
             totalValue += item.value
         }
+        overviewComparisonConnection = OverviewComparisonConnection.getRandomComparisonConnection()
     }
 
 
