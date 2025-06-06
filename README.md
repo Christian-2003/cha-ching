@@ -7,6 +7,13 @@
 
 Do you want to know how much money you have earned? Cha Ching makes you store all your incomes, such as salaries or bonuses, on your Android device locally.
 
+<div align="center">
+    <img src="docs/img/preview_1.png" height="390">
+    <img src="docs/img/preview_2.png" height="390">
+    <img src="docs/img/preview_3.png" height="390">
+    <img src="docs/img/preview_4.png" height="390">
+</div>
+
 ###### Table of Contents
 1. [Description](#description)
 2. [Install and Use the Project](#install-and-use-the-project)
@@ -77,6 +84,18 @@ The project will be developed in English.
 
 <br/>
 
+## Additional Images
+
+<div align="center">
+    <img src="docs/img/img_1.png" height="390">
+    <img src="docs/img/img_2.png" height="390">
+    <img src="docs/img/img_3.png" height="390">
+    <img src="docs/img/img_4.png" height="390">
+    <img src="docs/img/img_5.png" height="390">
+</div>
+
+<br/>
+
 ***
-2025-06-01  
+2025-06-06  
 &copy; Christian-2003
