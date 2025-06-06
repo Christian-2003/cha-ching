@@ -20,6 +20,7 @@ Do you want to know how much money you have earned? Cha Ching makes you store al
 3. [Contributors](#contributors)
 4. [License](#license)
 5. [How to Contribute](#how-to-contribute)
+6. [Additional Images](#additional-images)
 
 <br/>
 
