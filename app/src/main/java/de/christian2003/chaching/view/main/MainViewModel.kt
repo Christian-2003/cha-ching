@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.database.ChaChingRepository
-import de.christian2003.chaching.database.entities.Transfer
 import de.christian2003.chaching.database.entities.TransferWithType
 import de.christian2003.chaching.database.entities.Type
 import de.christian2003.chaching.model.transfers.OverviewCalcResult

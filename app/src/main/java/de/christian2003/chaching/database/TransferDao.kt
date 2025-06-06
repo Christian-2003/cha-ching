@@ -10,7 +10,6 @@ import androidx.room.Update
 import de.christian2003.chaching.database.entities.Transfer
 import de.christian2003.chaching.database.entities.TransferWithType
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 import java.util.UUID
 
 

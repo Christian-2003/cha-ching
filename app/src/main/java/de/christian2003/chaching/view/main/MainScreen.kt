@@ -183,7 +183,6 @@ private fun Overview(
 ) {
 	val valueFormat = DecimalFormat("#,###.00")
 	val colors = listOf<Color>(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.tertiary)
-	val containerColors = listOf<Color>(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.secondaryContainer, MaterialTheme.colorScheme.tertiaryContainer)
 	Column(
 		modifier = modifier
 			.fillMaxWidth()
