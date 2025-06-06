@@ -43,7 +43,7 @@ fun Card(
             .clip(MaterialTheme.shapes.extraLarge)
             .background(backgroundColor)
             .padding(
-                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                horizontal = dimensionResource(R.dimen.margin_horizontal),
                 vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {

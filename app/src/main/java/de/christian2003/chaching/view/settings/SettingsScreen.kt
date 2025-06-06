@@ -45,10 +45,13 @@ import java.time.format.DateTimeFormatter
 /**
  * Screen displays settings of the app.
  *
- * @param viewModel             View model.
- * @param onNavigateUp          Callback invoked to navigate up on the navigation stack.
- * @param onNavigateToTypes     Callback invoked to navigate to the screen displaying the list of types.
- * @param onNavigateToLicenses  Callback invoked to navigate to the screen displaying licenses.
+ * @param viewModel                 View model.
+ * @param onNavigateUp              Callback invoked to navigate up on the navigation stack.
+ * @param onNavigateToTypes         Callback invoked to navigate to the screen displaying the list
+ *                                  of types.
+ * @param onNavigateToLicenses      Callback invoked to navigate to the screen displaying licenses.
+ * @param onNavigateToHelpMessages  Callback invoked to navigate to the screen displaying the list
+ *                                  of help messages.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,7 +59,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     onNavigateUp: () -> Unit,
     onNavigateToTypes: () -> Unit,
-    onNavigateToLicenses: () -> Unit
+    onNavigateToLicenses: () -> Unit,
+    onNavigateToHelpMessages: () -> Unit
 ) {
     val context: Context = LocalContext.current
     val exportSuccessMessage = stringResource(R.string.settings_data_exportSuccess)
@@ -152,6 +156,22 @@ fun SettingsScreen(
                 prefixIcon = painterResource(R.drawable.ic_import)
             )
             HorizontalDivider()
+
+
+            //Help
+            Headline(
+                title = stringResource(R.string.settings_help),
+                indentToPrefixIcon = true
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_help_helpMessagesTitle),
+                info = stringResource(R.string.settings_help_helpMessagesInfo),
+                onClick = onNavigateToHelpMessages,
+                endIcon = painterResource(R.drawable.ic_next),
+                prefixIcon = painterResource(R.drawable.ic_help)
+            )
+            HorizontalDivider()
+
 
             //About
             Headline(

@@ -16,6 +16,8 @@ import androidx.navigation.navArgument
 import de.christian2003.chaching.database.ChaChingDatabase
 import de.christian2003.chaching.database.ChaChingRepository
 import de.christian2003.chaching.ui.theme.ChaChingTheme
+import de.christian2003.chaching.view.help.HelpScreen
+import de.christian2003.chaching.view.help.HelpViewModel
 import de.christian2003.chaching.view.licenses.LicensesScreen
 import de.christian2003.chaching.view.licenses.LicensesViewModel
 import de.christian2003.chaching.view.main.MainScreen
@@ -70,6 +72,7 @@ fun ChaChing() {
 	val typeViewModel: TypeViewModel = viewModel()
 	val settingsViewModel: SettingsViewModel = viewModel()
 	val licensesViewModel: LicensesViewModel = viewModel()
+	val helpViewModel: HelpViewModel = viewModel()
 
 	ChaChingTheme {
 		NavHost(
@@ -88,6 +91,9 @@ fun ChaChing() {
 					},
 					onCreateTransfer = { typeId ->
 						navController.navigate("transfer/$typeId/")
+					},
+					onCreateNewType = {
+						navController.navigate("type/")
 					},
 					onNavigateToSettings = {
 						navController.navigate("settings")
@@ -189,6 +195,9 @@ fun ChaChing() {
 					},
 					onNavigateToLicenses = {
 						navController.navigate("licenses")
+					},
+					onNavigateToHelpMessages = {
+						navController.navigate("help")
 					}
 				)
 			}
@@ -198,6 +207,17 @@ fun ChaChing() {
 				licensesViewModel.init()
 				LicensesScreen(
 					viewModel = licensesViewModel,
+					onNavigateUp = {
+						navController.navigateUp()
+					}
+				)
+			}
+
+
+			composable("help") {
+				helpViewModel.init()
+				HelpScreen(
+					viewModel = helpViewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					}

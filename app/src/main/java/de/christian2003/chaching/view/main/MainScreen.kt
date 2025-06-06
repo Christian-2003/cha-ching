@@ -49,6 +49,7 @@ fun MainScreen(
 	onNavigateToTransfers: () -> Unit,
 	onNavigateToTypes: () -> Unit,
 	onCreateTransfer: (UUID) -> Unit,
+	onCreateNewType: () -> Unit,
 	onNavigateToSettings: () -> Unit
 ) {
 	val allTypes by viewModel.allTypes.collectAsState(emptyList())
@@ -77,7 +78,8 @@ fun MainScreen(
 				types = allTypes,
 				onTypeClicked = { type ->
 					onCreateTransfer(type.typeId)
-				}
+				},
+				onCreateNewType = onCreateNewType
 			)
 		}
 	) { innerPadding ->
@@ -111,7 +113,8 @@ fun MainScreen(
 @Composable
 private fun FabMenu(
 	types: List<Type>,
-	onTypeClicked: (Type) -> Unit
+	onTypeClicked: (Type) -> Unit,
+	onCreateNewType: () -> Unit
 ) {
 	var isExpanded by remember { mutableStateOf(false) }
 	val iconAnimator by animateFloatAsState(
@@ -139,6 +142,22 @@ private fun FabMenu(
 			}
 		}
 	) {
+		FloatingActionButtonMenuItem(
+			onClick = {
+				onCreateNewType()
+			},
+			text = {
+				Text(stringResource(R.string.button_createNewType))
+			},
+			icon = {
+				Icon(
+					painter = painterResource(R.drawable.ic_add),
+					contentDescription = ""
+				)
+			},
+			containerColor = MaterialTheme.colorScheme.surfaceContainer,
+			contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+		)
 		types.forEach { type ->
 			FloatingActionButtonMenuItem(
 				onClick = {

@@ -3,7 +3,6 @@ package de.christian2003.chaching.view.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +26,13 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.model.backup.ImportStrategy
 
 
+/**
+ * Displays a dialog through which the user can configure what happens with the data currently stored
+ * in the app, once the user restores a backup.
+ *
+ * @param onDismiss Callback invoked to dismiss the dialog without any action.
+ * @param onConfirm Callback invoked once the user selects an option.
+ */
 @Composable
 fun ImportDialog(
     onDismiss: () -> Unit,
