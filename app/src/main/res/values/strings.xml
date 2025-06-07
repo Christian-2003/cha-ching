@@ -6,6 +6,7 @@
     <string name="main_overview_total">Total income last 30 days</string>
     <string name="main_overview_otherTypes">Other types</string>
     <string name="main_overview_noData">You have not earned any money in the last 30 days</string>
+    <string name="main_downloadMessage">A new version for Cha Ching is available. Do you want to download the update now?</string>
     <string name="main_recentTransfers">Recent transfers</string>
     <string name="main_emptyPlaceholder_title">No data to show</string>
     <string name="main_emptyPlaceholder_subtitle">Add transfers to unlock the full potential of Cha Ching</string>
@@ -151,4 +152,6 @@
     <string name="button_next">Next</string>
     <string name="button_previous">Previous</string>
     <string name="button_finish">Finish</string>
+    <string name="button_download">Download</string>
+    <string name="button_dismiss">Dismiss</string>
 </resources>

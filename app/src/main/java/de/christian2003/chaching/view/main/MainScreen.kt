@@ -7,8 +7,11 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -132,6 +136,17 @@ fun MainScreen(
 					.padding(innerPadding)
 					.verticalScroll(rememberScrollState())
 			) {
+				AnimatedVisibility(viewModel.isUpdateAvailable && !viewModel.isUpdateMessageDismissed) {
+					DownloadCard(
+						onCancelClicked = {
+							viewModel.isUpdateMessageDismissed = true
+						},
+						onConfirmClicked = {
+							viewModel.isUpdateMessageDismissed = true
+							viewModel.requestDownload()
+						}
+					)
+				}
 				AnimatedVisibility(viewModel.overviewCalcResult != null) {
 					Overview(
 						overviewCalcResult = viewModel.overviewCalcResult!!,
@@ -488,4 +503,76 @@ private fun FabMenu(
 		}
 	}
 
+}
+
+
+/**
+ * Composable displays a card at the top of the view if a new app version is available to download.
+ *
+ * @param onCancelClicked   Callback invoked once the cancel-button is clicked.
+ * @param onConfirmClicked  Callback invoked once the confirm-button is clicked.
+ */
+@Composable
+fun DownloadCard(
+	onCancelClicked: () -> Unit,
+	onConfirmClicked: () -> Unit
+) {
+	androidx.compose.material3.Card(
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				start = dimensionResource(R.dimen.margin_horizontal),
+				end = dimensionResource(R.dimen.margin_horizontal),
+				bottom = dimensionResource(R.dimen.padding_vertical)
+			),
+		shape = MaterialTheme.shapes.extraLarge
+	) {
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.background(MaterialTheme.colorScheme.surfaceContainer)
+				.padding(
+					horizontal = dimensionResource(R.dimen.margin_horizontal),
+					vertical = dimensionResource(R.dimen.padding_vertical)
+				)
+		) {
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier.fillMaxWidth()
+			) {
+				Icon(
+					painter = painterResource(R.drawable.ic_info),
+					tint = MaterialTheme.colorScheme.onSurfaceVariant,
+					contentDescription = "",
+					modifier = Modifier
+						.padding(end = dimensionResource(R.dimen.padding_horizontal))
+				)
+				Text(
+					text = stringResource(R.string.main_downloadMessage),
+					color = MaterialTheme.colorScheme.onSurfaceVariant
+				)
+			}
+			FlowRow(
+				modifier = Modifier.align(Alignment.End).padding(top = dimensionResource(R.dimen.padding_vertical)),
+				horizontalArrangement = Arrangement.End
+			) {
+				TextButton(
+					onClick = onCancelClicked,
+					colors = ButtonDefaults.textButtonColors().copy(
+						contentColor = MaterialTheme.colorScheme.primary
+					)
+				) {
+					Text(stringResource(R.string.button_dismiss))
+				}
+				TextButton(
+					onClick = onConfirmClicked,
+					colors = ButtonDefaults.textButtonColors().copy(
+						contentColor = MaterialTheme.colorScheme.primary
+					)
+				) {
+					Text(stringResource(R.string.button_download))
+				}
+			}
+		}
+	}
 }

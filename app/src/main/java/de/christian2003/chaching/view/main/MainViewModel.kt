@@ -9,6 +9,7 @@ import de.christian2003.chaching.database.ChaChingRepository
 import de.christian2003.chaching.database.entities.TransferWithType
 import de.christian2003.chaching.database.entities.Type
 import de.christian2003.chaching.model.transfers.OverviewCalcResult
+import de.christian2003.chaching.model.update.UpdateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -35,6 +36,11 @@ class MainViewModel: ViewModel() {
 	 */
 	private lateinit var transfersLastMonth: Flow<List<TransferWithType>>
 
+	/**
+	 * Stores the update manager.
+	 */
+	private lateinit var updateManager: UpdateManager
+
 
 	/**
 	 * List of all types.
@@ -56,22 +62,38 @@ class MainViewModel: ViewModel() {
 	 */
 	var overviewCalcResult: OverviewCalcResult? by mutableStateOf(null)
 
+	/**
+	 * Indicates whether an update is available for the app.
+	 */
+	var isUpdateAvailable: Boolean by mutableStateOf(false)
+
+	/**
+	 * Indicates whether the update message has been dismissed by the user.
+	 */
+	var isUpdateMessageDismissed: Boolean by mutableStateOf(false)
+
 
 	/**
 	 * Instantiates the view model.
 	 *
 	 * @param repository	Repository from which to source data.
 	 */
-	fun init(repository: ChaChingRepository) = viewModelScope.launch(Dispatchers.IO) {
+	fun init(repository: ChaChingRepository, updateManager: UpdateManager) {
+		isUpdateAvailable = updateManager.isUpdateAvailable
 		if (!isInitialized) {
 			this@MainViewModel.repository = repository
+			this@MainViewModel.updateManager = updateManager
 			allTypes = repository.allTypes
 			recentTransfers = repository.recentTransfers
 			transfersLastMonth = repository.selectTransfersForMonth(LocalDate.now())
-			transfersLastMonth.collect { transfersList ->
-				overviewCalcResult = OverviewCalcResult(transfersList)
-			}
 			isInitialized = true
+			//All code after 'collect' is not called, therefore, this must be the last method call of the init-function!
+			viewModelScope.launch(Dispatchers.IO) {
+				transfersLastMonth.collect { transfersList ->
+					overviewCalcResult = OverviewCalcResult(transfersList)
+				}
+			}
+
 		}
 	}
 
@@ -85,6 +107,14 @@ class MainViewModel: ViewModel() {
 			transferToDelete = null
 			repository.deleteTransfer(transfer.transfer)
 		}
+	}
+
+
+	/**
+	 * Requests the download of the new version of the app (if available).
+	 */
+	fun requestDownload() {
+		updateManager.requestDownload()
 	}
 
 }
