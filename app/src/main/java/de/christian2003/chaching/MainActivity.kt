@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import de.christian2003.chaching.database.ChaChingDatabase
 import de.christian2003.chaching.database.ChaChingRepository
+import de.christian2003.chaching.model.update.UpdateManager
 import de.christian2003.chaching.ui.theme.ChaChingTheme
 import de.christian2003.chaching.view.help.HelpScreen
 import de.christian2003.chaching.view.help.HelpViewModel
@@ -42,6 +43,9 @@ import java.util.UUID
  */
 class MainActivity : ComponentActivity() {
 
+	private var updateManager: UpdateManager? = null
+
+
 	/**
 	 * Instantiates the app on state changes.
 	 *
@@ -49,9 +53,18 @@ class MainActivity : ComponentActivity() {
 	 */
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
+		//Update manager:
+		if (updateManager == null) {
+			updateManager = UpdateManager.getInstance(this)
+		}
+
+		//App content:
 		enableEdgeToEdge()
 		setContent {
-			ChaChing()
+			ChaChing(
+				updateManager = updateManager!!
+			)
 		}
 	}
 
@@ -60,9 +73,11 @@ class MainActivity : ComponentActivity() {
 
 /**
  * Root composable for the ChaChing-app.
+ *
+ * @param updateManager	Update manager which detects app updates.
  */
 @Composable
-fun ChaChing() {
+fun ChaChing(updateManager: UpdateManager) {
 	val navController: NavHostController = rememberNavController()
 	val database: ChaChingDatabase = ChaChingDatabase.getInstance(LocalContext.current)
 	val repository = ChaChingRepository(database.transferDao, database.typeDao)
@@ -74,7 +89,7 @@ fun ChaChing() {
 		) {
 			composable("main") {
 				val viewModel: MainViewModel = viewModel()
-				viewModel.init(repository)
+				viewModel.init(repository, updateManager)
 				MainScreen(
 					viewModel = viewModel,
 					onNavigateToTransfers = {
