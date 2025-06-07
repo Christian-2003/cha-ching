@@ -19,6 +19,8 @@ class TransfersViewModel: ViewModel() {
      */
     private lateinit var repository: ChaChingRepository
 
+    private var isInitialized: Boolean = false
+
     /**
      * List of all transfers.
      */
@@ -37,8 +39,11 @@ class TransfersViewModel: ViewModel() {
      * @param repository    Repository from which to source the data.
      */
     fun init(repository: ChaChingRepository) {
-        this.repository = repository
-        allTransfers = repository.allTransfers
+        if (!isInitialized) {
+            this.repository = repository
+            allTransfers = repository.allTransfers
+            isInitialized = true
+        }
     }
 
 

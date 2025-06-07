@@ -33,6 +33,8 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      */
     private lateinit var repository: ChaChingRepository
 
+    private var isInitialized: Boolean = false
+
     /**
      * Transfer to edit. If a new transfer is created, this is null.
      */
@@ -108,48 +110,51 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      * @param transferId    ID of the transfer to edit. To create a new transfer, pass null.
      */
     fun init(repository: ChaChingRepository, typeId: UUID, transferId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
-        this@TransferViewModel.repository = repository
-        isHelpCardVisible = HelpCards.CREATE_TRANSFER.getVisible(getApplication<Application>().baseContext)
+        if (!isInitialized) {
+            this@TransferViewModel.repository = repository
+            isHelpCardVisible = HelpCards.CREATE_TRANSFER.getVisible(getApplication<Application>().baseContext)
 
-        //Get type:
-        val type: Type? = repository.selectTypeById(typeId)
-        if (type == null) {
-            throw IllegalStateException("Cannot create transfer where 'type = null'.")
-            return@launch
-        }
-        this@TransferViewModel.type = type
-        isHoursWorkedEditable = type.isHoursWorkedEditable
+            //Get type:
+            val type: Type? = repository.selectTypeById(typeId)
+            if (type == null) {
+                throw IllegalStateException("Cannot create transfer where 'type = null'.")
+                return@launch
+            }
+            this@TransferViewModel.type = type
+            isHoursWorkedEditable = type.isHoursWorkedEditable
 
-        if (transferId != null) {
-            //Edit transfer:
-            val transferWithType: TransferWithType? = repository.selectTransferWithTypeById(transferId)
-            if (transferWithType == null) {
-                throw IllegalStateException("Cannot edit transfer that does not exist")
+            if (transferId != null) {
+                //Edit transfer:
+                val transferWithType: TransferWithType? = repository.selectTransferWithTypeById(transferId)
+                if (transferWithType == null) {
+                    throw IllegalStateException("Cannot edit transfer that does not exist")
+                }
+                isCreating = false
+                transfer = transferWithType.transfer
+                if (this@TransferViewModel.type.typeId != transferWithType.type.typeId) {
+                    this@TransferViewModel.type = transferWithType.type
+                    isHoursWorkedEditable = transferWithType.type.isHoursWorkedEditable
+                }
+                val formattedValue = numberFormat.format(transferWithType.transfer.value.toDouble() / 100)
+                value = TextFieldValue(formattedValue, TextRange(formattedValue.length))
+                valueErrorMessage = null
+                hoursWorked = transferWithType.transfer.hoursWorked.toString()
+                hoursWorkedErrorMessage = null
+                valueDate = transferWithType.transfer.valueDate
+                isSavable = true
             }
-            isCreating = false
-            transfer = transferWithType.transfer
-            if (this@TransferViewModel.type.typeId != transferWithType.type.typeId) {
-                this@TransferViewModel.type = transferWithType.type
-                isHoursWorkedEditable = transferWithType.type.isHoursWorkedEditable
+            else {
+                //Create new transfer:
+                isCreating = true
+                transfer = null
+                value = TextFieldValue("")
+                valueErrorMessage = null
+                hoursWorked = ""
+                hoursWorkedErrorMessage = null
+                valueDate = LocalDate.now()
+                isSavable = false
             }
-            val formattedValue = numberFormat.format(transferWithType.transfer.value.toDouble() / 100)
-            value = TextFieldValue(formattedValue, TextRange(formattedValue.length))
-            valueErrorMessage = null
-            hoursWorked = transferWithType.transfer.hoursWorked.toString()
-            hoursWorkedErrorMessage = null
-            valueDate = transferWithType.transfer.valueDate
-            isSavable = true
-        }
-        else {
-            //Create new transfer:
-            isCreating = true
-            transfer = null
-            value = TextFieldValue("")
-            valueErrorMessage = null
-            hoursWorked = ""
-            hoursWorkedErrorMessage = null
-            valueDate = LocalDate.now()
-            isSavable = false
+            isInitialized = true
         }
     }
 

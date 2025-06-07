@@ -28,6 +28,8 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      */
     private lateinit var repository: ChaChingRepository
 
+    private var isInitialized: Boolean = false
+
     /**
      * Type that is being edited. If a new type is being created, this is null.
      */
@@ -72,28 +74,31 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      * @param typeId        UUID of the type to edit. Pass null to create a new type.
      */
     fun init(repository: ChaChingRepository, typeId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
-        this@TypeViewModel.repository = repository
-        isHelpCardVisible = HelpCards.CREATE_TYPE.getVisible(getApplication<Application>().baseContext)
-        var size: Int = repository.allTypes.first().size
-        if (typeId == null) {
-            size++
-        }
-        namePlaceholder = getApplication<Application>().resources.getString(R.string.type_unnamed, size)
-        if (typeId != null) {
-            //Edit type
-            isCreating = false
-            type = repository.selectTypeById(typeId)
-            name = type!!.name
-            isHoursWorkedEditable = type!!.isHoursWorkedEditable
-            icon = type!!.icon
-        }
-        else {
-            //Create new type:
-            type = null
-            isCreating = true
-            name = ""
-            isHoursWorkedEditable = true
-            icon = TypeIcon.CURRENCY
+        if (!isInitialized) {
+            this@TypeViewModel.repository = repository
+            isHelpCardVisible = HelpCards.CREATE_TYPE.getVisible(getApplication<Application>().baseContext)
+            var size: Int = repository.allTypes.first().size
+            if (typeId == null) {
+                size++
+            }
+            namePlaceholder = getApplication<Application>().resources.getString(R.string.type_unnamed, size)
+            if (typeId != null) {
+                //Edit type
+                isCreating = false
+                type = repository.selectTypeById(typeId)
+                name = type!!.name
+                isHoursWorkedEditable = type!!.isHoursWorkedEditable
+                icon = type!!.icon
+            }
+            else {
+                //Create new type:
+                type = null
+                isCreating = true
+                name = ""
+                isHoursWorkedEditable = true
+                icon = TypeIcon.CURRENCY
+            }
+            isInitialized = true
         }
     }
 

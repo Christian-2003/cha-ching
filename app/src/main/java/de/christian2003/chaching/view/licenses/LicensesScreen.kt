@@ -42,8 +42,6 @@ fun LicensesScreen(
     viewModel: LicensesViewModel,
     onNavigateUp: () -> Unit
 ) {
-    viewModel.loadLicenses()
-
     Scaffold(
         topBar = {
             TopAppBar(

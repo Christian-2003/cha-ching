@@ -25,6 +25,8 @@ class MainViewModel: ViewModel() {
 	 */
 	private lateinit var repository: ChaChingRepository
 
+	private var isInitialized: Boolean = false
+
 
 	/**
 	 * List of all types.
@@ -50,11 +52,13 @@ class MainViewModel: ViewModel() {
 	 * @param repository	Repository from which to source data.
 	 */
 	fun init(repository: ChaChingRepository) = viewModelScope.launch(Dispatchers.IO) {
-		this@MainViewModel.repository = repository
-		allTypes = repository.allTypes
-		recentTransfers = repository.recentTransfers
-
-		overviewCalcResult = OverviewCalcResult(repository.selectTransfersForMonth(LocalDate.now()))
+		if (!isInitialized) {
+			this@MainViewModel.repository = repository
+			allTypes = repository.allTypes
+			recentTransfers = repository.recentTransfers
+			overviewCalcResult = OverviewCalcResult(repository.selectTransfersForMonth(LocalDate.now()))
+			isInitialized = true
+		}
 	}
 
 

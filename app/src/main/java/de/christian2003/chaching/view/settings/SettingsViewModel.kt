@@ -23,12 +23,17 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
 
     private lateinit var repository: ChaChingRepository
 
+    private var isInitialized: Boolean = false
+
 
     var importUri: Uri? by mutableStateOf(null)
 
 
     fun init(repository: ChaChingRepository) {
-        this.repository = repository
+        if (!isInitialized) {
+            this.repository = repository
+            isInitialized = true
+        }
     }
 
 

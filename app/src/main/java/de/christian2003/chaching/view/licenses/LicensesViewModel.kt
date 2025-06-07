@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.R
 import de.christian2003.chaching.model.licenses.License
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.InputStream
 
@@ -19,6 +20,9 @@ import java.io.InputStream
  * @since   1.0.0
  */
 class LicensesViewModel(application: Application): AndroidViewModel(application) {
+
+    private var isInitialized: Boolean = false
+
 
     /**
      * Attribute stores a list of all licenses used.
@@ -44,21 +48,18 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
     /**
      * Method initializes the view model.
      */
-    fun init() {
-
-    }
-
-    /**
-     * Method loads all licenses.
-     */
-    fun loadLicenses() = viewModelScope.launch {
-        if (!isLoading && licenses.isEmpty()) {
-            isLoading = true
-            val csv = readLicensesFile()
-            if (csv != null) {
-                parseLicenseFile(csv)
+    fun init() = viewModelScope.launch(Dispatchers.IO) {
+        if (!isInitialized) {
+            isInitialized = true
+            if (!isLoading && licenses.isEmpty()) {
+                isLoading = true
+                val csv = readLicensesFile()
+                if (csv != null) {
+                    parseLicenseFile(csv)
+                }
+                isLoading = false
             }
-            isLoading = false
+            isInitialized = true
         }
     }
 

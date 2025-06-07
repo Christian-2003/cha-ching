@@ -12,6 +12,9 @@ import de.christian2003.chaching.model.help.HelpCards
  */
 class HelpViewModel(application: Application): AndroidViewModel(application) {
 
+    private var isInitialized: Boolean = false
+
+
     /**
      * Maps each help card to a mutable state which indicates whether the respective help message
      * is visible.
@@ -23,9 +26,12 @@ class HelpViewModel(application: Application): AndroidViewModel(application) {
      * Initializes the view model.
      */
     fun init() {
-        val context: Context = getApplication<Application>().baseContext
-        HelpCards.entries.forEach { helpCard ->
-            helpCards[helpCard] = helpCard.getVisible(context)
+        if (!isInitialized) {
+            val context: Context = getApplication<Application>().baseContext
+            HelpCards.entries.forEach { helpCard ->
+                helpCards[helpCard] = helpCard.getVisible(context)
+            }
+            isInitialized = true
         }
     }
 

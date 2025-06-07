@@ -65,24 +65,16 @@ fun ChaChing() {
 	val database: ChaChingDatabase = ChaChingDatabase.getInstance(LocalContext.current)
 	val repository = ChaChingRepository(database.transferDao, database.typeDao)
 
-	val mainViewModel: MainViewModel = viewModel()
-	val transfersViewModel: TransfersViewModel = viewModel()
-	val transferViewModel: TransferViewModel = viewModel()
-	val typesViewModel: TypesViewModel = viewModel()
-	val typeViewModel: TypeViewModel = viewModel()
-	val settingsViewModel: SettingsViewModel = viewModel()
-	val licensesViewModel: LicensesViewModel = viewModel()
-	val helpViewModel: HelpViewModel = viewModel()
-
 	ChaChingTheme {
 		NavHost(
 			navController = navController,
 			startDestination = "main"
 		) {
 			composable("main") {
-				mainViewModel.init(repository)
+				val viewModel: MainViewModel = viewModel()
+				viewModel.init(repository)
 				MainScreen(
-					viewModel = mainViewModel,
+					viewModel = viewModel,
 					onNavigateToTransfers = {
 						navController.navigate("transfers")
 					},
@@ -106,9 +98,10 @@ fun ChaChing() {
 
 
 			composable("transfers") {
-				transfersViewModel.init(repository)
+				val viewModel: TransfersViewModel = viewModel()
+				viewModel.init(repository)
 				TransfersScreen(
-					viewModel = transfersViewModel,
+					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					},
@@ -137,9 +130,10 @@ fun ChaChing() {
 					null
 				}
 
-				transferViewModel.init(repository, typeId!!, transferId)
+				val viewModel: TransferViewModel = viewModel()
+				viewModel.init(repository, typeId!!, transferId)
 				TransferScreen(
-					viewModel = transferViewModel,
+					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					}
@@ -148,9 +142,10 @@ fun ChaChing() {
 
 
 			composable("types") {
-				typesViewModel.init(repository)
+				val viewModel: TypesViewModel = viewModel()
+				viewModel.init(repository)
 				TypesScreen(
-					viewModel = typesViewModel,
+					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					},
@@ -176,9 +171,10 @@ fun ChaChing() {
 					null
 				}
 
-				typeViewModel.init(repository, typeId)
+				val viewModel: TypeViewModel = viewModel()
+				viewModel.init(repository, typeId)
 				TypeScreen(
-					viewModel = typeViewModel,
+					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					}
@@ -187,9 +183,10 @@ fun ChaChing() {
 
 
 			composable("settings") {
-				settingsViewModel.init(repository)
+				val viewModel: SettingsViewModel = viewModel()
+				viewModel.init(repository)
 				SettingsScreen(
-					viewModel = settingsViewModel,
+					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					},
@@ -207,9 +204,10 @@ fun ChaChing() {
 
 
 			composable("licenses") {
-				licensesViewModel.init()
+				val viewModel: LicensesViewModel = viewModel()
+				viewModel.init()
 				LicensesScreen(
-					viewModel = licensesViewModel,
+					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					}
@@ -218,9 +216,10 @@ fun ChaChing() {
 
 
 			composable("help") {
-				helpViewModel.init()
+				val viewModel: HelpViewModel = viewModel()
+				viewModel.init()
 				HelpScreen(
-					viewModel = helpViewModel,
+					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()
 					}

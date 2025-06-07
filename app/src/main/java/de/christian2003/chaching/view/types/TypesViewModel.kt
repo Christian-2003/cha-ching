@@ -24,6 +24,8 @@ class TypesViewModel(application: Application): AndroidViewModel(application) {
      */
     private lateinit var repository: ChaChingRepository
 
+    private var isInitialized: Boolean = false
+
     /**
      * List of all types available.
      */
@@ -47,9 +49,12 @@ class TypesViewModel(application: Application): AndroidViewModel(application) {
      * @param repository    Repository from which to source data.
      */
     fun init(repository: ChaChingRepository) {
-        this.repository = repository
-        isHelpCardVisible = HelpCards.TYPES_LIST.getVisible(getApplication<Application>().baseContext)
-        allTypes = repository.allTypes
+        if (!isInitialized) {
+            this.repository = repository
+            isHelpCardVisible = HelpCards.TYPES_LIST.getVisible(getApplication<Application>().baseContext)
+            allTypes = repository.allTypes
+            isInitialized = true
+        }
     }
 
 
