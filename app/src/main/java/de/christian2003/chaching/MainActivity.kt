@@ -22,6 +22,8 @@ import de.christian2003.chaching.view.licenses.LicensesScreen
 import de.christian2003.chaching.view.licenses.LicensesViewModel
 import de.christian2003.chaching.view.main.MainScreen
 import de.christian2003.chaching.view.main.MainViewModel
+import de.christian2003.chaching.view.onboarding.OnboardingScreen
+import de.christian2003.chaching.view.onboarding.OnboardingViewModel
 import de.christian2003.chaching.view.settings.SettingsScreen
 import de.christian2003.chaching.view.settings.SettingsViewModel
 import de.christian2003.chaching.view.transfer.TransferScreen
@@ -198,6 +200,9 @@ fun ChaChing() {
 					},
 					onNavigateToHelpMessages = {
 						navController.navigate("help")
+					},
+					onNavigateToOnboarding = {
+						navController.navigate("onboarding")
 					}
 				)
 			}
@@ -219,6 +224,18 @@ fun ChaChing() {
 				val viewModel: HelpViewModel = viewModel()
 				viewModel.init()
 				HelpScreen(
+					viewModel = viewModel,
+					onNavigateUp = {
+						navController.navigateUp()
+					}
+				)
+			}
+
+
+			composable("onboarding") {
+				val viewModel: OnboardingViewModel = viewModel()
+				viewModel.init(repository)
+				OnboardingScreen(
 					viewModel = viewModel,
 					onNavigateUp = {
 						navController.navigateUp()

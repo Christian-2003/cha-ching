@@ -52,6 +52,7 @@ import java.time.format.DateTimeFormatter
  * @param onNavigateToLicenses      Callback invoked to navigate to the screen displaying licenses.
  * @param onNavigateToHelpMessages  Callback invoked to navigate to the screen displaying the list
  *                                  of help messages.
+ * @param onNavigateToOnboarding    Callback invoked to navigate to the app onboarding.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +61,8 @@ fun SettingsScreen(
     onNavigateUp: () -> Unit,
     onNavigateToTypes: () -> Unit,
     onNavigateToLicenses: () -> Unit,
-    onNavigateToHelpMessages: () -> Unit
+    onNavigateToHelpMessages: () -> Unit,
+    onNavigateToOnboarding: () -> Unit
 ) {
     val context: Context = LocalContext.current
     val exportSuccessMessage = stringResource(R.string.settings_data_exportSuccess)
@@ -169,6 +171,13 @@ fun SettingsScreen(
                 onClick = onNavigateToHelpMessages,
                 endIcon = painterResource(R.drawable.ic_next),
                 prefixIcon = painterResource(R.drawable.ic_help)
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_help_onboardingTitle),
+                info = stringResource(R.string.settings_help_onboardingInfo),
+                onClick = onNavigateToOnboarding,
+                endIcon = painterResource(R.drawable.ic_next),
+                prefixIcon = painterResource(R.drawable.ic_welcome)
             )
             HorizontalDivider()
 

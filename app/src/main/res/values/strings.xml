@@ -88,6 +88,8 @@
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate help messages</string>
+    <string name="settings_help_onboardingTitle">Onboarding</string>
+    <string name="settings_help_onboardingInfo">Show onboarding tour for Cha Ching</string>
     <string name="settings_about">About</string>
     <string name="settings_about_copyright">© %1$s Christian‑2003</string>
     <string name="settings_about_licensesTitle">Used software</string>
@@ -114,6 +116,12 @@
     <string name="licenses_title">Licenses</string>
 
 
+    <string name="onboarding_page1_title">Document transfers and transfer types</string>
+    <string name="onboarding_page1_text">Document all your transfers by transfer type for maximum analysis power</string>
+    <string name="onboarding_page2_title">Analyze your transfers</string>
+    <string name="onboarding_page2_text">Get the most from your transfers through our analysis</string>
+
+
     <!-- Error messages -->
     <string name="error_emptyText">This field cannot be empty</string>
     <string name="error_valueError">The number format is invalid</string>
@@ -132,4 +140,7 @@
     <string name="button_save">Save</string>
     <string name="button_import">Import</string>
     <string name="button_showAllTransfers">Show all transfers</string>
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
+    <string name="button_finish">Finish</string>
 </resources>
