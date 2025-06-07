@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -184,80 +185,113 @@ private fun Overview(
 	modifier: Modifier = Modifier
 ) {
 	val valueFormat = DecimalFormat("#,###.00")
-	val colors = listOf<Color>(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.tertiary)
-	Column(
-		modifier = modifier
-			.fillMaxWidth()
-			.border(
-				width = 1.dp,
+	if (overviewCalcResult.results.isNotEmpty()) {
+		val colors = listOf<Color>(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.tertiary)
+		Column(
+			modifier = modifier
+				.fillMaxWidth()
+				.border(
+					width = 1.dp,
+					color = MaterialTheme.colorScheme.outline,
+					shape = MaterialTheme.shapes.extraLarge
+				)
+				.clip(MaterialTheme.shapes.extraLarge)
+				.padding(
+					horizontal = dimensionResource(R.dimen.margin_horizontal),
+					vertical = dimensionResource(R.dimen.padding_vertical)
+				)
+		) {
+			//Total:
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier.fillMaxWidth()
+			) {
+				Text(
+					text = stringResource(R.string.main_overview_total),
+					color = MaterialTheme.colorScheme.onSurface,
+					style = MaterialTheme.typography.bodyLarge,
+					modifier = Modifier
+						.weight(1f)
+						.padding(end = dimensionResource(R.dimen.padding_horizontal))
+				)
+				Value(valueFormat.format(overviewCalcResult.totalValue.toDouble() / 100))
+			}
+			Text(
+				text = overviewCalcResult.overviewComparisonConnection.getLocalizedString(LocalContext.current, overviewCalcResult.totalValue),
+				color = MaterialTheme.colorScheme.onSurfaceVariant,
+				style = MaterialTheme.typography.bodyMedium,
+				textAlign = TextAlign.Center,
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(top = dimensionResource(R.dimen.padding_vertical))
+			)
+			HorizontalDivider(
 				color = MaterialTheme.colorScheme.outline,
-				shape = MaterialTheme.shapes.extraLarge
+				modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
 			)
-			.clip(MaterialTheme.shapes.extraLarge)
-			.padding(
-				horizontal = dimensionResource(R.dimen.margin_horizontal),
-				vertical = dimensionResource(R.dimen.padding_vertical)
-			)
-	) {
-		//Total:
+
+			//Types:
+			Row(
+				modifier = Modifier.fillMaxWidth()
+			) {
+				//List:
+				Column(
+					modifier = Modifier.weight(1f)
+				) {
+					for (i in 0..overviewCalcResult.results.size - 1) {
+						if (i >= 3) {
+							break
+						}
+						OverviewItem(
+							overviewCalcResultItem = overviewCalcResult.results[i],
+							color = colors[i],
+							valueFormat = valueFormat
+						)
+					}
+				}
+
+				//Diagram:
+				OverviewChart(
+					overviewCalcResultItems = overviewCalcResult.results,
+					colors = colors,
+					modifier = Modifier
+						.align(Alignment.CenterVertically)
+						.padding(
+							start = dimensionResource(R.dimen.padding_horizontal),
+							top = dimensionResource(R.dimen.padding_vertical)
+						)
+				)
+			}
+		}
+	}
+	else {
 		Row(
 			verticalAlignment = Alignment.CenterVertically,
-			modifier = Modifier.fillMaxWidth()
+			modifier = modifier
+				.fillMaxWidth()
+				.border(
+					width = 1.dp,
+					color = MaterialTheme.colorScheme.outline,
+					shape = MaterialTheme.shapes.extraLarge
+				)
+				.clip(MaterialTheme.shapes.extraLarge)
+				.padding(
+					horizontal = dimensionResource(R.dimen.margin_horizontal),
+					vertical = dimensionResource(R.dimen.padding_vertical)
+				)
 		) {
 			Text(
-				text = stringResource(R.string.main_overview_total),
+				text = stringResource(R.string.main_overview_noData),
 				color = MaterialTheme.colorScheme.onSurface,
 				style = MaterialTheme.typography.bodyLarge,
 				modifier = Modifier
 					.weight(1f)
 					.padding(end = dimensionResource(R.dimen.padding_horizontal))
 			)
-			Value(valueFormat.format(overviewCalcResult.totalValue.toDouble() / 100))
-		}
-		Text(
-			text = overviewCalcResult.overviewComparisonConnection.getLocalizedString(LocalContext.current, overviewCalcResult.totalValue),
-			color = MaterialTheme.colorScheme.onSurfaceVariant,
-			style = MaterialTheme.typography.bodyMedium,
-			textAlign = TextAlign.Center,
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(top = dimensionResource(R.dimen.padding_vertical))
-		)
-		HorizontalDivider(
-			color = MaterialTheme.colorScheme.outline,
-			modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
-		)
-
-		//Types:
-		Row(
-			modifier = Modifier.fillMaxWidth()
-		) {
-			//List:
-			Column(
-				modifier = Modifier.weight(1f)
-			) {
-				for (i in 0..overviewCalcResult.results.size - 1) {
-					if (i >= 3) {
-						break
-					}
-					OverviewItem(
-						overviewCalcResultItem = overviewCalcResult.results[i],
-						color = colors[i],
-						valueFormat = valueFormat
-					)
-				}
-			}
-
-			//Diagram:
-			OverviewChart(
-				overviewCalcResultItems = overviewCalcResult.results,
-				colors = colors,
-				modifier = Modifier
-					.align(Alignment.CenterVertically)
-					.padding(
-						start = dimensionResource(R.dimen.padding_horizontal),
-						top = dimensionResource(R.dimen.padding_vertical)
-					)
+			Image(
+				painter = painterResource(R.drawable.el_overview),
+				contentDescription = "",
+				modifier = Modifier.size(dimensionResource(R.dimen.image_emptyPlaceholderSmall))
 			)
 		}
 	}

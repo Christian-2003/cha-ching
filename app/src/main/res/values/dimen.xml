@@ -11,6 +11,7 @@
 
     <!-- Sizes for images -->
     <dimen name="image_emptyPlaceholder">192dp</dimen>
+    <dimen name="image_emptyPlaceholderSmall">128dp</dimen>
     <dimen name="image_onboarding">256dp</dimen>
     <dimen name="image_l">64dp</dimen>
     <dimen name="image_m">48dp</dimen>
