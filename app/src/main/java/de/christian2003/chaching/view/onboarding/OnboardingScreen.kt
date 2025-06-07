@@ -42,6 +42,13 @@ import de.christian2003.chaching.database.entities.Type
 import kotlinx.coroutines.launch
 
 
+/**
+ * Displays the onboarding screen which is shown to the user once they open the app for the first
+ * time.
+ *
+ * @param viewModel     View model.
+ * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun OnboardingScreen(
@@ -109,8 +116,18 @@ fun OnboardingScreen(
 }
 
 
+/**
+ * Displays the row at the bottom through which the user can navigate through the onboarding pages.
+ *
+ * @param page              Index of the onboarding page currently displayed.
+ * @param pageCount         Number of pages.
+ * @param onNextClick       Callback invoked to navigate to the next page.
+ * @param onPreviousClick   Callback invoked to navigate to the previous page.
+ * @param modifier          Modifier.
+ * @param nextButtonVisible Indicates whether the "next" button is visible.
+ */
 @Composable
-fun BottomRow(
+private fun BottomRow(
     page: Int,
     pageCount: Int,
     onNextClick: () -> Unit,
@@ -176,6 +193,16 @@ fun BottomRow(
 }
 
 
+/**
+ * Displays a static onboarding page consisting of an image, title and text.
+ *
+ * @param painter           Painter for the page image.
+ * @param title             Title for the page.
+ * @param text              Text for the page.
+ * @param backgroundColor   Background color.
+ * @param foregroundColor   Foreground color.
+ * @param modifier          Modifier.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun OnboardingPageStatic(
@@ -229,6 +256,14 @@ private fun OnboardingPageStatic(
 }
 
 
+/**
+ * Displays dynamic onboarding page through which the user can select some predefined types to get
+ * started with the app.
+ *
+ * @param defaultTypes  Default types.
+ * @param onTypeClick   Callback invoked once one of the default types has been (un-)selected.
+ * @param modifier      Modifier.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun OnboardingPageDynamic(
