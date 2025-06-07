@@ -25,7 +25,15 @@ class MainViewModel: ViewModel() {
 	 */
 	private lateinit var repository: ChaChingRepository
 
+	/**
+	 * Indicates whether the view model is initialized.
+	 */
 	private var isInitialized: Boolean = false
+
+	/**
+	 * Stores all transfers from the last month.
+	 */
+	private lateinit var transfersLastMonth: Flow<List<TransferWithType>>
 
 
 	/**
@@ -43,6 +51,9 @@ class MainViewModel: ViewModel() {
 	 */
 	var transferToDelete: TransferWithType? by mutableStateOf(null)
 
+	/**
+	 * Result for the overview.
+	 */
 	var overviewCalcResult: OverviewCalcResult? by mutableStateOf(null)
 
 
@@ -56,12 +67,18 @@ class MainViewModel: ViewModel() {
 			this@MainViewModel.repository = repository
 			allTypes = repository.allTypes
 			recentTransfers = repository.recentTransfers
-			overviewCalcResult = OverviewCalcResult(repository.selectTransfersForMonth(LocalDate.now()))
+			transfersLastMonth = repository.selectTransfersForMonth(LocalDate.now())
+			transfersLastMonth.collect { transfersList ->
+				overviewCalcResult = OverviewCalcResult(transfersList)
+			}
 			isInitialized = true
 		}
 	}
 
 
+	/**
+	 * Deletes the transfer currently selected for deletion (i.e. stored in "transferToDelete").
+	 */
 	fun deleteTransfer() = viewModelScope.launch(Dispatchers.IO) {
 		val transfer: TransferWithType? = transferToDelete
 		if (transfer != null) {

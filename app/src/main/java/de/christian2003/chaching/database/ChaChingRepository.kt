@@ -4,6 +4,7 @@ import de.christian2003.chaching.database.entities.Transfer
 import de.christian2003.chaching.database.entities.TransferWithType
 import de.christian2003.chaching.database.entities.Type
 import de.christian2003.chaching.model.backup.ImportStrategy
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.util.UUID
 
@@ -55,7 +56,7 @@ class ChaChingRepository(
 	 * @param date	Current date (i.e. today).
 	 * @return		List of all transfers for the last 30 days.
 	 */
-	suspend fun selectTransfersForMonth(date: LocalDate): List<TransferWithType> {
+    fun selectTransfersForMonth(date: LocalDate): Flow<List<TransferWithType>> {
 		val today: Long = date.toEpochDay()
 		val thirtyDaysAgo: Long = date.minusDays(30).toEpochDay()
 		return transferDao.selectTransfersWithValueDateRange(thirtyDaysAgo, today)

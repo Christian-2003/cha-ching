@@ -67,7 +67,7 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
      */
     fun changeTypeSelected(type: Type, selected: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         defaultTypes[type] = selected
-        defaultTypes.forEach { (type, selected) ->
+        defaultTypes.forEach { (_, selected) ->
             if (selected) {
                 typesSelected = true
                 return@launch
