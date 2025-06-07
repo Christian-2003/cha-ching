@@ -120,6 +120,13 @@
     <string name="onboarding_page1_text">Document all your transfers by transfer type for maximum analysis power</string>
     <string name="onboarding_page2_title">Analyze your transfers</string>
     <string name="onboarding_page2_text">Get the most from your transfers through our analysis</string>
+    <string name="onboarding_page3_title">Choose transfer types to track</string>
+    <string name="onboarding_page3_text">You can add more transfer types later</string>
+    <string name="onboarding_defaultTypeSalary">Salary</string>
+    <string name="onboarding_defaultTypeHolidayPay">Holiday Pay</string>
+    <string name="onboarding_defaultTypeSickPay">Sick Pay</string>
+    <string name="onboarding_defaultTypeSpecialPay">Special Pay</string>
+    <string name="onboarding_defaultTypeShareInterest">Share Interest</string>
 
 
     <!-- Error messages -->

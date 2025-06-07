@@ -1,26 +1,26 @@
 package de.christian2003.chaching.view.onboarding
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,13 +35,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.room.util.TableInfo
 import de.christian2003.chaching.R
-import kotlinx.coroutines.Dispatchers
+import de.christian2003.chaching.database.entities.Type
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.coroutineContext
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -77,22 +75,34 @@ fun OnboardingScreen(
                         backgroundColor = MaterialTheme.colorScheme.secondary,
                         foregroundColor = MaterialTheme.colorScheme.onSecondary
                     )
-                    2 -> OnboardingPage3()
+                    2 -> OnboardingPageDynamic(
+                        defaultTypes = viewModel.defaultTypes.toMap(),
+                        onTypeClick = { type, selected ->
+                            viewModel.changeTypeSelected(type, selected)
+                        }
+                    )
                 }
             }
             BottomRow(
                 page = pagerState.currentPage,
                 pageCount = pagerState.pageCount,
                 onNextClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    if (pagerState.currentPage == pagerState.pageCount - 1) {
+                        viewModel.save()
+                        onNavigateUp()
+                    }
+                    else {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
                     }
                 },
                 onPreviousClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
-                }
+                },
+                nextButtonVisible = viewModel.typesSelected || pagerState.currentPage != pagerState.pageCount - 1
             )
         }
     }
@@ -111,7 +121,6 @@ fun BottomRow(
     var color: Color = when (page) {
         0 -> MaterialTheme.colorScheme.onPrimary
         1 -> MaterialTheme.colorScheme.onSecondary
-        2 -> MaterialTheme.colorScheme.onTertiary
         else -> MaterialTheme.colorScheme.onSurface
     }
 
@@ -159,7 +168,7 @@ fun BottomRow(
                     ),
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
-                    Text(stringResource(R.string.button_next))
+                    Text(if (page != pageCount - 1) { stringResource(R.string.button_next) } else { stringResource(R.string.button_finish) })
                 }
             }
         }
@@ -220,15 +229,81 @@ private fun OnboardingPageStatic(
 }
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun OnboardingPage3(
+private fun OnboardingPageDynamic(
+    defaultTypes: Map<Type, Boolean>,
+    onTypeClick: (Type, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.tertiary)
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
+            )
     ) {
-
+        Text(
+            text = stringResource(R.string.onboarding_page3_title),
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.headlineLargeEmphasized,
+            modifier = Modifier.padding(
+                vertical = dimensionResource(R.dimen.padding_vertical)
+            )
+        )
+        Text(
+            text = stringResource(R.string.onboarding_page3_text),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(
+                bottom = dimensionResource(R.dimen.padding_vertical)
+            )
+        )
+        FlowRow(
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                )
+        ) {
+            defaultTypes.forEach { (type, selected) ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp)
+                ) {
+                    IconToggleButton(
+                        checked = selected,
+                        onCheckedChange = {
+                            onTypeClick(type, it)
+                        },
+                        colors = IconButtonDefaults.iconToggleButtonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            checkedContainerColor = MaterialTheme.colorScheme.primary,
+                            checkedContentColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .size(56.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(type.icon.drawableResourceId),
+                            contentDescription = "",
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                    Text(
+                        text = type.name,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.labelLarge,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
     }
 }

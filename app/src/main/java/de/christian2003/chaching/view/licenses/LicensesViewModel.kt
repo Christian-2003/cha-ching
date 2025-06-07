@@ -81,7 +81,7 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
             displayedLicenseName = license.licenseName
             displayedLicenseText = String(content)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             displayedLicenseName = null
             displayedLicenseText = null
         }
@@ -100,7 +100,7 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
             inputStream.read(content)
             inputStream.close()
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             return null
         }
         return String(content)

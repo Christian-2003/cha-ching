@@ -1,8 +1,21 @@
 package de.christian2003.chaching.view.onboarding
 
 import android.app.Application
+import android.content.Context
+import android.text.Selection
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.database.ChaChingRepository
+import de.christian2003.chaching.database.entities.Type
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import de.christian2003.chaching.R
+import de.christian2003.chaching.model.transfers.TypeIcon
+
 
 class OnboardingViewModel(application: Application): AndroidViewModel(application) {
 
@@ -10,12 +23,85 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
 
     private var isInitialized: Boolean = false
 
+    val defaultTypes: MutableMap<Type, Boolean> = mutableStateMapOf()
+
+    var typesSelected: Boolean by mutableStateOf(false)
+
 
     fun init(repository: ChaChingRepository) {
         if (!isInitialized) {
             this.repository = repository
+            generateDefaultTypes()
             isInitialized = true
         }
+    }
+
+
+    fun changeTypeSelected(type: Type, selected: Boolean) = viewModelScope.launch(Dispatchers.IO) {
+        defaultTypes[type] = selected
+        defaultTypes.forEach { (type, selected) ->
+            if (selected) {
+                typesSelected = true
+                return@launch
+            }
+        }
+        typesSelected = false
+    }
+
+
+    fun save() = viewModelScope.launch(Dispatchers.IO) {
+        val types: MutableMap<Type, Boolean> = defaultTypes
+        types.forEach { (type, selected) ->
+            if (selected) {
+                repository.insertType(type)
+            }
+        }
+    }
+
+
+    private fun generateDefaultTypes() = viewModelScope.launch(Dispatchers.IO) {
+        val context: Context = getApplication<Application>().baseContext
+
+        defaultTypes.put(
+            Type(
+                name = context.getString(R.string.onboarding_defaultTypeSalary),
+                icon = TypeIcon.COIN,
+                isHoursWorkedEditable = true
+            ),
+            false
+        )
+        defaultTypes.put(
+            Type(
+                name = context.getString(R.string.onboarding_defaultTypeSickPay),
+                icon = TypeIcon.HOME,
+                isHoursWorkedEditable = false
+            ),
+            false
+        )
+        defaultTypes.put(
+            Type(
+                name = context.getString(R.string.onboarding_defaultTypeHolidayPay),
+                icon = TypeIcon.VACATION,
+                isHoursWorkedEditable = true
+            ),
+            false
+        )
+        defaultTypes.put(
+            Type(
+                name = context.getString(R.string.onboarding_defaultTypeSpecialPay),
+                icon = TypeIcon.BANK,
+                isHoursWorkedEditable = false
+            ),
+            false
+        )
+        defaultTypes.put(
+            Type(
+                name = context.getString(R.string.onboarding_defaultTypeShareInterest),
+                icon = TypeIcon.SHARES,
+                isHoursWorkedEditable = false
+            ),
+            false
+        )
     }
 
 }
