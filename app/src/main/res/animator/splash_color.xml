@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<objectAnimator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@integer/splash_duration"
+    android:startOffset="250"
+    android:propertyName="fillColor"
+    android:valueType="colorType"
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+    android:valueFrom="@color/splash_background"
+    android:valueTo="@color/splash_foreground">
+
+</objectAnimator>

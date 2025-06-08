@@ -19,4 +19,7 @@
     <dimen name="image_xs">24dp</dimen>
     <dimen name="image_xxs">16dp</dimen>
 
+    <!-- Splash screen duration -->
+    <integer name="splash_duration">1000</integer>
+
 </resources>

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
 
+    <!-- Default theme for the app -->
     <style name="Theme.ChaChing" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Theme for the splash screen -->
+    <style name="Theme.ChaChing.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="windowSplashScreenAnimationDuration">@integer/splash_duration</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_splash_branding</item>
+        <item name="postSplashScreenTheme">@style/Theme.ChaChing</item>
+    </style>
+
 </resources>

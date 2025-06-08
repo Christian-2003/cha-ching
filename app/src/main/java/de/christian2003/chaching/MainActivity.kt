@@ -42,6 +42,10 @@ import de.christian2003.chaching.view.types.TypesScreen
 import de.christian2003.chaching.view.types.TypesViewModel
 import java.util.UUID
 import androidx.core.content.edit
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -63,6 +67,15 @@ class MainActivity : ComponentActivity() {
 		//Update manager:
 		if (updateManager == null) {
 			updateManager = UpdateManager.getInstance(this)
+		}
+
+		//Splash screen:
+		val splashScreen = installSplashScreen()
+		var keepSplashScreen = true
+		splashScreen.setKeepOnScreenCondition { keepSplashScreen }
+		lifecycleScope.launch {
+			delay(resources.getInteger(R.integer.splash_duration).toLong())
+			keepSplashScreen = false
 		}
 
 		//App content:
