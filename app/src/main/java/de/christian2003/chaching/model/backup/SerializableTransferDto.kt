@@ -15,17 +15,17 @@ import java.util.UUID
 class SerializableTransferDto (
 
     @SerialName("value")
-    val value: Int,
+    val value: Int = 0,
 
     @SerialName("hoursWorked")
-    val hoursWorked: Int,
+    val hoursWorked: Int = 0,
 
     @SerialName("isSalary")
-    val isSalary: Boolean,
+    val isSalary: Boolean = true,
 
     @SerialName("valueDate")
     @Serializable(with = LocalDateSerializer::class)
-    val valueDate: LocalDate,
+    val valueDate: LocalDate = LocalDate.now(),
 
     @SerialName("type")
     @Serializable(with = UuidSerializer::class)
@@ -37,11 +37,11 @@ class SerializableTransferDto (
 
     @SerialName("created")
     @Serializable(with = LocalDateTimeSerializer::class)
-    val created: LocalDateTime,
+    val created: LocalDateTime = LocalDateTime.now(),
 
     @SerialName("edited")
     @Serializable(with = LocalDateTimeSerializer::class)
-    val edited: LocalDateTime
+    val edited: LocalDateTime = LocalDateTime.now()
 
 ) {
 

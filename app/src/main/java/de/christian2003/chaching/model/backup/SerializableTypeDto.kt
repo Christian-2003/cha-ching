@@ -7,6 +7,7 @@ import de.christian2003.chaching.model.transfers.TypeIcon
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.UUID
 
 
@@ -14,13 +15,13 @@ import java.util.UUID
 class SerializableTypeDto(
 
     @SerialName("name")
-    val name: String,
+    val name: String = "Unnamed",
 
     @SerialName("icon")
-    val icon: TypeIcon,
+    val icon: TypeIcon = TypeIcon.CURRENCY,
 
     @SerialName("isHoursWorkedEditable")
-    val isHoursWorkedEditable: Boolean,
+    val isHoursWorkedEditable: Boolean = true,
 
     @SerialName("id")
     @Serializable(with = UuidSerializer::class)
@@ -28,11 +29,11 @@ class SerializableTypeDto(
 
     @SerialName("created")
     @Serializable(with = LocalDateTimeSerializer::class)
-    val created: LocalDateTime,
+    val created: LocalDateTime = LocalDateTime.now(),
 
     @SerialName("edited")
     @Serializable(with = LocalDateTimeSerializer::class)
-    val edited: LocalDateTime
+    val edited: LocalDateTime = LocalDateTime.now()
 
 ) {
 
