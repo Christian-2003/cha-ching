@@ -2,10 +2,10 @@
 
 # Changelog
 
-## 1.0.0 (XXXX-XX-XX)
+## 1.0.0 (2025-06-08)
 
 ###### Release Highlights
-n./a.
+Created app with basic features, such as transfer documentation by transfer types.
 
 ###### Features
 * Transfer types can be created / edited / deleted
