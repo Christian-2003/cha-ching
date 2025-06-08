@@ -1,0 +1,157 @@
+<resources>
+    <string name="app_name">Cha Ching</string>
+    <string name="confirm_delete">Löschen bestätigen</string>
+
+
+    <string name="main_overview_total">Gesamte Einnahmen der letzten 30 Tage</string>
+    <string name="main_overview_otherTypes">Ander Einkommensarten</string>
+    <string name="main_overview_noData">Es gibt keine Einkommen in den letzten 30 Tagen</string>
+    <string name="main_downloadMessage">Eine neue Version von Cha Ching ist verfügbar. Möchtest du das Update jetzt herunterladen?</string>
+    <string name="main_recentTransfers">Letzte Einkommen</string>
+    <string name="main_emptyPlaceholder_title">Keine Daten</string>
+    <string name="main_emptyPlaceholder_subtitle">Erstelle Einkommen um das volle Potenzial von Cha Ching freizuschalten</string>
+    <string-array name="main_comparisons">
+        <item>Das ist so viel wie %1$s Tassen Kaffee</item>
+        <item>Mit diesem Geld kannst du %1$s Kugel Eis kaufen</item>
+        <item>Hast du Lust auf %1$s Big Macs?</item>
+        <item>Du kannst %1$s Pizzen kaufen</item>
+        <item>Das it genug für %1$s Tafeln Schokolade</item>
+        <item>Du kannst %1$s Menschen jeweils eine Avocado schenken</item>
+        <item>Genug für %1$s Rollen Toilettenpapier</item>
+        <item>Brauchst du %1$s Liter Milch?</item>
+        <item>In der Bäckerei kannst du damit %1$s Laibe Brot kaufen</item>
+        <item>Das ist genug um %1$s Erierkartons zu kaufen</item>
+        <item>Das ist so viel wie %1$s monatliche Spotify-Abos</item>
+        <item>Damit kannst du dir %1$s Kinotickets kaufen</item>
+        <item>Hast du Interesse an %1$s Deutschlandtickets?</item>
+        <item>Du kannst dir %1$s japanische Ramen kaufen</item>
+        <item>Das ist genug für %1$s Tuben Zahnpasta</item>
+        <item>Du kannst %1$s Menschen jeweils einen Apfel geben</item>
+        <item>Genug für %1$s Flaschen Waschmittel</item>
+        <item>Wolltest du schonmal %1$s Liter Softdrinks haben?</item>
+        <item>Das ist genug um %1$s Pakete Batterien zu kaufen</item>
+    </string-array>
+
+
+    <string name="transfers_title">Deine Einkommen</string>
+    <string name="transfers_emptyPlaceholder_title">Keine Einkommen</string>
+    <string name="transfers_emptyPlaceholder_subtitle">Verfügbare Einkommen werden hier angezeigt</string>
+    <string name="transfers_confirmDelete">Das Löschen von %1$s kann nicht rückgängig gemacht werden. Bist du dir sicher, dass du dieses Einkommen löschen möchtest?</string>
+
+
+    <string name="transfer_titleEdit">Einkommen bearbeiten</string>
+    <string name="transfer_titleCreate">Einkommen erstellen</string>
+    <string name="transfer_valueDateLabel">Wertstellungsdatum</string>
+    <string name="transfer_valueLabel">Wert</string>
+    <string name="transfer_valueSuffix">EUR</string>
+    <string name="transfer_hoursWorkedLabel">Arbeitsstunden</string>
+    <string name="transfer_hoursWorkedSuffix">Stunden</string>
+    <string name="transfer_help">Gebe ein, wie hoch das Einkommen für das Wertstellungsdatum ist.</string>
+
+
+    <string name="types_title">Einkommensarten konfigurieren</string>
+    <string name="types_emptyPlaceholder_title">Keine Einkommensarten</string>
+    <string name="types_emptyPlaceholder_subtitle">Verfügbare Einkommensarten werden hier angezeigt</string>
+    <string name="types_listTitle">Deine Einkommensarten</string>
+    <string name="types_value">%1$s €</string>
+    <string name="types_help">Einkommensarten definierren, welche Art von Einkommen du erfassen kannst. Du kannst Einkommensarten erstellen, bearbeiten und löschen.</string>
+    <string name="types_confirmDelete">Wenn du %1$s löschst, dann werden auch alle damit verbundenen Einkommen gelöscht. Bist du dir sicher, dass du diese Einkommensart löschen möchtest?</string>
+
+
+    <string name="type_unnamed">Unbenannte Einkommensart %1$d</string>
+    <string name="type_nameLabel">Name</string>
+    <string name="type_hoursWorkedEditableTitle">Arbeitsstunden anzeigen</string>
+    <string name="type_hoursWorkedEditableText">Sollen Arbeitsstunden für diese Einkommensart erfasst werden?</string>
+    <string name="type_chooseIcon">Wähle ein Bild aus</string>
+    <string name="type_help_create">Bearbeite die Einkommensart indem du einen Namen eingibst und ein Bild auswählst.</string>
+
+
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_data">Daten</string>
+    <string name="settings_data_exportTitle">Daten exportieren</string>
+    <string name="settings_data_exportInfo">Daten in eine JSON-Datei exportieren</string>
+    <string name="settings_data_exportSuccess">Daten erfolgreich exportiert</string>
+    <string name="settings_data_exportError">Daten können nicht exportiert werden</string>
+    <string name="settings_data_exportFilename">ChaChing-Export-%1$s.json</string>
+    <string name="settings_data_importTitle">Daten importieren</string>
+    <string name="settings_data_importInfo">Daten aus JSON-Datei importieren</string>
+    <string name="settings_data_importSuccess">Daten erfolgreich importiert</string>
+    <string name="settings_data_importError">Daten können nicht importiert werden</string>
+    <string name="settings_data_importDialog_title">Option auswählen</string>
+    <string name="settings_data_importDialog_text">Wähle aus, was mit deinen aktuellen Daten geschehen soll</string>
+    <string name="settings_data_importDialog_deleteTitle">Aktuelle Daten löschen</string>
+    <string name="settings_data_importDialog_deleteInfo">Löscht alle aktuellen Daten, bevor neue Daten importiert werden</string>
+    <string name="settings_data_importDialog_replaceTitle">Aktuelle Daten ersetzen</string>
+    <string name="settings_data_importDialog_replaceInfo">Beim Importieren werden Dupliakte ersetzt</string>
+    <string name="settings_data_importDialog_ignoreTitle">Duplikate überspringen</string>
+    <string name="settings_data_importDialog_ignoreInfo">Duplikate werden nicht importiert</string>
+    <string name="settings_data_typesTitle">Alle Einkommensarten</string>
+    <string name="settings_data_typesInfo">Bearbeite die Einkommensarten</string>
+    <string name="settings_help">Hilfe</string>
+    <string name="settings_help_helpMessagesTitle">Hinweise</string>
+    <string name="settings_help_helpMessagesInfo">Deaktivierte Hinweisnachrichten wieder aktivieren</string>
+    <string name="settings_help_onboardingTitle">Produkttour</string>
+    <string name="settings_help_onboardingInfo">Produkttour für Cha Ching anzeigen</string>
+    <string name="settings_about">Über</string>
+    <string name="settings_about_copyright">© %1$s Christian‑2003</string>
+    <string name="settings_about_licensesTitle">Verwendete Software</string>
+    <string name="settings_about_licensesInfo">Von Cha Ching verwendete Software anzeigen</string>
+    <string name="settings_about_repoTitle">Repository</string>
+    <string name="settings_about_repoInfo">App auf GitHub anzeigen</string>
+    <string name="settings_about_issuesTitle">Fehler melden</string>
+    <string name="settings_about_issuesInfo">Fehler auf GitHUb melden</string>
+    <string name="settings_about_moreTitle">Weitere Infos</string>
+    <string name="settings_about_moreInfo">Öffne die App in den Systemeinstellungen</string>
+
+
+    <string name="help_title">Hilfenachrichten</string>
+    <string name="help_visible">Sichtbar</string>
+    <string name="help_invisible">Ausgeblendet</string>
+    <string name="help_clickToActivate">Klicken zum Einblenden</string>
+    <string name="help_help">Aktiviere Hilfenachrichten, die du zuvor ausgeblendet hast.</string>
+    <string name="help_createType">Neue Einkommensart anlegen</string>
+    <string name="help_typesList">List aller Eikommensarten</string>
+    <string name="help_createTransfer">Neue Einnahme anlegen</string>
+    <string name="help_helpList">Liste aller Hilfenachrichten</string>
+
+
+    <string name="licenses_title">Lizenzen</string>
+
+
+    <string name="onboarding_page1_title">Dokumentiere deine Einkommen</string>
+    <string name="onboarding_page1_text">Dokumentiere alle deine Einkommen nach verschiedenen Einkommensarten, um die besten Analyseergebnisse zu erhalten</string>
+    <string name="onboarding_page2_title">Analysiere deine Einkommen</string>
+    <string name="onboarding_page2_text">Erhalte die besten Infos über deine Einkommen mit unseren Analysen</string>
+    <string name="onboarding_page3_title">Wähle aus, welche Einkommensarten du erfassen möchtest</string>
+    <string name="onboarding_page3_text">Du kannst später noch weitere Einkommensarten hinzufügen</string>
+    <string name="onboarding_defaultTypeSalary">Gehalt</string>
+    <string name="onboarding_defaultTypeHolidayPay">Urlaubsgeld</string>
+    <string name="onboarding_defaultTypeSickPay">Krankengeld</string>
+    <string name="onboarding_defaultTypeSpecialPay">Sonderzahlungen</string>
+    <string name="onboarding_defaultTypeShareInterest">Aktienerlöse</string>
+
+
+    <!-- Error messages -->
+    <string name="error_emptyText">Dieses Feld darf nicht leer sein</string>
+    <string name="error_valueError">Das Zahlenformat ist ungültig</string>
+    <string name="error_hoursWorkedError">Das ist keine gültige Zahl</string>
+
+
+    <!-- Button texts -->
+    <string name="button_createNewTransfer">Neues Einkommen erstellen</string>
+    <string name="button_createNewType">Neue Einkommensart erstellen</string>
+    <string name="button_dismissHelp">Ausblenden</string>
+    <string name="button_edit">Bearbeiten</string>
+    <string name="button_delete">Löschen</string>
+    <string name="button_cancel">Abbrechen</string>
+    <string name="button_confirm">Bestätigen</string>
+    <string name="button_createType">Einkommensart erstellen</string>
+    <string name="button_save">Speichern</string>
+    <string name="button_import">Importieren</string>
+    <string name="button_showAllTransfers">Alle Einkommen anzeigen</string>
+    <string name="button_next">Weiter</string>
+    <string name="button_previous">Zurück</string>
+    <string name="button_finish">Fertig</string>
+    <string name="button_download">Herunterladen</string>
+    <string name="button_dismiss">Später</string>
+</resources>
