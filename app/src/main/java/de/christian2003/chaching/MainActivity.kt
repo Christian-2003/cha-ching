@@ -1,10 +1,17 @@
 package de.christian2003.chaching
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -36,6 +43,7 @@ import de.christian2003.chaching.view.type.TypeViewModel
 import de.christian2003.chaching.view.types.TypesScreen
 import de.christian2003.chaching.view.types.TypesViewModel
 import java.util.UUID
+import androidx.core.content.edit
 
 
 /**
@@ -81,11 +89,13 @@ fun ChaChing(updateManager: UpdateManager) {
 	val navController: NavHostController = rememberNavController()
 	val database: ChaChingDatabase = ChaChingDatabase.getInstance(LocalContext.current)
 	val repository = ChaChingRepository(database.transferDao, database.typeDao)
+	val context: Context = LocalContext.current
+	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("onboardingFinished", false)) }
 
 	ChaChingTheme {
 		NavHost(
 			navController = navController,
-			startDestination = "main"
+			startDestination = if (isOnboardingFinished) { "main" } else { "onboarding" }
 		) {
 			composable("main") {
 				val viewModel: MainViewModel = viewModel()
@@ -253,7 +263,22 @@ fun ChaChing(updateManager: UpdateManager) {
 				OnboardingScreen(
 					viewModel = viewModel,
 					onNavigateUp = {
-						navController.navigateUp()
+						if (!isOnboardingFinished) {
+							//Onboarding shown for first time:
+							isOnboardingFinished = true
+							context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit {
+								putBoolean("onboardingFinished", true)
+							}
+							navController.navigate("main") {
+								popUpTo("onboarding") {
+									inclusive = true
+								}
+							}
+						}
+						else {
+							//Onboarding shown through settings:
+							navController.navigateUp()
+						}
 					}
 				)
 			}

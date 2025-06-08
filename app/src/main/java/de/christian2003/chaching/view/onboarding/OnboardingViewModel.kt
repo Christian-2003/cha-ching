@@ -93,7 +93,7 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
     /**
      * Generates the default types from which the user needs to choose at least one.
      */
-    private fun generateDefaultTypes() = viewModelScope.launch(Dispatchers.IO) {
+    private fun generateDefaultTypes() {
         val context: Context = getApplication<Application>().baseContext
 
         defaultTypes.put(

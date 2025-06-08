@@ -83,7 +83,7 @@ fun OnboardingScreen(
                         foregroundColor = MaterialTheme.colorScheme.onSecondary
                     )
                     2 -> OnboardingPageDynamic(
-                        defaultTypes = viewModel.defaultTypes.toMap(),
+                        defaultTypes = viewModel.defaultTypes,
                         onTypeClick = { type, selected ->
                             viewModel.changeTypeSelected(type, selected)
                         }

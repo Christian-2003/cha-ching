@@ -45,4 +45,17 @@ class Type(
      */
     var edited: LocalDateTime = LocalDateTime.now()
 
-)
+) {
+
+    override fun hashCode(): Int {
+        return typeId.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is Type) {
+            return other.typeId == typeId
+        }
+        return false
+    }
+
+}
