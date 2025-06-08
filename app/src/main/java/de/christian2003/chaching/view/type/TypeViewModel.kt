@@ -54,7 +54,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Placeholder for the name to show in the app bar in case the user removes the name.
      */
-    var namePlaceholder: String = ""
+    var namePlaceholder: String by mutableStateOf("")
 
     /**
      * Indicates whether the screen is currently creating a new type.
