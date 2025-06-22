@@ -10,7 +10,7 @@ class TransferTest {
 
     @Test
     fun CreateTransfer() {
-        val transfer = Transfer(
+        Transfer(
             value = 123456,
             hoursWorked = 160,
             isSalary = true,

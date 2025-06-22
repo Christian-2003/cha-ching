@@ -50,12 +50,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
-import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import de.christian2003.chaching.model.transfers.OverviewCalcResult
 import de.christian2003.chaching.model.transfers.OverviewCalcResultItem
 import de.christian2003.chaching.ui.composables.ConfirmDeleteDialog

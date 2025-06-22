@@ -20,7 +20,7 @@ import java.util.UUID
 		onDelete = ForeignKey.CASCADE
 	)]
 )
-class TransferEntity(
+data class TransferEntity(
 
 	/**
 	 * Value of the transfer in cents, e.g. 500 (for $ 5.00).
@@ -65,21 +65,4 @@ class TransferEntity(
 	 */
 	var edited: LocalDateTime = LocalDateTime.now()
 
-) {
-
-	/**
-	 * Returns the transfer value (i.e. "value") formatted according to the current locale.
-	 *
-	 * Examples for value = 123456:
-	 * * en-US: "1,234.56"
-	 * * de-DE: "1.234,56"
-	 *
-	 * @return	Formatted value.
-	 */
-	fun getFormattedValue(): String {
-		val numberFormat = DecimalFormat("#,###.00")
-		val formattedNumber: String = numberFormat.format(value.toDouble() / 100)
-		return formattedNumber
-	}
-
-}
+)

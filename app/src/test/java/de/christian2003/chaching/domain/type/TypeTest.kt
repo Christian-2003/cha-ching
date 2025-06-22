@@ -9,7 +9,7 @@ class TypeTest {
 
     @Test
     fun CreateType() {
-        val type = Type(
+        Type(
             name = "Hello, World!",
             icon = TypeIcon.CURRENCY
         )

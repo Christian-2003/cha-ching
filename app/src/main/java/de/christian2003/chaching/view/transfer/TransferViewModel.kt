@@ -8,10 +8,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.plugin.db.ChaChingRepository
-import de.christian2003.chaching.plugin.db.entities.TransferEntity
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
-import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.NumberFormat

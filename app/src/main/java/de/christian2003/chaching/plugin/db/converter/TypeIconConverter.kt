@@ -31,7 +31,7 @@ class TypeIconConverter {
     fun toTypeIcon(ordinal: Int): TypeIcon {
         return try {
             TypeIcon.entries[ordinal]
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             TypeIcon.CURRENCY
         }
     }

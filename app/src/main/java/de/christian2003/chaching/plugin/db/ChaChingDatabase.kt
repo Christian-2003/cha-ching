@@ -65,7 +65,7 @@ abstract class ChaChingDatabase: RoomDatabase() {
 						klass = ChaChingDatabase::class.java,
 						name = "cha_ching_database"
 					)
-						.fallbackToDestructiveMigration()
+						.fallbackToDestructiveMigration(false)
 						.build()
 				}
 				return instance

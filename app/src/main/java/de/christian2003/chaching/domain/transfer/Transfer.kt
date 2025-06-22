@@ -1,6 +1,5 @@
 package de.christian2003.chaching.domain.transfer
 
-import de.christian2003.chaching.domain.type.Type
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.time.LocalDate

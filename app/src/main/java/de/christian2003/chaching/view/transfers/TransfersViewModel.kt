@@ -9,12 +9,8 @@ import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.plugin.db.ChaChingRepository
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
 
