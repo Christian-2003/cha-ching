@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.database.ChaChingRepository
-import de.christian2003.chaching.database.entities.TransferWithType
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.ChaChingRepository
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import de.christian2003.chaching.model.transfers.OverviewCalcResult
 import de.christian2003.chaching.model.update.UpdateManager
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +34,7 @@ class MainViewModel: ViewModel() {
 	/**
 	 * Stores all transfers from the last month.
 	 */
-	private lateinit var transfersLastMonth: Flow<List<TransferWithType>>
+	private lateinit var transfersLastMonth: Flow<List<TransferWithTypeEntity>>
 
 	/**
 	 * Stores the update manager.
@@ -45,17 +45,17 @@ class MainViewModel: ViewModel() {
 	/**
 	 * List of all types.
 	 */
-	lateinit var allTypes: Flow<List<Type>>
+	lateinit var allTypes: Flow<List<TypeEntity>>
 
 	/**
 	 * List of recent transfers.
 	 */
-	lateinit var recentTransfers: Flow<List<TransferWithType>>
+	lateinit var recentTransfers: Flow<List<TransferWithTypeEntity>>
 
 	/**
 	 * Transfer to delete. If no transfer shall be deleted, this is null.
 	 */
-	var transferToDelete: TransferWithType? by mutableStateOf(null)
+	var transferToDelete: TransferWithTypeEntity? by mutableStateOf(null)
 
 	/**
 	 * Result for the overview.
@@ -83,7 +83,7 @@ class MainViewModel: ViewModel() {
 		if (!isInitialized) {
 			this@MainViewModel.repository = repository
 			this@MainViewModel.updateManager = updateManager
-			allTypes = repository.allTypes
+			allTypes = repository.allTypesDeprecated
 			recentTransfers = repository.recentTransfers
 			transfersLastMonth = repository.selectTransfersForMonth(LocalDate.now())
 			isInitialized = true
@@ -102,7 +102,7 @@ class MainViewModel: ViewModel() {
 	 * Deletes the transfer currently selected for deletion (i.e. stored in "transferToDelete").
 	 */
 	fun deleteTransfer() = viewModelScope.launch(Dispatchers.IO) {
-		val transfer: TransferWithType? = transferToDelete
+		val transfer: TransferWithTypeEntity? = transferToDelete
 		if (transfer != null) {
 			transferToDelete = null
 			repository.deleteTransfer(transfer.transfer)

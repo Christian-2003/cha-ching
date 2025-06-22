@@ -51,8 +51,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
-import de.christian2003.chaching.database.entities.TransferWithType
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import de.christian2003.chaching.model.transfers.OverviewCalcResult
 import de.christian2003.chaching.model.transfers.OverviewCalcResultItem
 import de.christian2003.chaching.ui.composables.ConfirmDeleteDialog
@@ -111,7 +111,7 @@ fun MainScreen(
 		},
 		floatingActionButton = {
 			FabMenu(
-				types = allTypes,
+				typeEntities = allTypes,
 				onTypeClicked = { type ->
 					onCreateTransfer(type.typeId)
 				},
@@ -159,7 +159,7 @@ fun MainScreen(
 				TransferList(
 					transfers = recentTransfers,
 					onEditTransfer = {
-						onEditTransfer(it.type.typeId, it.transfer.transferId)
+						onEditTransfer(it.typeEntity.typeId, it.transfer.transferId)
 					},
 					onDeleteTransfer = {
 						viewModel.transferToDelete = it
@@ -175,7 +175,7 @@ fun MainScreen(
 
 		if (viewModel.transferToDelete != null) {
 			ConfirmDeleteDialog(
-				text = stringResource(R.string.transfers_confirmDelete, viewModel.transferToDelete!!.type.name),
+				text = stringResource(R.string.transfers_confirmDelete, viewModel.transferToDelete!!.typeEntity.name),
 				onDismiss = {
 					viewModel.transferToDelete = null
 				},
@@ -334,7 +334,7 @@ private fun OverviewItem(
 		)
 	) {
 		Text(
-			text = if (overviewCalcResultItem.type != null) { overviewCalcResultItem.type.name } else { stringResource(R.string.main_overview_otherTypes) },
+			text = if (overviewCalcResultItem.typeEntity != null) { overviewCalcResultItem.typeEntity.name } else { stringResource(R.string.main_overview_otherTypes) },
 			color = MaterialTheme.colorScheme.onSurface,
 			style = MaterialTheme.typography.bodyMedium,
 			modifier = Modifier
@@ -369,7 +369,7 @@ private fun OverviewChart(
 			break
 		}
 		data.add(Pie(
-			label = if (overviewCalcResultItems[i].type != null) { overviewCalcResultItems[i].type!!.name } else { stringResource(R.string.main_overview_otherTypes) },
+			label = if (overviewCalcResultItems[i].typeEntity != null) { overviewCalcResultItems[i].typeEntity!!.name } else { stringResource(R.string.main_overview_otherTypes) },
 			data = overviewCalcResultItems[i].value.toDouble(),
 			color = colors[i]
 		))
@@ -395,9 +395,9 @@ private fun OverviewChart(
  */
 @Composable
 private fun TransferList(
-	transfers: List<TransferWithType>,
-	onEditTransfer: (TransferWithType) -> Unit,
-	onDeleteTransfer: (TransferWithType) -> Unit,
+	transfers: List<TransferWithTypeEntity>,
+	onEditTransfer: (TransferWithTypeEntity) -> Unit,
+	onDeleteTransfer: (TransferWithTypeEntity) -> Unit,
 	onShowAllTransfers: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
@@ -433,14 +433,14 @@ private fun TransferList(
 /**
  * Displays the floating action button and it'S menu.
  *
- * @param types			List of types to display in the FAB menu.
+ * @param typeEntities            List of types to display in the FAB menu.
  * @param onTypeClicked	Callback invoked once a type is clicked.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun FabMenu(
-	types: List<Type>,
-	onTypeClicked: (Type) -> Unit,
+	typeEntities: List<TypeEntity>,
+	onTypeClicked: (TypeEntity) -> Unit,
 	onCreateNewType: () -> Unit
 ) {
 	var isExpanded by remember { mutableStateOf(false) }
@@ -485,7 +485,7 @@ private fun FabMenu(
 			containerColor = MaterialTheme.colorScheme.surfaceContainer,
 			contentColor = MaterialTheme.colorScheme.onSurfaceVariant
 		)
-		types.forEach { type ->
+		typeEntities.forEach { type ->
 			FloatingActionButtonMenuItem(
 				onClick = {
 					onTypeClicked(type)

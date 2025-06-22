@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.database.ChaChingRepository
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.model.help.HelpCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +22,7 @@ class TypesViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Repository from which to source data.
      */
-    private lateinit var repository: ChaChingRepository
+    private lateinit var repository: TypeRepository
 
     private var isInitialized: Boolean = false
 
@@ -48,11 +48,11 @@ class TypesViewModel(application: Application): AndroidViewModel(application) {
      *
      * @param repository    Repository from which to source data.
      */
-    fun init(repository: ChaChingRepository) {
+    fun init(repository: TypeRepository) {
         if (!isInitialized) {
             this.repository = repository
             isHelpCardVisible = HelpCards.TYPES_LIST.getVisible(getApplication<Application>().baseContext)
-            allTypes = repository.allTypes
+            allTypes = repository.getAllTypes()
             isInitialized = true
         }
     }

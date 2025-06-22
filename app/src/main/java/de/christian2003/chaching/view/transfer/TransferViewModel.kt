@@ -8,10 +8,10 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.database.ChaChingRepository
-import de.christian2003.chaching.database.entities.Transfer
-import de.christian2003.chaching.database.entities.TransferWithType
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.ChaChingRepository
+import de.christian2003.chaching.plugin.db.entities.TransferEntity
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -38,7 +38,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     /**
      * Transfer to edit. If a new transfer is created, this is null.
      */
-    private var transfer: Transfer? = null
+    private var transfer: TransferEntity? = null
 
     /**
      * Number format used to format numbers according to the user's locale.
@@ -49,7 +49,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     /**
      * Type of the transfer.
      */
-    lateinit var type: Type
+    lateinit var typeEntity: TypeEntity
 
     /**
      * String representation of the value.
@@ -115,25 +115,25 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
             isHelpCardVisible = HelpCards.CREATE_TRANSFER.getVisible(getApplication<Application>().baseContext)
 
             //Get type:
-            val type: Type? = repository.selectTypeById(typeId)
-            if (type == null) {
+            val typeEntity: TypeEntity? = repository.selectTypeById(typeId)
+            if (typeEntity == null) {
                 throw IllegalStateException("Cannot create transfer where 'type = null'.")
                 return@launch
             }
-            this@TransferViewModel.type = type
-            isHoursWorkedEditable = type.isHoursWorkedEditable
+            this@TransferViewModel.typeEntity = typeEntity
+            isHoursWorkedEditable = typeEntity.isHoursWorkedEditable
 
             if (transferId != null) {
                 //Edit transfer:
-                val transferWithType: TransferWithType? = repository.selectTransferWithTypeById(transferId)
+                val transferWithType: TransferWithTypeEntity? = repository.selectTransferWithTypeById(transferId)
                 if (transferWithType == null) {
                     throw IllegalStateException("Cannot edit transfer that does not exist")
                 }
                 isCreating = false
                 transfer = transferWithType.transfer
-                if (this@TransferViewModel.type.typeId != transferWithType.type.typeId) {
-                    this@TransferViewModel.type = transferWithType.type
-                    isHoursWorkedEditable = transferWithType.type.isHoursWorkedEditable
+                if (this@TransferViewModel.typeEntity.typeId != transferWithType.typeEntity.typeId) {
+                    this@TransferViewModel.typeEntity = transferWithType.typeEntity
+                    isHoursWorkedEditable = transferWithType.typeEntity.isHoursWorkedEditable
                 }
                 val formattedValue = numberFormat.format(transferWithType.transfer.value.toDouble() / 100)
                 value = TextFieldValue(formattedValue, TextRange(formattedValue.length))
@@ -266,12 +266,12 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
         }
 
         if (transfer == null) {
-            transfer = Transfer(
+            transfer = TransferEntity(
                 value = value,
                 hoursWorked = hoursWorked,
                 valueDate = valueDate,
                 isSalary = true,
-                type = type.typeId
+                type = typeEntity.typeId
             )
             repository.insertTransfer(transfer!!)
         }

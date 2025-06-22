@@ -1,6 +1,6 @@
 package de.christian2003.chaching.model.backup
 
-import de.christian2003.chaching.database.entities.Transfer
+import de.christian2003.chaching.plugin.db.entities.TransferEntity
 import de.christian2003.chaching.model.backup.serializer.LocalDateSerializer
 import de.christian2003.chaching.model.backup.serializer.LocalDateTimeSerializer
 import de.christian2003.chaching.model.backup.serializer.UuidSerializer
@@ -45,8 +45,8 @@ class SerializableTransferDto (
 
 ) {
 
-    fun toDatabaseEntity(): Transfer {
-        return Transfer(
+    fun toDatabaseEntity(): TransferEntity {
+        return TransferEntity(
             value = value,
             hoursWorked = hoursWorked,
             isSalary = isSalary,
@@ -61,7 +61,7 @@ class SerializableTransferDto (
 
     companion object {
 
-        fun fromDatabaseEntity(transfer: Transfer): SerializableTransferDto {
+        fun fromDatabaseEntity(transfer: TransferEntity): SerializableTransferDto {
             return SerializableTransferDto(
                 value = transfer.value,
                 hoursWorked = transfer.hoursWorked,

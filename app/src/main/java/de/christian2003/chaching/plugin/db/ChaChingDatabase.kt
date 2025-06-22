@@ -1,15 +1,15 @@
-package de.christian2003.chaching.database
+package de.christian2003.chaching.plugin.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import de.christian2003.chaching.database.converter.LocalDateConverter
-import de.christian2003.chaching.database.converter.LocalDateTimeConverter
-import de.christian2003.chaching.database.converter.TypeIconConverter
-import de.christian2003.chaching.database.entities.Transfer
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.converter.LocalDateConverter
+import de.christian2003.chaching.plugin.db.converter.LocalDateTimeConverter
+import de.christian2003.chaching.plugin.db.converter.TypeIconConverter
+import de.christian2003.chaching.plugin.db.entities.TransferEntity
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 
 
 /**
@@ -17,8 +17,8 @@ import de.christian2003.chaching.database.entities.Type
  */
 @Database(
 	entities = [
-		Transfer::class,
-		Type::class
+		TransferEntity::class,
+		TypeEntity::class
 	],
 	version = 1,
 	exportSchema = false

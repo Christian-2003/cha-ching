@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
-import de.christian2003.chaching.database.entities.TransferWithType
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -48,9 +48,9 @@ import java.time.format.FormatStyle
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TransferListItem(
-    transfer: TransferWithType,
-    onEdit: (TransferWithType) -> Unit,
-    onDelete: (TransferWithType) -> Unit
+    transfer: TransferWithTypeEntity,
+    onEdit: (TransferWithTypeEntity) -> Unit,
+    onDelete: (TransferWithTypeEntity) -> Unit
 ) {
     val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     var isExpanded: Boolean by remember { mutableStateOf(false) }
@@ -75,7 +75,7 @@ fun TransferListItem(
                     .padding(end = dimensionResource(R.dimen.padding_horizontal))
             ) {
                 Text(
-                    text = transfer.type.name,
+                    text = transfer.typeEntity.name,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )

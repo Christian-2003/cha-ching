@@ -1,4 +1,4 @@
-package de.christian2003.chaching.database
+package de.christian2003.chaching.plugin.db
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import de.christian2003.chaching.database.entities.Transfer
-import de.christian2003.chaching.database.entities.TransferWithType
+import de.christian2003.chaching.plugin.db.entities.TransferEntity
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -25,7 +25,7 @@ interface TransferDao {
 	 * @return	List of all transfers.
 	 */
 	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
-	fun selectAllTransfersSortedByDate(): Flow<List<Transfer>>
+	fun selectAllTransfersSortedByDate(): Flow<List<TransferEntity>>
 
 	/**
 	 * Returns all transfers (with type) sorted by the value date.
@@ -34,7 +34,7 @@ interface TransferDao {
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
-	fun selectAllTransfersWithTypeSortedByDate(): Flow<List<TransferWithType>>
+	fun selectAllTransfersWithTypeSortedByDate(): Flow<List<TransferWithTypeEntity>>
 
 	/**
 	 * Returns the last three transfers (with type).
@@ -43,7 +43,7 @@ interface TransferDao {
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers ORDER BY valueDate DESC LIMIT 3")
-	fun selectRecentTransfersWithType(): Flow<List<TransferWithType>>
+	fun selectRecentTransfersWithType(): Flow<List<TransferWithTypeEntity>>
 
 	/**
 	 * Returns the transfer (with type) of the ID passed. If no transfer with the ID specified
@@ -54,7 +54,7 @@ interface TransferDao {
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers WHERE transferId = :transferId")
-	suspend fun selectTransferWithTypeById(transferId: UUID): TransferWithType?
+	suspend fun selectTransferWithTypeById(transferId: UUID): TransferWithTypeEntity?
 
 	/**
 	 * Returns all transfers (with type) in the range between the epoch days passed.
@@ -65,7 +65,7 @@ interface TransferDao {
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay")
-	fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferWithType>>
+	fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferWithTypeEntity>>
 
 
 	/**
@@ -74,7 +74,7 @@ interface TransferDao {
 	 * @param transfer	Transfer to insert.
 	 */
 	@Insert
-	suspend fun insert(transfer: Transfer)
+	suspend fun insert(transfer: TransferEntity)
 
 
 	/**
@@ -83,7 +83,7 @@ interface TransferDao {
 	 * @param transfer	Transfer to delete.
 	 */
 	@Delete
-	suspend fun delete(transfer: Transfer)
+	suspend fun delete(transfer: TransferEntity)
 
 
 	/**
@@ -92,16 +92,16 @@ interface TransferDao {
 	 * @param transfer	Transfer to update.
 	 */
 	@Update
-	suspend fun update(transfer: Transfer)
+	suspend fun update(transfer: TransferEntity)
 
 
 	@Query("DELETE FROM transfers")
 	suspend fun deleteAll()
 
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
-	suspend fun insertAndIgnore(transfers: List<Transfer>)
+	suspend fun insertAndIgnore(transfers: List<TransferEntity>)
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertAndReplace(transfers: List<Transfer>)
+	suspend fun insertAndReplace(transfers: List<TransferEntity>)
 
 }

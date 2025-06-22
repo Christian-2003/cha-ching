@@ -33,7 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
-import de.christian2003.chaching.model.transfers.TypeIcon
+import de.christian2003.chaching.domain.type.TypeIcon
 import de.christian2003.chaching.ui.composables.Headline
 import de.christian2003.chaching.ui.composables.HelpCard
 import de.christian2003.chaching.ui.composables.TextInput

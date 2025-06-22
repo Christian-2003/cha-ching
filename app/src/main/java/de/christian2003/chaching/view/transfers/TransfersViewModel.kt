@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.database.ChaChingRepository
-import de.christian2003.chaching.database.entities.TransferWithType
+import de.christian2003.chaching.plugin.db.ChaChingRepository
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -24,13 +24,13 @@ class TransfersViewModel: ViewModel() {
     /**
      * List of all transfers.
      */
-    lateinit var allTransfers: Flow<List<TransferWithType>>
+    lateinit var allTransfers: Flow<List<TransferWithTypeEntity>>
 
 
     /**
      * Transfer to delete. If no transfer shall be deleted, this is null.
      */
-    var transferToDelete: TransferWithType? by mutableStateOf(null)
+    var transferToDelete: TransferWithTypeEntity? by mutableStateOf(null)
 
 
     /**
@@ -41,7 +41,7 @@ class TransfersViewModel: ViewModel() {
     fun init(repository: ChaChingRepository) {
         if (!isInitialized) {
             this.repository = repository
-            allTransfers = repository.allTransfers
+            allTransfers = repository.allTransfersDeprecated
             isInitialized = true
         }
     }

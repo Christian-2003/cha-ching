@@ -1,4 +1,4 @@
-package de.christian2003.chaching.database.converter
+package de.christian2003.chaching.plugin.db.converter
 
 import androidx.room.TypeConverter
 import java.time.LocalDateTime

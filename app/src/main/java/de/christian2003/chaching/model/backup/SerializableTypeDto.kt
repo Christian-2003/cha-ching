@@ -1,9 +1,9 @@
 package de.christian2003.chaching.model.backup
 
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import de.christian2003.chaching.model.backup.serializer.LocalDateTimeSerializer
 import de.christian2003.chaching.model.backup.serializer.UuidSerializer
-import de.christian2003.chaching.model.transfers.TypeIcon
+import de.christian2003.chaching.domain.type.TypeIcon
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
@@ -36,8 +36,8 @@ class SerializableTypeDto(
 
 ) {
 
-    fun toDatabaseEntity(): Type {
-        return Type(
+    fun toDatabaseEntity(): TypeEntity {
+        return TypeEntity(
             name = name,
             icon = icon,
             isHoursWorkedEditable = isHoursWorkedEditable,
@@ -50,14 +50,14 @@ class SerializableTypeDto(
 
     companion object {
 
-        fun fromDatabaseEntity(type: Type): SerializableTypeDto {
+        fun fromDatabaseEntity(typeEntity: TypeEntity): SerializableTypeDto {
             return SerializableTypeDto(
-                name = type.name,
-                icon = type.icon,
-                isHoursWorkedEditable = type.isHoursWorkedEditable,
-                id = type.typeId,
-                created = type.created,
-                edited = type.edited
+                name = typeEntity.name,
+                icon = typeEntity.icon,
+                isHoursWorkedEditable = typeEntity.isHoursWorkedEditable,
+                id = typeEntity.typeId,
+                created = typeEntity.created,
+                edited = typeEntity.edited
             )
         }
 

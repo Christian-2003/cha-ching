@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import kotlinx.coroutines.launch
 
 
@@ -267,8 +267,8 @@ private fun OnboardingPageStatic(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun OnboardingPageDynamic(
-    defaultTypes: Map<Type, Boolean>,
-    onTypeClick: (Type, Boolean) -> Unit,
+    defaultTypes: Map<TypeEntity, Boolean>,
+    onTypeClick: (TypeEntity, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(

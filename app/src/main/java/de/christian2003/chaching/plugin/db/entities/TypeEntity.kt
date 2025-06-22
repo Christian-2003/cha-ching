@@ -1,8 +1,8 @@
-package de.christian2003.chaching.database.entities
+package de.christian2003.chaching.plugin.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import de.christian2003.chaching.model.transfers.TypeIcon
+import de.christian2003.chaching.domain.type.TypeIcon
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -11,7 +11,7 @@ import java.util.UUID
  * Database entity for storing types.
  */
 @Entity(tableName = "types")
-class Type(
+class TypeEntity(
 
     /**
      * Display name of the type.
@@ -52,7 +52,7 @@ class Type(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is Type) {
+        if (other is TypeEntity) {
             return other.typeId == typeId
         }
         return false

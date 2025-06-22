@@ -28,7 +28,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import de.christian2003.chaching.R
-import de.christian2003.chaching.database.entities.Type
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.ui.composables.Headline
@@ -59,7 +59,7 @@ fun TypesScreen(
     onCreateType: () -> Unit,
     onEditType: (UUID) -> Unit
 ) {
-    val types: List<Type> by viewModel.allTypes.collectAsState(emptyList())
+    val typeEntities: List<Type> by viewModel.allTypes.collectAsState(emptyList())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -84,7 +84,7 @@ fun TypesScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (types.isEmpty()) {
+            if (typeEntities.isEmpty()) {
                 EmptyPlaceholder(
                     title = stringResource(R.string.types_emptyPlaceholder_title),
                     subtitle = stringResource(R.string.types_emptyPlaceholder_subtitle),
@@ -133,11 +133,11 @@ fun TypesScreen(
                             title = stringResource(R.string.types_listTitle)
                         )
                     }
-                    items(types) { type ->
+                    items(typeEntities) { type ->
                         TypeListItem(
                             type = type,
                             onEdit = {
-                                onEditType(type.typeId)
+                                onEditType(type.id)
                             },
                             onDelete = {
                                 viewModel.typeToDelete = type

@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.database.ChaChingRepository
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.ChaChingRepository
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import de.christian2003.chaching.R
 import de.christian2003.chaching.model.help.HelpCards
-import de.christian2003.chaching.model.transfers.TypeIcon
+import de.christian2003.chaching.domain.type.TypeIcon
 
 
 /**
@@ -33,7 +33,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Type that is being edited. If a new type is being created, this is null.
      */
-    private var type: Type? = null
+    private var typeEntity: TypeEntity? = null
 
 
     /**
@@ -77,7 +77,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
         if (!isInitialized) {
             this@TypeViewModel.repository = repository
             isHelpCardVisible = HelpCards.CREATE_TYPE.getVisible(getApplication<Application>().baseContext)
-            var size: Int = repository.allTypes.first().size
+            var size: Int = repository.allTypesDeprecated.first().size
             if (typeId == null) {
                 size++
             }
@@ -85,14 +85,14 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             if (typeId != null) {
                 //Edit type
                 isCreating = false
-                type = repository.selectTypeById(typeId)
-                name = type!!.name
-                isHoursWorkedEditable = type!!.isHoursWorkedEditable
-                icon = type!!.icon
+                typeEntity = repository.selectTypeById(typeId)
+                name = typeEntity!!.name
+                isHoursWorkedEditable = typeEntity!!.isHoursWorkedEditable
+                icon = typeEntity!!.icon
             }
             else {
                 //Create new type:
-                type = null
+                typeEntity = null
                 isCreating = true
                 name = ""
                 isHoursWorkedEditable = true
@@ -107,21 +107,21 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      * Saves the type by either inserting a new type or updating the type in the database.
      */
     fun save() = viewModelScope.launch(Dispatchers.IO) {
-        var type: Type? = this@TypeViewModel.type
-        if (type == null) {
-            type = Type(
+        var typeEntity: TypeEntity? = this@TypeViewModel.typeEntity
+        if (typeEntity == null) {
+            typeEntity = TypeEntity(
                 name = name,
                 icon = icon,
                 isHoursWorkedEditable = isHoursWorkedEditable
             )
-            repository.insertType(type)
+            repository.insertType(typeEntity)
         }
         else {
-            type.name = name
-            type.icon = icon
-            type.isHoursWorkedEditable = isHoursWorkedEditable
-            type.edited = LocalDateTime.now()
-            repository.updateType(type)
+            typeEntity.name = name
+            typeEntity.icon = icon
+            typeEntity.isHoursWorkedEditable = isHoursWorkedEditable
+            typeEntity.edited = LocalDateTime.now()
+            repository.updateType(typeEntity)
         }
     }
 

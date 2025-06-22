@@ -1,7 +1,7 @@
 package de.christian2003.chaching.model.backup
 
-import de.christian2003.chaching.database.entities.Transfer
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.entities.TransferEntity
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -20,8 +20,8 @@ class SerializableAppData(
 
 ) {
 
-    fun toTypes(): List<Type> {
-        val typesList = mutableListOf<Type>()
+    fun toTypes(): List<TypeEntity> {
+        val typesList = mutableListOf<TypeEntity>()
         types.forEach { type ->
             typesList.add(type.toDatabaseEntity())
         }
@@ -29,8 +29,8 @@ class SerializableAppData(
     }
 
 
-    fun toTransfers(): List<Transfer> {
-        val transfersList = mutableListOf<Transfer>()
+    fun toTransfers(): List<TransferEntity> {
+        val transfersList = mutableListOf<TransferEntity>()
         transfers.forEach { transfer ->
             transfersList.add(transfer.toDatabaseEntity())
         }
@@ -40,11 +40,11 @@ class SerializableAppData(
 
     companion object {
 
-        fun toSerializableAppData(types: List<Type>, transfers: List<Transfer>): SerializableAppData {
+        fun toSerializableAppData(typeEntities: List<TypeEntity>, transfers: List<TransferEntity>): SerializableAppData {
             val typesList = mutableListOf<SerializableTypeDto>()
             val transfersList = mutableListOf<SerializableTransferDto>()
 
-            types.forEach { type ->
+            typeEntities.forEach { type ->
                 typesList.add(SerializableTypeDto.fromDatabaseEntity(type))
             }
             transfers.forEach { transfer ->

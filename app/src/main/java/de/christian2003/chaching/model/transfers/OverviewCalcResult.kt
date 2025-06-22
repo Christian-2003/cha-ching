@@ -1,7 +1,7 @@
 package de.christian2003.chaching.model.transfers
 
-import de.christian2003.chaching.database.entities.TransferWithType
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 
 
 /**
@@ -12,7 +12,7 @@ class OverviewCalcResult(
     /**
      * Transfers for which to generate the overview.
      */
-    val transfers: List<TransferWithType>
+    val transfers: List<TransferWithTypeEntity>
 
 ) {
 
@@ -36,8 +36,8 @@ class OverviewCalcResult(
      * Calculates the overview results.
      */
     init {
-        val valueByType: Map<Type, Int> = mapTransfersToType()
-        results = convertMapToListOfOverviewCalcResultItems(valueByType)
+        val valueByTypeEntity: Map<TypeEntity, Int> = mapTransfersToType()
+        results = convertMapToListOfOverviewCalcResultItems(valueByTypeEntity)
         results.forEach { item ->
             totalValue += item.value
         }
@@ -50,17 +50,17 @@ class OverviewCalcResult(
      *
      * @return  Value mapped to type.
      */
-    private fun mapTransfersToType(): Map<Type, Int> {
-        val map: MutableMap<Type, Int> = mutableMapOf()
+    private fun mapTransfersToType(): Map<TypeEntity, Int> {
+        val map: MutableMap<TypeEntity, Int> = mutableMapOf()
         transfers.forEach { transferWithType ->
-            var value: Int? = map[transferWithType.type]
+            var value: Int? = map[transferWithType.typeEntity]
             if (value == null) {
                 value = transferWithType.transfer.value
             }
             else {
                 value += transferWithType.transfer.value
             }
-            map[transferWithType.type] = value
+            map[transferWithType.typeEntity] = value
         }
         return map.toMap()
     }
@@ -72,9 +72,9 @@ class OverviewCalcResult(
      * @param map   Map which maps the value to type.
      * @return      List of result items.
      */
-    private fun convertMapToListOfOverviewCalcResultItems(map: Map<Type, Int>): List<OverviewCalcResultItem> {
+    private fun convertMapToListOfOverviewCalcResultItems(map: Map<TypeEntity, Int>): List<OverviewCalcResultItem> {
         val list: MutableList<OverviewCalcResultItem> = mutableListOf()
-        val sortedPairs: List<Pair<Type, Int>> = map.toList().sortedByDescending { item -> item.second }
+        val sortedPairs: List<Pair<TypeEntity, Int>> = map.toList().sortedByDescending { item -> item.second }
 
         if (sortedPairs.size <= 3) {
             // 3 or less types:

@@ -1,4 +1,4 @@
-package de.christian2003.chaching.database.entities
+package de.christian2003.chaching.plugin.db.entities
 
 import android.icu.text.DecimalFormat
 import androidx.room.Entity
@@ -14,13 +14,13 @@ import java.util.UUID
  */
 @Entity(tableName = "transfers",
 	foreignKeys = [ForeignKey(
-		entity = Type::class,
+		entity = TypeEntity::class,
 		parentColumns = arrayOf("typeId"),
 		childColumns = arrayOf("type"),
 		onDelete = ForeignKey.CASCADE
 	)]
 )
-class Transfer(
+class TransferEntity(
 
 	/**
 	 * Value of the transfer in cents, e.g. 500 (for $ 5.00).

@@ -1,4 +1,4 @@
-package de.christian2003.chaching.model.transfers
+package de.christian2003.chaching.domain.type
 
 import androidx.annotation.DrawableRes
 import de.christian2003.chaching.R

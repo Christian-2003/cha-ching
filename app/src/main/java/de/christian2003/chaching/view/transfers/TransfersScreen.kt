@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import java.util.UUID
 import de.christian2003.chaching.R
-import de.christian2003.chaching.database.entities.TransferWithType
+import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import de.christian2003.chaching.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.ui.composables.TransferListItem
@@ -39,7 +39,7 @@ fun TransfersScreen(
     onNavigateUp: () -> Unit,
     onEditTransfer: (UUID, UUID) -> Unit
 ) {
-    val transfers: List<TransferWithType> by viewModel.allTransfers.collectAsState(emptyList())
+    val transfers: List<TransferWithTypeEntity> by viewModel.allTransfers.collectAsState(emptyList())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -76,7 +76,7 @@ fun TransfersScreen(
                 TransferList(
                     transfers = transfers,
                     onEditTransfer = { transfer ->
-                        onEditTransfer(transfer.type.typeId, transfer.transfer.transferId)
+                        onEditTransfer(transfer.typeEntity.typeId, transfer.transfer.transferId)
                     },
                     onDeleteTransfer = { transfer ->
                         viewModel.transferToDelete = transfer
@@ -86,7 +86,7 @@ fun TransfersScreen(
         }
         if (viewModel.transferToDelete != null) {
             ConfirmDeleteDialog(
-                text = stringResource(R.string.transfers_confirmDelete, viewModel.transferToDelete!!.type.name),
+                text = stringResource(R.string.transfers_confirmDelete, viewModel.transferToDelete!!.typeEntity.name),
                 onDismiss = {
                     viewModel.transferToDelete = null
                 },
@@ -108,9 +108,9 @@ fun TransfersScreen(
  */
 @Composable
 private fun TransferList(
-    transfers: List<TransferWithType>,
-    onEditTransfer: (TransferWithType) -> Unit,
-    onDeleteTransfer: (TransferWithType) -> Unit
+    transfers: List<TransferWithTypeEntity>,
+    onEditTransfer: (TransferWithTypeEntity) -> Unit,
+    onDeleteTransfer: (TransferWithTypeEntity) -> Unit
 ) {
     LazyColumn {
         items(transfers) { transfer ->

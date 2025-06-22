@@ -18,8 +18,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.christian2003.chaching.database.ChaChingDatabase
-import de.christian2003.chaching.database.ChaChingRepository
+import de.christian2003.chaching.plugin.db.ChaChingDatabase
+import de.christian2003.chaching.plugin.db.ChaChingRepository
 import de.christian2003.chaching.model.update.UpdateManager
 import de.christian2003.chaching.ui.theme.ChaChingTheme
 import de.christian2003.chaching.view.help.HelpScreen

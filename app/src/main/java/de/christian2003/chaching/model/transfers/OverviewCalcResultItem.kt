@@ -1,6 +1,6 @@
 package de.christian2003.chaching.model.transfers
 
-import de.christian2003.chaching.database.entities.Type
+import de.christian2003.chaching.plugin.db.entities.TypeEntity
 
 
 /**
@@ -13,7 +13,7 @@ data class OverviewCalcResultItem(
      * If the overview result has too many types, multiple types are merged into a single item. In
      * such a case, this is null.
      */
-    val type: Type?,
+    val typeEntity: TypeEntity?,
 
     /**
      * Stores the value for the item.

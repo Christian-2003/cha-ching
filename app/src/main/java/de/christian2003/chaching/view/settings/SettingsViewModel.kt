@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.database.ChaChingRepository
+import de.christian2003.chaching.plugin.db.ChaChingRepository
 import de.christian2003.chaching.model.backup.ImportStrategy
 import de.christian2003.chaching.model.backup.SerializableAppData
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +38,7 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
 
 
     fun exportDataToJsonFile(uri: Uri, onFinished: (Boolean) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        val data: SerializableAppData = SerializableAppData.toSerializableAppData(repository.allTypes.first(), repository.allTransfers.first().map { it.transfer })
+        val data: SerializableAppData = SerializableAppData.toSerializableAppData(repository.allTypesDeprecated.first(), repository.allTransfersDeprecated.first().map { it.transfer })
         val json = Json.encodeToString(data)
         val result: Boolean = writeToFile(uri, json)
         withContext(Dispatchers.Main) {

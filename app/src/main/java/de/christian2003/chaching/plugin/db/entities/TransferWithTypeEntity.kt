@@ -1,4 +1,4 @@
-package de.christian2003.chaching.database.entities
+package de.christian2003.chaching.plugin.db.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation
@@ -7,13 +7,13 @@ import androidx.room.Relation
 /**
  * Connects each transfer with a type.
  */
-data class TransferWithType(
+data class TransferWithTypeEntity(
 
     /**
      * Transfer.
      */
     @Embedded
-    val transfer: Transfer,
+    val transfer: TransferEntity,
 
     /**
      * Type of the transfer.
@@ -22,6 +22,6 @@ data class TransferWithType(
         parentColumn = "type",
         entityColumn = "typeId"
     )
-    val type: Type
+    val typeEntity: TypeEntity
 
 )
