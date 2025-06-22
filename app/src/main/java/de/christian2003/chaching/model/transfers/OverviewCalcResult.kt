@@ -1,7 +1,7 @@
 package de.christian2003.chaching.model.transfers
 
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
-import de.christian2003.chaching.plugin.db.entities.TypeEntity
+import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.type.Type
 
 
 /**
@@ -12,7 +12,9 @@ class OverviewCalcResult(
     /**
      * Transfers for which to generate the overview.
      */
-    val transfers: List<TransferWithTypeEntity>
+    val transfers: List<Transfer>,
+
+    val types: List<Type>
 
 ) {
 
@@ -36,8 +38,8 @@ class OverviewCalcResult(
      * Calculates the overview results.
      */
     init {
-        val valueByTypeEntity: Map<TypeEntity, Int> = mapTransfersToType()
-        results = convertMapToListOfOverviewCalcResultItems(valueByTypeEntity)
+        val valueByType: Map<Type, Int> = mapTransfersToType()
+        results = convertMapToListOfOverviewCalcResultItems(valueByType)
         results.forEach { item ->
             totalValue += item.value
         }
@@ -50,17 +52,20 @@ class OverviewCalcResult(
      *
      * @return  Value mapped to type.
      */
-    private fun mapTransfersToType(): Map<TypeEntity, Int> {
-        val map: MutableMap<TypeEntity, Int> = mutableMapOf()
-        transfers.forEach { transferWithType ->
-            var value: Int? = map[transferWithType.typeEntity]
-            if (value == null) {
-                value = transferWithType.transfer.value
+    private fun mapTransfersToType(): Map<Type, Int> {
+        val map: MutableMap<Type, Int> = mutableMapOf()
+        transfers.forEach { transfer ->
+            val type: Type? = getTypeForTransfer(transfer)
+            if (type != null) {
+                var value: Int? = map[type]
+                if (value == null) {
+                    value = transfer.value
+                }
+                else {
+                    value += transfer.value
+                }
+                map[type] = value
             }
-            else {
-                value += transferWithType.transfer.value
-            }
-            map[transferWithType.typeEntity] = value
         }
         return map.toMap()
     }
@@ -72,9 +77,9 @@ class OverviewCalcResult(
      * @param map   Map which maps the value to type.
      * @return      List of result items.
      */
-    private fun convertMapToListOfOverviewCalcResultItems(map: Map<TypeEntity, Int>): List<OverviewCalcResultItem> {
+    private fun convertMapToListOfOverviewCalcResultItems(map: Map<Type, Int>): List<OverviewCalcResultItem> {
         val list: MutableList<OverviewCalcResultItem> = mutableListOf()
-        val sortedPairs: List<Pair<TypeEntity, Int>> = map.toList().sortedByDescending { item -> item.second }
+        val sortedPairs: List<Pair<Type, Int>> = map.toList().sortedByDescending { item -> item.second }
 
         if (sortedPairs.size <= 3) {
             // 3 or less types:
@@ -94,6 +99,18 @@ class OverviewCalcResult(
         }
 
         return list.toList()
+    }
+
+
+    private fun getTypeForTransfer(transfer: Transfer): Type? {
+        var transferType: Type? = null
+        types.forEach { type ->
+            if (type.id == transfer.type) {
+                transferType = type
+                return@forEach
+            }
+        }
+        return transferType
     }
 
 }

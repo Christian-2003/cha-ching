@@ -65,7 +65,7 @@ interface TransferDao {
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay")
-	fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferWithTypeEntity>>
+	fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferEntity>>
 
 
 	/**

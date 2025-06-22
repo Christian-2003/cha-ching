@@ -33,7 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
+import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.type.Type
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -41,16 +42,18 @@ import java.time.format.FormatStyle
 /**
  * Displays a single transfer as list item.
  *
- * @param transfer  Transfer to display.
- * @param onEdit    Callback invoked to edit the transfer.
- * @param onDelete  Callback invoked to delete the transfer.
+ * @param transfer              Transfer to display.
+ * @param onEdit                Callback invoked to edit the transfer.
+ * @param onDelete              Callback invoked to delete the transfer.
+ * @param onQueryTransferType   Callback invoked to query the type for a transfer.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TransferListItem(
-    transfer: TransferWithTypeEntity,
-    onEdit: (TransferWithTypeEntity) -> Unit,
-    onDelete: (TransferWithTypeEntity) -> Unit
+    transfer: Transfer,
+    onEdit: (Transfer) -> Unit,
+    onDelete: (Transfer) -> Unit,
+    onQueryTransferType: (Transfer) -> Type?
 ) {
     val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     var isExpanded: Boolean by remember { mutableStateOf(false) }
@@ -75,18 +78,18 @@ fun TransferListItem(
                     .padding(end = dimensionResource(R.dimen.padding_horizontal))
             ) {
                 Text(
-                    text = transfer.typeEntity.name,
+                    text = onQueryTransferType(transfer)?.name ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = transfer.transfer.valueDate.format(formatter),
+                    text = transfer.valueDate.format(formatter),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Value(
-                formattedValue = transfer.transfer.getFormattedValue()
+                formattedValue = transfer.getFormattedValue()
             )
         }
         AnimatedVisibility(

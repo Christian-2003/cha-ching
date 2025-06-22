@@ -5,45 +5,79 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.christian2003.chaching.domain.repository.TransferRepository
+import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.db.ChaChingRepository
 import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
 
 class TransfersViewModel: ViewModel() {
 
     /**
-     * Repository from which to source data.
+     * Repository through which to access and manipulate transfers.
      */
-    private lateinit var repository: ChaChingRepository
+    private lateinit var transferRepository: TransferRepository
 
+    /**
+     * Repository through which to access types.
+     */
+    private lateinit var typeRepository: TypeRepository
+
+    /**
+     * Indicates whether the view model has been initialized.
+     */
     private var isInitialized: Boolean = false
 
     /**
      * List of all transfers.
      */
-    lateinit var allTransfers: Flow<List<TransferWithTypeEntity>>
+    lateinit var allTransfers: Flow<List<Transfer>>
+
+    /**
+     * List of all types.
+     */
+    lateinit var allTypes: Flow<List<Type>>
 
 
     /**
      * Transfer to delete. If no transfer shall be deleted, this is null.
      */
-    var transferToDelete: TransferWithTypeEntity? by mutableStateOf(null)
+    var transferToDelete: Transfer? by mutableStateOf(null)
 
 
     /**
      * Instantiates the view model.
      *
-     * @param repository    Repository from which to source the data.
+     * @param transferRepository    Repository to access and manipulate transfers.
+     * @param typeRepository        Repository to access types.
      */
-    fun init(repository: ChaChingRepository) {
+    fun init(transferRepository: TransferRepository, typeRepository: TypeRepository) {
         if (!isInitialized) {
-            this.repository = repository
-            allTransfers = repository.allTransfersDeprecated
+            this.transferRepository = transferRepository
+            this.typeRepository = typeRepository
+            allTransfers = transferRepository.getAllTransfers()
+            allTypes = typeRepository.getAllTypes()
             isInitialized = true
         }
+    }
+
+
+    fun getTypeForTransfer(transfer: Transfer, types: List<Type>): Type? {
+        var transferType: Type? = null
+        types.forEach { type ->
+            if (type.id == transfer.type) {
+                transferType = type
+                return@forEach
+            }
+        }
+        return transferType
     }
 
 
@@ -51,10 +85,10 @@ class TransfersViewModel: ViewModel() {
      * Deletes the transfer indicated by "transferToDelete".
      */
     fun delete() = viewModelScope.launch(Dispatchers.IO) {
-        val transferWithType = transferToDelete
+        val transfer = transferToDelete
         transferToDelete = null
-        if (transferWithType != null) {
-            repository.deleteTransfer(transferWithType.transfer)
+        if (transfer != null) {
+            transferRepository.deleteTransfer(transfer)
         }
     }
 

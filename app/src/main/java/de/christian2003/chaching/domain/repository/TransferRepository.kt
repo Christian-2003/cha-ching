@@ -2,6 +2,7 @@ package de.christian2003.chaching.domain.repository
 
 import de.christian2003.chaching.domain.transfer.Transfer
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 import java.util.UUID
 
 
@@ -16,6 +17,16 @@ interface TransferRepository {
      * @return  List of all transfers.
      */
     fun getAllTransfers(): Flow<List<Transfer>>
+
+
+    /**
+     * Returns as list of all transfers with a value date within the range specified.
+     *
+     * @param start Start day of the range.
+     * @param end   End day of the range.
+     * @return      List of all transfers within the date range specified.
+     */
+    fun getAllTransfersInDateRange(start: LocalDate, end: LocalDate): Flow<List<Transfer>>
 
 
     /**

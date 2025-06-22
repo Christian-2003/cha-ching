@@ -110,7 +110,11 @@ fun ChaChing(updateManager: UpdateManager) {
 		) {
 			composable("main") {
 				val viewModel: MainViewModel = viewModel()
-				viewModel.init(repository, updateManager)
+				viewModel.init(
+					transferRepository = repository,
+					typeRepository = repository,
+					updateManager = updateManager
+				)
 				MainScreen(
 					viewModel = viewModel,
 					onNavigateToTransfers = {
@@ -137,7 +141,10 @@ fun ChaChing(updateManager: UpdateManager) {
 
 			composable("transfers") {
 				val viewModel: TransfersViewModel = viewModel()
-				viewModel.init(repository)
+				viewModel.init(
+					transferRepository = repository,
+					typeRepository = repository
+				)
 				TransfersScreen(
 					viewModel = viewModel,
 					onNavigateUp = {
@@ -169,7 +176,12 @@ fun ChaChing(updateManager: UpdateManager) {
 				}
 
 				val viewModel: TransferViewModel = viewModel()
-				viewModel.init(repository, typeId!!, transferId)
+				viewModel.init(
+					transferRepository = repository,
+					typeRepository = repository,
+					typeId = typeId!!,
+					transferId = transferId
+				)
 				TransferScreen(
 					viewModel = viewModel,
 					onNavigateUp = {

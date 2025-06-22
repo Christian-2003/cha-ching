@@ -19,7 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import java.util.UUID
 import de.christian2003.chaching.R
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
+import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.ui.composables.TransferListItem
@@ -39,7 +40,8 @@ fun TransfersScreen(
     onNavigateUp: () -> Unit,
     onEditTransfer: (UUID, UUID) -> Unit
 ) {
-    val transfers: List<TransferWithTypeEntity> by viewModel.allTransfers.collectAsState(emptyList())
+    val types: List<Type> by viewModel.allTypes.collectAsState(emptyList())
+    val transfers: List<Transfer> by viewModel.allTransfers.collectAsState(emptyList())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -76,17 +78,20 @@ fun TransfersScreen(
                 TransferList(
                     transfers = transfers,
                     onEditTransfer = { transfer ->
-                        onEditTransfer(transfer.typeEntity.typeId, transfer.transfer.transferId)
+                        onEditTransfer(transfer.type, transfer.id)
                     },
                     onDeleteTransfer = { transfer ->
                         viewModel.transferToDelete = transfer
+                    },
+                    onQueryTransferType = { transfer ->
+                        viewModel.getTypeForTransfer(transfer, types)
                     }
                 )
             }
         }
         if (viewModel.transferToDelete != null) {
             ConfirmDeleteDialog(
-                text = stringResource(R.string.transfers_confirmDelete, viewModel.transferToDelete!!.typeEntity.name),
+                text = stringResource(R.string.transfers_confirmDelete, viewModel.getTypeForTransfer(viewModel.transferToDelete!!, types)?.name ?: ""),
                 onDismiss = {
                     viewModel.transferToDelete = null
                 },
@@ -102,22 +107,25 @@ fun TransfersScreen(
 /**
  * Displays the list of transfers.
  *
- * @param transfers         List of transfers to display.
- * @param onEditTransfer    Callback invoked to edit a transfer.
- * @param onDeleteTransfer  Callback invoked to delete a transfer.
+ * @param transfers             List of transfers to display.
+ * @param onEditTransfer        Callback invoked to edit a transfer.
+ * @param onDeleteTransfer      Callback invoked to delete a transfer.
+ * @param onQueryTransferType   Callback invoked to query the type for a transfer.
  */
 @Composable
 private fun TransferList(
-    transfers: List<TransferWithTypeEntity>,
-    onEditTransfer: (TransferWithTypeEntity) -> Unit,
-    onDeleteTransfer: (TransferWithTypeEntity) -> Unit
+    transfers: List<Transfer>,
+    onEditTransfer: (Transfer) -> Unit,
+    onDeleteTransfer: (Transfer) -> Unit,
+    onQueryTransferType: (Transfer) -> Type?
 ) {
     LazyColumn {
         items(transfers) { transfer ->
             TransferListItem(
                 transfer = transfer,
                 onEdit = onEditTransfer,
-                onDelete = onDeleteTransfer
+                onDelete = onDeleteTransfer,
+                onQueryTransferType = onQueryTransferType
             )
         }
     }

@@ -5,13 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.plugin.db.ChaChingRepository
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
-import de.christian2003.chaching.plugin.db.entities.TypeEntity
+import de.christian2003.chaching.domain.repository.TransferRepository
+import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.model.transfers.OverviewCalcResult
 import de.christian2003.chaching.model.update.UpdateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -24,7 +26,9 @@ class MainViewModel: ViewModel() {
 	/**
 	 * Repository from which to source data.
 	 */
-	private lateinit var repository: ChaChingRepository
+	private lateinit var transferRepository: TransferRepository
+
+	private lateinit var typeRepository: TypeRepository
 
 	/**
 	 * Indicates whether the view model is initialized.
@@ -34,7 +38,7 @@ class MainViewModel: ViewModel() {
 	/**
 	 * Stores all transfers from the last month.
 	 */
-	private lateinit var transfersLastMonth: Flow<List<TransferWithTypeEntity>>
+	private lateinit var transfersLastMonth: Flow<List<Transfer>>
 
 	/**
 	 * Stores the update manager.
@@ -45,17 +49,17 @@ class MainViewModel: ViewModel() {
 	/**
 	 * List of all types.
 	 */
-	lateinit var allTypes: Flow<List<TypeEntity>>
+	lateinit var allTypes: Flow<List<Type>>
 
 	/**
 	 * List of recent transfers.
 	 */
-	lateinit var recentTransfers: Flow<List<TransferWithTypeEntity>>
+	lateinit var recentTransfers: Flow<List<Transfer>>
 
 	/**
 	 * Transfer to delete. If no transfer shall be deleted, this is null.
 	 */
-	var transferToDelete: TransferWithTypeEntity? by mutableStateOf(null)
+	var transferToDelete: Transfer? by mutableStateOf(null)
 
 	/**
 	 * Result for the overview.
@@ -76,25 +80,39 @@ class MainViewModel: ViewModel() {
 	/**
 	 * Instantiates the view model.
 	 *
-	 * @param repository	Repository from which to source data.
+	 * @param transferRepository	Repository to access and manipulate transfers.
+	 * @param typeRepository		Repository to access types.
+	 * @param updateManager			Update manager.
 	 */
-	fun init(repository: ChaChingRepository, updateManager: UpdateManager) {
+	fun init(transferRepository: TransferRepository, typeRepository: TypeRepository, updateManager: UpdateManager) {
 		isUpdateAvailable = updateManager.isUpdateAvailable
 		if (!isInitialized) {
-			this@MainViewModel.repository = repository
+			this@MainViewModel.transferRepository = transferRepository
+			this@MainViewModel.typeRepository = typeRepository
 			this@MainViewModel.updateManager = updateManager
-			allTypes = repository.allTypesDeprecated
-			recentTransfers = repository.recentTransfers
-			transfersLastMonth = repository.selectTransfersForMonth(LocalDate.now())
+			allTypes = typeRepository.getAllTypes()
+			recentTransfers = transferRepository.getAllTransfers()
+			transfersLastMonth = transferRepository.getAllTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
 			isInitialized = true
 			//All code after 'collect' is not called, therefore, this must be the last method call of the init-function!
 			viewModelScope.launch(Dispatchers.IO) {
 				transfersLastMonth.collect { transfersList ->
-					overviewCalcResult = OverviewCalcResult(transfersList)
+					overviewCalcResult = OverviewCalcResult(transfersList, allTypes.first())
 				}
 			}
-
 		}
+	}
+
+
+	fun getTypeForTransfer(transfer: Transfer, types: List<Type>): Type? {
+		var transferType: Type? = null
+		types.forEach { type ->
+			if (type.id == transfer.type) {
+				transferType = type
+				return@forEach
+			}
+		}
+		return transferType
 	}
 
 
@@ -102,10 +120,10 @@ class MainViewModel: ViewModel() {
 	 * Deletes the transfer currently selected for deletion (i.e. stored in "transferToDelete").
 	 */
 	fun deleteTransfer() = viewModelScope.launch(Dispatchers.IO) {
-		val transfer: TransferWithTypeEntity? = transferToDelete
+		val transfer: Transfer? = transferToDelete
 		if (transfer != null) {
 			transferToDelete = null
-			repository.deleteTransfer(transfer.transfer)
+			transferRepository.deleteTransfer(transfer)
 		}
 	}
 

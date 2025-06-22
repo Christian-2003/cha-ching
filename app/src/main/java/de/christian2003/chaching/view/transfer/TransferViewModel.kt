@@ -19,6 +19,10 @@ import java.time.LocalDate
 import java.util.Locale
 import java.util.UUID
 import de.christian2003.chaching.R
+import de.christian2003.chaching.domain.repository.TransferRepository
+import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.model.help.HelpCards
 import java.time.LocalDateTime
 
@@ -29,16 +33,24 @@ import java.time.LocalDateTime
 class TransferViewModel(application: Application): AndroidViewModel(application) {
 
     /**
-     * Repository from which to source data.
+     * Repository through which to access and manipulate transfers.
      */
-    private lateinit var repository: ChaChingRepository
+    private lateinit var transferRepository: TransferRepository
 
+    /**
+     * Repository through which to access types.
+     */
+    private lateinit var typeRepository: TypeRepository
+
+    /**
+     * Indicates whether the view model is initialized.
+     */
     private var isInitialized: Boolean = false
 
     /**
      * Transfer to edit. If a new transfer is created, this is null.
      */
-    private var transfer: TransferEntity? = null
+    private var transfer: Transfer? = null
 
     /**
      * Number format used to format numbers according to the user's locale.
@@ -49,7 +61,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     /**
      * Type of the transfer.
      */
-    lateinit var typeEntity: TypeEntity
+    lateinit var type: Type
 
     /**
      * String representation of the value.
@@ -105,42 +117,40 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     /**
      * Instantiates the view model.
      *
-     * @param repository    Repository from which to source data.
-     * @param typeId        ID of the type with which to create the transfer.
-     * @param transferId    ID of the transfer to edit. To create a new transfer, pass null.
+     * @param transferRepository    Repository to access and manipulate types.
+     * @param typeRepository        Repository to access types.
+     * @param typeId                ID of the type with which to create the transfer.
+     * @param transferId            ID of the transfer to edit. To create a new transfer, pass null.
      */
-    fun init(repository: ChaChingRepository, typeId: UUID, transferId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
+    fun init(transferRepository: TransferRepository, typeRepository: TypeRepository, typeId: UUID, transferId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
         if (!isInitialized) {
-            this@TransferViewModel.repository = repository
+            this@TransferViewModel.transferRepository = transferRepository
+            this@TransferViewModel.typeRepository = typeRepository
             isHelpCardVisible = HelpCards.CREATE_TRANSFER.getVisible(getApplication<Application>().baseContext)
 
             //Get type:
-            val typeEntity: TypeEntity? = repository.selectTypeById(typeId)
-            if (typeEntity == null) {
+            val type: Type? = typeRepository.getTypeById(typeId)
+            if (type == null) {
                 throw IllegalStateException("Cannot create transfer where 'type = null'.")
                 return@launch
             }
-            this@TransferViewModel.typeEntity = typeEntity
-            isHoursWorkedEditable = typeEntity.isHoursWorkedEditable
+            this@TransferViewModel.type = type
+            isHoursWorkedEditable = type.isHoursWorkedEditable
 
             if (transferId != null) {
                 //Edit transfer:
-                val transferWithType: TransferWithTypeEntity? = repository.selectTransferWithTypeById(transferId)
-                if (transferWithType == null) {
+                val transfer: Transfer? = transferRepository.getTransferById(transferId)
+                if (transfer == null) {
                     throw IllegalStateException("Cannot edit transfer that does not exist")
                 }
                 isCreating = false
-                transfer = transferWithType.transfer
-                if (this@TransferViewModel.typeEntity.typeId != transferWithType.typeEntity.typeId) {
-                    this@TransferViewModel.typeEntity = transferWithType.typeEntity
-                    isHoursWorkedEditable = transferWithType.typeEntity.isHoursWorkedEditable
-                }
-                val formattedValue = numberFormat.format(transferWithType.transfer.value.toDouble() / 100)
+                this@TransferViewModel.transfer = transfer
+                val formattedValue = numberFormat.format(transfer.value.toDouble() / 100)
                 value = TextFieldValue(formattedValue, TextRange(formattedValue.length))
                 valueErrorMessage = null
-                hoursWorked = transferWithType.transfer.hoursWorked.toString()
+                hoursWorked = transfer.hoursWorked.toString()
                 hoursWorkedErrorMessage = null
-                valueDate = transferWithType.transfer.valueDate
+                valueDate = transfer.valueDate
                 isSavable = true
             }
             else {
@@ -266,21 +276,21 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
         }
 
         if (transfer == null) {
-            transfer = TransferEntity(
+            transfer = Transfer(
                 value = value,
                 hoursWorked = hoursWorked,
                 valueDate = valueDate,
                 isSalary = true,
-                type = typeEntity.typeId
+                type = type.id
             )
-            repository.insertTransfer(transfer!!)
+            transferRepository.createNewTransfer(transfer!!)
         }
         else {
             transfer!!.value = value
             transfer!!.hoursWorked = hoursWorked
             transfer!!.valueDate = valueDate
             transfer!!.edited = LocalDateTime.now()
-            repository.updateTransfer(transfer!!)
+            transferRepository.updateExistingTransfer(transfer!!)
         }
     }
 

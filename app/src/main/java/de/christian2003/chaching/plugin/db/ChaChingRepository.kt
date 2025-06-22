@@ -38,101 +38,11 @@ class ChaChingRepository(
 	 */
 	val allTransfersDeprecated = transferDao.selectAllTransfersWithTypeSortedByDate()
 
-	val recentTransfers = transferDao.selectRecentTransfersWithType()
-
 	/**
 	 * List of all types sorted by date of creation.
 	 */
 	val allTypesDeprecated = typeDao.selectAllTypesSortedByDate()
 
-
-
-	/**
-	 * Returns the transfer (with type) of the ID specified. If no transfer with the ID specified
-	 * exists, null is returned.
-	 *
-	 * @return	Transfer with type or null.
-	 */
-	suspend fun selectTransferWithTypeById(transferId: UUID): TransferWithTypeEntity? {
-		return transferDao.selectTransferWithTypeById(transferId)
-	}
-
-	/**
-	 * Returns all transfers for the last thirty days.
-	 *
-	 * @param date	Current date (i.e. today).
-	 * @return		List of all transfers for the last 30 days.
-	 */
-    fun selectTransfersForMonth(date: LocalDate): Flow<List<TransferWithTypeEntity>> {
-		val today: Long = date.toEpochDay()
-		val thirtyDaysAgo: Long = date.minusDays(30).toEpochDay()
-		return transferDao.selectTransfersWithValueDateRange(thirtyDaysAgo, today)
-	}
-
-	/**
-	 * Inserts a new transfer into the database.
-	 *
-	 * @param transfer	New transfer to insert.
-	 */
-	suspend fun insertTransfer(transfer: TransferEntity) {
-		transferDao.insert(transfer)
-	}
-
-	/**
-	 * Deletes the transfer passed from the database.
-	 *
-	 * @param transfer	Transfer to delete.
-	 */
-	suspend fun deleteTransfer(transfer: TransferEntity) {
-		transferDao.delete(transfer)
-	}
-
-	/**
-	 * Updates an existing transfer within the database with the transfer passed.
-	 *
-	 * @param transfer	Transfer to update.
-	 */
-	suspend fun updateTransfer(transfer: TransferEntity) {
-		transferDao.update(transfer)
-	}
-
-
-	/**
-	 * Returns the type with the ID passed. If no type with the ID specified exists, null is
-	 * returned.
-	 *
-	 * @return	Type of the ID specified or null.
-	 */
-	suspend fun selectTypeById(typeId: UUID): TypeEntity? {
-		return typeDao.selectTypeById(typeId)
-	}
-
-	/**
-	 * Inserts a new type into the database.
-	 *
-	 * @param typeEntity    New type to insert.
-	 */
-	suspend fun insertType(typeEntity: TypeEntity) {
-		typeDao.insert(typeEntity)
-	}
-
-	/**
-	 * Deletes the type passed from the database.
-	 *
-	 * @param typeEntity    Type to delete.
-	 */
-	suspend fun deleteType(typeEntity: TypeEntity) {
-		typeDao.delete(typeEntity)
-	}
-
-	/**
-	 * Updates an existing type from the database with the type passed.
-	 *
-	 * @param typeEntity    Type to update.
-	 */
-	suspend fun updateType(typeEntity: TypeEntity) {
-		typeDao.update(typeEntity)
-	}
 
 
 	/**
@@ -190,7 +100,6 @@ class ChaChingRepository(
 	 * @return  List of all transfers.
 	 */
 	override fun getAllTransfers(): Flow<List<Transfer>> {
-		TODO("Not yet implemented")
 		if (transfers == null) {
 			//WARNING: If this does not work, map type list every time the function is called!
 			transfers = transferDao.selectAllTransfersSortedByDate().map { list ->
@@ -200,6 +109,23 @@ class ChaChingRepository(
 			}
 		}
 		return transfers!!
+	}
+
+
+	/**
+	 * Returns as list of all transfers with a value date within the range specified.
+	 *
+	 * @param start Start day of the range.
+	 * @param end   End day of the range.
+	 * @return      List of all transfers within the date range specified.
+	 */
+	override fun getAllTransfersInDateRange(start: LocalDate, end: LocalDate): Flow<List<Transfer>> {
+		val transfers: Flow<List<TransferEntity>> = transferDao.selectTransfersWithValueDateRange(start.toEpochDay(), end.toEpochDay())
+		return transfers.map { list ->
+			list.map { transfer ->
+				transferMapper.toDomain(transfer)
+			}
+		}
 	}
 
 
