@@ -91,7 +91,7 @@ class MainViewModel: ViewModel() {
 			this@MainViewModel.typeRepository = typeRepository
 			this@MainViewModel.updateManager = updateManager
 			allTypes = typeRepository.getAllTypes()
-			recentTransfers = transferRepository.getAllTransfers()
+			recentTransfers = transferRepository.getRecentTransfers()
 			transfersLastMonth = transferRepository.getAllTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
 			isInitialized = true
 			//All code after 'collect' is not called, therefore, this must be the last method call of the init-function!

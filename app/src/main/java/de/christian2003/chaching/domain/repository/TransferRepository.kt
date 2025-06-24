@@ -20,13 +20,21 @@ interface TransferRepository {
 
 
     /**
-     * Returns as list of all transfers with a value date within the range specified.
+     * Returns a list of all transfers with a value date within the range specified.
      *
      * @param start Start day of the range.
      * @param end   End day of the range.
      * @return      List of all transfers within the date range specified.
      */
     fun getAllTransfersInDateRange(start: LocalDate, end: LocalDate): Flow<List<Transfer>>
+
+
+    /**
+     * Returns a flow containing a list of the most recent transfers.
+     *
+     * @return  List of the most recent transfers.
+     */
+    fun getRecentTransfers(): Flow<List<Transfer>>
 
 
     /**

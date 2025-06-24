@@ -8,7 +8,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import de.christian2003.chaching.plugin.db.entities.TransferEntity
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -28,36 +27,27 @@ interface TransferDao {
 	fun selectAllTransfersSortedByDate(): Flow<List<TransferEntity>>
 
 	/**
-	 * Returns all transfers (with type) sorted by the value date.
+	 * Returns the last three transfers.
 	 *
-	 * @return	List of all transfers with type.
-	 */
-	@Transaction
-	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
-	fun selectAllTransfersWithTypeSortedByDate(): Flow<List<TransferWithTypeEntity>>
-
-	/**
-	 * Returns the last three transfers (with type).
-	 *
-	 * @return	Last three transfers with type.
+	 * @return	Last three transfers.
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers ORDER BY valueDate DESC LIMIT 3")
-	fun selectRecentTransfersWithType(): Flow<List<TransferWithTypeEntity>>
+	fun selectRecentTransfers(): Flow<List<TransferEntity>>
 
 	/**
-	 * Returns the transfer (with type) of the ID passed. If no transfer with the ID specified
+	 * Returns the transfer of the ID passed. If no transfer with the ID specified
 	 * exists, null is returned.
 	 *
 	 * @param transferId	ID of the transfer to query.
-	 * @return				Transfer with type or null.
+	 * @return				Transfer or null.
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers WHERE transferId = :transferId")
-	suspend fun selectTransferWithTypeById(transferId: UUID): TransferWithTypeEntity?
+	suspend fun selectTransferById(transferId: UUID): TransferEntity?
 
 	/**
-	 * Returns all transfers (with type) in the range between the epoch days passed.
+	 * Returns all transfers in the range between the epoch days passed.
 	 *
 	 * @param startEpochDay	First epoch day of the range.
 	 * @param endEpochDay	Last epoch day of the range.

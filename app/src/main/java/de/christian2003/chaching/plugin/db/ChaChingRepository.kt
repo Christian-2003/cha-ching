@@ -5,7 +5,6 @@ import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.plugin.db.entities.TransferEntity
-import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import de.christian2003.chaching.plugin.db.entities.TypeEntity
 import de.christian2003.chaching.application.backup.ImportStrategy
 import de.christian2003.chaching.domain.type.Type
@@ -129,6 +128,21 @@ class ChaChingRepository(
 
 
 	/**
+	 * Returns a flow containing a list of the most recent transfers.
+	 *
+	 * @return  List of the most recent transfers.
+	 */
+	override fun getRecentTransfers(): Flow<List<Transfer>> {
+		val transfers: Flow<List<TransferEntity>> = transferDao.selectRecentTransfers()
+		return transfers.map { list ->
+			list.map { transfer ->
+				transferMapper.toDomain(transfer)
+			}
+		}
+	}
+
+
+	/**
 	 * Returns the transfer of the ID passed as argument. If no transfer with the ID specified
 	 * exists, null is returned.
 	 *
@@ -136,9 +150,9 @@ class ChaChingRepository(
 	 * @return      Transfer with the ID specified.
 	 */
 	override suspend fun getTransferById(id: UUID): Transfer? {
-		val transfer: TransferWithTypeEntity? = transferDao.selectTransferWithTypeById(id)
+		val transfer: TransferEntity? = transferDao.selectTransferById(id)
 		return if (transfer != null) {
-			transferMapper.toDomain(transfer.transfer)
+			transferMapper.toDomain(transfer)
 		} else {
 			null
 		}
