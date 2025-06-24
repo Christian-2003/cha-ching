@@ -18,8 +18,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.christian2003.chaching.plugin.db.ChaChingDatabase
-import de.christian2003.chaching.plugin.db.ChaChingRepository
+import de.christian2003.chaching.plugin.infrastructure.db.ChaChingDatabase
+import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
 import de.christian2003.chaching.model.update.UpdateManager
 import de.christian2003.chaching.ui.theme.ChaChingTheme
 import de.christian2003.chaching.view.help.HelpScreen
@@ -44,8 +44,7 @@ import java.util.UUID
 import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import de.christian2003.chaching.application.backup.BackupService
-import de.christian2003.chaching.plugin.backup.JsonBackupService
+import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

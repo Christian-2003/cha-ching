@@ -9,7 +9,7 @@ import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.model.transfers.OverviewCalcResult
+import de.christian2003.chaching.domain.analysis.OverviewCalcResult
 import de.christian2003.chaching.model.update.UpdateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

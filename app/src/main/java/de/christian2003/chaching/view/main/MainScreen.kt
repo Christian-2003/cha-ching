@@ -53,8 +53,8 @@ import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.model.transfers.OverviewCalcResult
-import de.christian2003.chaching.model.transfers.OverviewCalcResultItem
+import de.christian2003.chaching.domain.analysis.OverviewCalcResult
+import de.christian2003.chaching.domain.analysis.OverviewCalcResultItem
 import de.christian2003.chaching.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.ui.composables.Headline

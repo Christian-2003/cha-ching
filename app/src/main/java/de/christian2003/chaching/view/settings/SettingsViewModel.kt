@@ -9,17 +9,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.application.backup.BackupImportRepository
 import de.christian2003.chaching.application.backup.BackupService
-import de.christian2003.chaching.plugin.db.ChaChingRepository
 import de.christian2003.chaching.application.backup.ImportStrategy
-import de.christian2003.chaching.plugin.backup.BackupData
-import de.christian2003.chaching.plugin.backup.JsonBackupService
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 
 
 class SettingsViewModel(application: Application): AndroidViewModel(application) {
