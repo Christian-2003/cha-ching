@@ -1,6 +1,5 @@
 package de.christian2003.chaching.plugin.db.entities
 
-import android.icu.text.DecimalFormat
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey

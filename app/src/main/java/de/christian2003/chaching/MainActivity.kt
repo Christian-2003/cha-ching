@@ -44,6 +44,8 @@ import java.util.UUID
 import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import de.christian2003.chaching.application.backup.BackupService
+import de.christian2003.chaching.plugin.backup.JsonBackupService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -234,7 +236,11 @@ fun ChaChing(updateManager: UpdateManager) {
 
 			composable("settings") {
 				val viewModel: SettingsViewModel = viewModel()
-				viewModel.init(repository)
+				viewModel.init(JsonBackupService(
+					transferRepository = repository,
+					typeRepository = repository,
+					importRepository = repository
+				))
 				SettingsScreen(
 					viewModel = viewModel,
 					onNavigateUp = {

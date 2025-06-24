@@ -1,12 +1,13 @@
 package de.christian2003.chaching.plugin.db
 
+import de.christian2003.chaching.application.backup.BackupImportRepository
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.plugin.db.entities.TransferEntity
 import de.christian2003.chaching.plugin.db.entities.TransferWithTypeEntity
 import de.christian2003.chaching.plugin.db.entities.TypeEntity
-import de.christian2003.chaching.model.backup.ImportStrategy
+import de.christian2003.chaching.application.backup.ImportStrategy
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.db.mapper.TransferDbMapper
 import de.christian2003.chaching.plugin.db.mapper.TypeDbMapper
@@ -31,42 +32,40 @@ class ChaChingRepository(
 	 */
 	private val typeDao: TypeDao
 
-): TransferRepository, TypeRepository {
+): TransferRepository, TypeRepository, BackupImportRepository {
 
 	/**
-	 * List of all transfers (with type) sorted by value date.
-	 */
-	val allTransfersDeprecated = transferDao.selectAllTransfersWithTypeSortedByDate()
-
-	/**
-	 * List of all types sorted by date of creation.
-	 */
-	val allTypesDeprecated = typeDao.selectAllTypesSortedByDate()
-
-
-
-	/**
-	 * Imports the types and transfers from the backup according to the import strategy.
+	 * Imports the data passed as arguments based on the specified import strategy.
 	 *
-	 * @param typeEntities                Types to import.
-	 * @param transfers			Transfers to import
-	 * @param importStrategy	Import strategy indicates how to handle existing data with the import.
+	 * @param transfers         List of transfers to import
+	 * @param types             List of types to import
+	 * @param importStrategy    Indicates what should happen to existing data during import.
 	 */
-	suspend fun importDataFromBackup(typeEntities: List<TypeEntity>, transfers: List<TransferEntity>, importStrategy: ImportStrategy) {
+	override suspend fun importFromBackup(transfers: List<Transfer>, types: List<Type>, importStrategy: ImportStrategy) {
+		val transferEntities: MutableList<TransferEntity> = mutableListOf()
+		val typeEntities: MutableList<TypeEntity> = mutableListOf()
+
+		transfers.forEach { transfer ->
+			transferEntities.add(transferMapper.toEntity(transfer))
+		}
+		types.forEach { type ->
+			typeEntities.add(typeMapper.toEntity(type))
+		}
+
 		when (importStrategy) {
 			ImportStrategy.DELETE_EXISTING_DATA -> {
 				transferDao.deleteAll()
 				typeDao.deleteAll()
 				typeDao.insertAndIgnore(typeEntities)
-				transferDao.insertAndIgnore(transfers)
+				transferDao.insertAndIgnore(transferEntities)
 			}
 			ImportStrategy.REPLACE_EXISTING_DATA -> {
 				typeDao.insertAndReplace(typeEntities)
-				transferDao.insertAndReplace(transfers)
+				transferDao.insertAndReplace(transferEntities)
 			}
 			ImportStrategy.IGNORE_EXISTING_DATA -> {
 				typeDao.insertAndIgnore(typeEntities)
-				transferDao.insertAndIgnore(transfers)
+				transferDao.insertAndIgnore(transferEntities)
 			}
 		}
 	}
