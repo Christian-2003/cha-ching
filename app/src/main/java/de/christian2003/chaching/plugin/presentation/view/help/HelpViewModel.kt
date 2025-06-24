@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.AndroidViewModel
-import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 
 
 /**
