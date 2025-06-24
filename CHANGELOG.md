@@ -2,6 +2,16 @@
 
 # Changelog
 
+## 1.0.1 (XXXX-XX-XX)
+
+###### Release Highlights
+n./a.
+
+###### Features
+* Introduction of clean architecture and domain driven design to decrease development times in the future
+
+<br/>
+
 ## 1.0.0 (2025-06-08)
 
 ###### Release Highlights
