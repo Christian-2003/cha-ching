@@ -59,8 +59,8 @@ class ChaChingRepository(
 				transferDao.insertAndIgnore(transferEntities)
 			}
 			ImportStrategy.REPLACE_EXISTING_DATA -> {
-				typeDao.insertAndReplace(typeEntities)
-				transferDao.insertAndReplace(transferEntities)
+				typeDao.upsert(typeEntities)
+				transferDao.upsert(transferEntities)
 			}
 			ImportStrategy.IGNORE_EXISTING_DATA -> {
 				typeDao.insertAndIgnore(typeEntities)

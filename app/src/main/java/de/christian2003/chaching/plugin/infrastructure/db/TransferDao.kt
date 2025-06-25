@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TransferEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -59,7 +60,7 @@ interface TransferDao {
 
 
 	/**
-	 * Inserts a new transfer into the database.
+	 * Inserts a new transf@Upserter into the database.
 	 *
 	 * @param transfer	Transfer to insert.
 	 */
@@ -91,7 +92,7 @@ interface TransferDao {
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	suspend fun insertAndIgnore(transfers: List<TransferEntity>)
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertAndReplace(transfers: List<TransferEntity>)
+	@Upsert
+	suspend fun upsert(transfers: List<TransferEntity>)
 
 }

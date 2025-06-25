@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -69,7 +70,7 @@ interface TypeDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAndIgnore(typeEntities: List<TypeEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAndReplace(typeEntities: List<TypeEntity>)
+    @Upsert
+    suspend fun upsert(typeEntities: List<TypeEntity>)
 
 }
