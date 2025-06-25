@@ -11,13 +11,14 @@ This document describes the database architecture for the app Cha Ching.
 
 ## Database Scheme
 The database scheme can be described through the following UML diagram:
+
 ![](../img/development/database_scheme.drawio.svg)
 
 ###### `transfers` Table
 The database table transfers is modeled through the class `TransferEntity`. The table has the following attributes:
 
 &nbsp; | Attribute | Remarks
---: | --: | :--
+--- | --- | ---
 Primary Key | transferId | Unique type 4 UUID for the transfer within the database.
 Foreign Key | type | UUID of the type of the transfer.
 &nbsp; | hoursWorked | Stores the number of hours that were worked for the transfer.
@@ -31,7 +32,7 @@ Foreign Key | type | UUID of the type of the transfer.
 The database table types is modeled through the class `TypeEntity`. The table has the following attributes:
 
 &nbsp; | Attribute | Remarks
---: | --: | :--
+--- | --- | ---
 Primary Key | typeId | Unique type 4 UUID for the type within the database.
 &nbsp; | name | Stores the name of the type as string. This name is shown to the user.
 &nbsp; | icon | Stores the icon of the type. The value within this field corresponds to the ordinal of the icon within the enum `TypeIcon`.
@@ -43,6 +44,7 @@ Primary Key | typeId | Unique type 4 UUID for the type within the database.
 
 ## Relations
 The tables `transfers` and `types` have a many-to-one relation.
+
 ![](../img/development/database_relations.drawio.svg)
 
 Each transfer must have exactly one corresponding type. Therefore, each type can have an unlimited number of transfers.
