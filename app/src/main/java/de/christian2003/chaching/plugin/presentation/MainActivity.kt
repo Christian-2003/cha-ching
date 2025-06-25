@@ -5,6 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -112,6 +117,18 @@ fun ChaChing(updateManager: UpdateManager) {
                 "main"
             } else {
                 "onboarding"
+            },
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
+                ) + fadeIn(spring(Spring.DampingRatioLowBouncy))
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessHigh)
+                ) + fadeOut(spring(Spring.DampingRatioLowBouncy))
             }
         ) {
             composable("main") {

@@ -11,6 +11,7 @@ n./a.
 * Introduction of clean architecture and domain driven design to decrease development times in the future
 * Importing a backup with option 'Replace duplicates' no longer deletes transfers that are not part of the backup
 * Transfers in `TransfersScreen` are grouped by month for better user experience. Each month has a header displaying the month name
+* Add animated transitions between screens
 
 <br/>
 
