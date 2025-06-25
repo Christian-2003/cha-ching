@@ -37,6 +37,20 @@
     <string name="transfers_emptyPlaceholder_title">No data to show</string>
     <string name="transfers_emptyPlaceholder_subtitle">Available earnings are shown here</string>
     <string name="transfers_confirmDelete">Deleting %1$s cannot be undone. Are you sure you want to delete this earning?</string>
+    <string-array name="transfers_months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 
 
     <string name="transfer_titleEdit">Edit earning</string>

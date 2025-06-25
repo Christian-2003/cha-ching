@@ -37,6 +37,20 @@
     <string name="transfers_emptyPlaceholder_title">Keine Einkommen</string>
     <string name="transfers_emptyPlaceholder_subtitle">Verfügbare Einkommen werden hier angezeigt</string>
     <string name="transfers_confirmDelete">Das Löschen von %1$s kann nicht rückgängig gemacht werden. Bist du dir sicher, dass du dieses Einkommen löschen möchtest?</string>
+    <string-array name="transfers_months">
+        <item>Januar</item>
+        <item>Februar</item>
+        <item>März</item>
+        <item>April</item>
+        <item>Mai</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>August</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>Dezember</item>
+    </string-array>
 
 
     <string name="transfer_titleEdit">Einkommen bearbeiten</string>

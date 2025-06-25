@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -16,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import java.util.UUID
 import de.christian2003.chaching.R
@@ -23,7 +26,9 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
+import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.TransferListItem
+import java.time.LocalDate
 
 
 /**
@@ -122,14 +127,40 @@ private fun TransferList(
     onDeleteTransfer: (Transfer) -> Unit,
     onQueryTransferType: (Transfer) -> Type?
 ) {
+    val groupedTransfers = transfers.groupBy { transfer ->
+        transfer.valueDate.withDayOfMonth(1)
+    }
     LazyColumn {
-        items(transfers) { transfer ->
-            TransferListItem(
-                transfer = transfer,
-                onEdit = onEditTransfer,
-                onDelete = onDeleteTransfer,
-                onQueryTransferType = onQueryTransferType
-            )
+        groupedTransfers.forEach { (month, monthTransfer) ->
+            item {
+                Column {
+                    HorizontalDivider()
+                    Headline(
+                        title = stringArrayResource(R.array.transfers_months)[month.month.ordinal]
+                    )
+                }
+            }
+            items(monthTransfer) { transfer ->
+                TransferListItem(
+                    transfer = transfer,
+                    onEdit = onEditTransfer,
+                    onDelete = onDeleteTransfer,
+                    onQueryTransferType = onQueryTransferType
+                )
+            }
         }
     }
+}
+
+
+@Composable
+private fun TransferListMonthHeader(
+    date: LocalDate
+) {
+    val monthName: String = stringArrayResource(R.array.transfers_months)[date.month.ordinal]
+    Text(
+        text = monthName,
+        color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.bodyLarge
+    )
 }
