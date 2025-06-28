@@ -16,6 +16,6 @@ data class AnalysisDiagramLine(
     /**
      * Type for which the diagram line is created.
      */
-    val type: Type
+    val type: Type?
 
 )
