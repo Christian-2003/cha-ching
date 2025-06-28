@@ -134,7 +134,7 @@ private fun TransferList(
                 Column {
                     HorizontalDivider()
                     Headline(
-                        title = stringArrayResource(R.array.transfers_months)[month.month.ordinal]
+                        title = stringArrayResource(R.array.months)[month.month.ordinal]
                     )
                 }
             }

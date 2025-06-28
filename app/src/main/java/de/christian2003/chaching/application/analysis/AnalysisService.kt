@@ -19,6 +19,6 @@ interface AnalysisService {
      * @param precision Precision for the analysis results.
      * @return          Analysis result.
      */
-    suspend fun analyzeData(startDay: LocalDate, endDay: LocalDate, precision: AnalysisPrecision): AnalysisResult;
+    suspend fun analyzeData(startDay: LocalDate, endDay: LocalDate, precision: AnalysisPrecision): AnalysisResult
 
 }

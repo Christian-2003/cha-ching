@@ -1,6 +1,26 @@
 <resources>
     <string name="app_name">Cha Ching</string>
     <string name="confirm_delete">Löschen bestätigen</string>
+    <string-array name="months">
+        <item>Januar</item>
+        <item>Februar</item>
+        <item>März</item>
+        <item>April</item>
+        <item>Mai</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>August</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>Dezember</item>
+    </string-array>
+    <string-array name="quarters">
+        <item>Q1</item>
+        <item>Q2</item>
+        <item>Q3</item>
+        <item>Q4</item>
+    </string-array>
 
 
     <string name="main_overview_total">Gesamte Einnahmen der letzten 30 Tage</string>
@@ -37,20 +57,6 @@
     <string name="transfers_emptyPlaceholder_title">Keine Einkommen</string>
     <string name="transfers_emptyPlaceholder_subtitle">Verfügbare Einkommen werden hier angezeigt</string>
     <string name="transfers_confirmDelete">Das Löschen von %1$s kann nicht rückgängig gemacht werden. Bist du dir sicher, dass du dieses Einkommen löschen möchtest?</string>
-    <string-array name="transfers_months">
-        <item>Januar</item>
-        <item>Februar</item>
-        <item>März</item>
-        <item>April</item>
-        <item>Mai</item>
-        <item>Juni</item>
-        <item>Juli</item>
-        <item>August</item>
-        <item>September</item>
-        <item>Oktober</item>
-        <item>November</item>
-        <item>Dezember</item>
-    </string-array>
 
 
     <string name="transfer_titleEdit">Einkommen bearbeiten</string>
@@ -78,6 +84,9 @@
     <string name="type_hoursWorkedEditableText">Sollen Arbeitsstunden für diese Einkommensart erfasst werden?</string>
     <string name="type_chooseIcon">Wähle ein Bild aus</string>
     <string name="type_help_create">Bearbeite die Einkommensart indem du einen Namen eingibst und ein Bild auswählst.</string>
+
+
+    <string name="analysis_title">Analyse</string>
 
 
     <string name="settings_title">Einstellungen</string>

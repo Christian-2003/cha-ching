@@ -51,6 +51,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
+import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScreen
+import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -157,6 +159,9 @@ fun ChaChing(updateManager: UpdateManager) {
                     },
                     onNavigateToSettings = {
                         navController.navigate("settings")
+                    },
+                    onNavigateToAnalysis = {
+                        navController.navigate("analysis")
                     }
                 )
             }
@@ -247,6 +252,21 @@ fun ChaChing(updateManager: UpdateManager) {
                 val viewModel: TypeViewModel = viewModel()
                 viewModel.init(repository, typeId)
                 TypeScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+
+            composable("analysis") {
+                val viewModel: AnalysisViewModel = viewModel()
+                viewModel.init(
+                    transferRepository = repository,
+                    typeRepository = repository
+                )
+                AnalysisScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()

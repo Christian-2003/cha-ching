@@ -1,6 +1,26 @@
 <resources>
     <string name="app_name">Cha Ching</string>
     <string name="confirm_delete">Confirm deletion</string>
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <string-array name="quarters">
+        <item>Q1</item>
+        <item>Q2</item>
+        <item>Q3</item>
+        <item>Q4</item>
+    </string-array>
 
 
     <string name="main_overview_total">Total earnings last 30 days</string>
@@ -37,20 +57,6 @@
     <string name="transfers_emptyPlaceholder_title">No data to show</string>
     <string name="transfers_emptyPlaceholder_subtitle">Available earnings are shown here</string>
     <string name="transfers_confirmDelete">Deleting %1$s cannot be undone. Are you sure you want to delete this earning?</string>
-    <string-array name="transfers_months">
-        <item>January</item>
-        <item>February</item>
-        <item>March</item>
-        <item>April</item>
-        <item>May</item>
-        <item>June</item>
-        <item>July</item>
-        <item>August</item>
-        <item>September</item>
-        <item>October</item>
-        <item>November</item>
-        <item>December</item>
-    </string-array>
 
 
     <string name="transfer_titleEdit">Edit earning</string>
@@ -78,6 +84,9 @@
     <string name="type_hoursWorkedEditableText">Should earnings of this type track hours worked?</string>
     <string name="type_chooseIcon">Choose an icon</string>
     <string name="type_help_create">Configure the type by entering a name and selecting an icon.</string>
+
+
+    <string name="analysis_title">Analysis</string>
 
 
     <string name="settings_title">Settings</string>
