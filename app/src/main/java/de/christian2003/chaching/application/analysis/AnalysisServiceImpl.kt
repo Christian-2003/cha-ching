@@ -64,15 +64,16 @@ class AnalysisServiceImpl(
         resetServiceForAnalysis(types, precision)
 
         //Group transfers by analysis precision:
-        val transfersGroupedByPrecision: Map<LocalDate, List<Transfer>> = transfers.groupBy { transfer ->
+        val transfersGroupedByPrecision: Map<LocalDate, List<Transfer>> = transfers.reversed().groupBy { transfer ->
             when (precision) {
-                AnalysisPrecision.QUARTER -> transfer.valueDate.withMonth(transfer.valueDate.month.value - ((transfer.valueDate.month.value - 1) % 3))
+                AnalysisPrecision.QUARTER -> transfer.valueDate.withMonth(getQuarterForDate(transfer.valueDate))
                 AnalysisPrecision.YEAR -> transfer.valueDate.withMonth(1).withDayOfMonth(1)
                 else -> transfer.valueDate.withDayOfMonth(1)
             }
         }
 
         calculateAnalysisResultsForPrecision(transfersGroupedByPrecision, types)
+        fillBlankPrecisionSpaces(precision)
         createAnalysisResult()
 
         return analysisResultBuilder.build()
@@ -98,6 +99,146 @@ class AnalysisServiceImpl(
         cumulatedTransfersByType.forEach { (type, analysisItems) ->
             analysisResultBuilder.addCumulatedTransferByType(AnalysisDiagramLine(analysisItems, type))
         }
+    }
+
+
+    /**
+     * Fills blank months / quarters / years (depending on precision) within the current analysis
+     * results. After this method is called, the analysis results will have AnalysisItems for each
+     * date depending on the precision.
+     *
+     * @param precision Precision for which to insert dates.
+     */
+    private fun fillBlankPrecisionSpaces(precision: AnalysisPrecision) {
+        val firstDate: LocalDate = findFirstPrecisionDate()
+        val lastDate: LocalDate = findLastPrecisionDate(firstDate)
+        val allDates: List<LocalDate> = createListWithAllDates(firstDate, lastDate, precision)
+
+        transfersByType.forEach { (type, analysisItems) ->
+            val fullDates: MutableList<AnalysisItem> = mutableListOf()
+            allDates.forEach { date ->
+                var analysisItemWithDate: AnalysisItem? = null
+                analysisItems.forEach { analysisItem ->
+                    if (analysisItem.date == date) {
+                        analysisItemWithDate = analysisItem
+                        return@forEach
+                    }
+                }
+                fullDates.add(analysisItemWithDate ?: AnalysisItem(0, date))
+            }
+            transfersByType[type] = fullDates
+        }
+
+        cumulatedTransfersByType.forEach { (type, analysisItems) ->
+            val fullDates: MutableList<AnalysisItem> = mutableListOf()
+            var cumulatedValue = 0
+            allDates.forEach { date ->
+                var analysisItemWithDate: AnalysisItem? = null
+                analysisItems.forEach { analysisItem ->
+                    if (analysisItem.date == date) {
+                        analysisItemWithDate = analysisItem
+                        cumulatedValue = analysisItem.value
+                        return@forEach
+                    }
+                }
+                fullDates.add(analysisItemWithDate ?: AnalysisItem(cumulatedValue, date))
+            }
+            cumulatedTransfersByType[type] = fullDates
+        }
+    }
+
+
+    /**
+     * Finds the first date within the current analysis results.
+     *
+     * @return  First date.
+     */
+    private fun findFirstPrecisionDate(): LocalDate {
+        var firstDate: LocalDate = LocalDate.now()
+        transfersByType.forEach { (_, analysisItems) ->
+            analysisItems.forEach { analysisItem ->
+                if (analysisItem.date.toEpochDay() < firstDate.toEpochDay()) {
+                    firstDate = analysisItem.date
+                }
+            }
+        }
+        return firstDate
+    }
+
+
+    /**
+     * Finds the last date within the current analysis results.
+     *
+     * @param startDate First possible date to be returned.
+     * @return          Last date.
+     */
+    private fun findLastPrecisionDate(startDate: LocalDate): LocalDate {
+        var lastDate: LocalDate = startDate
+        transfersByType.forEach { (_, analysisItems) ->
+            analysisItems.forEach { analysisItem ->
+                if (analysisItem.date.toEpochDay() > lastDate.toEpochDay()) {
+                    lastDate = analysisItem.date
+                }
+            }
+        }
+        return lastDate
+    }
+
+
+    /**
+     * Creates a list containing dates (according to the precision specified) in the range specified.
+     *
+     * @param firstDate First date in the range to be included in the list.
+     * @param lastDate  Last date in the range to be included in the list.
+     * @param precision Precision for the dates in the list.
+     * @return          List with all dates of the passed precision in the range specified.
+     */
+    private fun createListWithAllDates(firstDate: LocalDate, lastDate: LocalDate, precision: AnalysisPrecision): List<LocalDate> {
+        val dates: MutableList<LocalDate> = mutableListOf()
+        when (precision) {
+            AnalysisPrecision.MONTH -> {
+                var month = firstDate.month.value
+                var year = firstDate.year
+                while ((year < lastDate.year) || (month <= lastDate.month.value && year == lastDate.year)) {
+                    dates.add(LocalDate.of(year, month, 1))
+                    month++
+                    if (month > 12) {
+                        month = 1
+                        year++
+                    }
+                }
+            }
+            AnalysisPrecision.QUARTER -> {
+                var quarter = getQuarterForDate(firstDate)
+                var year = firstDate.year
+                while ((year < lastDate.year) || (quarter <= getQuarterForDate(lastDate) || year == lastDate.year)) {
+                    dates.add(LocalDate.of(year, when(quarter) { 1 -> 1; 2 -> 4; 3 -> 7; else -> 10}, 1))
+                    quarter++
+                    if (quarter > 4) {
+                        quarter = 1
+                        year++
+                    }
+                }
+            }
+            AnalysisPrecision.YEAR -> {
+                for (i in firstDate.year..lastDate.year) {
+                    dates.add(LocalDate.of(i, 1, 1))
+                }
+                return dates
+            }
+        }
+        return dates
+    }
+
+
+    /**
+     * Gets the yearly quarter of the date passed from 1 (Q1) to 4 (Q4).
+     *
+     * @param date  Date whose yearly quarter to return.
+     * @return      Yearly quarter of the date specified.
+     */
+    private fun getQuarterForDate(date: LocalDate): Int {
+        return date.month.value - ((date.month.value - 1) % 3)
     }
 
 

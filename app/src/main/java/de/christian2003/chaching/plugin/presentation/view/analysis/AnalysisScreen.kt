@@ -142,7 +142,6 @@ fun LineDiagram(
                 }
             )
         }
-        labels.reverse()
     }
     val data: MutableList<Line> = mutableListOf()
     var lineNumber = 0
