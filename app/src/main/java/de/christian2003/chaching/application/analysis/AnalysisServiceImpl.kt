@@ -1,6 +1,7 @@
 package de.christian2003.chaching.application.analysis
 
 import android.util.Log
+import androidx.compose.ui.platform.LocalGraphicsContext
 import de.christian2003.chaching.domain.analysis.AnalysisDiagramLine
 import de.christian2003.chaching.domain.analysis.AnalysisItem
 import de.christian2003.chaching.domain.analysis.AnalysisPrecision
@@ -66,7 +67,7 @@ class AnalysisServiceImpl(
         //Group transfers by analysis precision:
         val transfersGroupedByPrecision: Map<LocalDate, List<Transfer>> = transfers.reversed().groupBy { transfer ->
             when (precision) {
-                AnalysisPrecision.QUARTER -> transfer.valueDate.withMonth(getQuarterForDate(transfer.valueDate))
+                AnalysisPrecision.QUARTER -> transfer.valueDate.withMonth(transfer.valueDate.month.value - ((transfer.valueDate.month.value - 1) % 3)).withDayOfMonth(1)
                 AnalysisPrecision.YEAR -> transfer.valueDate.withMonth(1).withDayOfMonth(1)
                 else -> transfer.valueDate.withDayOfMonth(1)
             }
@@ -211,7 +212,7 @@ class AnalysisServiceImpl(
             AnalysisPrecision.QUARTER -> {
                 var quarter = getQuarterForDate(firstDate)
                 var year = firstDate.year
-                while ((year < lastDate.year) || (quarter <= getQuarterForDate(lastDate) || year == lastDate.year)) {
+                while ((year < lastDate.year) || (quarter <= getQuarterForDate(lastDate) && year == lastDate.year)) {
                     dates.add(LocalDate.of(year, when(quarter) { 1 -> 1; 2 -> 4; 3 -> 7; else -> 10}, 1))
                     quarter++
                     if (quarter > 4) {

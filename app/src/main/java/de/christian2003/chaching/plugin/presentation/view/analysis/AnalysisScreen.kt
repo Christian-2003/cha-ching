@@ -187,7 +187,7 @@ fun LineDiagram(
                 horizontal = dimensionResource(R.dimen.padding_horizontal),
                 vertical = dimensionResource(R.dimen.padding_vertical)
             )
-            .padding(bottom = 20.dp) //Always require bottom padding to make space for x-axis labels!
+            .padding(bottom = 48.dp) //Always require bottom padding to make space for x-axis labels!
     ) {
         LineChart(
             modifier = Modifier
