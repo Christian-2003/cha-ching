@@ -1,7 +1,5 @@
 package de.christian2003.chaching.plugin.presentation.view.analysis
 
-import android.app.DatePickerDialog
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -43,8 +41,8 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
-import de.christian2003.chaching.domain.analysis.AnalysisDiagram
-import de.christian2003.chaching.domain.analysis.AnalysisPrecision
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisDiagram
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.ui.composables.Value
 import ir.ehsannarmani.compose_charts.LineChart
@@ -55,13 +53,17 @@ import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.PopupProperties
-import kotlinx.coroutines.selects.select
 import java.time.LocalDate
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 
+/**
+ * Screen displays the analysis of data to the user.
+ *
+ * @param viewModel     View model from which to source data.
+ * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AnalysisScreen(
@@ -176,6 +178,15 @@ fun AnalysisScreen(
 }
 
 
+/**
+ * Displays a row with chips through which to select the date range for the analysis.
+ *
+ * @param analysisPeriod            Analysis period currently selected.
+ * @param onAnalysisPeriodChange    Callback invoked once the analysis period is changed. This passes
+ *                                  null if a custom range shall be selected. You need to manually
+ *                                  allow the user to select a custom range if null is passed!
+ * @param modifier                  Modifier.
+ */
 @Composable
 private fun AnalysisPeriodSelector(
     analysisPeriod: AnalysisPeriod,
@@ -230,6 +241,13 @@ private fun AnalysisPeriodSelector(
 }
 
 
+/**
+ * Displays a row with the total transfer sum and the average transfer sum.
+ *
+ * @param formattedTotal    Formatted total value (without currency symbol!).
+ * @param formattedAverage  Formatted average value (without currency symbol!).
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun TotalOverview(
     formattedTotal: String,
@@ -260,6 +278,13 @@ private fun TotalOverview(
 }
 
 
+/**
+ * Displays a box with a value.
+ *
+ * @param title             Title for the value displayed.
+ * @param formattedValue    Formatted value to display (without currency symbol!).
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun TotalValueBox(
     title: String,
@@ -293,6 +318,14 @@ private fun TotalValueBox(
 }
 
 
+/**
+ * Displays the sum of values for all transfers by types.
+ *
+ * @param title             Title for the overview.
+ * @param transfersByType   Sum of transfers by type.
+ * @param formatValue       Callback invoked to format a value.
+ * @param modifier          Modifier.
+ */
 @Composable
 fun TransfersByTypeOverview(
     title: String,
@@ -367,6 +400,15 @@ fun TransfersByTypeOverview(
 }
 
 
+/**
+ * Displays a line diagram for the analysis diagram passed as argument.
+ *
+ * @param title             Title for the dialog.
+ * @param diagram           Diagram data.
+ * @param curvedEdges       Whether the diagram lines should have curved edges.
+ * @param indicatorBuilder  Callback invoked to build an indicator value for the dialog.
+ * @param modifier          Modifier.
+ */
 @Composable
 fun LineDiagram(
     title: String,
@@ -419,9 +461,7 @@ fun LineDiagram(
             )
         )
         data.add(diagramLine)
-        Log.d("Analysis", "Line data points: ${values.size}")
     }
-    Log.d("Analysis", "Lines: ${data.size}")
 
     Column(
         modifier = modifier
@@ -491,6 +531,14 @@ fun LineDiagram(
 }
 
 
+/**
+ * Displays a model date picker through which to select a date range for analysis.
+ *
+ * @param selectedAnalysisPeriod    Time period that is selected currently.
+ * @param onPeriodSelected          Callback invoked once a new time period is selected.
+ * @param onDismiss                 Callback invoked to close the dialog without selecting a new
+ *                                  date range.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DateRangePickerModal(

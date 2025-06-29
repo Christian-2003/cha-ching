@@ -1,11 +1,10 @@
 package de.christian2003.chaching.application.analysis
 
 import android.util.Log
-import androidx.compose.ui.platform.LocalGraphicsContext
-import de.christian2003.chaching.domain.analysis.AnalysisDiagramLine
-import de.christian2003.chaching.domain.analysis.AnalysisItem
-import de.christian2003.chaching.domain.analysis.AnalysisPrecision
-import de.christian2003.chaching.domain.analysis.AnalysisResult
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisDiagramLine
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisItem
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisResult
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer

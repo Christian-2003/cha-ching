@@ -50,6 +50,8 @@ import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import de.christian2003.chaching.R
+import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
+import de.christian2003.chaching.application.analysis.AnalysisSquasher
 import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScreen
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
@@ -263,8 +265,7 @@ fun ChaChing(updateManager: UpdateManager) {
             composable("analysis") {
                 val viewModel: AnalysisViewModel = viewModel()
                 viewModel.init(
-                    transferRepository = repository,
-                    typeRepository = repository
+                    analysisService = AnalysisSquasher(AnalysisServiceImpl(repository, repository))
                 )
                 AnalysisScreen(
                     viewModel = viewModel,

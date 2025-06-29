@@ -1,9 +1,9 @@
 package de.christian2003.chaching.application.analysis
 
-import de.christian2003.chaching.domain.analysis.AnalysisDiagramLine
-import de.christian2003.chaching.domain.analysis.AnalysisItem
-import de.christian2003.chaching.domain.analysis.AnalysisPrecision
-import de.christian2003.chaching.domain.analysis.AnalysisResult
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisDiagramLine
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisItem
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisResult
 import de.christian2003.chaching.domain.type.Type
 import java.time.LocalDate
 

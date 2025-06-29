@@ -1,4 +1,4 @@
-package de.christian2003.chaching.domain.analysis
+package de.christian2003.chaching.domain.analysis.extensive
 
 import de.christian2003.chaching.domain.type.Type
 

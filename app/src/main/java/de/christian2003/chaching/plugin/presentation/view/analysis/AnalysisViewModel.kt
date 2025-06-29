@@ -7,48 +7,68 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.application.analysis.AnalysisService
-import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
-import de.christian2003.chaching.application.analysis.AnalysisSquasher
-import de.christian2003.chaching.domain.analysis.AnalysisPrecision
-import de.christian2003.chaching.domain.analysis.AnalysisResult
-import de.christian2003.chaching.domain.repository.TransferRepository
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.time.LocalDate
 
 
+/**
+ * View model for the analysis screen.
+ *
+ * @param application   Application object.
+ */
 class AnalysisViewModel(application: Application): AndroidViewModel(application) {
 
-    private lateinit var transferRepository: TransferRepository
-
-    private lateinit var typeRepository: TypeRepository
-
+    /**
+     * Service with which to analyze data.
+     */
     private lateinit var analysisService: AnalysisService
 
+    /**
+     * Indicates whether the view model has been initialized.
+     */
     private var isInitialized: Boolean = false
 
 
+    /**
+     * Period for which to analyze data.
+     */
     lateinit var analysisPeriod: AnalysisPeriod
 
+    /**
+     * Result of the analysis. This is null while the analysis is running.
+     */
     var analysisResult: AnalysisResult? by mutableStateOf(null)
 
+    /**
+     * Indicates whether to show the dialog through which to select a custom date range for the analysis.
+     */
     var showDatePeriodPickerDialog: Boolean by mutableStateOf(false)
 
 
-    fun init(transferRepository: TransferRepository, typeRepository: TypeRepository) {
+    /**
+     * Initializes the view model.
+     *
+     * @param analysisService   Service to analyze the data.
+     */
+    fun init(analysisService: AnalysisService) {
         if (!isInitialized) {
-            this.transferRepository = transferRepository
-            this.typeRepository = typeRepository
-            this.analysisService = AnalysisSquasher(AnalysisServiceImpl(transferRepository, typeRepository))
+            this.analysisService = analysisService
             startAnalysis(analysisPeriod = AnalysisPeriod.CURRENT_YEAR, force = true)
             isInitialized = true
         }
     }
 
 
+    /**
+     * Starts the analysis for the time period specified.
+     *
+     * @param analysisPeriod    Time period for the analysis.
+     * @param force             Whether to force start an analysis, even if one is already running.
+     */
     fun startAnalysis(analysisPeriod: AnalysisPeriod, force: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
         if (analysisResult != null || force) {
             analysisResult = null
@@ -69,6 +89,12 @@ class AnalysisViewModel(application: Application): AndroidViewModel(application)
     }
 
 
+    /**
+     * Builds the indicator values for diagrams.
+     *
+     * @param value Value for which to build the indicator.
+     * @return      Indicator value.
+     */
     fun buildIndicator(value: Double): String {
         val numberFormat: NumberFormat = DecimalFormat("#,##0.00")
         val formattedNumber: String = numberFormat.format(value)
