@@ -24,10 +24,15 @@
     </string-array>
 
 
-    <string name="main_overview_total">Gesamte Einnahmen der letzten 30 Tage</string>
-    <string name="main_overview_otherTypes">Ander Einkommensarten</string>
+    <string name="main_overview_title">Übersicht</string>
+    <string name="main_overview_total">Einkommen der letzten 30 Tage</string>
+    <string name="main_overview_otherTypes">Sonstiges</string>
     <string name="main_overview_noData">Es gibt keine Einkommen in den letzten 30 Tagen</string>
     <string name="main_downloadMessage">Eine neue Version von Cha Ching ist verfügbar. Möchtest du das Update jetzt herunterladen?</string>
+    <string name="main_quickActions_title">Schnellzugriff</string>
+    <string name="main_quickActions_analysis">Analyse</string>
+    <string name="main_quickActions_transfers">Einkommen</string>
+    <string name="main_quickActions_types">Ein\u00ADkommens\u00ADarten</string>
     <string name="main_recentTransfers">Letzte Einkommen</string>
     <string name="main_emptyPlaceholder_title">Keine Daten</string>
     <string name="main_emptyPlaceholder_subtitle">Erstelle Einkommen um das volle Potenzial von Cha Ching freizuschalten</string>

@@ -9,6 +9,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -17,19 +18,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -46,10 +49,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
@@ -150,18 +155,25 @@ fun MainScreen(
 						}
 					)
 				}
-				Button(
-					onClick = onNavigateToAnalysis
-				) {
-					Text("Analysis")
-				}
+				Headline(stringResource(R.string.main_quickActions_title))
+				QuickActions(
+					onAnalysisClicked = onNavigateToAnalysis,
+					onTransfersClicked = onNavigateToTransfers,
+					onTypesClicked = onNavigateToTypes,
+					modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
+				)
 				AnimatedVisibility(viewModel.overviewCalcResult != null) {
-					Overview(
-						overviewCalcResult = viewModel.overviewCalcResult!!,
-						modifier = Modifier.padding(
-							horizontal = dimensionResource(R.dimen.margin_horizontal)
+					Column {
+						Headline(stringResource(R.string.main_overview_title))
+						Overview(
+							overviewCalcResult = viewModel.overviewCalcResult!!,
+							modifier = Modifier.padding(
+								start = dimensionResource(R.dimen.margin_horizontal),
+								end = dimensionResource(R.dimen.margin_horizontal),
+								bottom = dimensionResource(R.dimen.padding_vertical)
+							)
 						)
-					)
+					}
 				}
 				Headline(stringResource(R.string.main_recentTransfers))
 				TransferList(
@@ -177,7 +189,9 @@ fun MainScreen(
 						viewModel.getTypeForTransfer(transfer, allTypes)
 					},
 					modifier = Modifier.padding(
-						horizontal = dimensionResource(R.dimen.margin_horizontal)
+						start = dimensionResource(R.dimen.margin_horizontal),
+						end = dimensionResource(R.dimen.margin_horizontal),
+						bottom = dimensionResource(R.dimen.padding_vertical)
 					)
 				)
 			}
@@ -198,6 +212,98 @@ fun MainScreen(
 				}
 			)
 		}
+	}
+}
+
+
+/**
+ * Displays a row with quick actions.
+ *
+ * @param onAnalysisClicked		Callback invoked once the button for analysis is clicked.
+ * @param onTransfersClicked	Callback invoked once the button to show all transfers is clicked.
+ * @param onTypesClicked		Callback invoked once the button to show all types is clicked.
+ * @param modifier				Modifier.
+ */
+@Composable
+fun QuickActions(
+	onAnalysisClicked: () -> Unit,
+	onTransfersClicked: () -> Unit,
+	onTypesClicked: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	Row(
+		modifier = modifier
+			.fillMaxWidth()
+			.horizontalScroll(rememberScrollState())
+	) {
+		QuickActionsButton(
+			painter = painterResource(R.drawable.ic_analysis),
+			text = stringResource(R.string.main_quickActions_analysis),
+			onClick = onAnalysisClicked,
+			modifier = Modifier
+				.padding(start = dimensionResource(R.dimen.margin_horizontal))
+				.width(96.dp)
+		)
+		QuickActionsButton(
+			painter = painterResource(R.drawable.ic_data),
+			text = stringResource(R.string.main_quickActions_transfers),
+			onClick = onTransfersClicked,
+			modifier = Modifier
+				.padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
+				.width(96.dp)
+		)
+		QuickActionsButton(
+			painter = painterResource(R.drawable.ic_types),
+			text = stringResource(R.string.main_quickActions_types),
+			onClick = onTypesClicked,
+			modifier = Modifier
+				.padding(end = dimensionResource(R.dimen.margin_horizontal))
+				.width(96.dp)
+		)
+	}
+}
+
+
+/**
+ * Displays a quick action button.
+ *
+ * @param painter	Painter for the button icon.
+ * @param text		Text for the button.
+ * @param onClick	Callback invoked once the button is clicked.
+ * @param modifier	Modifier.
+ */
+@Composable
+fun QuickActionsButton(
+	painter: Painter,
+	text: String,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	Column(
+		horizontalAlignment = Alignment.CenterHorizontally,
+		modifier = modifier
+	) {
+		FilledIconButton(
+			onClick = onClick,
+			colors = IconButtonDefaults.filledIconButtonColors().copy(
+				containerColor = MaterialTheme.colorScheme.surfaceContainer,
+				contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+			),
+			modifier = Modifier.size(dimensionResource(R.dimen.image_l))
+		) {
+			Icon(
+				painter = painter,
+				contentDescription = "",
+				modifier = Modifier.size(dimensionResource(R.dimen.image_s))
+			)
+		}
+		Text(
+			text = text,
+			color = MaterialTheme.colorScheme.onSurfaceVariant,
+			style = MaterialTheme.typography.labelMedium.copy(hyphens = Hyphens.Auto),
+			textAlign = TextAlign.Center,
+			modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical) / 2)
+		)
 	}
 }
 

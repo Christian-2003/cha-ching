@@ -24,10 +24,15 @@
     </string-array>
 
 
-    <string name="main_overview_total">Total earnings last 30 days</string>
-    <string name="main_overview_otherTypes">Other types</string>
+    <string name="main_overview_title">Overview</string>
+    <string name="main_overview_total">Earnings last 30 days</string>
+    <string name="main_overview_otherTypes">Other</string>
     <string name="main_overview_noData">You have not earned any money in the last 30 days</string>
     <string name="main_downloadMessage">A new version for Cha Ching is available. Do you want to download the update now?</string>
+    <string name="main_quickActions_title">Quick actions</string>
+    <string name="main_quickActions_analysis">Analysis</string>
+    <string name="main_quickActions_transfers">Earnings</string>
+    <string name="main_quickActions_types">Types</string>
     <string name="main_recentTransfers">Recent earnings</string>
     <string name="main_emptyPlaceholder_title">No data to show</string>
     <string name="main_emptyPlaceholder_subtitle">Add earnings to unlock the full potential of Cha Ching</string>
