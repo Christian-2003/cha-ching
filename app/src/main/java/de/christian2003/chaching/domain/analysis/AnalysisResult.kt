@@ -11,7 +11,11 @@ data class AnalysisResult(
 
     val totalTransferByType: Map<Type?, Int>,
 
-    val averageTransferByType: Map<Type?, Int>
+    val averageTransferByType: Map<Type?, Int>,
+
+    val total: Int,
+
+    val average: Int
 
 ) {
 
@@ -54,12 +58,20 @@ data class AnalysisResult(
         fun build(): AnalysisResult {
             val transfersByTypeDiagram = AnalysisDiagram(transfersByType, precision)
             val cumulatedTransfersByTypeDiagram = AnalysisDiagram(cumulatedTransfersByType, precision)
+            var total = 0
+            var count = 0
+            totalTransferByType.forEach { (_, value) ->
+                total += value
+                count++
+            }
 
             return AnalysisResult(
                 transfersByTypeDiagram = transfersByTypeDiagram,
                 cumulatedTransfersByTypeDiagram = cumulatedTransfersByTypeDiagram,
                 totalTransferByType = totalTransferByType,
-                averageTransferByType = averageTransferByType
+                averageTransferByType = averageTransferByType,
+                total = total,
+                average = total / count
             )
         }
 

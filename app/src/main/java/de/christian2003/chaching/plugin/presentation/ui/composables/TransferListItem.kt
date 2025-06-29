@@ -143,7 +143,7 @@ fun Value(
     formattedValue: String
 ) {
     Text(
-        text = stringResource(R.string.types_value, formattedValue),
+        text = stringResource(R.string.value_format, formattedValue),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onPrimaryContainer,
         fontWeight = FontWeight.Bold,

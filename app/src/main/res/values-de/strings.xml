@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Cha Ching</string>
     <string name="confirm_delete">Löschen bestätigen</string>
+    <string name="value_format">%1$s €</string>
     <string-array name="months">
         <item>Januar</item>
         <item>Februar</item>
@@ -73,7 +74,6 @@
     <string name="types_emptyPlaceholder_title">Keine Einkommensarten</string>
     <string name="types_emptyPlaceholder_subtitle">Verfügbare Einkommensarten werden hier angezeigt</string>
     <string name="types_listTitle">Deine Einkommensarten</string>
-    <string name="types_value">%1$s €</string>
     <string name="types_help">Einkommensarten definierren, welche Art von Einkommen du erfassen kannst. Du kannst Einkommensarten erstellen, bearbeiten und löschen.</string>
     <string name="types_confirmDelete">Wenn du %1$s löschst, dann werden auch alle damit verbundenen Einkommen gelöscht. Bist du dir sicher, dass du diese Einkommensart löschen möchtest?</string>
 
@@ -87,6 +87,19 @@
 
 
     <string name="analysis_title">Analyse</string>
+    <string name="analysis_other">Sonstige</string>
+    <string name="analysis_total">Gesamt</string>
+    <string name="analysis_average">Durchschnitt</string>
+    <string name="analysis_diagram_transfers">Einkommen nach %1$s</string>
+    <string name="analysis_diagram_cumulated">Kumuliertes Einkommen nach %1$s</string>
+    <string name="analysis_transfersByType">Einkommen nach Einkommensart</string>
+    <string name="analysis_precision_month">Monat</string>
+    <string name="analysis_precision_quarter">Quartal</string>
+    <string name="analysis_precision_year">Jahr</string>
+    <string name="analysis_period_currentYear">Aktuelles Jahr</string>
+    <string name="analysis_period_lastYear">Letztes Jahr</string>
+    <string name="analysis_period_custom">Eigener Zeitraum</string>
+    <string name="analysis_period_customValue">%1$s - %2$s</string>
 
 
     <string name="settings_title">Einstellungen</string>

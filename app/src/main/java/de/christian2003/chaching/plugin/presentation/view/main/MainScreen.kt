@@ -356,7 +356,7 @@ private fun OverviewItem(
 				.padding(end = dimensionResource(R.dimen.padding_horizontal))
 		)
 		Text(
-			text = stringResource(R.string.types_value, valueFormat.format(overviewCalcResultItem.value.toDouble() / 100)),
+			text = stringResource(R.string.value_format, valueFormat.format(overviewCalcResultItem.value.toDouble() / 100)),
 			color = color,
 			style = MaterialTheme.typography.bodyMedium
 		)

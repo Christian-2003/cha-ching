@@ -31,7 +31,11 @@ class AnalysisViewModel(application: Application): AndroidViewModel(application)
     private var isInitialized: Boolean = false
 
 
+    lateinit var analysisPeriod: AnalysisPeriod
+
     var analysisResult: AnalysisResult? by mutableStateOf(null)
+
+    var showDatePeriodPickerDialog: Boolean by mutableStateOf(false)
 
 
     fun init(transferRepository: TransferRepository, typeRepository: TypeRepository) {
@@ -39,17 +43,27 @@ class AnalysisViewModel(application: Application): AndroidViewModel(application)
             this.transferRepository = transferRepository
             this.typeRepository = typeRepository
             this.analysisService = AnalysisSquasher(AnalysisServiceImpl(transferRepository, typeRepository))
+            startAnalysis(analysisPeriod = AnalysisPeriod.CURRENT_YEAR, force = true)
             isInitialized = true
-            val now = LocalDate.now()
-            startAnalysis(now.minusYears(1), now, true)
         }
     }
 
 
-    fun startAnalysis(startDate: LocalDate, endDate: LocalDate, force: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
+    fun startAnalysis(analysisPeriod: AnalysisPeriod, force: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
         if (analysisResult != null || force) {
             analysisResult = null
-            val result: AnalysisResult = analysisService.analyzeData(startDate, endDate, AnalysisPrecision.MONTH)
+            this@AnalysisViewModel.analysisPeriod = analysisPeriod
+
+            val periodLength = analysisPeriod.endDate.toEpochDay() - analysisPeriod.startDate.toEpochDay()
+            val precision: AnalysisPrecision = if (periodLength <= 365) {
+                AnalysisPrecision.MONTH //0 Months - 12 Months
+            } else if (periodLength <= 1825) {
+                AnalysisPrecision.QUARTER //13 Months - 5 Years
+            } else {
+                AnalysisPrecision.YEAR //More than 5 Years
+            }
+
+            val result: AnalysisResult = analysisService.analyzeData(analysisPeriod.startDate, analysisPeriod.endDate, precision)
             analysisResult = result
         }
     }
