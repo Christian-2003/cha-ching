@@ -10,11 +10,14 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -133,7 +136,8 @@ fun ChaChing(updateManager: UpdateManager) {
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
                     animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessHigh)
                 ) + fadeOut(spring(Spring.DampingRatioLowBouncy))
-            }
+            },
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
             composable("main") {
                 val viewModel: MainViewModel = viewModel()

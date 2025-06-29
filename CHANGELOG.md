@@ -2,16 +2,19 @@
 
 # Changelog
 
-## 1.0.1 (XXXX-XX-XX)
+## 1.1.0 (XXXX-XX-XX)
 
 ###### Release Highlights
-n./a.
+Introduction of the transfer analysis. The analysis can analyze the transfers for a specified period of time.
 
 ###### Features
 * Introduction of clean architecture and domain driven design to decrease development times in the future
 * Importing a backup with option 'Replace duplicates' no longer deletes transfers that are not part of the backup
 * Transfers in `TransfersScreen` are grouped by month for better user experience. Each month has a header displaying the month name
 * Add animated transitions between screens
+* Add analysis for transfers
+* Add quick actions to `MainScreen`
+* Visual enhancements to `MainScreen`
 
 <br/>
 

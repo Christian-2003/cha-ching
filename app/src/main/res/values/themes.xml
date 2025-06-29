@@ -3,14 +3,7 @@
 <resources>
 
     <!-- Default theme for the app -->
-    <style name="Theme.ChaChing" parent="android:Theme.Material.Light.NoActionBar">
-        <!--
-         Using transitions with the Jetpack Compose nav controller shows the (white) background of
-         the entire app for a few milliseconds. We can set the background of the entire app to the
-         same background color used by Jetpack Compose to better blend in the animations.
-         -->
-        <item name="android:background">@color/splash_background</item>
-    </style>
+    <style name="Theme.ChaChing" parent="android:Theme.Material.Light.NoActionBar"/>
 
     <!-- Theme for the splash screen -->
     <style name="Theme.ChaChing.SplashScreen" parent="Theme.SplashScreen">
