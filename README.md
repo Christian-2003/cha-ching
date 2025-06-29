@@ -45,7 +45,7 @@ This section helps you to install and use the app on you Android device.
 ###### System Requirements
 In order to use Cha Ching, you need to fulfil the following requirements:
 * Have an Android device with version **Android 14** or higher. The preferred version is Android 15.
-* Have **5 MB** of internal storage
+* Have **8 MB** of internal storage
 
 ###### Installation Guide
 In order to install the app on your Android device, consider the following steps:

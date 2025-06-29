@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 1.1.0 (XXXX-XX-XX)
+## 1.1.0 (2025-06-29)
 
 ###### Release Highlights
 Introduction of the transfer analysis. The analysis can analyze the transfers for a specified period of time.
