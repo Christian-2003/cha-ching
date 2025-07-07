@@ -132,10 +132,8 @@ data class AnalysisResult(
             val transfersByTypeDiagram = AnalysisDiagram(transfersByType, precision)
             val cumulatedTransfersByTypeDiagram = AnalysisDiagram(cumulatedTransfersByType, precision)
             var total = 0
-            var count = 0
             totalTransferByType.forEach { (_, value) ->
                 total += value
-                count++
             }
 
             return AnalysisResult(
@@ -144,7 +142,7 @@ data class AnalysisResult(
                 totalTransferByType = totalTransferByType,
                 averageTransferByType = averageTransferByType,
                 total = total,
-                average = total / count
+                average = if (transfersByType.isNotEmpty()) { total / transfersByType[0].data.size } else { total }
             )
         }
 

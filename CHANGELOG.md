@@ -10,6 +10,7 @@ n./a.
 
 ###### Features
 * Fix a bug where some decimal numbers (e.g. "300.03") cannot be entered in the app with a desired precision.
+* Fix a bug where the average of the analysis was calculated as average for types instead of average for month / quarter / year.
 
 <br/>
 
