@@ -21,6 +21,7 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import java.time.LocalDateTime
+import kotlin.math.roundToInt
 
 
 /**
@@ -246,7 +247,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      */
     fun save() = viewModelScope.launch(Dispatchers.IO) {
         var value: Int? = try {
-            (numberFormat.parse(this@TransferViewModel.value.text)!!.toDouble() * 100).toInt()
+            (numberFormat.parse(this@TransferViewModel.value.text)!!.toDouble() * 100).roundToInt()
         } catch (_: Exception) {
             null
         }
