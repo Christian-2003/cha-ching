@@ -1,6 +1,5 @@
 package de.christian2003.chaching.application.analysis
 
-import android.util.Log
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisDiagramLine
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisItem
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
@@ -262,7 +261,6 @@ class AnalysisServiceImpl(
                 else {
                     cumulatedTransfersForType.add(AnalysisItem(sum + cumulatedTransfersForType[cumulatedTransfersForType.size - 1].value, month))
                 }
-                Log.d("Analysis", "Added analysis item")
             }
         }
     }
