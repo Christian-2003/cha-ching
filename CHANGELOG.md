@@ -9,7 +9,7 @@
 n./a.
 
 ###### Features
-* n./a.
+* Fix a bug where some decimal numbers (e.g. "300.03") cannot be entered in the app with a desired precision.
 
 <br/>
 

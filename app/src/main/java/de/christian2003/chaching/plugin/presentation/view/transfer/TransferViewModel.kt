@@ -129,7 +129,6 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
             val type: Type? = typeRepository.getTypeById(typeId)
             if (type == null) {
                 throw IllegalStateException("Cannot create transfer where 'type = null'.")
-                return@launch
             }
             this@TransferViewModel.type = type
             isHoursWorkedEditable = type.isHoursWorkedEditable
@@ -246,12 +245,12 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      * method either inserts a new transfer or updates an existing one.
      */
     fun save() = viewModelScope.launch(Dispatchers.IO) {
-        var value: Int? = try {
+        val value: Int? = try {
             (numberFormat.parse(this@TransferViewModel.value.text)!!.toDouble() * 100).roundToInt()
         } catch (_: Exception) {
             null
         }
-        var hoursWorked: Int? = if (this@TransferViewModel.hoursWorked.isNotEmpty()) {
+        val hoursWorked: Int? = if (this@TransferViewModel.hoursWorked.isNotEmpty()) {
             try {
                 this@TransferViewModel.hoursWorked.toInt()
             } catch (_: Exception) {
