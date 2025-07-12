@@ -181,6 +181,7 @@ private fun DatePickerModal(
 ) {
     val datePickerState = rememberDatePickerState()
     datePickerState.selectedDateMillis = selectedMillis
+    datePickerState.displayedMonthMillis = selectedMillis
 
     DatePickerDialog(
         onDismissRequest = onDismiss,
