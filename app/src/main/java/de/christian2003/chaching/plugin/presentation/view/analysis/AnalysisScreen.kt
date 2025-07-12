@@ -556,8 +556,8 @@ private fun DateRangePickerModal(
         confirmButton = {
             TextButton(
                 onClick = {
-                    val startDate: LocalDate? = dateRangePickerState.getSelectedStartDate()!!
-                    val endDate: LocalDate? = dateRangePickerState.getSelectedEndDate()!!
+                    val startDate: LocalDate? = dateRangePickerState.getSelectedStartDate() ?: selectedAnalysisPeriod.startDate
+                    val endDate: LocalDate? = dateRangePickerState.getSelectedEndDate() ?: selectedAnalysisPeriod.endDate
                     if (startDate != null && endDate != null) {
                         val selectedPeriod = AnalysisPeriod(startDate, endDate)
                         onPeriodSelected(selectedPeriod)
