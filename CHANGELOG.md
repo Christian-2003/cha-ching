@@ -12,7 +12,8 @@ n./a.
 * Fix a bug where some decimal numbers (e.g. "300.03") cannot be entered in the app with a desired precision.
 * Fix a bug where the average of the analysis was calculated as average for types instead of average for month / quarter / year.
 * Fix a bug where the app crashes if a date range for the analysis is selected, without changing either default start date OR default end date.
-* Date picker through which to select the value date for a transfer now displays the correct month of the value date selected. 
+* Date picker through which to select the value date for a transfer now displays the correct month of the value date selected.
+* Fix a bug where the app crashes during analysis if less than 4 types are available.
 
 <br/>
 

@@ -108,7 +108,9 @@ class AnalysisSquasher(
                 totalTransfersSum += totalValue
             }
         }
-        resultBuilder.addTotalTransferByType(null, totalTransfersSum)
+        if (totalTransfersSum != 0) {
+            resultBuilder.addTotalTransferByType(null, totalTransfersSum)
+        }
     }
 
 
@@ -129,7 +131,9 @@ class AnalysisSquasher(
                 numberOfAverageTransfers++
             }
         }
-        resultBuilder.addAverageTransferByType(null, totalAveragesSum / numberOfAverageTransfers)
+        if (numberOfAverageTransfers != 0) {
+            resultBuilder.addAverageTransferByType(null, totalAveragesSum / numberOfAverageTransfers)
+        }
     }
 
 
