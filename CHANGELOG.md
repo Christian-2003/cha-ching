@@ -2,11 +2,10 @@
 
 # Changelog
 
-
-## 1.1.1 (XXXX-XX-XX)
+## 1.1.1 (2025-07-13)
 
 ###### Release Highlights
-n./a.
+This update focuses on important bugfixes that result in app crashes or bad user experience.
 
 ###### Features
 * Fix a bug where some decimal numbers (e.g. "300.03") cannot be entered in the app with a desired precision.
