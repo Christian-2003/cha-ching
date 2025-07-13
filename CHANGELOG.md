@@ -2,6 +2,16 @@
 
 # Changelog
 
+## 1.1.2 (XXXX-XX-XX)
+
+###### Release Highlights
+n./a.
+
+###### Features
+* n./a.
+
+<br/>
+
 ## 1.1.1 (2025-07-13)
 
 ###### Release Highlights
