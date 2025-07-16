@@ -46,7 +46,7 @@ android {
 		compose = true
 	}
 	composeOptions {
-		kotlinCompilerExtensionVersion = "1.5.1"
+		kotlinCompilerExtensionVersion = "1.5.15"
 	}
 	packaging {
 		resources {
@@ -76,6 +76,8 @@ dependencies {
 	implementation(libs.androidx.core.splashscreen)
 	implementation(libs.coil.compose)
 	implementation(libs.kotlinx.serialization.json)
+	implementation("androidx.glance:glance-appwidget:1.1.1")
+	implementation("androidx.glance:glance-material3:1.1.1")
 
 	testImplementation(libs.junit)
 

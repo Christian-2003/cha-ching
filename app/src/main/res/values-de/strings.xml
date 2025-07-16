@@ -195,4 +195,10 @@
     <string name="button_finish">Fertig</string>
     <string name="button_download">Herunterladen</string>
     <string name="button_dismiss">Später</string>
+
+
+    <!-- Widgets -->
+    <string name="widget_overview_text">Einkommen diesen Monat</string>
+    <string name="widget_overview_emptyPlaceholder">Du hast diesen Monat noch kein Einkommen</string>
+
 </resources>

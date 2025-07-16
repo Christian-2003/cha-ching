@@ -8,6 +8,8 @@ Compose Navigation,2.8.3,license_apache20,Apache 2.0
 Compose Tooling,1.7.6,license_apache20,Apache 2.0
 Compose UI,1.7.6,license_apache20,Apache 2.0
 Core Kotlin Extensions,1.16.0,license_apache20,Apache 2.0
+Glance for App Widgets,1.1.1,license_apache20,Apache 2.0
+Glance Material,1.1.1,license_apache20,Apache 2.0
 Jetpack Compose Libraries BOM,2024.04.01,license_apache20,Apache 2.0
 Kotlinx Coroutines Android,1.9.0,license_apache20,Apache 2.0
 Kotlinx Serialization JSON,1.8.0,license_apache20,Apache 2.0

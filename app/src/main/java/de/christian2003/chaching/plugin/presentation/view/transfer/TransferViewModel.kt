@@ -18,7 +18,6 @@ import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
-import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import kotlin.math.roundToInt
 

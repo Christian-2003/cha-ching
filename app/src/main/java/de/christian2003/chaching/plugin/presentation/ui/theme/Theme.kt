@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.glance.GlanceTheme
+import androidx.glance.material3.ColorProviders
+import androidx.glance.unit.ColorProvider
 
 
 private val lightScheme = lightColorScheme(
@@ -275,4 +278,21 @@ fun ChaChingTheme(
 		typography = AppTypography,
 		content = content
 	)
+}
+
+
+@Composable
+fun ChaChingThemeGlance(
+	content: @Composable() () -> Unit
+) {
+	val colors = ColorProviders(
+		light = lightScheme,
+		dark = darkScheme
+	)
+
+	GlanceTheme(
+		colors = colors
+	) {
+		content()
+	}
 }
