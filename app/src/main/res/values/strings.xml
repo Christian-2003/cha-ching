@@ -65,8 +65,8 @@
     <string name="transfers_confirmDelete">Deleting %1$s cannot be undone. Are you sure you want to delete this earning?</string>
 
 
-    <string name="transfer_titleEdit">Edit earning</string>
-    <string name="transfer_titleCreate">Create earning</string>
+    <string name="transfer_titleEdit">Edit %1$s</string>
+    <string name="transfer_titleCreate">Create %1$s</string>
     <string name="transfer_valueDateLabel">Value date</string>
     <string name="transfer_valueLabel">Value</string>
     <string name="transfer_valueSuffix">USD</string>

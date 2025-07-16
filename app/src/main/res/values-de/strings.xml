@@ -65,8 +65,8 @@
     <string name="transfers_confirmDelete">Das Löschen von %1$s kann nicht rückgängig gemacht werden. Bist du dir sicher, dass du dieses Einkommen löschen möchtest?</string>
 
 
-    <string name="transfer_titleEdit">Einkommen bearbeiten</string>
-    <string name="transfer_titleCreate">Einkommen erstellen</string>
+    <string name="transfer_titleEdit">%1$s bearbeiten</string>
+    <string name="transfer_titleCreate">%1$s erstellen</string>
     <string name="transfer_valueDateLabel">Wertstellungsdatum</string>
     <string name="transfer_valueLabel">Wert</string>
     <string name="transfer_valueSuffix">EUR</string>

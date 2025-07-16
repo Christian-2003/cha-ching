@@ -57,7 +57,13 @@ fun TransferScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(if (viewModel.isCreating) { stringResource(R.string.transfer_titleCreate) } else { stringResource(R.string.transfer_titleEdit) })
+                    Text(if (viewModel.type != null) {
+                        if (viewModel.isCreating) {
+                            stringResource(R.string.transfer_titleCreate, viewModel.type!!.name)
+                        } else {
+                            stringResource(R.string.transfer_titleEdit, viewModel.type!!.name)
+                        }
+                    } else { "" })
                 },
                 navigationIcon = {
                     IconButton(

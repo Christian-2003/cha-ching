@@ -9,6 +9,8 @@ n./a.
 
 ###### Features
 * Implement a `VisualTransformation` to handle grouping- and decimal-separators for better user experience and reusability.
+* Fix a bug where the text input to enter the hours worked was not visible sometimes.
+* `TransferScreen` shows the name of the type for which a transfer is being created or edited.
 
 <br/>
 
