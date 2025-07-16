@@ -8,7 +8,7 @@
 n./a.
 
 ###### Features
-* n./a.
+* Implement a `VisualTransformation` to handle grouping- and decimal-separators for better user experience and reusability.
 
 <br/>
 

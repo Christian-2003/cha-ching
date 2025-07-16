@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +61,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     /**
      * String representation of the value.
      */
-    var value: TextFieldValue by mutableStateOf(TextFieldValue(""))
+    var value: String by mutableStateOf("")
 
     /**
      * Error message for the value entered. If the value is valid, this is null.
@@ -141,8 +139,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
                 }
                 isCreating = false
                 this@TransferViewModel.transfer = transfer
-                val formattedValue = numberFormat.format(transfer.value.toDouble() / 100)
-                value = TextFieldValue(formattedValue, TextRange(formattedValue.length))
+                value = numberFormat.format(transfer.value.toDouble() / 100.0)
                 valueErrorMessage = null
                 hoursWorked = transfer.hoursWorked.toString()
                 hoursWorkedErrorMessage = null
@@ -153,7 +150,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
                 //Create new transfer:
                 isCreating = true
                 transfer = null
-                value = TextFieldValue("")
+                value = ""
                 valueErrorMessage = null
                 hoursWorked = ""
                 hoursWorkedErrorMessage = null
@@ -170,8 +167,8 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      *
      * @param value Value entered by the user.
      */
-    fun updateValue(value: TextFieldValue) {
-        if (value.text.isEmpty()) {
+    fun updateValue(value: String) {
+        if (value.isEmpty()) {
             this.value = value
             valueErrorMessage = getApplication<Application>().getString(R.string.error_emptyText)
             updateIsSavable()
@@ -179,26 +176,8 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
         }
 
         try {
-            val valueAsDouble: Double = numberFormat.parse(value.text)!!.toDouble()
-
-            val lastCharEntered: Char = value.text[value.text.length - 1]
-            if (lastCharEntered == ',' || lastCharEntered == '.') {
-                val formattedNumber = numberFormat.format(valueAsDouble) + lastCharEntered
-                this.value = TextFieldValue(formattedNumber, TextRange(formattedNumber.length))
-            }
-            else {
-                val formattedNumber = numberFormat.format(valueAsDouble)
-                if (formattedNumber.length > value.text.length) {
-                    this.value = TextFieldValue(formattedNumber, TextRange(value.selection.end + 1))
-                }
-                else if (formattedNumber.length < value.text.length) {
-                    this.value = TextFieldValue(formattedNumber, TextRange(value.selection.end - 1))
-                }
-                else {
-                    this.value = TextFieldValue(formattedNumber, value.selection)
-                }
-
-            }
+            numberFormat.parse(this@TransferViewModel.value)!!.toDouble()
+            this.value = value
             valueErrorMessage = null
         } catch (_: Exception) {
             this.value = value
@@ -236,7 +215,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      * Updates the "isSavable" field according to the current state of the view model.
      */
     fun updateIsSavable() {
-        isSavable = valueErrorMessage == null && hoursWorkedErrorMessage == null && value.text.isNotEmpty()
+        isSavable = valueErrorMessage == null && hoursWorkedErrorMessage == null && value.isNotEmpty()
     }
 
 
@@ -246,7 +225,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      */
     fun save() = viewModelScope.launch(Dispatchers.IO) {
         val value: Int? = try {
-            (numberFormat.parse(this@TransferViewModel.value.text)!!.toDouble() * 100).roundToInt()
+            (numberFormat.parse(this@TransferViewModel.value)!!.toDouble() * 100).roundToInt()
         } catch (_: Exception) {
             null
         }

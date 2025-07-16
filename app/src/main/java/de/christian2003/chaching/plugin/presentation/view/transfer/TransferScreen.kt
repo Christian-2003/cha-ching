@@ -110,14 +110,16 @@ fun TransferScreen(
             )
             TextInput(
                 value = viewModel.value,
-                onValueChange = {
-                    viewModel.updateValue(it)
+                onValueChange = { input ->
+                    val cleanupInput = input.filter { it.isDigit() || it == ',' || it == '.' }
+                    viewModel.updateValue(cleanupInput)
                 },
                 label = stringResource(R.string.transfer_valueLabel),
                 errorMessage = viewModel.valueErrorMessage,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 prefixIcon = painterResource(R.drawable.ic_money),
                 suffixLabel = stringResource(R.string.transfer_valueSuffix),
+                visualTransformation = NumberFormatTransformation(),
                 modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
             )
             if (viewModel.isHoursWorkedEditable) {

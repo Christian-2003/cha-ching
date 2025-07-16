@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import de.christian2003.chaching.R
 import kotlinx.coroutines.launch
 import androidx.compose.ui.unit.dp
@@ -33,18 +34,19 @@ import androidx.compose.ui.unit.dp
 /**
  * Composable displays an outlined text field through which the user can edit a value.
  *
- * @param value             Value to edit.
- * @param onValueChange     Callback invoked once the value changes.
- * @param label             Label for the text field.
- * @param modifier          Modifier.
- * @param prefixIcon        Optional Icon to display in front of the text input.
- * @param keyboardOptions   Optional keyboard options.
- * @param suffixLabel       Optional suffix label to display within the text input.
- * @param trailingIcon      Optional trailing icon to display within the text input. If the error
- *                          message passed is not null, this icon will be replaced with an error
- *                          icon.
- * @param errorMessage      Error message to display.
- * @param enabled           Whether the text input is enabled or not.
+ * @param value                 Value to edit.
+ * @param onValueChange         Callback invoked once the value changes.
+ * @param label                 Label for the text field.
+ * @param modifier              Modifier.
+ * @param prefixIcon            Optional Icon to display in front of the text input.
+ * @param keyboardOptions       Optional keyboard options.
+ * @param suffixLabel           Optional suffix label to display within the text input.
+ * @param trailingIcon          Optional trailing icon to display within the text input. If the error
+ *                              message passed is not null, this icon will be replaced with an error
+ *                              icon.
+ * @param errorMessage          Error message to display.
+ * @param enabled               Whether the text input is enabled or not.
+ * @param visualTransformation  Visual transformation for the text displayed.
  */
 @Composable
 fun TextInput(
@@ -57,7 +59,8 @@ fun TextInput(
     suffixLabel: String? = null,
     trailingIcon: Painter? = null,
     errorMessage: String? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     var selection by remember { mutableStateOf(TextRange(value.length)) }
     TextInput(
@@ -73,7 +76,8 @@ fun TextInput(
         suffixLabel = suffixLabel,
         trailingIcon = trailingIcon,
         errorMessage = errorMessage,
-        enabled = enabled
+        enabled = enabled,
+        visualTransformation = visualTransformation
     )
 }
 
@@ -81,18 +85,19 @@ fun TextInput(
 /**
  * Composable displays an outlined text field through which the user can edit a value.
  *
- * @param value             Value to edit.
- * @param onValueChange     Callback invoked once the value changes.
- * @param label             Label for the text field.
- * @param modifier          Modifier.
- * @param prefixIcon        Optional Icon to display in front of the text input.
- * @param keyboardOptions   Optional keyboard options.
- * @param suffixLabel       Optional suffix label to display within the text input.
- * @param trailingIcon      Optional trailing icon to display within the text input. If the error
- *                          message passed is not null, this icon will be replaced with an error
- *                          icon.
- * @param errorMessage      Error message to display.
- * @param enabled           Whether the text input is enabled or not.
+ * @param value                 Value to edit.
+ * @param onValueChange         Callback invoked once the value changes.
+ * @param label                 Label for the text field.
+ * @param modifier              Modifier.
+ * @param prefixIcon            Optional Icon to display in front of the text input.
+ * @param keyboardOptions       Optional keyboard options.
+ * @param suffixLabel           Optional suffix label to display within the text input.
+ * @param trailingIcon          Optional trailing icon to display within the text input. If the error
+ *                              message passed is not null, this icon will be replaced with an error
+ *                              icon.
+ * @param errorMessage          Error message to display.
+ * @param enabled               Whether the text input is enabled or not.
+ * @param visualTransformation  Visual transformation for the text displayed.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -106,7 +111,8 @@ fun TextInput(
     suffixLabel: String? = null,
     trailingIcon: Painter? = null,
     errorMessage: String? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     val scope = rememberCoroutineScope()
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
@@ -192,6 +198,7 @@ fun TextInput(
             isError = errorMessage != null,
             trailingIcon = trailingIconView,
             supportingText = supportingTextView,
+            visualTransformation = visualTransformation,
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusEvent {
