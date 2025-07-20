@@ -11,7 +11,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ChaChing.SplashScreen">
+        android:theme="@style/Theme.ChaChing.SplashScreen"
+        android:name=".plugin.ChaChingApplication">
 
         <activity
             android:name=".plugin.presentation.MainActivity"

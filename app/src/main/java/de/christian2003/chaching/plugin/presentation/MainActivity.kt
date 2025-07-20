@@ -55,6 +55,7 @@ import androidx.lifecycle.lifecycleScope
 import de.christian2003.chaching.R
 import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
 import de.christian2003.chaching.application.analysis.AnalysisSquasher
+import de.christian2003.chaching.plugin.ChaChingApplication
 import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScreen
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
@@ -112,9 +113,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ChaChing(updateManager: UpdateManager) {
 	val navController: NavHostController = rememberNavController()
-	val database: ChaChingDatabase = ChaChingDatabase.getInstance(LocalContext.current)
-	val repository = ChaChingRepository(database.transferDao, database.typeDao)
-	val context: Context = LocalContext.current
+    val context: Context = LocalContext.current
+	val repository: ChaChingRepository = (context.applicationContext as ChaChingApplication).getRepository()
 	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("onboardingFinished", false)) }
 
     ChaChingTheme {
