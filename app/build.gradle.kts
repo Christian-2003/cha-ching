@@ -76,8 +76,8 @@ dependencies {
 	implementation(libs.androidx.core.splashscreen)
 	implementation(libs.coil.compose)
 	implementation(libs.kotlinx.serialization.json)
-	implementation("androidx.glance:glance-appwidget:1.1.1")
-	implementation("androidx.glance:glance-material3:1.1.1")
+	implementation(libs.androidx.glance.appwidget)
+	implementation(libs.androidx.glance.material3)
 
 	testImplementation(libs.junit)
 

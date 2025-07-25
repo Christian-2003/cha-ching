@@ -4,6 +4,7 @@ apkupdaterLibrary = "v2.1.0"
 composeCharts = "0.1.0"
 coilCompose = "2.7.0"
 coreSplashscreen = "1.0.1"
+glanceAppwidget = "1.1.1"
 kotlin = "2.1.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -23,6 +24,8 @@ material3 = "1.4.0-alpha15"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceAppwidget" }
+androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glanceAppwidget" }
 androidx-ui-test = { module = "androidx.compose.ui:ui-test" }
 apkupdater-library = { module = "com.github.supersu-man:apkupdater-library", version.ref = "apkupdaterLibrary" }
 compose-charts = { module = "io.github.ehsannarmani:compose-charts", version.ref = "composeCharts" }

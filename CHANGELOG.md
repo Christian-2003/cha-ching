@@ -12,6 +12,7 @@ n./a.
 * Fix a bug where the text input to enter the hours worked was not visible sometimes.
 * `TransferScreen` shows the name of the type for which a transfer is being created or edited.
 * Move database and repository declaration from `MainActivity` to `ChaChingApplication` to make them accessible from Android widgets.
+* Implement a custom overview widget which shows the total amount of money earned in the last 31 days.
 
 <br/>
 

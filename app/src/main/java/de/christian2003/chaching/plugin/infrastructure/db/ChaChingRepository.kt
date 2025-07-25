@@ -1,6 +1,5 @@
 package de.christian2003.chaching.plugin.infrastructure.db
 
-import android.appwidget.AppWidgetManager
 import de.christian2003.chaching.application.backup.BackupImportRepository
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
