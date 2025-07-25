@@ -13,6 +13,10 @@ n./a.
 * `TransferScreen` shows the name of the type for which a transfer is being created or edited.
 * Move database and repository declaration from `MainActivity` to `ChaChingApplication` to make them accessible from Android widgets.
 * Implement a custom overview widget which shows the total amount of money earned in the last 31 days.
+* Introduce app mascot.
+* Change empty placeholder icon for transfers within the app to match app mascot.
+* Change the app icon to match the app mascot.
+* Change the splash screen to match new app icon.
 
 <br/>
 

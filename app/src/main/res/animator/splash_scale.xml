@@ -2,10 +2,10 @@
 
 <objectAnimator
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="@integer/splash_duration"
+    android:duration="500"
     android:propertyName="scaleX"
     android:interpolator="@android:anim/anticipate_overshoot_interpolator"
-    android:valueFrom="1"
-    android:valueTo="0.5">
+    android:valueFrom="0"
+    android:valueTo="0.6">
 
 </objectAnimator>

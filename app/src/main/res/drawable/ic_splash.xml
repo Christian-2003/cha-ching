@@ -5,15 +5,11 @@
     android:drawable="@drawable/ic_launcher_foreground">
 
     <target
-        android:name="mainPath"
-        android:animation="@animator/splash_color" />
-
-    <target
-        android:name="mainGroup"
-        android:animation="@animator/splash_position" />
-
-    <target
         android:name="mainGroup"
         android:animation="@animator/splash_scale" />
+
+    <target
+        android:name="handGroup"
+        android:animation="@animator/splash_hand"/>
 
 </animated-vector>

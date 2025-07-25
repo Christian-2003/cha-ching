@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<objectAnimator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:startOffset="300"
+    android:propertyName="rotation"
+    android:valueFrom="-20"
+    android:valueTo="20"
+    android:repeatCount="3"
+    android:repeatMode="reverse"
+    android:valueType="floatType">
+
+</objectAnimator>
