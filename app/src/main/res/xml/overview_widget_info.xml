@@ -5,8 +5,8 @@
     android:initialLayout="@layout/glance_default_loading_layout"
     android:targetCellWidth="2"
     android:targetCellHeight="1"
-    android:minWidth="80dp"
-    android:minHeight="40dp"
+    android:minWidth="140dp"
+    android:minHeight="70dp"
     android:resizeMode="horizontal|vertical">
 
 </appwidget-provider>

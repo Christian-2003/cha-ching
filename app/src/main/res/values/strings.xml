@@ -199,6 +199,9 @@
 
     <!-- Widgets -->
     <string name="widget_overview_text">earned this month</string>
-    <string name="widget_overview_emptyPlaceholder">You have not earned any money this month</string>
+    <string name="widget_overview_errorTitle">Something went wrong</string>
+    <string name="widget_overview_errorText">Sorry, but we cannot display any data right now</string>
+    <string name="widget_overview_emptyTitle">No ear\u00ADnings</string>
+    <string name="widget_overview_emptyText">You have not earned any money in the past month</string>
 
 </resources>

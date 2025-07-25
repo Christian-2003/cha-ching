@@ -199,6 +199,9 @@
 
     <!-- Widgets -->
     <string name="widget_overview_text">Einkommen diesen Monat</string>
-    <string name="widget_overview_emptyPlaceholder">Du hast diesen Monat noch kein Einkommen</string>
+    <string name="widget_overview_errorTitle">Etwas ist schief gegangen</string>
+    <string name="widget_overview_errorText">Wir können leider gerade keine Daten anzeigen</string>
+    <string name="widget_overview_emptyTitle">Kein Ein\u00ADkom\u00ADmen</string>
+    <string name="widget_overview_emptyText">Du hast im letzten Monat kein Geld verdient</string>
 
 </resources>
