@@ -27,6 +27,7 @@
 
         <receiver
             android:name=".plugin.presentation.widget.ChaChingWidgetReceiver"
+            android:label="@string/widget_overview_descriptionLabel"
             android:exported="true">
 
             <intent-filter>

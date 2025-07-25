@@ -5,6 +5,11 @@
     <color name="splash_foreground">#FF3D5F90</color> <!-- primaryLight -->
     <color name="splash_tint">#FF191C20</color> <!-- onSurfaceLight -->
 
+    <color name="widget_background">#FFF9F9FF</color> <!-- surfaceLight -->
+    <color name="widget_onBackground">#FF191C20</color> <!-- onSurfaceLight -->
+    <color name="widget_primaryContainer">#FFD5E3FF</color> <!-- primaryContainerLight -->
+    <color name="widget_onPrimaryContainer">#FF234777</color> <!-- onPrimaryContainerLight -->
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
