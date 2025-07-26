@@ -4,6 +4,10 @@
     <color name="splash_background">#FF111318</color> <!-- surfaceDark -->
     <color name="splash_foreground">#FFA6C8FF</color> <!-- primaryDark -->
     <color name="splash_tint">#FFE1E2E9</color> <!-- onSurfaceDark -->
+    <color name="splash_shadow">#FFFFFF</color>
+    <color name="splash_fill">#3D4758</color>
+    <color name="splash_eyes">#A7C8FF</color>
+    <color name="splash_stroke">#3E5F90</color>
 
     <color name="widget_background">#FF111318</color> <!-- surfaceDark -->
     <color name="widget_onBackground">#FFE1E2E9</color> <!-- onSurfaceDark -->

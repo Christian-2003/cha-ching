@@ -4,6 +4,10 @@
     <color name="splash_background">#FFF9F9FF</color> <!-- surfaceLight -->
     <color name="splash_foreground">#FF3D5F90</color> <!-- primaryLight -->
     <color name="splash_tint">#FF191C20</color> <!-- onSurfaceLight -->
+    <color name="splash_shadow">#000000</color>
+    <color name="splash_fill">#D9E3F8</color>
+    <color name="splash_eyes">#F9F9FF</color>
+    <color name="splash_stroke">#555F71</color>
 
     <color name="widget_background">#FFF9F9FF</color> <!-- surfaceLight -->
     <color name="widget_onBackground">#FF191C20</color> <!-- onSurfaceLight -->
