@@ -17,9 +17,9 @@ The widget can display the following states:
 
 State | Small size | Large size
 --- | --- | ---
-Normal | <img src="../img/development/widget_normal_small.png" style="max-width:256px"> | <img src="../img/development/widget_normal_large.png" style="max-width:256px">
-Empty | <img src="../img/development/widget_empty_small.png" style="max-width:256px"> | <img src="../img/development/widget_empty_large.png" style="max-width:256px">
-Error | <img src="../img/development/widget_error_small.png" style="max-width:256px"> | <img src="../img/development/widget_error_large.png" style="max-width:256px">
+Normal | <img src="../img/development/widget_normal_small.png" style="max-width:128px"> | <img src="../img/development/widget_normal_large.png" style="max-width:128px">
+Empty | <img src="../img/development/widget_empty_small.png" style="max-width:128px"> | <img src="../img/development/widget_empty_large.png" style="max-width:128px">
+Error | <img src="../img/development/widget_error_small.png" style="max-width:128px"> | <img src="../img/development/widget_error_large.png" style="max-width:128px">
 
 The **normal** state displays the money earned in the last month.  
 The **empty** state is displayed if no money has been earned in the last month.  
