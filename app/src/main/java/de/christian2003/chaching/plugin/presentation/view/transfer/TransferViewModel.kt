@@ -18,6 +18,7 @@ import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 import kotlin.math.roundToInt
 
@@ -139,7 +140,12 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
                 }
                 isCreating = false
                 this@TransferViewModel.transfer = transfer
-                value = numberFormat.format(transfer.value.toDouble() / 100.0)
+
+                //Cannot use number format because it puts group separator into the formatted string,
+                //which confuses the visual transformation for the TextField.
+                val roundingFormat = DecimalFormat("#.##")
+                value = roundingFormat.format(transfer.value.toDouble() / 100.0)
+
                 valueErrorMessage = null
                 hoursWorked = transfer.hoursWorked.toString()
                 hoursWorkedErrorMessage = null

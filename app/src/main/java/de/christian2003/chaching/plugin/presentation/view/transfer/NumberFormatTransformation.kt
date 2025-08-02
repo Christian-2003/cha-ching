@@ -73,12 +73,16 @@ class NumberFormatTransformation(
             text = AnnotatedString(formatted),
             offsetMapping = object : OffsetMapping {
                 override fun originalToTransformed(offset: Int): Int {
-                    return if (offset <= integerPartRaw.length) {
+                    var transformedOffset: Int = if (offset <= integerPartRaw.length) {
                         originalToFormatted[offset] ?: formatted.length
                     } else {
                         val decimalOffset = offset - integerPartRaw.length - 1
                         integerPartFormatted.length + 1 + decimalOffset
                     }
+                    if (transformedOffset > formatted.length) {
+                        transformedOffset = formatted.length
+                    }
+                    return transformedOffset
                 }
 
                 override fun transformedToOriginal(offset: Int): Int {
@@ -87,9 +91,9 @@ class NumberFormatTransformation(
                         var count = 0
                         while (raw < integerPartFormatted.length && count < offset) {
                             if (integerPartFormatted[raw] != groupingSeparator) {
-                                count++;
+                                count++
                             }
-                            raw++;
+                            raw++
                         }
                         count
                     } else {
