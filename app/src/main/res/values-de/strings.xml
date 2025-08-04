@@ -87,6 +87,8 @@
     <string name="type_nameLabel">Name</string>
     <string name="type_hoursWorkedEditableTitle">Arbeitsstunden anzeigen</string>
     <string name="type_hoursWorkedEditableText">Sollen Arbeitsstunden für diese Einkommensart erfasst werden?</string>
+    <string name="type_quickAccessEnabledTitle">Im Schnellzugriff anzeigen</string>
+    <string name="type_quickAccessEnabledText">Soll diese Einkommensart auf dem Startbildschirm über den Schnellzugriff angezeigt werden?</string>
     <string name="type_chooseIcon">Wähle ein Bild aus</string>
     <string name="type_help_create">Bearbeite die Einkommensart indem du einen Namen eingibst und ein Bild auswählst.</string>
 

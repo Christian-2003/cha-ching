@@ -31,6 +31,11 @@ class Type(
     var isHoursWorkedEditable: Boolean = true,
 
     /**
+     * Indicates whether the type is available through the "+"-FAB on the main screen.
+     */
+    var isEnabledInQuickAccess: Boolean = true,
+
+    /**
      * Stores the date time on which the type was created. This is for statistical purposes.
      */
     val created: LocalDateTime = LocalDateTime.now(),

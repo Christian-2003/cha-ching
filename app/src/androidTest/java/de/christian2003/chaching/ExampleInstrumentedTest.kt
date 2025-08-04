@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
 	fun useAppContext() {
 		// Context of the app under test.
 		val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-		assertEquals("de.christian2003.chaching", appContext.packageName)
+		assertEquals("de.christian2003.chaching.debug", appContext.packageName)
 	}
 }

@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import de.christian2003.chaching.plugin.infrastructure.db.converter.LocalDateConverter
 import de.christian2003.chaching.plugin.infrastructure.db.converter.LocalDateTimeConverter
 import de.christian2003.chaching.plugin.infrastructure.db.converter.TypeIconConverter
@@ -20,7 +22,7 @@ import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 		TransferEntity::class,
 		TypeEntity::class
 	],
-	version = 1,
+	version = 2,
 	exportSchema = false
 )
 @TypeConverters(
@@ -50,6 +52,13 @@ abstract class ChaChingDatabase: RoomDatabase() {
 		private var INSTANCE: ChaChingDatabase? = null
 
 
+		private val MIGRATION_1_2 = object: Migration(1, 2) {
+			override fun migrate(db: SupportSQLiteDatabase) {
+				db.execSQL("ALTER TABLE types ADD COLUMN isEnabledInQuickAccess INTEGER NOT NULL DEFAULT 1")
+			}
+		}
+
+
 		/**
 		 * Returns the singleton instance of the database.
 		 *
@@ -66,6 +75,7 @@ abstract class ChaChingDatabase: RoomDatabase() {
 						name = "cha_ching_database"
 					)
 						.fallbackToDestructiveMigration(false)
+						.addMigrations(MIGRATION_1_2)
 						.build()
 				}
 				return instance

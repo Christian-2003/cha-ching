@@ -21,6 +21,7 @@ class TypeDbMapper {
             icon = entity.icon,
             id = entity.typeId,
             isHoursWorkedEditable = entity.isHoursWorkedEditable,
+            isEnabledInQuickAccess = entity.isEnabledInQuickAccess,
             created = entity.created,
             edited = entity.edited
         )
@@ -39,6 +40,7 @@ class TypeDbMapper {
             icon = domain.icon,
             typeId = domain.id,
             isHoursWorkedEditable = domain.isHoursWorkedEditable,
+            isEnabledInQuickAccess = domain.isEnabledInQuickAccess,
             created = domain.created,
             edited = domain.edited
         )

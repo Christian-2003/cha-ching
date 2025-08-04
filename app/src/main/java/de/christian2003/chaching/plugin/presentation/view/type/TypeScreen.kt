@@ -118,6 +118,14 @@ fun TypeScreen(
                 title = stringResource(R.string.type_hoursWorkedEditableTitle),
                 text = stringResource(R.string.type_hoursWorkedEditableText)
             )
+            Checkbox(
+                checked = viewModel.isEnabledInQuickAccess,
+                onCheckedChange = {
+                    viewModel.isEnabledInQuickAccess = it
+                },
+                title = stringResource(R.string.type_quickAccessEnabledTitle),
+                text = stringResource(R.string.type_quickAccessEnabledText)
+            )
             Headline(stringResource(R.string.type_chooseIcon))
             TypeIconSelection(
                 selected = viewModel.icon,

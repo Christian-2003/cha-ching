@@ -21,6 +21,9 @@ data class TypeDto(
     @SerialName("isHoursWorkedEditable")
     val isHoursWorkedEditable: Boolean = true,
 
+    @SerialName("isEnabledInQuickAccess")
+    val isEnabledInQuickAccess: Boolean = true,
+
     @SerialName("id")
     @Serializable(with = UuidSerializer::class)
     val id: UUID,

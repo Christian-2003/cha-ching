@@ -47,6 +47,11 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
     var isHoursWorkedEditable by mutableStateOf(true)
 
     /**
+     * Whether the type is visible in the "+"-FAB on the main screen.
+     */
+    var isEnabledInQuickAccess by mutableStateOf(true)
+
+    /**
      * Icon selected by the user.
      */
     var icon: TypeIcon by mutableStateOf(TypeIcon.CURRENCY)
@@ -88,6 +93,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
                 type = repository.getTypeById(typeId)
                 name = type!!.name
                 isHoursWorkedEditable = type!!.isHoursWorkedEditable
+                isEnabledInQuickAccess = type!!.isEnabledInQuickAccess
                 icon = type!!.icon
             }
             else {
@@ -96,6 +102,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
                 isCreating = true
                 name = ""
                 isHoursWorkedEditable = true
+                isEnabledInQuickAccess = true
                 icon = TypeIcon.CURRENCY
             }
             isInitialized = true
@@ -112,7 +119,8 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             type = Type(
                 name = name,
                 icon = icon,
-                isHoursWorkedEditable = isHoursWorkedEditable
+                isHoursWorkedEditable = isHoursWorkedEditable,
+                isEnabledInQuickAccess = isEnabledInQuickAccess
             )
             repository.createNewType(type)
         }
@@ -120,6 +128,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             type.name = name
             type.icon = icon
             type.isHoursWorkedEditable = isHoursWorkedEditable
+            type.isEnabledInQuickAccess = isEnabledInQuickAccess
             type.edited = LocalDateTime.now()
             repository.updateExistingType(type)
         }

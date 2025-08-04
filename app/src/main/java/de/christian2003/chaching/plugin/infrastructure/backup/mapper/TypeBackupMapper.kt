@@ -21,6 +21,7 @@ class TypeBackupMapper {
             icon = dto.icon,
             id = dto.id,
             isHoursWorkedEditable = dto.isHoursWorkedEditable,
+            isEnabledInQuickAccess = dto.isEnabledInQuickAccess,
             created = dto.created,
             edited = dto.edited
         )
@@ -39,6 +40,7 @@ class TypeBackupMapper {
             icon = domain.icon,
             id = domain.id,
             isHoursWorkedEditable = domain.isHoursWorkedEditable,
+            isEnabledInQuickAccess = domain.isEnabledInQuickAccess,
             created = domain.created,
             edited = domain.edited
         )

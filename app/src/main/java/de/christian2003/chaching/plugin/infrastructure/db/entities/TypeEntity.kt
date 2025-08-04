@@ -34,6 +34,10 @@ class TypeEntity(
      */
     var isHoursWorkedEditable: Boolean = true,
 
+    /**
+     * Whether the type is available through the "+"-FAB on the main screen.
+     */
+    var isEnabledInQuickAccess: Boolean = true,
 
     /**
      * Date time on which the type was created. This is for statistical purposes.

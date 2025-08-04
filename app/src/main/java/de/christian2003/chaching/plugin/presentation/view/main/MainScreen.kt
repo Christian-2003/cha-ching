@@ -608,20 +608,22 @@ private fun FabMenu(
 			contentColor = MaterialTheme.colorScheme.onSurfaceVariant
 		)
 		types.forEach { type ->
-			FloatingActionButtonMenuItem(
-				onClick = {
-					onTypeClicked(type)
-				},
-				text = {
-					Text(type.name)
-				},
-				icon = {
-					Icon(
-						painter = painterResource(type.icon.drawableResourceId),
-						contentDescription = ""
-					)
-				}
-			)
+			if (type.isEnabledInQuickAccess) {
+				FloatingActionButtonMenuItem(
+					onClick = {
+						onTypeClicked(type)
+					},
+					text = {
+						Text(type.name)
+					},
+					icon = {
+						Icon(
+							painter = painterResource(type.icon.drawableResourceId),
+							contentDescription = ""
+						)
+					}
+				)
+			}
 		}
 	}
 
