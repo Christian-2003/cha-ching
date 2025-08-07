@@ -17,6 +17,8 @@ n./a.
 * Change empty placeholder icon for transfers within the app to match app mascot.
 * Change the app icon to match the app mascot.
 * Change the splash screen to match new app icon.
+* Add "Compose Animation Gaphics" to app in order to use animated vector drawables with Jetpack Compose.
+* Add dialog displaying info about quick access visibility on `MainScreen` for types.
 
 <br/>
 
