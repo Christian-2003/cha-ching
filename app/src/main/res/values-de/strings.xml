@@ -91,6 +91,8 @@
     <string name="type_quickAccessEnabledText">Soll diese Einkommensart auf dem Startbildschirm über den Schnellzugriff angezeigt werden?</string>
     <string name="type_chooseIcon">Wähle ein Bild aus</string>
     <string name="type_help_create">Bearbeite die Einkommensart indem du einen Namen eingibst und ein Bild auswählst.</string>
+    <string name="type_quickAccessHelp_title">Im Schnellzugriff anzeigen</string>
+    <string name="type_quickAccessHelp_text">Der Schnellzugriff auf der Startseite erlaubt dir, für diese Einkommensart neue Einkommen zu erstellen. Mit dieser Einstellung legst du fest, ob diese Einkommensart auf der Startseite über den Schnellzugriff angezeigt werden soll.</string>
 
 
     <string name="analysis_title">Analyse</string>
@@ -197,6 +199,7 @@
     <string name="button_finish">Fertig</string>
     <string name="button_download">Herunterladen</string>
     <string name="button_dismiss">Später</string>
+    <string name="button_close">Schließen</string>
 
 
     <!-- Widgets -->

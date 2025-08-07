@@ -71,6 +71,11 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      */
     var isHelpCardVisible: Boolean by mutableStateOf(false)
 
+    /**
+     * Indicates whether the help dialog for the quick info is visible.
+     */
+    var isQuickAccessHelpVisible: Boolean by mutableStateOf(false)
+
 
     /**
      * Instantiates the repository.
@@ -81,6 +86,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
     fun init(repository: TypeRepository, typeId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
         if (!isInitialized) {
             this@TypeViewModel.repository = repository
+            isQuickAccessHelpVisible = false
             isHelpCardVisible = HelpCards.CREATE_TYPE.getVisible(getApplication<Application>().baseContext)
             var size: Int = repository.getAllTypes().first().size
             if (typeId == null) {

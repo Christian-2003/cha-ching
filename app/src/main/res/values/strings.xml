@@ -91,6 +91,8 @@
     <string name="type_quickAccessEnabledText">Should this type be visible in the quick access on the home screen?</string>
     <string name="type_chooseIcon">Choose an icon</string>
     <string name="type_help_create">Configure the type by entering a name and selecting an icon.</string>
+    <string name="type_quickAccessHelp_title">Visible in quick access</string>
+    <string name="type_quickAccessHelp_text">Quick access allows you to create earnings for this type on the home screen. This field determines whether the type should be visible in this quick access.</string>
 
 
     <string name="analysis_title">Analysis</string>
@@ -197,6 +199,7 @@
     <string name="button_finish">Finish</string>
     <string name="button_download">Download</string>
     <string name="button_dismiss">Dismiss</string>
+    <string name="button_close">Close</string>
 
 
     <!-- Widgets -->

@@ -1,6 +1,11 @@
 package de.christian2003.chaching.plugin.presentation.view.type
 
+import androidx.compose.material3.AlertDialog
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,8 +29,14 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -37,6 +48,7 @@ import de.christian2003.chaching.domain.type.TypeIcon
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.HelpCard
 import de.christian2003.chaching.plugin.presentation.ui.composables.TextInput
+import kotlinx.coroutines.delay
 
 
 /**
@@ -56,9 +68,7 @@ fun TypeScreen(
             TopAppBar(
                 title = {
                     Text(
-                        if (viewModel.name.isNotEmpty()) {
-                            viewModel.name
-                        } else {
+                        viewModel.name.ifEmpty {
                             viewModel.namePlaceholder
                         }
                     )
@@ -124,7 +134,10 @@ fun TypeScreen(
                     viewModel.isEnabledInQuickAccess = it
                 },
                 title = stringResource(R.string.type_quickAccessEnabledTitle),
-                text = stringResource(R.string.type_quickAccessEnabledText)
+                text = stringResource(R.string.type_quickAccessEnabledText),
+                onInfoClick = {
+                    viewModel.isQuickAccessHelpVisible = true
+                }
             )
             Headline(stringResource(R.string.type_chooseIcon))
             TypeIconSelection(
@@ -154,6 +167,13 @@ fun TypeScreen(
                 )
             }
         }
+        if (viewModel.isQuickAccessHelpVisible) {
+            QuickAccessHelp(
+                onDismiss = {
+                    viewModel.isQuickAccessHelpVisible = false
+                }
+            )
+        }
     }
 }
 
@@ -173,7 +193,8 @@ private fun Checkbox(
     onCheckedChange: (Boolean) -> Unit,
     title: String,
     modifier: Modifier = Modifier,
-    text: String? = null
+    text: String? = null,
+    onInfoClick: (() -> Unit)? = null
 ) {
     var checkboxStartPadding = dimensionResource(R.dimen.margin_horizontal) - 12.dp
     if (checkboxStartPadding < 0.dp) {
@@ -202,7 +223,9 @@ private fun Checkbox(
             onCheckedChange = onCheckedChange,
             modifier = Modifier.padding(end = checkboxEndPadding)
         )
-        Column {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -213,6 +236,17 @@ private fun Checkbox(
                     text = text,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.labelMedium
+                )
+            }
+        }
+        if (onInfoClick != null) {
+            IconButton(
+                onClick = onInfoClick,
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_info),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = ""
                 )
             }
         }
@@ -268,4 +302,65 @@ private fun TypeIconSelection(
             }
         }
     }
+}
+
+
+/**
+ * Displays the help which shows info about the quick access on the home page.
+ *
+ * @param onDismiss Callback invoked to dismiss the help for the quick access.
+ */
+@Composable
+private fun QuickAccessHelp(
+    onDismiss: () -> Unit
+) {
+    var atEnd by remember { mutableStateOf(false) }
+    val painter = rememberAnimatedVectorPainter(AnimatedImageVector.animatedVectorResource(R.drawable.ic_quickaccesshelp), atEnd)
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            atEnd = true
+            delay(3000)
+            atEnd = false
+            delay(3000)
+        }
+    }
+
+    AlertDialog(
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_info),
+                contentDescription = ""
+            )
+        },
+        title = {
+            Text(stringResource(R.string.type_quickAccessHelp_title))
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = stringResource(R.string.type_quickAccessHelp_text),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Image(
+                    painter = painter,
+                    contentDescription = "",
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_emptyPlaceholder))
+                )
+            }
+        },
+        onDismissRequest = {
+            onDismiss()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text(stringResource(R.string.button_close))
+            }
+        }
+    )
 }
