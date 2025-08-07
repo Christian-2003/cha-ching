@@ -78,6 +78,7 @@ dependencies {
 	implementation(libs.kotlinx.serialization.json)
 	implementation(libs.androidx.glance.appwidget)
 	implementation(libs.androidx.glance.material3)
+	implementation(libs.androidx.animation.graphics)
 
 	testImplementation(libs.junit)
 
