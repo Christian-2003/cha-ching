@@ -19,6 +19,8 @@ n./a.
 * Change the splash screen to match new app icon.
 * Add "Compose Animation Gaphics" to app in order to use animated vector drawables with Jetpack Compose.
 * Add dialog displaying info about quick access visibility on `MainScreen` for types.
+* Revert to original app icon.
+* Add alterantive icon for app in debug build to better distinguish between release and debug installations.
 
 <br/>
 
