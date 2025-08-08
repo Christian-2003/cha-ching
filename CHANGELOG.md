@@ -2,10 +2,10 @@
 
 # Changelog
 
-## 1.2.0 (XXXX-XX-XX)
+## 1.2.0 (2025-08-08)
 
 ###### Release Highlights
-n./a.
+Add an app widget showing the money earned in the last month. Furthermore, types can be enabled and disabled for the quick access on the home screen.
 
 ###### Features
 * Implement a `VisualTransformation` to handle grouping- and decimal-separators for better user experience and reusability.
