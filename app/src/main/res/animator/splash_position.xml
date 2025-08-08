@@ -3,9 +3,9 @@
 <objectAnimator
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="@integer/splash_duration"
-    android:propertyName="scaleX"
+    android:propertyName="translateX"
     android:interpolator="@android:anim/anticipate_overshoot_interpolator"
-    android:valueFrom="1"
-    android:valueTo="0.5">
+    android:valueFrom="-498"
+    android:valueTo="249">
 
 </objectAnimator>
