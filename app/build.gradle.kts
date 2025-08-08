@@ -15,7 +15,7 @@ android {
 		minSdk = 34
 		targetSdk = 35
 		versionCode = 6
-		versionName = "1.1.2-pre2"
+		versionName = "1.2.0"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables {
 			useSupportLibrary = true
@@ -52,6 +52,14 @@ android {
 		resources {
 			excludes += "/META-INF/{AL2.0,LGPL2.1}"
 		}
+	}
+}
+
+android.applicationVariants.all {
+	outputs.all {
+		val appName = "cha-ching"
+		val versionName = versionName
+		(this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName = "$appName-v$versionName.apk"
 	}
 }
 

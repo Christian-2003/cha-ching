@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 1.1.2 (XXXX-XX-XX)
+## 1.2.0 (XXXX-XX-XX)
 
 ###### Release Highlights
 n./a.
@@ -19,8 +19,10 @@ n./a.
 * Change the splash screen to match new app icon.
 * Add "Compose Animation Gaphics" to app in order to use animated vector drawables with Jetpack Compose.
 * Add dialog displaying info about quick access visibility on `MainScreen` for types.
-* Revert to original app icon.
+* Transfer types can be removed from quick qccess on `MainScreen`.
+* Revert to original app icon and splash screen.
 * Add alterantive icon for app in debug build to better distinguish between release and debug installations.
+* Change build pipeline to automatically generate the correct APK file name.
 
 <br/>
 
