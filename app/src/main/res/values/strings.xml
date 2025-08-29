@@ -75,7 +75,7 @@
     <string name="transfer_help">Enter how much money you earned on a specific date.</string>
 
 
-    <string name="types_title">Configure types</string>
+    <string name="types_title">Types</string>
     <string name="types_emptyPlaceholder_title">No data to show</string>
     <string name="types_emptyPlaceholder_subtitle">Available earning types are shown here</string>
     <string name="types_listTitle">Your types</string>

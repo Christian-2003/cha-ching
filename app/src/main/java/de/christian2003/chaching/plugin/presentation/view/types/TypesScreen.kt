@@ -111,26 +111,14 @@ fun TypesScreen(
                                 )
                             )
                         }
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    horizontal = dimensionResource(R.dimen.margin_horizontal),
-                                    vertical = dimensionResource(R.dimen.padding_vertical)
-                                )
-                        ) {
-                            Button(
-                                onClick = onCreateType
-                            ) {
-                                CreateButtonContent()
-                            }
-                        }
                     }
                     item {
-                        HorizontalDivider()
                         Headline(
-                            title = stringResource(R.string.types_listTitle)
+                            title = stringResource(R.string.types_listTitle),
+                            endIcon = painterResource(R.drawable.ic_add),
+                            onClick = {
+                                onCreateType()
+                            }
                         )
                     }
                     items(typeEntities) { type ->
@@ -188,8 +176,10 @@ private fun TypeListItem(
                 onEdit()
             }
             .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
+                start = dimensionResource(R.dimen.margin_horizontal),
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.margin_horizontal) - 12.dp,
+                bottom = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         Icon(

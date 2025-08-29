@@ -9,6 +9,9 @@ n/a
 
 ###### Features
 * Fix a bug where the cumulated transfers on the `AnalysisScreen` could sometimes decrease after time.
+* `TypeScreen` no longer shows multiple lines of the title in the app bar.
+* `TypesScreen` no longer shows multiple lines of the title in the app bar.
+* Visual changes to `TypesScreen`.
 
 <br/>
 

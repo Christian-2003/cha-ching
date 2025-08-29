@@ -75,7 +75,7 @@
     <string name="transfer_help">Gebe ein, wie hoch das Einkommen für das Wertstellungsdatum ist.</string>
 
 
-    <string name="types_title">Einkommensarten konfigurieren</string>
+    <string name="types_title">Einkommensarten</string>
     <string name="types_emptyPlaceholder_title">Keine Einkommensarten</string>
     <string name="types_emptyPlaceholder_subtitle">Verfügbare Einkommensarten werden hier angezeigt</string>
     <string name="types_listTitle">Deine Einkommensarten</string>
@@ -83,7 +83,7 @@
     <string name="types_confirmDelete">Wenn du %1$s löschst, dann werden auch alle damit verbundenen Einkommen gelöscht. Bist du dir sicher, dass du diese Einkommensart löschen möchtest?</string>
 
 
-    <string name="type_unnamed">Unbenannte Einkommensart %1$d</string>
+    <string name="type_unnamed">Einkommensart %1$d</string>
     <string name="type_nameLabel">Name</string>
     <string name="type_hoursWorkedEditableTitle">Arbeitsstunden anzeigen</string>
     <string name="type_hoursWorkedEditableText">Sollen Arbeitsstunden für diese Einkommensart erfasst werden?</string>
