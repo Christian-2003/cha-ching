@@ -2,6 +2,16 @@
 
 # Changelog
 
+## 1.2.1 (XXXX-XX-XX)
+
+###### Release Highlights
+n/a
+
+###### Features
+* Fix a bug where the cumulated transfers on the `AnalysisScreen` could sometimes decrease after time.
+
+<br/>
+
 ## 1.2.0 (2025-08-08)
 
 ###### Release Highlights

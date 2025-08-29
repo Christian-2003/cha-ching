@@ -55,7 +55,7 @@ interface TransferDao {
 	 * @return				All transfers in the range specified.
 	 */
 	@Transaction
-	@Query("SELECT * FROM transfers WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay")
+	@Query("SELECT * FROM transfers WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay ORDER BY valueDate DESC")
 	fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferEntity>>
 
 
