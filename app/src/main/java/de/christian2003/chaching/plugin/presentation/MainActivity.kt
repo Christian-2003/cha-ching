@@ -26,7 +26,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.christian2003.chaching.plugin.infrastructure.db.ChaChingDatabase
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
 import de.christian2003.chaching.plugin.infrastructure.update.UpdateManager
 import de.christian2003.chaching.plugin.presentation.ui.theme.ChaChingTheme
@@ -56,11 +55,13 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
 import de.christian2003.chaching.application.analysis.AnalysisSquasher
 import de.christian2003.chaching.plugin.ChaChingApplication
+import de.christian2003.chaching.plugin.infrastructure.rest.apps.AppsRestRepository
 import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScreen
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 
 
 /**
@@ -114,7 +115,9 @@ class MainActivity : ComponentActivity() {
 fun ChaChing(updateManager: UpdateManager) {
 	val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
-	val repository: ChaChingRepository = (context.applicationContext as ChaChingApplication).getRepository()
+    val chaChingApplication: ChaChingApplication = context.applicationContext as ChaChingApplication
+	val repository: ChaChingRepository = chaChingApplication.getRepository()
+    val client: OkHttpClient = chaChingApplication.getClient()
 	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("onboardingFinished", false)) }
 
     ChaChingTheme {
@@ -283,11 +286,16 @@ fun ChaChing(updateManager: UpdateManager) {
             composable("settings") {
                 val viewModel: SettingsViewModel = viewModel()
                 viewModel.init(
-                    JsonBackupService(
+                    backupService = JsonBackupService(
                         transferRepository = repository,
                         typeRepository = repository,
                         importRepository = repository
-                    )
+                    ),
+                    appsRepository = AppsRestRepository(
+                        packageName = context.applicationContext.packageName,
+                        client = client
+                    ),
+                    client = client
                 )
                 SettingsScreen(
                     viewModel = viewModel,

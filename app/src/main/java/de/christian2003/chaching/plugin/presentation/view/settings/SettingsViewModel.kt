@@ -5,15 +5,19 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.application.backup.BackupService
 import de.christian2003.chaching.application.backup.ImportStrategy
+import de.christian2003.chaching.domain.apps.AppItem
+import de.christian2003.chaching.domain.repository.AppsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 
 
 class SettingsViewModel(application: Application): AndroidViewModel(application) {
@@ -25,11 +29,22 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
 
     var importUri: Uri? by mutableStateOf(null)
 
+    lateinit var client: OkHttpClient
 
-    fun init(backupService: BackupService) {
-        if (!isInitialized) {
-            this.backupService = backupService
-            isInitialized = true
+    val apps: MutableList<AppItem> = mutableStateListOf()
+
+
+    fun init(backupService: BackupService, appsRepository: AppsRepository, client: OkHttpClient) {
+        if (isInitialized) {
+            return
+        }
+        this.backupService = backupService
+        this.client = client
+        isInitialized = true
+        viewModelScope.launch(Dispatchers.IO) {
+            val apps: List<AppItem> = appsRepository.getApps()
+            this@SettingsViewModel.apps.clear()
+            this@SettingsViewModel.apps.addAll(apps)
         }
     }
 

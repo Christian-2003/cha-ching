@@ -1,6 +1,6 @@
 package de.christian2003.chaching.plugin.infrastructure.backup
 
-import de.christian2003.chaching.plugin.infrastructure.backup.serializer.LocalDateTimeSerializer
+import de.christian2003.chaching.plugin.infrastructure.serializer.LocalDateTimeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime

@@ -1,8 +1,8 @@
 package de.christian2003.chaching.plugin.infrastructure.backup.dto
 
-import de.christian2003.chaching.plugin.infrastructure.backup.serializer.LocalDateSerializer
-import de.christian2003.chaching.plugin.infrastructure.backup.serializer.LocalDateTimeSerializer
-import de.christian2003.chaching.plugin.infrastructure.backup.serializer.UuidSerializer
+import de.christian2003.chaching.plugin.infrastructure.serializer.LocalDateSerializer
+import de.christian2003.chaching.plugin.infrastructure.serializer.LocalDateTimeSerializer
+import de.christian2003.chaching.plugin.infrastructure.serializer.UuidSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate

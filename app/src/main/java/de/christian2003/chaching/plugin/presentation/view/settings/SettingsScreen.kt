@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -34,11 +35,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import java.time.LocalDate
 import androidx.core.net.toUri
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
+import de.christian2003.chaching.domain.apps.AppItem
+import de.christian2003.chaching.plugin.infrastructure.rest.HttpClientProvider
+import okhttp3.OkHttpClient
 import java.time.format.DateTimeFormatter
 
 
@@ -226,6 +235,16 @@ fun SettingsScreen(
                 endIcon = painterResource(R.drawable.ic_external),
                 prefixIcon = painterResource(R.drawable.ic_android)
             )
+
+            //Apps:
+            AppsSection(
+                apps = viewModel.apps,
+                client = viewModel.client,
+                onAppClick = { app ->
+                    val intent = Intent(Intent.ACTION_VIEW, app.url)
+                    context.startActivity(intent)
+                }
+            )
         }
 
         if (viewModel.importUri != null) {
@@ -367,6 +386,92 @@ private fun GeneralSection() {
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
             )
+        }
+    }
+}
+
+
+/**
+ * Displays the list of other apps that the user might check out.
+ *
+ * @param apps          List of apps to display.
+ * @param client        OkHttpClient to use for loading the SVG images.
+ * @param onAppClick    Callback invoked once an app is clicked.
+ */
+@Composable
+private fun AppsSection(
+    apps: List<AppItem>,
+    client: OkHttpClient,
+    onAppClick: (AppItem) -> Unit
+) {
+    val imageLoader: ImageLoader = ImageLoader.Builder(LocalContext.current.applicationContext)
+        .okHttpClient(client)
+        .components {
+            add(SvgDecoder.Factory())
+        }
+        .build()
+    AnimatedVisibility(apps.isNotEmpty()) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            HorizontalDivider()
+            Headline(
+                title = stringResource(R.string.settings_apps),
+                indentToPrefixIcon = true
+            )
+            apps.forEach { app ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onAppClick(app)
+                        }
+                        .padding(
+                            horizontal = dimensionResource(R.dimen.margin_horizontal),
+                            vertical = dimensionResource(R.dimen.padding_vertical)
+                        )
+                ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(app.iconUrl)
+                            .build(),
+                        imageLoader = imageLoader,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                            .size(dimensionResource(R.dimen.image_xs))
+                    )
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = app.displayName,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                            Icon(
+                                painter = painterResource(R.drawable.ic_external),
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
+                                    .size(dimensionResource(R.dimen.image_xxs))
+                            )
+                        }
+                        val scheme: String? = app.url.scheme
+                        val host: String? = app.url.host
+                        if (scheme != null && host != null) {
+                            Text(
+                                text = "$scheme://$host",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

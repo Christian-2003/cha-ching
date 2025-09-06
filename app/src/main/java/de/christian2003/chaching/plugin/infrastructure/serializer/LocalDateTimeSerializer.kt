@@ -1,4 +1,4 @@
-package de.christian2003.chaching.plugin.infrastructure.backup.serializer
+package de.christian2003.chaching.plugin.infrastructure.serializer
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer

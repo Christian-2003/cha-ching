@@ -15,7 +15,7 @@ android {
 		minSdk = 34
 		targetSdk = 35
 		versionCode = 6
-		versionName = "1.2.0"
+		versionName = "1.2.1"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables {
 			useSupportLibrary = true
@@ -87,6 +87,8 @@ dependencies {
 	implementation(libs.androidx.glance.appwidget)
 	implementation(libs.androidx.glance.material3)
 	implementation(libs.androidx.animation.graphics)
+	implementation("com.squareup.okhttp3:okhttp:4.12.0")
+	implementation("io.coil-kt:coil-svg:2.7.0")
 
 	testImplementation(libs.junit)
 

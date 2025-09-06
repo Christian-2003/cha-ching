@@ -147,6 +147,7 @@
     <string name="settings_about_issuesInfo">Fehler auf GitHub melden</string>
     <string name="settings_about_moreTitle">Weitere Infos</string>
     <string name="settings_about_moreInfo">Öffne die App in den Systemeinstellungen</string>
+    <string name="settings_apps">Weitere Apps</string>
 
 
     <string name="help_title">Hilfenachrichten</string>

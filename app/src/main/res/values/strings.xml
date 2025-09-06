@@ -147,6 +147,7 @@
     <string name="settings_about_issuesInfo">Report issues on GitHub</string>
     <string name="settings_about_moreTitle">More info</string>
     <string name="settings_about_moreInfo">Show app in system settings</string>
+    <string name="settings_apps">Other Apps</string>
 
 
     <string name="help_title">Help messages</string>
