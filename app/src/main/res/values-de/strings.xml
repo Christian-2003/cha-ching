@@ -144,7 +144,7 @@
     <string name="settings_about_repoTitle">Repository</string>
     <string name="settings_about_repoInfo">App auf GitHub anzeigen</string>
     <string name="settings_about_issuesTitle">Fehler melden</string>
-    <string name="settings_about_issuesInfo">Fehler auf GitHUb melden</string>
+    <string name="settings_about_issuesInfo">Fehler auf GitHub melden</string>
     <string name="settings_about_moreTitle">Weitere Infos</string>
     <string name="settings_about_moreInfo">Öffne die App in den Systemeinstellungen</string>
 
