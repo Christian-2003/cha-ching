@@ -83,12 +83,12 @@ dependencies {
 	implementation(libs.apkupdater.library)
 	implementation(libs.androidx.core.splashscreen)
 	implementation(libs.coil.compose)
+	implementation(libs.coil.svg)
 	implementation(libs.kotlinx.serialization.json)
 	implementation(libs.androidx.glance.appwidget)
 	implementation(libs.androidx.glance.material3)
 	implementation(libs.androidx.animation.graphics)
-	implementation("com.squareup.okhttp3:okhttp:4.12.0")
-	implementation("io.coil-kt:coil-svg:2.7.0")
+	implementation(libs.okhttp)
 
 	testImplementation(libs.junit)
 

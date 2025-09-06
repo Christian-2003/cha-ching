@@ -18,6 +18,7 @@ Lifecycle Kotlin Extensions,2.9.0,license_apache20,Apache 2.0
 Lifecycle ViewModel Compose,2.9.0,license_apache20,Apache 2.0
 Material Symbols / Material Icons,4.0.0,license_apache20,Apache 2.0
 Navigation Runtime Kotlin Extensions,2.9.0,license_apache20,Apache 2.0
+OkHttp,4.12.0,license_apache20,Apache 2.0
 Room Compiler,2.6.1,license_apache20,Apache 2.0
 Room Kotlin Extensions,2.6.1,license_apache20,Apache 2.0
 Room Runtime,2.6.1,license_apache20,Apache 2.0
