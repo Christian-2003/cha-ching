@@ -16,4 +16,8 @@
         android:name="mainGroup"
         android:animation="@animator/splash_scale" />
 
+    <target
+        android:name="shadowPath"
+        android:animation="@animator/splash_shadow_alpha" />
+
 </animated-vector>

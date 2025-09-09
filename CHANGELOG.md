@@ -12,6 +12,9 @@ n/a
 * `TypeScreen` no longer shows multiple lines of the title in the app bar.
 * `TypesScreen` no longer shows multiple lines of the title in the app bar.
 * Visual changes to `TypesScreen`.
+* Fix typo in German settings.
+* Add a list of other apps that are advertised to the user when they go to the settings.
+* Add shadow to the app icon.
 
 <br/>
 
