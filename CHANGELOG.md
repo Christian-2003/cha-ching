@@ -19,6 +19,7 @@ n/a
 * Change edge-to-edge implementation so that the navigation bar has a transparent scrim.
 * Add collapsing app bar to `TransfersScreen`.
 * Transfers on `TransfersScreen` are shown below navigation bar.
+* Changes to screen displaying licenses of used software to match newer styles of Petrol Index.
 
 <br/>
 

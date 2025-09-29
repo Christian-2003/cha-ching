@@ -12,16 +12,6 @@ data class License (
     val softwareName: String,
 
     /**
-     * Attribute stores the version of the software.
-     */
-    val softwareVersion: String,
-
-    /**
-     * Attribute stores the name of the license.
-     */
-    val licenseName: String,
-
-    /**
      * Attribute stores the resource file of the license.
      */
     val licenseFile: String

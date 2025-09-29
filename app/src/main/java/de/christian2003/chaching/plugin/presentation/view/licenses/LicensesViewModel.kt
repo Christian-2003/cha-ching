@@ -36,7 +36,7 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
     /**
      * Attribute stores the name of the license currently displayed in a dialog.
      */
-    var displayedLicenseName: String? by mutableStateOf(null)
+    var displayedSoftwareName: String? by mutableStateOf(null)
 
     /**
      * Attribute stores the text of the license currently displayed in a dialog.
@@ -77,11 +77,11 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
             content = ByteArray(inputStream.available())
             inputStream.read(content)
             inputStream.close()
-            displayedLicenseName = license.licenseName
+            displayedSoftwareName = license.softwareName
             displayedLicenseText = String(content)
         }
         catch (_: Exception) {
-            displayedLicenseName = null
+            displayedSoftwareName = null
             displayedLicenseText = null
         }
     }
@@ -116,12 +116,10 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
         val software: List<String> = csv.split("\n")
         software.forEach { s ->
             val attributes: List<String> = s.split(",")
-            if (attributes.size == 4) {
+            if (attributes.size == 2) {
                 list.add(License(
                     softwareName = attributes[0],
-                    softwareVersion = attributes[1],
-                    licenseFile = attributes[2],
-                    licenseName = attributes[3]
+                    licenseFile = attributes[1],
                 ))
             }
         }

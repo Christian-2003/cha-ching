@@ -1,25 +1,25 @@
-Activity Compose,1.9.2,license_apache20,Apache 2.0
-APKUpdater-Library,v2.1.0,license_apkupdater,MIT License
-Coil Compose,2.7.0,license_coilcompose,Apache 2.0
-ComposeCharts,0.1.0,license_apache20,Apache 2.0
-Compose Animation Graphics,1.8.3,license_apache20,Apache 2.0
-Compose Graphics,1.7.6,license_apache20,Apache 2.0
-Compose Material3 Components,1.4.0-alpha15,license_apache20,Apache 2.0
-Compose Navigation,2.8.3,license_apache20,Apache 2.0
-Compose Tooling,1.7.6,license_apache20,Apache 2.0
-Compose UI,1.7.6,license_apache20,Apache 2.0
-Core Kotlin Extensions,1.16.0,license_apache20,Apache 2.0
-Glance for App Widgets,1.1.1,license_apache20,Apache 2.0
-Glance Material,1.1.1,license_apache20,Apache 2.0
-Jetpack Compose Libraries BOM,2024.04.01,license_apache20,Apache 2.0
-Kotlinx Coroutines Android,1.9.0,license_apache20,Apache 2.0
-Kotlinx Serialization JSON,1.8.0,license_apache20,Apache 2.0
-Lifecycle Kotlin Extensions,2.9.0,license_apache20,Apache 2.0
-Lifecycle ViewModel Compose,2.9.0,license_apache20,Apache 2.0
-Material Symbols / Material Icons,4.0.0,license_apache20,Apache 2.0
-Navigation Runtime Kotlin Extensions,2.9.0,license_apache20,Apache 2.0
-OkHttp,4.12.0,license_apache20,Apache 2.0
-Room Compiler,2.6.1,license_apache20,Apache 2.0
-Room Kotlin Extensions,2.6.1,license_apache20,Apache 2.0
-Room Runtime,2.6.1,license_apache20,Apache 2.0
-SplashScreen,1.0.1,license_apache20,Apache 2.0
+Activity Compose,license_apache20
+APKUpdater-Library,license_apkupdater
+Coil Compose,license_coilcompose
+ComposeCharts,license_apache20
+Compose Animation Graphics,license_apache20
+Compose Graphics,license_apache20
+Compose Material3 Components,license_apache20
+Compose Navigation,license_apache20
+Compose Tooling,license_apache20
+Compose UI,license_apache20
+Core Kotlin Extensions,license_apache20
+Glance for App Widgets,license_apache20
+Glance Material,license_apache20
+Jetpack Compose Libraries BOM,license_apache20
+Kotlinx Coroutines Android,license_apache20
+Kotlinx Serialization JSON,license_apache20
+Lifecycle Kotlin Extensions,license_apache20
+Lifecycle ViewModel Compose,license_apache20
+Material Symbols / Material Icons,license_apache20
+Navigation Runtime Kotlin Extensions,license_apache20
+OkHttp,license_apache20
+Room Compiler,license_apache20
+Room Kotlin Extensions,license_apache20
+Room Runtime,license_apache20
+SplashScreen,license_apache20
