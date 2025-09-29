@@ -20,6 +20,7 @@ n/a
 * Add collapsing app bar to `TransfersScreen`.
 * Transfers on `TransfersScreen` are shown below navigation bar.
 * Changes to screen displaying licenses of used software to match newer styles of Petrol Index.
+* Add indicator on `TypesScreen` which shows whether each type is visible (or invisible) through quick access.
 
 <br/>
 

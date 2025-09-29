@@ -79,6 +79,7 @@
     <string name="types_emptyPlaceholder_title">Keine Einkommensarten</string>
     <string name="types_emptyPlaceholder_subtitle">Verfügbare Einkommensarten werden hier angezeigt</string>
     <string name="types_listTitle">Deine Einkommensarten</string>
+    <string name="types_invisible">Im Schnellzugriff ausgeblendet</string>
     <string name="types_help">Einkommensarten definierren, welche Art von Einkommen du erfassen kannst. Du kannst Einkommensarten erstellen, bearbeiten und löschen.</string>
     <string name="types_confirmDelete">Wenn du %1$s löschst, dann werden auch alle damit verbundenen Einkommen gelöscht. Bist du dir sicher, dass du diese Einkommensart löschen möchtest?</string>
 

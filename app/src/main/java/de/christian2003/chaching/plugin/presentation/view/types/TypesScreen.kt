@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.domain.type.Type
@@ -51,7 +50,6 @@ import java.util.UUID
  * @param onCreateType  Callback invoked to navigate to another screen to create a new type.
  * @param onEditType    Callback invoked to navigate to another screen to edit an existing type.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TypesScreen(
     viewModel: TypesViewModel,
@@ -185,17 +183,53 @@ private fun TypeListItem(
         Icon(
             painter = painterResource(type.icon.drawableResourceId),
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = if (type.isEnabledInQuickAccess) {
+                MaterialTheme.colorScheme.onSurface
+            } else {
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            },
             modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_horizontal))
         )
-        Text(
-            text = type.name,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
+        Column(
             modifier = Modifier.weight(1f)
-        )
+        ) {
+            Text(
+                text = type.name,
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (type.isEnabledInQuickAccess) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                },
+                maxLines = 2,
+                textDecoration = if (type.isEnabledInQuickAccess) {
+                    TextDecoration.None
+                } else {
+                    TextDecoration.LineThrough
+                },
+                overflow = TextOverflow.Ellipsis
+            )
+            if (!type.isEnabledInQuickAccess) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_invisible),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                        modifier = Modifier
+                            .padding(end = dimensionResource(R.dimen.padding_horizontal) / 2)
+                            .size(dimensionResource(R.dimen.image_xxs))
+                    )
+                    Text(
+                        text = stringResource(R.string.types_invisible),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                    )
+                }
+            }
+        }
+
         Box {
             IconButton(
                 onClick = {
@@ -205,6 +239,11 @@ private fun TypeListItem(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_more),
+                    tint = if (type.isEnabledInQuickAccess) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    },
                     contentDescription = ""
                 )
                 DropdownMenu(
