@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
@@ -46,7 +44,6 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import de.christian2003.chaching.domain.apps.AppItem
-import de.christian2003.chaching.plugin.infrastructure.rest.HttpClientProvider
 import okhttp3.OkHttpClient
 import java.time.format.DateTimeFormatter
 
@@ -63,7 +60,6 @@ import java.time.format.DateTimeFormatter
  *                                  of help messages.
  * @param onNavigateToOnboarding    Callback invoked to navigate to the app onboarding.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
@@ -179,7 +175,7 @@ fun SettingsScreen(
                 info = stringResource(R.string.settings_help_helpMessagesInfo),
                 onClick = onNavigateToHelpMessages,
                 endIcon = painterResource(R.drawable.ic_next),
-                prefixIcon = painterResource(R.drawable.ic_help)
+                prefixIcon = painterResource(R.drawable.ic_help_outlined)
             )
             SettingsItemButton(
                 setting = stringResource(R.string.settings_help_onboardingTitle),
@@ -319,7 +315,8 @@ private fun SettingsItemButton(
                 Text(
                     text = setting,
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
                 )
                 if (endIcon != null) {
                     Icon(
@@ -345,7 +342,6 @@ private fun SettingsItemButton(
 /**
  * Displays the general information which contains info about the app.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun GeneralSection() {
     val context: Context = LocalContext.current
@@ -449,7 +445,8 @@ private fun AppsSection(
                             Text(
                                 text = app.displayName,
                                 color = MaterialTheme.colorScheme.onSurface,
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold
                             )
                             Icon(
                                 painter = painterResource(R.drawable.ic_external),

@@ -15,6 +15,7 @@ n/a
 * Fix typo in German settings.
 * Add a list of other apps that are advertised to the user when they go to the settings.
 * Add shadow to the app icon.
+* Changes to app styles to match new Petrol Index release.
 
 <br/>
 

@@ -55,6 +55,18 @@ android {
 	}
 }
 
+kotlin {
+	compilerOptions {
+		freeCompilerArgs.addAll(
+			"-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+			"-opt-in=kotlin.uuid.ExperimentalUuidApi",
+			"-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+			"-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
+			"-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
+		)
+	}
+}
+
 android.applicationVariants.all {
 	outputs.all {
 		val appName = "cha-ching"
