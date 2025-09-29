@@ -16,6 +16,9 @@ n/a
 * Add a list of other apps that are advertised to the user when they go to the settings.
 * Add shadow to the app icon.
 * Changes to app styles to match new Petrol Index release.
+* Change edge-to-edge implementation so that the navigation bar has a transparent scrim.
+* Add collapsing app bar to `TransfersScreen`.
+* Transfers on `TransfersScreen` are shown below navigation bar.
 
 <br/>
 

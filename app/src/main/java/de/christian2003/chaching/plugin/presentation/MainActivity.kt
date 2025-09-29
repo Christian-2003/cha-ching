@@ -1,8 +1,10 @@
 package de.christian2003.chaching.plugin.presentation
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -95,13 +97,30 @@ class MainActivity : ComponentActivity() {
 		}
 
 		//App content:
-		enableEdgeToEdge()
+        enableEdgeToEdge(
+            navigationBarStyle = if (isNightMode()) {
+                SystemBarStyle.dark(
+                    scrim = android.graphics.Color.TRANSPARENT
+                )
+            } else {
+                SystemBarStyle.light(
+                    scrim = android.graphics.Color.TRANSPARENT,
+                    darkScrim = android.graphics.Color.TRANSPARENT
+                )
+            }
+        )
 		setContent {
 			ChaChing(
 				updateManager = updateManager!!
 			)
 		}
 	}
+
+
+    private fun isNightMode(): Boolean {
+        val currentMode: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return currentMode == Configuration.UI_MODE_NIGHT_YES
+    }
 
 }
 
