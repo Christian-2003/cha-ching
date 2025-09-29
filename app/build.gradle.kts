@@ -14,8 +14,8 @@ android {
 		applicationId = "de.christian2003.chaching"
 		minSdk = 34
 		targetSdk = 35
-		versionCode = 7
-		versionName = "1.2.1-pre1"
+		versionCode = 8
+		versionName = "1.2.1"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables {
 			useSupportLibrary = true

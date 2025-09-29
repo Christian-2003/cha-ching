@@ -36,13 +36,13 @@ enum class OverviewComparisonConnection(
 
     BREAD(350),
 
-    EGGS(45),
+    EGGS(200),
 
     SPOTIFY(1199),
 
     MOVIE_TICKET(1500),
 
-    GERMANY_TICKET(5800),
+    GERMANY_TICKET(6500),
 
     RAMEN(1500),
 
