@@ -13,16 +13,14 @@ import java.time.LocalDate
 import java.util.Locale
 import java.util.UUID
 import de.christian2003.chaching.R
+import de.christian2003.chaching.application.usecases.transfer.CreateTransferUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetTransferByIdUseCase
+import de.christian2003.chaching.application.usecases.transfer.UpdateTransferUseCase
 import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
-import de.christian2003.chaching.domain.repository.TransferRepository
-import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
-import de.christian2003.chaching.domain.transfer.TransferMetadata
-import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import java.text.DecimalFormat
-import java.time.LocalDateTime
 import kotlin.math.roundToInt
 
 
@@ -31,10 +29,8 @@ import kotlin.math.roundToInt
  */
 class TransferViewModel(application: Application): AndroidViewModel(application) {
 
-    /**
-     * Repository through which to access and manipulate transfers.
-     */
-    private lateinit var transferRepository: TransferRepository
+    private lateinit var createTransferUseCase: CreateTransferUseCase
+    private lateinit var updateTransferUseCase: UpdateTransferUseCase
 
     /**
      * Indicates whether the view model is initialized.
@@ -111,14 +107,24 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     /**
      * Instantiates the view model.
      *
-     * @param transferRepository    Repository to access and manipulate types.
-     * @param getTypeByIdUseCase    Use case to get a type by it's ID.
-     * @param typeId                ID of the type with which to create the transfer.
-     * @param transferId            ID of the transfer to edit. To create a new transfer, pass null.
+     * @param createTransferUseCase     Use case to create a new transfer.
+     * @param updateTransferUseCase     Use case to update an existing transfer.
+     * @param getTransferByIdUseCase    Use case to get a transfer by it's ID.
+     * @param getTypeByIdUseCase        Use case to get a type by it's ID.
+     * @param typeId                    ID of the type with which to create the transfer.
+     * @param transferId                ID of the transfer to edit. To create a new transfer, pass null.
      */
-    fun init(transferRepository: TransferRepository, getTypeByIdUseCase: GetTypeByIdUseCase, typeId: UUID, transferId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
+    fun init(
+        createTransferUseCase: CreateTransferUseCase,
+        updateTransferUseCase: UpdateTransferUseCase,
+        getTypeByIdUseCase: GetTypeByIdUseCase,
+        getTransferByIdUseCase: GetTransferByIdUseCase,
+        typeId: UUID,
+        transferId: UUID?
+    ) = viewModelScope.launch(Dispatchers.IO) {
         if (!isInitialized) {
-            this@TransferViewModel.transferRepository = transferRepository
+            this@TransferViewModel.createTransferUseCase = createTransferUseCase
+            this@TransferViewModel.updateTransferUseCase = updateTransferUseCase
             isHelpCardVisible = HelpCards.CREATE_TRANSFER.getVisible(getApplication<Application>().baseContext)
 
             //Get type:
@@ -131,7 +137,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
 
             if (transferId != null) {
                 //Edit transfer:
-                val transfer: Transfer? = transferRepository.getTransferById(transferId)
+                val transfer: Transfer? = getTransferByIdUseCase.getTransferById(transferId)
                 if (transfer == null) {
                     throw IllegalStateException("Cannot edit transfer that does not exist")
                 }
@@ -254,26 +260,21 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
         }
 
         if (transfer == null) {
-            transfer = Transfer(
-                transferValue = TransferValue(
-                    value = value,
-                    date = valueDate,
-                    isSalary = true,
-                ),
+            createTransferUseCase.createTransfer(
+                value = value,
+                date = valueDate,
+                isSalary = true,
                 hoursWorked = hoursWorked,
-                type = type!!.id
+                typeId = type!!.id
             )
-            transferRepository.createNewTransfer(transfer!!)
         }
         else {
-            transfer!!.transferValue = TransferValue(
+            updateTransferUseCase.updateTransfer(
+                transferId = transfer!!.id,
                 value = value,
-                date = valueDate
-            )
-            transfer!!.hoursWorked = hoursWorked
-            transferRepository.updateExistingTransfer(transfer!!)
-            transfer!!.metadata = transfer!!.metadata.copy(
-                edited = LocalDateTime.now()
+                date = valueDate,
+                isSalary = true,
+                hoursWorked = hoursWorked
             )
         }
     }

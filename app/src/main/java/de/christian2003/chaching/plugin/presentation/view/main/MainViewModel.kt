@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetTransfersInDateRangeUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.transfer.Transfer
@@ -23,10 +26,7 @@ import java.time.LocalDate
  */
 class MainViewModel: ViewModel() {
 
-	/**
-	 * Repository from which to source data.
-	 */
-	private lateinit var transferRepository: TransferRepository
+	private lateinit var deleteTransferUseCase: DeleteTransferUseCase
 
 	/**
 	 * Indicates whether the view model is initialized.
@@ -78,18 +78,25 @@ class MainViewModel: ViewModel() {
 	/**
 	 * Instantiates the view model.
 	 *
-	 * @param transferRepository	Repository to access and manipulate transfers.
-	 * @param getAllTypesUseCase	Use case to get a list of all types.
-	 * @param updateManager			Update manager.
+	 * @param deleteTransferUseCase				Use case to delete a transfer.
+	 * @param getRecentTransfersUseCase			Use case to get recent transfers.
+	 * @param getTransfersInDateRangeUseCase	Use case to get transfers in a date range.
+	 * @param getAllTypesUseCase				Use case to get a list of all types.
+	 * @param updateManager						Update manager.
 	 */
-	fun init(transferRepository: TransferRepository, getAllTypesUseCase: GetAllTypesUseCase, updateManager: UpdateManager) {
+	fun init(
+		deleteTransferUseCase: DeleteTransferUseCase,
+		getRecentTransfersUseCase: GetRecentTransfersUseCase,
+		getTransfersInDateRangeUseCase: GetTransfersInDateRangeUseCase,
+		getAllTypesUseCase: GetAllTypesUseCase, updateManager: UpdateManager
+	) {
 		isUpdateAvailable = updateManager.isUpdateAvailable
 		if (!isInitialized) {
-			this@MainViewModel.transferRepository = transferRepository
+			this@MainViewModel.deleteTransferUseCase = deleteTransferUseCase
 			this@MainViewModel.updateManager = updateManager
 			allTypes = getAllTypesUseCase.getAllTypes()
-			recentTransfers = transferRepository.getRecentTransfers()
-			transfersLastMonth = transferRepository.getAllTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
+			recentTransfers = getRecentTransfersUseCase.getRecentTransfers()
+			transfersLastMonth = getTransfersInDateRangeUseCase.getTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
 			isInitialized = true
 			//All code after 'collect' is not called, therefore, this must be the last method call of the init-function!
 			viewModelScope.launch(Dispatchers.IO) {
@@ -120,7 +127,7 @@ class MainViewModel: ViewModel() {
 		val transfer: Transfer? = transferToDelete
 		if (transfer != null) {
 			transferToDelete = null
-			transferRepository.deleteTransfer(transfer)
+			deleteTransferUseCase.deleteTransfer(transfer.id)
 		}
 	}
 

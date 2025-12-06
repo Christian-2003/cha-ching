@@ -56,6 +56,13 @@ import androidx.lifecycle.lifecycleScope
 import de.christian2003.chaching.R
 import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
 import de.christian2003.chaching.application.analysis.AnalysisSquasher
+import de.christian2003.chaching.application.usecases.transfer.CreateTransferUseCase
+import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetAllTransfersUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetTransferByIdUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetTransfersInDateRangeUseCase
+import de.christian2003.chaching.application.usecases.transfer.UpdateTransferUseCase
 import de.christian2003.chaching.application.usecases.type.CreateTypeUseCase
 import de.christian2003.chaching.application.usecases.type.DeleteTypeUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
@@ -169,7 +176,9 @@ fun ChaChing(updateManager: UpdateManager) {
             composable("main") {
                 val viewModel: MainViewModel = viewModel()
                 viewModel.init(
-                    transferRepository = repository,
+                    deleteTransferUseCase = DeleteTransferUseCase(repository),
+                    getRecentTransfersUseCase = GetRecentTransfersUseCase(repository),
+                    getTransfersInDateRangeUseCase = GetTransfersInDateRangeUseCase(repository),
                     getAllTypesUseCase = GetAllTypesUseCase(repository),
                     updateManager = updateManager
                 )
@@ -203,7 +212,8 @@ fun ChaChing(updateManager: UpdateManager) {
             composable("transfers") {
                 val viewModel: TransfersViewModel = viewModel()
                 viewModel.init(
-                    transferRepository = repository,
+                    getAllTransfersUseCase = GetAllTransfersUseCase(repository),
+                    deleteTransferUseCase = DeleteTransferUseCase(repository),
                     getAllTypesUseCase = GetAllTypesUseCase(repository)
                 )
                 TransfersScreen(
@@ -238,8 +248,10 @@ fun ChaChing(updateManager: UpdateManager) {
 
                 val viewModel: TransferViewModel = viewModel()
                 viewModel.init(
-                    transferRepository = repository,
+                    createTransferUseCase = CreateTransferUseCase(repository, repository),
+                    updateTransferUseCase = UpdateTransferUseCase(repository),
                     getTypeByIdUseCase = GetTypeByIdUseCase(repository),
+                    getTransferByIdUseCase = GetTransferByIdUseCase(repository),
                     typeId = typeId!!,
                     transferId = transferId
                 )

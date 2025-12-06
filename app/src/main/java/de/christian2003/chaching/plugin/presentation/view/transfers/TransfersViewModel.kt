@@ -5,8 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
+import de.christian2003.chaching.application.usecases.transfer.GetAllTransfersUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
-import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import kotlinx.coroutines.Dispatchers
@@ -16,10 +17,7 @@ import kotlinx.coroutines.launch
 
 class TransfersViewModel: ViewModel() {
 
-    /**
-     * Repository through which to access and manipulate transfers.
-     */
-    private lateinit var transferRepository: TransferRepository
+    private lateinit var deleteTransferUseCase: DeleteTransferUseCase
 
     /**
      * Indicates whether the view model has been initialized.
@@ -46,13 +44,14 @@ class TransfersViewModel: ViewModel() {
     /**
      * Instantiates the view model.
      *
-     * @param transferRepository    Repository to access and manipulate transfers.
-     * @param getAllTypesUseCase    Use case to get a list of all types.
+     * @param getAllTransfersUseCase    Use case to get a list of all transfers.
+     * @param deleteTransferUseCase     Use case to delete a transfer.
+     * @param getAllTypesUseCase        Use case to get a list of all types.
      */
-    fun init(transferRepository: TransferRepository, getAllTypesUseCase: GetAllTypesUseCase) {
+    fun init(getAllTransfersUseCase: GetAllTransfersUseCase, deleteTransferUseCase: DeleteTransferUseCase, getAllTypesUseCase: GetAllTypesUseCase) {
         if (!isInitialized) {
-            this.transferRepository = transferRepository
-            allTransfers = transferRepository.getAllTransfers()
+            this.deleteTransferUseCase = deleteTransferUseCase
+            allTransfers = getAllTransfersUseCase.getAllTransfers()
             allTypes = getAllTypesUseCase.getAllTypes()
             isInitialized = true
         }
@@ -78,7 +77,7 @@ class TransfersViewModel: ViewModel() {
         val transfer = transferToDelete
         transferToDelete = null
         if (transfer != null) {
-            transferRepository.deleteTransfer(transfer)
+            deleteTransferUseCase.deleteTransfer(transfer.id)
         }
     }
 
