@@ -11,6 +11,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import de.christian2003.chaching.R
+import de.christian2003.chaching.application.usecases.transfer.CreateTransferUseCase
+import de.christian2003.chaching.application.usecases.type.CreateTypeUseCase
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.type.TypeIcon
@@ -22,10 +24,7 @@ import de.christian2003.chaching.domain.type.TypeMetadata
  */
 class OnboardingViewModel(application: Application): AndroidViewModel(application) {
 
-    /**
-     * Repository from which to source data.
-     */
-    private lateinit var repository: TypeRepository
+    private lateinit var createTypeUseCase: CreateTypeUseCase
 
     /**
      * Indicates whether the view model has been initialized.
@@ -49,11 +48,11 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
     /**
      * Initializes the repository.
      *
-     * @param repository    Repository from which to source data.
+     * @param createTypeUseCase Use case to create a new type.
      */
-    fun init(repository: TypeRepository) {
+    fun init(createTypeUseCase: CreateTypeUseCase) {
         if (!isInitialized) {
-            this.repository = repository
+            this.createTypeUseCase = createTypeUseCase
             generateDefaultTypes()
             isInitialized = true
         }
@@ -85,7 +84,12 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
         val types: MutableMap<Type, Boolean> = defaultTypes
         types.forEach { (type, selected) ->
             if (selected) {
-                repository.createNewType(type)
+                createTypeUseCase.createType(
+                    name = type.name,
+                    icon = type.icon,
+                    isHoursWorkedEditable = type.metadata.isHoursWorkedEditable,
+                    isEnabledInQuickAccess = true
+                )
             }
         }
     }

@@ -377,7 +377,9 @@ fun ChaChing(updateManager: UpdateManager) {
 
             composable("onboarding") {
                 val viewModel: OnboardingViewModel = viewModel()
-                viewModel.init(repository)
+                viewModel.init(
+                    createTypeUseCase = CreateTypeUseCase(repository)
+                )
                 OnboardingScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
