@@ -16,6 +16,8 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.transfer.TransferMetadata
+import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import java.text.DecimalFormat
@@ -144,12 +146,12 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
                 //Cannot use number format because it puts group separator into the formatted string,
                 //which confuses the visual transformation for the TextField.
                 val roundingFormat = DecimalFormat("#.##")
-                value = roundingFormat.format(transfer.value.toDouble() / 100.0)
+                value = roundingFormat.format(transfer.transferValue.value.toDouble() / 100.0)
 
                 valueErrorMessage = null
                 hoursWorked = transfer.hoursWorked.toString()
                 hoursWorkedErrorMessage = null
-                valueDate = transfer.valueDate
+                valueDate = transfer.transferValue.date
                 isSavable = true
             }
             else {
@@ -258,20 +260,26 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
 
         if (transfer == null) {
             transfer = Transfer(
-                value = value,
+                transferValue = TransferValue(
+                    value = value,
+                    date = valueDate,
+                    isSalary = true,
+                ),
                 hoursWorked = hoursWorked,
-                valueDate = valueDate,
-                isSalary = true,
                 type = type!!.id
             )
             transferRepository.createNewTransfer(transfer!!)
         }
         else {
-            transfer!!.value = value
+            transfer!!.transferValue = TransferValue(
+                value = value,
+                date = valueDate
+            )
             transfer!!.hoursWorked = hoursWorked
-            transfer!!.valueDate = valueDate
-            transfer!!.edited = LocalDateTime.now()
             transferRepository.updateExistingTransfer(transfer!!)
+            transfer!!.metadata = transfer!!.metadata.copy(
+                edited = LocalDateTime.now()
+            )
         }
     }
 

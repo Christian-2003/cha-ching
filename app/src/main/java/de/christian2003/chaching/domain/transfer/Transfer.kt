@@ -2,7 +2,6 @@ package de.christian2003.chaching.domain.transfer
 
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -12,53 +11,48 @@ import java.util.UUID
  * a value date as well as a transfer type. Additionally, some metadata is stored as well. Each
  * transfer must always be created for a single transfer type, which describes the created transfer
  * in greater detail.
+ *
+ * @param transferValue Value for the transfer.
+ * @param hoursWorked   Hours worked for this transfer.
+ * @param type          Type of the transfer. The type is references through it's ID.
+ * @param id            Unique ID of the type.
+ * @param metadata      Metadata for the transfer.
  */
 class Transfer(
-
-    /**
-     * Stores the value of the transfer in cents. For example, a value of 15.05 € would be stored as
-     * 1505 cents.
-     */
-    var value: Int,
-
-    /**
-     * Stores the hours worked for this transfer.
-     */
-    var hoursWorked: Int,
-
-    /**
-     * Indicates whether the transfer is a salary.
-     * Currently, this is unused. Later, this field should indicate whether the transfer is an income
-     * (= true) or an expense (= false). This way, the value can always store positive numbers.
-     */
-    var isSalary: Boolean,
-
-    /**
-     * Stores the value date on which the transfer takes effect.
-     */
-    var valueDate: LocalDate,
-
-    /**
-     * Type of the transfer. The type is references through it's ID.
-     */
+    transferValue: TransferValue,
+    hoursWorked: Int,
     val type: UUID,
-
-    /**
-     * Unique ID of the type.
-     */
     val id: UUID = UUID.randomUUID(),
-
-    /**
-     * Date time on which the transfer was created. This is for statistical purposes.
-     */
-    val created: LocalDateTime = LocalDateTime.now(),
-
-    /**
-     * Date time ojn which the transfer was last edited. This is for statistical purposes.
-     */
-    var edited: LocalDateTime = LocalDateTime.now()
-
+    var metadata: TransferMetadata = TransferMetadata()
 ) {
+
+    /**
+     * Value for the transfer.
+     */
+    var transferValue: TransferValue = transferValue
+        set(value) {
+            field = value
+            metadata = metadata.copy(edited = LocalDateTime.now())
+        }
+
+    /**
+     * Hours worked for this transfer.
+     */
+    var hoursWorked: Int = hoursWorked
+        set(value) {
+            field = value
+            metadata = metadata.copy(edited = LocalDateTime.now())
+        }
+
+
+    /**
+     * Initializes the transfer.
+     */
+    init {
+        this.transferValue = transferValue
+        this.hoursWorked = hoursWorked
+    }
+
 
     /**
      * Returns the value of the transfer as formatted string. For example, a value of 153005 cents
@@ -68,9 +62,10 @@ class Transfer(
      *
      * @return  Formatted value.
      */
+    @Deprecated("Use service instead")
     fun getFormattedValue() : String {
         val numberFormat: NumberFormat = DecimalFormat("#,###.00")
-        val formattedNumber: String = numberFormat.format(value.toDouble() / 100.0)
+        val formattedNumber: String = numberFormat.format(transferValue.value.toDouble() / 100.0)
         return formattedNumber
     }
 
@@ -91,11 +86,7 @@ class Transfer(
      * @return  Whether the ID of the transfer passed is identical to the ID of this transfer.
      */
     override fun equals(other: Any?): Boolean {
-        return if (other is Transfer) {
-            other.id == id
-        } else {
-            false
-        }
+        return (other is Transfer) && (other.id == this.id)
     }
 
 }

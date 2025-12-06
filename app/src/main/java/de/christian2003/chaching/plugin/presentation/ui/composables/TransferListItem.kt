@@ -83,7 +83,7 @@ fun TransferListItem(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = transfer.valueDate.format(formatter),
+                    text = transfer.transferValue.date.format(formatter),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

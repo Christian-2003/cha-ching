@@ -59,10 +59,10 @@ class OverviewCalcResult(
             if (type != null) {
                 var value: Int? = map[type]
                 if (value == null) {
-                    value = transfer.value
+                    value = transfer.transferValue.value
                 }
                 else {
-                    value += transfer.value
+                    value += transfer.transferValue.value
                 }
                 map[type] = value
             }

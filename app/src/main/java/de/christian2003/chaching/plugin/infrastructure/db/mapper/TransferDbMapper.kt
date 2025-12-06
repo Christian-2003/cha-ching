@@ -1,6 +1,8 @@
 package de.christian2003.chaching.plugin.infrastructure.db.mapper
 
 import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.transfer.TransferMetadata
+import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TransferEntity
 
 
@@ -17,14 +19,18 @@ class TransferDbMapper {
      */
     fun toDomain(entity: TransferEntity): Transfer {
         return Transfer(
-            value = entity.value,
+            transferValue = TransferValue(
+                value = entity.value,
+                date = entity.valueDate,
+                isSalary = entity.isSalary
+            ),
             hoursWorked = entity.hoursWorked,
-            isSalary = entity.isSalary,
-            valueDate = entity.valueDate,
             type = entity.type,
             id = entity.transferId,
-            created = entity.created,
-            edited = entity.edited
+            metadata = TransferMetadata(
+                created = entity.created,
+                edited = entity.edited
+            )
         )
     }
 
@@ -37,14 +43,14 @@ class TransferDbMapper {
      */
     fun toEntity(domain: Transfer): TransferEntity {
         return TransferEntity(
-            value = domain.value,
+            value = domain.transferValue.value,
             hoursWorked = domain.hoursWorked,
-            isSalary = domain.isSalary,
-            valueDate = domain.valueDate,
+            isSalary = domain.transferValue.isSalary,
+            valueDate = domain.transferValue.date,
             type = domain.type,
             transferId = domain.id,
-            created = domain.created,
-            edited = domain.edited
+            created = domain.metadata.created,
+            edited = domain.metadata.edited
         )
     }
 

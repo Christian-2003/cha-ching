@@ -159,7 +159,7 @@ private fun TransferList(
     windowInsets: WindowInsets
 ) {
     val groupedTransfers = transfers.groupBy { transfer ->
-        transfer.valueDate.withDayOfMonth(1)
+        transfer.transferValue.date.withDayOfMonth(1)
     }
     LazyColumn {
         groupedTransfers.forEach { (month, monthTransfer) ->

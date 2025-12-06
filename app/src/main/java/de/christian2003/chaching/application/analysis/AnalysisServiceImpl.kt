@@ -65,9 +65,9 @@ class AnalysisServiceImpl(
         //Group transfers by analysis precision:
         val transfersGroupedByPrecision: Map<LocalDate, List<Transfer>> = transfers.reversed().groupBy { transfer ->
             when (precision) {
-                AnalysisPrecision.QUARTER -> transfer.valueDate.withMonth(transfer.valueDate.month.value - ((transfer.valueDate.month.value - 1) % 3)).withDayOfMonth(1)
-                AnalysisPrecision.YEAR -> transfer.valueDate.withMonth(1).withDayOfMonth(1)
-                else -> transfer.valueDate.withDayOfMonth(1)
+                AnalysisPrecision.QUARTER -> transfer.transferValue.date.withMonth(transfer.transferValue.date.month.value - ((transfer.transferValue.date.month.value - 1) % 3)).withDayOfMonth(1)
+                AnalysisPrecision.YEAR -> transfer.transferValue.date.withMonth(1).withDayOfMonth(1)
+                else -> transfer.transferValue.date.withDayOfMonth(1)
             }
         }
 
@@ -278,10 +278,10 @@ class AnalysisServiceImpl(
         transfers.forEach { transfer ->
             val type: Type = getTypeForTransfer(transfer, types)
             if (sumByType.contains(type)) {
-                sumByType[type] = sumByType[type]!! + transfer.value
+                sumByType[type] = sumByType[type]!! + transfer.transferValue.value
             }
             else {
-                sumByType[type] = transfer.value
+                sumByType[type] = transfer.transferValue.value
             }
         }
         return sumByType

@@ -1,6 +1,8 @@
 package de.christian2003.chaching.plugin.infrastructure.backup.mapper
 
 import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.transfer.TransferMetadata
+import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.plugin.infrastructure.backup.dto.TransferDto
 
 
@@ -17,14 +19,18 @@ class TransferBackupMapper {
      */
     fun toDomain(dto: TransferDto): Transfer {
         return Transfer(
-            value = dto.value,
+            transferValue = TransferValue(
+                value = dto.value,
+                date = dto.valueDate,
+                isSalary = dto.isSalary
+            ),
             hoursWorked = dto.hoursWorked,
-            isSalary = dto.isSalary,
-            valueDate = dto.valueDate,
             type = dto.type,
             id = dto.id,
-            created = dto.created,
-            edited = dto.edited
+            metadata = TransferMetadata(
+                created = dto.created,
+                edited = dto.edited
+            )
         )
     }
 
@@ -37,14 +43,14 @@ class TransferBackupMapper {
      */
     fun toDto(domain: Transfer): TransferDto {
         return TransferDto(
-            value = domain.value,
+            value = domain.transferValue.value,
             hoursWorked = domain.hoursWorked,
-            isSalary = domain.isSalary,
-            valueDate = domain.valueDate,
+            isSalary = domain.transferValue.isSalary,
+            valueDate = domain.transferValue.date,
             type = domain.type,
             id = domain.id,
-            created = domain.created,
-            edited = domain.edited
+            created = domain.metadata.created,
+            edited = domain.metadata.edited
         )
     }
 
