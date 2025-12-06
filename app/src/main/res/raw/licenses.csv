@@ -11,12 +11,14 @@ Compose UI,license_apache20
 Core Kotlin Extensions,license_apache20
 Glance for App Widgets,license_apache20
 Glance Material,license_apache20
+Hilt Android,license_apache20
 Jetpack Compose Libraries BOM,license_apache20
 Kotlinx Coroutines Android,license_apache20
 Kotlinx Serialization JSON,license_apache20
 Lifecycle Kotlin Extensions,license_apache20
 Lifecycle ViewModel Compose,license_apache20
 Material Symbols / Material Icons,license_apache20
+Navigation Compose Hilt Integration,license_apache20
 Navigation Runtime Kotlin Extensions,license_apache20
 OkHttp,license_apache20
 Room Compiler,license_apache20

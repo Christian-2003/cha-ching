@@ -16,7 +16,7 @@ android {
 		minSdk = 34
 		targetSdk = 35
 		versionCode = 8
-		versionName = "1.2.1"
+		versionName = "1.2.1-pre1"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables {
 			useSupportLibrary = true
@@ -87,9 +87,9 @@ dependencies {
 	implementation(libs.androidx.material3)
 	implementation(libs.androidx.navigation.runtime.ktx)
 	implementation(libs.androidx.navigation.compose)
-	implementation(libs.room)
-	implementation(libs.room.runtime)
-	implementation(libs.coroutines)
+	implementation(libs.androidx.room)
+	implementation(libs.androidx.room.runtime)
+	implementation(libs.kotlinx.coroutines.android)
 	implementation(libs.androidx.lifecycle.viewmodel.compose)
 	implementation(libs.androidx.navigation.compose)
 	implementation(libs.compose.charts)
@@ -112,13 +112,12 @@ dependencies {
 	androidTestImplementation(platform(libs.androidx.compose.bom))
 	androidTestImplementation(libs.androidx.ui.test.junit4)
 	androidTestImplementation(libs.androidx.ui.test)
-	androidTestImplementation(libs.ui.test.junit4)
 
 	debugImplementation(libs.androidx.ui.tooling)
 	debugImplementation(libs.androidx.ui.test.manifest)
 
-	annotationProcessor(libs.room.compiler)
+	annotationProcessor(libs.androidx.room.compiler)
 
-	ksp(libs.room.compiler)
+	ksp(libs.androidx.room.compiler)
 	ksp(libs.hilt.compiler)
 }
