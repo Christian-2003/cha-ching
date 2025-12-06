@@ -12,8 +12,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.chaching.application.backup.BackupService
 import de.christian2003.chaching.application.backup.ImportStrategy
+import de.christian2003.chaching.application.usecases.apps.GetAllAppsUseCase
 import de.christian2003.chaching.domain.apps.AppItem
-import de.christian2003.chaching.domain.repository.AppsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,7 +34,7 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
     val apps: MutableList<AppItem> = mutableStateListOf()
 
 
-    fun init(backupService: BackupService, appsRepository: AppsRepository, client: OkHttpClient) {
+    fun init(backupService: BackupService, getAllAppsUseCase: GetAllAppsUseCase, client: OkHttpClient) {
         if (isInitialized) {
             return
         }
@@ -42,7 +42,7 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
         this.client = client
         isInitialized = true
         viewModelScope.launch(Dispatchers.IO) {
-            val apps: List<AppItem> = appsRepository.getApps()
+            val apps: List<AppItem> = getAllAppsUseCase.getAllApps()
             this@SettingsViewModel.apps.clear()
             this@SettingsViewModel.apps.addAll(apps)
         }

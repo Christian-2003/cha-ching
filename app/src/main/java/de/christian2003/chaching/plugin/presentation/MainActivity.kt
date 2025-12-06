@@ -56,6 +56,7 @@ import androidx.lifecycle.lifecycleScope
 import de.christian2003.chaching.R
 import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
 import de.christian2003.chaching.application.analysis.AnalysisSquasher
+import de.christian2003.chaching.application.usecases.apps.GetAllAppsUseCase
 import de.christian2003.chaching.application.usecases.transfer.CreateTransferUseCase
 import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetAllTransfersUseCase
@@ -336,9 +337,11 @@ fun ChaChing(updateManager: UpdateManager) {
                         typeRepository = repository,
                         importRepository = repository
                     ),
-                    appsRepository = AppsRestRepository(
-                        packageName = context.applicationContext.packageName,
-                        client = client
+                    getAllAppsUseCase = GetAllAppsUseCase(
+                        repository = AppsRestRepository(
+                            packageName = context.applicationContext.packageName,
+                            client = client
+                        )
                     ),
                     client = client
                 )
