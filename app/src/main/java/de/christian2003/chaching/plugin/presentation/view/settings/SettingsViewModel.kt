@@ -33,12 +33,11 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     application: Application,
     getAllAppsUseCase: GetAllAppsUseCase,
-    private val backupService: BackupService
+    private val backupService: BackupService,
+    val client: OkHttpClient
 ): AndroidViewModel(application) {
 
     var importUri: Uri? by mutableStateOf(null)
-
-    lateinit var client: OkHttpClient
 
     val apps: MutableList<AppItem> = mutableStateListOf()
 
@@ -49,11 +48,6 @@ class SettingsViewModel @Inject constructor(
             this@SettingsViewModel.apps.clear()
             this@SettingsViewModel.apps.addAll(apps)
         }
-    }
-
-
-    fun init(client: OkHttpClient) {
-        this.client = client
     }
 
 

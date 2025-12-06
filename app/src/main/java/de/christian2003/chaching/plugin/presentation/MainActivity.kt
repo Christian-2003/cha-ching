@@ -148,8 +148,6 @@ class MainActivity : ComponentActivity() {
 fun ChaChing(updateManager: UpdateManager) {
 	val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
-    val chaChingApplication: ChaChingApplication = context.applicationContext as ChaChingApplication
-    val client: OkHttpClient = chaChingApplication.getClient()
 	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("onboardingFinished", false)) }
 
     ChaChingTheme {
@@ -284,7 +282,6 @@ fun ChaChing(updateManager: UpdateManager) {
 
             composable("settings") {
                 val viewModel: SettingsViewModel = hiltViewModel()
-                viewModel.init(client = client)
                 SettingsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {

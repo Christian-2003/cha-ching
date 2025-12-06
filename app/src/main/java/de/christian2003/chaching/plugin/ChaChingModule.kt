@@ -16,10 +16,8 @@ import de.christian2003.chaching.domain.repository.AppsRepository
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
-import de.christian2003.chaching.plugin.infrastructure.db.ChaChingDatabase
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
-import de.christian2003.chaching.plugin.infrastructure.db.TransferDao
-import de.christian2003.chaching.plugin.infrastructure.db.TypeDao
+import de.christian2003.chaching.plugin.infrastructure.rest.HttpClientProvider
 import de.christian2003.chaching.plugin.infrastructure.rest.apps.AppsRestRepository
 import okhttp3.OkHttpClient
 import javax.inject.Singleton
@@ -48,6 +46,11 @@ abstract class BindingsModule {
     ): BackupImportRepository
 
     @Binds
+    abstract fun provideAppsRepository(
+        impl: AppsRestRepository
+    ): AppsRepository
+
+    @Binds
     abstract fun bindBackupService(
         impl: JsonBackupService
     ): BackupService
@@ -63,16 +66,9 @@ abstract class BindingsModule {
 class ProvidersModule {
 
     @Provides
-    @Singleton
-    fun provideChaChingDatabase(
+    fun provideChaChingRepository(
         @ApplicationContext context: Context
-    ): ChaChingDatabase = ChaChingDatabase.getInstance(context)
-
-    @Provides
-    fun provideTypeDao(db: ChaChingDatabase): TypeDao = db.typeDao
-
-    @Provides
-    fun provideTransferDao(db: ChaChingDatabase): TransferDao = db.transferDao
+    ): ChaChingRepository = (context as ChaChingApplication).getRepository()
 
     @Provides
     fun provideAnalysisService(
@@ -81,9 +77,14 @@ class ProvidersModule {
     ): AnalysisService = AnalysisSquasher(AnalysisServiceImpl(transferRepository, typeRepository))
 
     @Provides
-    fun provideAppsRepository(@ApplicationContext context: Context): AppsRepository {
-        val application: ChaChingApplication = context as ChaChingApplication
-        return AppsRestRepository(context.packageName, application.getClient())
-    }
+    fun providePackageName(
+        @ApplicationContext context: Context
+    ): String = context.packageName
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        @ApplicationContext context: Context
+    ): OkHttpClient = HttpClientProvider().provideOkHttpClient(context)
 
 }

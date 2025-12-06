@@ -4,10 +4,11 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingDatabase
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
-import de.christian2003.chaching.plugin.infrastructure.rest.HttpClientProvider
-import okhttp3.OkHttpClient
 
 
+/**
+ * Application for the app.
+ */
 @HiltAndroidApp
 class ChaChingApplication(): Application() {
 
@@ -21,14 +22,12 @@ class ChaChingApplication(): Application() {
      */
     private var repository: ChaChingRepository? = null
 
-    /**
-     * Stores the OkHttpClient to use for REST requests in the app.
-     */
-    private var client: OkHttpClient? = null
-
 
     /**
      * Returns the repository of the application.
+     * The repository could technically be provided through hilt as well. This way, we would not need
+     * to maintain this code. However, the repository is not only used within the app, but also the
+     * app widgets. Therefore, we choose to keep the repository instantiation in this class.
      *
      * @return  Repository.
      */
@@ -38,19 +37,6 @@ class ChaChingApplication(): Application() {
             repository = ChaChingRepository(database.transferDao, database.typeDao)
         }
         return repository!!
-    }
-
-
-    /**
-     * Returns the OkHttpClient to use for all web requests.
-     *
-     * @return  OkHttpClient.
-     */
-    fun getClient(): OkHttpClient {
-        if (client == null) {
-            client = HttpClientProvider().provideOkHttpClient(this)
-        }
-        return client!!
     }
 
 }

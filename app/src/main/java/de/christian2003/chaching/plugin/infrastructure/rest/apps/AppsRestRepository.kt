@@ -8,23 +8,18 @@ import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import javax.inject.Inject
 
 
 /**
  * Repository loads all apps that should be advertised from a REST API.
+ *
+ * @param packageName   Package name of this app.
+ * @param client        OkHttp client.
  */
-class AppsRestRepository(
-
-    /**
-     * Package name of this app.
-     */
+class AppsRestRepository @Inject constructor(
     private val packageName: String,
-
-    /**
-     * OkHttp client.
-     */
     private val client: OkHttpClient
-
 ): AppsRepository {
 
     /**
