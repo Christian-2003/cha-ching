@@ -14,23 +14,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.util.UUID
+import javax.inject.Inject
 
 
 /**
  * Repository through which to access data.
+ *
+ * @param transferDao	DAO through which to access transfers.
+ * @param typeDao		DAO through which to access types.
  */
-class ChaChingRepository(
-
-	/**
-	 * DAO through which to access transfers.
-	 */
+class ChaChingRepository @Inject constructor(
 	private val transferDao: TransferDao,
-
-	/**
-	 * DAO through which to access types.
-	 */
 	private val typeDao: TypeDao
-
 ): TransferRepository, TypeRepository, BackupImportRepository {
 
 	/**

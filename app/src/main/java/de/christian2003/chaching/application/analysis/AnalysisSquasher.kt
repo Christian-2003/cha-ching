@@ -6,12 +6,13 @@ import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisResult
 import de.christian2003.chaching.domain.type.Type
 import java.time.LocalDate
+import javax.inject.Inject
 
 
 /**
  * Analysis squasher reduces the number of result items (by type).
  */
-class AnalysisSquasher(
+class AnalysisSquasher @Inject constructor(
 
     /**
      * Analysis service whose result to squash.

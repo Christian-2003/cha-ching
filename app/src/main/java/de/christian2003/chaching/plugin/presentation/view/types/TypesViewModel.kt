@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.usecases.type.DeleteTypeUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.domain.type.Type
@@ -13,48 +14,38 @@ import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 /**
  * View model for the TypesScreen.
+ *
+ * @param application           Application.
+ * @param getAllTypesUseCase    Use case to get a list of all types.
+ * @param deleteTypeUseCase     Use case to delete an existing type.
  */
-class TypesViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var deleteTypeUseCase: DeleteTypeUseCase
-
-    private var isInitialized: Boolean = false
+@HiltViewModel
+class TypesViewModel @Inject constructor(
+    application: Application,
+    getAllTypesUseCase: GetAllTypesUseCase,
+    private val deleteTypeUseCase: DeleteTypeUseCase
+): AndroidViewModel(application) {
 
     /**
      * List of all types available.
      */
-    lateinit var allTypes: Flow<List<Type>>
+    val allTypes: Flow<List<Type>> = getAllTypesUseCase.getAllTypes()
 
     /**
      * Indicates whether the help card is visible.
      */
-    var isHelpCardVisible: Boolean by mutableStateOf(false)
+    var isHelpCardVisible: Boolean by mutableStateOf(HelpCards.TYPES_LIST.getVisible(application))
 
     /**
      * Indicates the type that the user has selected for deletion. This is null if the user does
      * not want to delete any type.
      */
     var typeToDelete: Type? by mutableStateOf(null)
-
-
-    /**
-     * Instantiates the view model.
-     *
-     * @param getAllTypesUseCase    Use case to get all types.
-     * @param deleteTypeUseCase     Use case to delete an existing type.
-     */
-    fun init(getAllTypesUseCase: GetAllTypesUseCase, deleteTypeUseCase: DeleteTypeUseCase) {
-        if (!isInitialized) {
-            this.deleteTypeUseCase = deleteTypeUseCase
-            isHelpCardVisible = HelpCards.TYPES_LIST.getVisible(getApplication<Application>().baseContext)
-            allTypes = getAllTypesUseCase.getAllTypes()
-            isInitialized = true
-        }
-    }
 
 
     /**

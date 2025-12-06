@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.backup.BackupService
 import de.christian2003.chaching.application.backup.ImportStrategy
 import de.christian2003.chaching.application.usecases.apps.GetAllAppsUseCase
@@ -18,14 +19,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import javax.inject.Inject
 
 
-class SettingsViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var backupService: BackupService
-
-    private var isInitialized: Boolean = false
-
+/**
+ * View model for the screen displaying the app settings.
+ *
+ * @param application       Application.
+ * @param getAllAppsUseCase Use case to get a list of all apps.
+ * @param backupService     Backup service.
+ */
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    application: Application,
+    getAllAppsUseCase: GetAllAppsUseCase,
+    private val backupService: BackupService
+): AndroidViewModel(application) {
 
     var importUri: Uri? by mutableStateOf(null)
 
@@ -34,18 +43,17 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
     val apps: MutableList<AppItem> = mutableStateListOf()
 
 
-    fun init(backupService: BackupService, getAllAppsUseCase: GetAllAppsUseCase, client: OkHttpClient) {
-        if (isInitialized) {
-            return
-        }
-        this.backupService = backupService
-        this.client = client
-        isInitialized = true
+    init {
         viewModelScope.launch(Dispatchers.IO) {
             val apps: List<AppItem> = getAllAppsUseCase.getAllApps()
             this@SettingsViewModel.apps.clear()
             this@SettingsViewModel.apps.addAll(apps)
         }
+    }
+
+
+    fun init(client: OkHttpClient) {
+        this.client = client
     }
 
 

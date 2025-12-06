@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.analysis.AnalysisService
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisResult
@@ -13,25 +14,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import javax.inject.Inject
 
 
 /**
  * View model for the analysis screen.
  *
- * @param application   Application object.
+ * @param application       Application object.
+ * @param analysisService   Service with which to analyze data.
  */
-class AnalysisViewModel(application: Application): AndroidViewModel(application) {
-
-    /**
-     * Service with which to analyze data.
-     */
-    private lateinit var analysisService: AnalysisService
-
-    /**
-     * Indicates whether the view model has been initialized.
-     */
-    private var isInitialized: Boolean = false
-
+@HiltViewModel
+class AnalysisViewModel @Inject constructor(
+    application: Application,
+    private val analysisService: AnalysisService
+): AndroidViewModel(application) {
 
     /**
      * Period for which to analyze data.
@@ -51,15 +47,9 @@ class AnalysisViewModel(application: Application): AndroidViewModel(application)
 
     /**
      * Initializes the view model.
-     *
-     * @param analysisService   Service to analyze the data.
      */
-    fun init(analysisService: AnalysisService) {
-        if (!isInitialized) {
-            this.analysisService = analysisService
-            startAnalysis(analysisPeriod = AnalysisPeriod.CURRENT_YEAR, force = true)
-            isInitialized = true
-        }
+    init {
+        startAnalysis(analysisPeriod = AnalysisPeriod.CURRENT_YEAR, force = true)
     }
 
 

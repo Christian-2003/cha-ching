@@ -3,6 +3,7 @@ package de.christian2003.chaching.application.usecases.transfer
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import java.util.UUID
+import javax.inject.Inject
 
 
 /**
@@ -10,7 +11,7 @@ import java.util.UUID
  *
  * @param repository    Repository to access transfers.
  */
-class GetTransferByIdUseCase(
+class GetTransferByIdUseCase @Inject constructor(
     private val repository: TransferRepository
 ) {
 

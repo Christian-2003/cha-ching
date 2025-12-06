@@ -6,22 +6,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.InputStream
+import javax.inject.Inject
 
 
 /**
  * Class implements the view model for the view displaying all software used by the app.
  *
- * @author  Christian-2003
- * @since   1.0.0
+ * @param application   Application.
  */
-class LicensesViewModel(application: Application): AndroidViewModel(application) {
-
-    private var isInitialized: Boolean = false
-
+@HiltViewModel
+class LicensesViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     /**
      * Attribute stores a list of all licenses used.
@@ -45,11 +46,10 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
 
 
     /**
-     * Method initializes the view model.
+     * Initializes the view model.
      */
-    fun init() = viewModelScope.launch(Dispatchers.IO) {
-        if (!isInitialized) {
-            isInitialized = true
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
             if (!isLoading && licenses.isEmpty()) {
                 isLoading = true
                 val csv = readLicensesFile()
@@ -58,9 +58,9 @@ class LicensesViewModel(application: Application): AndroidViewModel(application)
                 }
                 isLoading = false
             }
-            isInitialized = true
         }
     }
+
 
     /**
      * Method loads the license text for the specified license. This loads in another thread and is

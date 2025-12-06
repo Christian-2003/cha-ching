@@ -7,6 +7,7 @@ import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.domain.type.Type
 import java.time.LocalDate
 import java.util.UUID
+import javax.inject.Inject
 
 
 /**
@@ -15,7 +16,7 @@ import java.util.UUID
  * @param transferRepository    Repository to access transfers.
  * @param typeRepository        Repository to access types.
  */
-class CreateTransferUseCase(
+class CreateTransferUseCase @Inject constructor(
     private val transferRepository: TransferRepository,
     private val typeRepository: TypeRepository
 ) {

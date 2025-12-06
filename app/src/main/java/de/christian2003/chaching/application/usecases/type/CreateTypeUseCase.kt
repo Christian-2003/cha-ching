@@ -4,6 +4,7 @@ import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.type.TypeIcon
 import de.christian2003.chaching.domain.type.TypeMetadata
+import javax.inject.Inject
 
 
 /**
@@ -11,7 +12,7 @@ import de.christian2003.chaching.domain.type.TypeMetadata
  *
  * @param repository    Repository through which to access types.
  */
-class CreateTypeUseCase(
+class CreateTypeUseCase @Inject constructor(
     private val repository: TypeRepository
 ) {
 

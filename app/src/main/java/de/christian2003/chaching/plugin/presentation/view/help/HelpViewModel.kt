@@ -4,15 +4,19 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.AndroidViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
 /**
  * View model for the screen displaying all help messages.
+ *
+ * @param application   Application.
  */
-class HelpViewModel(application: Application): AndroidViewModel(application) {
-
-    private var isInitialized: Boolean = false
-
+@HiltViewModel
+class HelpViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     /**
      * Maps each help card to a mutable state which indicates whether the respective help message
@@ -24,13 +28,9 @@ class HelpViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Initializes the view model.
      */
-    fun init() {
-        if (!isInitialized) {
-            val context: Context = getApplication<Application>().baseContext
-            HelpCards.entries.forEach { helpCard ->
-                helpCards[helpCard] = helpCard.getVisible(context)
-            }
-            isInitialized = true
+    init {
+        HelpCards.entries.forEach { helpCard ->
+            helpCards[helpCard] = helpCard.getVisible(application)
         }
     }
 

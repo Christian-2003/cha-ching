@@ -4,10 +4,11 @@ import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import javax.inject.Inject
 
 //TODO: This is a temporary use case until the analysis feature is reworked and can be invoked through a use case.
 @Deprecated("Use analysis use case")
-class GetTransfersInDateRangeUseCase(
+class GetTransfersInDateRangeUseCase @Inject constructor(
     private val repository: TransferRepository
 ) {
 

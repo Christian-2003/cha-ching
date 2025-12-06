@@ -3,6 +3,7 @@ package de.christian2003.chaching.application.usecases.transfer
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
 /**
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param repository    Repository to access transfers.
  */
-class GetRecentTransfersUseCase(
+class GetRecentTransfersUseCase @Inject constructor(
     private val repository: TransferRepository
 ) {
 

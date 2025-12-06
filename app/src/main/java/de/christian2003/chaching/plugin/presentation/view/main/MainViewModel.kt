@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetTransfersInDateRangeUseCase
@@ -18,14 +19,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 
 /**
  * View model for the MainScreen.
  */
-class MainViewModel: ViewModel() {
-
-	private lateinit var deleteTransferUseCase: DeleteTransferUseCase
+@HiltViewModel
+class MainViewModel @Inject constructor(
+	getAllTypesUseCase: GetAllTypesUseCase,
+	getRecentTransfersUseCase: GetRecentTransfersUseCase,
+	getTransfersInDateRangeUseCase: GetTransfersInDateRangeUseCase,
+	private val deleteTransferUseCase: DeleteTransferUseCase
+): ViewModel() {
 
 	/**
 	 * Indicates whether the view model is initialized.
@@ -35,7 +41,7 @@ class MainViewModel: ViewModel() {
 	/**
 	 * Stores all transfers from the last month.
 	 */
-	private lateinit var transfersLastMonth: Flow<List<Transfer>>
+	private val transfersLastMonth: Flow<List<Transfer>> = getTransfersInDateRangeUseCase.getTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
 
 	/**
 	 * Stores the update manager.
@@ -46,12 +52,12 @@ class MainViewModel: ViewModel() {
 	/**
 	 * List of all types.
 	 */
-	lateinit var allTypes: Flow<List<Type>>
+	val allTypes: Flow<List<Type>> = getAllTypesUseCase.getAllTypes()
 
 	/**
 	 * List of recent transfers.
 	 */
-	lateinit var recentTransfers: Flow<List<Transfer>>
+	val recentTransfers: Flow<List<Transfer>> = getRecentTransfersUseCase.getRecentTransfers()
 
 	/**
 	 * Transfer to delete. If no transfer shall be deleted, this is null.
@@ -77,25 +83,12 @@ class MainViewModel: ViewModel() {
 	/**
 	 * Instantiates the view model.
 	 *
-	 * @param deleteTransferUseCase				Use case to delete a transfer.
-	 * @param getRecentTransfersUseCase			Use case to get recent transfers.
-	 * @param getTransfersInDateRangeUseCase	Use case to get transfers in a date range.
-	 * @param getAllTypesUseCase				Use case to get a list of all types.
-	 * @param updateManager						Update manager.
+	 * @param updateManager	Update manager.
 	 */
-	fun init(
-		deleteTransferUseCase: DeleteTransferUseCase,
-		getRecentTransfersUseCase: GetRecentTransfersUseCase,
-		getTransfersInDateRangeUseCase: GetTransfersInDateRangeUseCase,
-		getAllTypesUseCase: GetAllTypesUseCase, updateManager: UpdateManager
-	) {
+	fun init(updateManager: UpdateManager) {
 		isUpdateAvailable = updateManager.isUpdateAvailable
 		if (!isInitialized) {
-			this@MainViewModel.deleteTransferUseCase = deleteTransferUseCase
 			this@MainViewModel.updateManager = updateManager
-			allTypes = getAllTypesUseCase.getAllTypes()
-			recentTransfers = getRecentTransfersUseCase.getRecentTransfers()
-			transfersLastMonth = getTransfersInDateRangeUseCase.getTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
 			isInitialized = true
 			//All code after 'collect' is not called, therefore, this must be the last method call of the init-function!
 			viewModelScope.launch(Dispatchers.IO) {

@@ -52,7 +52,9 @@ import de.christian2003.chaching.plugin.presentation.view.types.TypesViewModel
 import java.util.UUID
 import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.chaching.R
 import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
 import de.christian2003.chaching.application.analysis.AnalysisSquasher
@@ -60,9 +62,7 @@ import de.christian2003.chaching.application.usecases.apps.GetAllAppsUseCase
 import de.christian2003.chaching.application.usecases.transfer.CreateTransferUseCase
 import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetAllTransfersUseCase
-import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetTransferByIdUseCase
-import de.christian2003.chaching.application.usecases.transfer.GetTransfersInDateRangeUseCase
 import de.christian2003.chaching.application.usecases.transfer.UpdateTransferUseCase
 import de.christian2003.chaching.application.usecases.type.CreateTypeUseCase
 import de.christian2003.chaching.application.usecases.type.DeleteTypeUseCase
@@ -82,6 +82,7 @@ import okhttp3.OkHttpClient
 /**
  * Main activity for the ChaChing app.
  */
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
 	private var updateManager: UpdateManager? = null
@@ -148,7 +149,6 @@ fun ChaChing(updateManager: UpdateManager) {
 	val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
     val chaChingApplication: ChaChingApplication = context.applicationContext as ChaChingApplication
-	val repository: ChaChingRepository = chaChingApplication.getRepository()
     val client: OkHttpClient = chaChingApplication.getClient()
 	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("onboardingFinished", false)) }
 
@@ -174,13 +174,10 @@ fun ChaChing(updateManager: UpdateManager) {
             },
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
+
             composable("main") {
-                val viewModel: MainViewModel = viewModel()
+                val viewModel: MainViewModel = hiltViewModel()
                 viewModel.init(
-                    deleteTransferUseCase = DeleteTransferUseCase(repository),
-                    getRecentTransfersUseCase = GetRecentTransfersUseCase(repository),
-                    getTransfersInDateRangeUseCase = GetTransfersInDateRangeUseCase(repository),
-                    getAllTypesUseCase = GetAllTypesUseCase(repository),
                     updateManager = updateManager
                 )
                 MainScreen(
@@ -211,12 +208,7 @@ fun ChaChing(updateManager: UpdateManager) {
 
 
             composable("transfers") {
-                val viewModel: TransfersViewModel = viewModel()
-                viewModel.init(
-                    getAllTransfersUseCase = GetAllTransfersUseCase(repository),
-                    deleteTransferUseCase = DeleteTransferUseCase(repository),
-                    getAllTypesUseCase = GetAllTypesUseCase(repository)
-                )
+                val viewModel: TransfersViewModel = hiltViewModel()
                 TransfersScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -235,27 +227,8 @@ fun ChaChing(updateManager: UpdateManager) {
                     navArgument("typeId") { type = NavType.StringType },
                     navArgument("transferId") { type = NavType.StringType }
                 )
-            ) { backStackEntry ->
-                val typeId: UUID? = try {
-                    UUID.fromString(backStackEntry.arguments!!.getString("typeId"))
-                } catch (_: Exception) {
-                    return@composable
-                }
-                val transferId: UUID? = try {
-                    UUID.fromString(backStackEntry.arguments!!.getString("transferId"))
-                } catch (_: Exception) {
-                    null
-                }
-
-                val viewModel: TransferViewModel = viewModel()
-                viewModel.init(
-                    createTransferUseCase = CreateTransferUseCase(repository, repository),
-                    updateTransferUseCase = UpdateTransferUseCase(repository),
-                    getTypeByIdUseCase = GetTypeByIdUseCase(repository),
-                    getTransferByIdUseCase = GetTransferByIdUseCase(repository),
-                    typeId = typeId!!,
-                    transferId = transferId
-                )
+            ) {
+                val viewModel: TransferViewModel = hiltViewModel()
                 TransferScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -266,11 +239,7 @@ fun ChaChing(updateManager: UpdateManager) {
 
 
             composable("types") {
-                val viewModel: TypesViewModel = viewModel()
-                viewModel.init(
-                    getAllTypesUseCase = GetAllTypesUseCase(repository),
-                    deleteTypeUseCase = DeleteTypeUseCase(repository)
-                )
+                val viewModel: TypesViewModel = hiltViewModel()
                 TypesScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -291,21 +260,8 @@ fun ChaChing(updateManager: UpdateManager) {
                 arguments = listOf(
                     navArgument("typeId") { type = NavType.StringType }
                 )
-            ) { backStackEntry ->
-                val typeId: UUID? = try {
-                    UUID.fromString(backStackEntry.arguments!!.getString("typeId"))
-                } catch (_: Exception) {
-                    null
-                }
-
-                val viewModel: TypeViewModel = viewModel()
-                viewModel.init(
-                    createTypeUseCase = CreateTypeUseCase(repository),
-                    updateTypeUseCase = UpdateTypeUseCase(repository),
-                    getAllTypesUseCase = GetAllTypesUseCase(repository),
-                    getTypeByIdUseCase = GetTypeByIdUseCase(repository),
-                    typeId = typeId
-                )
+            ) {
+                val viewModel: TypeViewModel = hiltViewModel()
                 TypeScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -316,10 +272,7 @@ fun ChaChing(updateManager: UpdateManager) {
 
 
             composable("analysis") {
-                val viewModel: AnalysisViewModel = viewModel()
-                viewModel.init(
-                    analysisService = AnalysisSquasher(AnalysisServiceImpl(repository, repository))
-                )
+                val viewModel: AnalysisViewModel = hiltViewModel()
                 AnalysisScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -330,21 +283,8 @@ fun ChaChing(updateManager: UpdateManager) {
 
 
             composable("settings") {
-                val viewModel: SettingsViewModel = viewModel()
-                viewModel.init(
-                    backupService = JsonBackupService(
-                        transferRepository = repository,
-                        typeRepository = repository,
-                        importRepository = repository
-                    ),
-                    getAllAppsUseCase = GetAllAppsUseCase(
-                        repository = AppsRestRepository(
-                            packageName = context.applicationContext.packageName,
-                            client = client
-                        )
-                    ),
-                    client = client
-                )
+                val viewModel: SettingsViewModel = hiltViewModel()
+                viewModel.init(client = client)
                 SettingsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -367,8 +307,7 @@ fun ChaChing(updateManager: UpdateManager) {
 
 
             composable("licenses") {
-                val viewModel: LicensesViewModel = viewModel()
-                viewModel.init()
+                val viewModel: LicensesViewModel = hiltViewModel()
                 LicensesScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -379,8 +318,7 @@ fun ChaChing(updateManager: UpdateManager) {
 
 
             composable("help") {
-                val viewModel: HelpViewModel = viewModel()
-                viewModel.init()
+                val viewModel: HelpViewModel = hiltViewModel()
                 HelpScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -391,10 +329,7 @@ fun ChaChing(updateManager: UpdateManager) {
 
 
             composable("onboarding") {
-                val viewModel: OnboardingViewModel = viewModel()
-                viewModel.init(
-                    createTypeUseCase = CreateTypeUseCase(repository)
-                )
+                val viewModel: OnboardingViewModel = hiltViewModel()
                 OnboardingScreen(
                     viewModel = viewModel,
                     onNavigateUp = {

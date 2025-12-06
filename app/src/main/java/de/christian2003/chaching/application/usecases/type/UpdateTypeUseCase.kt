@@ -4,6 +4,7 @@ import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.type.TypeIcon
 import java.util.UUID
+import javax.inject.Inject
 
 
 /**
@@ -11,7 +12,7 @@ import java.util.UUID
  *
  * @param repository    Repository through which to access types.
  */
-class UpdateTypeUseCase(
+class UpdateTypeUseCase @Inject constructor(
     private val repository: TypeRepository
 ) {
 

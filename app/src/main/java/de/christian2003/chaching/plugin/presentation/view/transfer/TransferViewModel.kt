@@ -5,7 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -21,21 +23,29 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import java.text.DecimalFormat
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 
 /**
  * View model for the TransferScreen.
+ *
+ * @param application               Application.
+ * @param savedStateHandle          Saved state handle.
+ * @param getTypeByIdUseCase        Use case to get a type by it's ID.
+ * @param getTransferByIdUseCase    Use case to get a transfer by it's ID.
+ * @param createTransferUseCase     Use case to create a new transfer.
+ * @param updateTransferUseCase     Use case to update an existing transfer.
  */
-class TransferViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var createTransferUseCase: CreateTransferUseCase
-    private lateinit var updateTransferUseCase: UpdateTransferUseCase
-
-    /**
-     * Indicates whether the view model is initialized.
-     */
-    private var isInitialized: Boolean = false
+@HiltViewModel
+class TransferViewModel @Inject constructor(
+    application: Application,
+    savedStateHandle: SavedStateHandle,
+    getTypeByIdUseCase: GetTypeByIdUseCase,
+    getTransferByIdUseCase: GetTransferByIdUseCase,
+    private val createTransferUseCase: CreateTransferUseCase,
+    private val updateTransferUseCase: UpdateTransferUseCase
+): AndroidViewModel(application) {
 
     /**
      * Transfer to edit. If a new transfer is created, this is null.
@@ -101,32 +111,25 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
     /**
      * Indicates whether the help card is visible.
      */
-    var isHelpCardVisible: Boolean by mutableStateOf(false)
+    var isHelpCardVisible: Boolean by mutableStateOf(HelpCards.CREATE_TRANSFER.getVisible(application))
 
 
     /**
-     * Instantiates the view model.
-     *
-     * @param createTransferUseCase     Use case to create a new transfer.
-     * @param updateTransferUseCase     Use case to update an existing transfer.
-     * @param getTransferByIdUseCase    Use case to get a transfer by it's ID.
-     * @param getTypeByIdUseCase        Use case to get a type by it's ID.
-     * @param typeId                    ID of the type with which to create the transfer.
-     * @param transferId                ID of the transfer to edit. To create a new transfer, pass null.
+     * Initializes the view model.
      */
-    fun init(
-        createTransferUseCase: CreateTransferUseCase,
-        updateTransferUseCase: UpdateTransferUseCase,
-        getTypeByIdUseCase: GetTypeByIdUseCase,
-        getTransferByIdUseCase: GetTransferByIdUseCase,
-        typeId: UUID,
-        transferId: UUID?
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        if (!isInitialized) {
-            this@TransferViewModel.createTransferUseCase = createTransferUseCase
-            this@TransferViewModel.updateTransferUseCase = updateTransferUseCase
-            isHelpCardVisible = HelpCards.CREATE_TRANSFER.getVisible(getApplication<Application>().baseContext)
+    init {
+        val typeId: UUID = try {
+            UUID.fromString(savedStateHandle["typeId"])
+        } catch (_: Exception) {
+            throw IllegalStateException("Cannot create or edit transfer without type")
+        }
+        val transferId: UUID? = try {
+            UUID.fromString(savedStateHandle["transferId"])
+        } catch (_: Exception) {
+            null
+        }
 
+        viewModelScope.launch(Dispatchers.IO) {
             //Get type:
             val type: Type? = getTypeByIdUseCase.getTypeById(typeId)
             if (type == null) {
@@ -166,7 +169,6 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
                 valueDate = LocalDate.now()
                 isSavable = false
             }
-            isInitialized = true
         }
     }
 

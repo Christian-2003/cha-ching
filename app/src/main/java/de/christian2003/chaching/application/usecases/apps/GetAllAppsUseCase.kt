@@ -2,6 +2,7 @@ package de.christian2003.chaching.application.usecases.apps
 
 import de.christian2003.chaching.domain.apps.AppItem
 import de.christian2003.chaching.domain.repository.AppsRepository
+import javax.inject.Inject
 
 
 /**
@@ -9,7 +10,7 @@ import de.christian2003.chaching.domain.repository.AppsRepository
  *
  * @param repository    Repository to access apps.
  */
-class GetAllAppsUseCase(
+class GetAllAppsUseCase @Inject constructor(
     private val repository: AppsRepository
 ) {
 

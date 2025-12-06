@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -18,17 +19,27 @@ import de.christian2003.chaching.application.usecases.type.UpdateTypeUseCase
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import de.christian2003.chaching.domain.type.TypeIcon
+import javax.inject.Inject
 
 
 /**
  * View model for the TypeScreen.
+ *
+ * @param application           Application.
+ * @param savedStateHandle      Saved state handle.
+ * @param getAllTypesUseCase    Use case to get a list of all types.
+ * @param getTypeByIdUseCase    Use case to get a type by it's ID.
+ * @param createTypeUseCase     Use case to create a new type.
+ * @param updateTypeUseCase     Use case to update an existing type.
  */
-class TypeViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var createTypeUseCase: CreateTypeUseCase
-    private lateinit var updateTypeUseCase: UpdateTypeUseCase
-
-    private var isInitialized: Boolean = false
+class TypeViewModel @Inject constructor(
+    application: Application,
+    savedStateHandle: SavedStateHandle,
+    getAllTypesUseCase: GetAllTypesUseCase,
+    getTypeByIdUseCase: GetTypeByIdUseCase,
+    private val createTypeUseCase: CreateTypeUseCase,
+    private val updateTypeUseCase: UpdateTypeUseCase
+): AndroidViewModel(application) {
 
     /**
      * Type that is being edited. If a new type is being created, this is null.
@@ -69,7 +80,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Indicates whether the help card is visible to the user.
      */
-    var isHelpCardVisible: Boolean by mutableStateOf(false)
+    var isHelpCardVisible: Boolean by mutableStateOf(HelpCards.CREATE_TYPE.getVisible(application))
 
     /**
      * Indicates whether the help dialog for the quick info is visible.
@@ -78,31 +89,21 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
 
 
     /**
-     * Instantiates the repository.
-     *
-     * @param createTypeUseCase     Use case to create a new type.
-     * @param updateTypeUseCase     Use case to update an existing type.
-     * @param getTypeByIdUseCase    Use case to get a list of all types.
-     * @param getAllTypesUseCase    Use case to get a type by it's ID.
-     * @param typeId                UUID of the type to edit. Pass null to create a new type.
+     * Initializes the view model.
      */
-    fun init(
-        createTypeUseCase: CreateTypeUseCase,
-        updateTypeUseCase: UpdateTypeUseCase,
-        getAllTypesUseCase: GetAllTypesUseCase,
-        getTypeByIdUseCase: GetTypeByIdUseCase,
-        typeId: UUID?
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        if (!isInitialized) {
-            this@TypeViewModel.createTypeUseCase = createTypeUseCase
-            this@TypeViewModel.updateTypeUseCase = updateTypeUseCase
-            isQuickAccessHelpVisible = false
-            isHelpCardVisible = HelpCards.CREATE_TYPE.getVisible(getApplication<Application>().baseContext)
+    init {
+        val typeId: UUID? = try {
+            UUID.fromString(savedStateHandle["typeId"])
+        } catch (_: Exception) {
+            null
+        }
+
+        viewModelScope.launch {
             var size: Int = getAllTypesUseCase.getAllTypes().first().size
             if (typeId == null) {
                 size++
             }
-            namePlaceholder = getApplication<Application>().resources.getString(R.string.type_unnamed, size)
+            namePlaceholder = application.resources.getString(R.string.type_unnamed, size)
             if (typeId != null) {
                 //Edit type
                 isCreating = false
@@ -121,7 +122,6 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
                 isEnabledInQuickAccess = true
                 icon = TypeIcon.CURRENCY
             }
-            isInitialized = true
         }
     }
 

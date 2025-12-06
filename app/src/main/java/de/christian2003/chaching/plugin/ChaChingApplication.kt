@@ -1,12 +1,14 @@
 package de.christian2003.chaching.plugin
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingDatabase
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
 import de.christian2003.chaching.plugin.infrastructure.rest.HttpClientProvider
 import okhttp3.OkHttpClient
 
 
+@HiltAndroidApp
 class ChaChingApplication(): Application() {
 
     /**

@@ -5,6 +5,7 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.transfer.TransferValue
 import java.time.LocalDate
 import java.util.UUID
+import javax.inject.Inject
 
 
 /**
@@ -12,7 +13,7 @@ import java.util.UUID
  *
  * @param repository    Repository to access transfers.
  */
-class UpdateTransferUseCase(
+class UpdateTransferUseCase @Inject constructor(
     private val repository: TransferRepository
 ) {
 

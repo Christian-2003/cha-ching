@@ -13,15 +13,13 @@ import de.christian2003.chaching.plugin.infrastructure.backup.mapper.TransferBac
 import de.christian2003.chaching.plugin.infrastructure.backup.mapper.TypeBackupMapper
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
-class JsonBackupService(
 
+class JsonBackupService @Inject constructor(
     private val transferRepository: TransferRepository,
-
     private val typeRepository: TypeRepository,
-
     private val importRepository: BackupImportRepository
-
 ): BackupService {
 
     private val transferMapper: TransferBackupMapper = TransferBackupMapper()

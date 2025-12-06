@@ -10,6 +10,7 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import kotlinx.coroutines.flow.first
 import java.time.LocalDate
+import javax.inject.Inject
 import kotlin.collections.MutableMap
 
 
@@ -17,7 +18,7 @@ import kotlin.collections.MutableMap
  * Analysis result generates the result for all transfers within the database in a specified period
  * of time.
  */
-class AnalysisServiceImpl(
+class AnalysisServiceImpl @Inject constructor(
 
     /**
      * Repository through which to access transfers.
