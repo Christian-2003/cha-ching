@@ -14,6 +14,7 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.type.TypeIcon
+import de.christian2003.chaching.domain.type.TypeMetadata
 
 
 /**
@@ -100,7 +101,9 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
             Type(
                 name = context.getString(R.string.onboarding_defaultTypeSalary),
                 icon = TypeIcon.COIN,
-                isHoursWorkedEditable = true
+                metadata = TypeMetadata(
+                    isHoursWorkedEditable = true
+                )
             ),
             false
         )
@@ -108,7 +111,9 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
             Type(
                 name = context.getString(R.string.onboarding_defaultTypeSickPay),
                 icon = TypeIcon.HOME,
-                isHoursWorkedEditable = false
+                metadata = TypeMetadata(
+                    isHoursWorkedEditable = false
+                )
             ),
             false
         )
@@ -116,7 +121,9 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
             Type(
                 name = context.getString(R.string.onboarding_defaultTypeHolidayPay),
                 icon = TypeIcon.VACATION,
-                isHoursWorkedEditable = true
+                metadata = TypeMetadata(
+                    isHoursWorkedEditable = true
+                )
             ),
             false
         )
@@ -124,7 +131,9 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
             Type(
                 name = context.getString(R.string.onboarding_defaultTypeSpecialPay),
                 icon = TypeIcon.BANK,
-                isHoursWorkedEditable = false
+                metadata = TypeMetadata(
+                    isHoursWorkedEditable = false
+                )
             ),
             false
         )
@@ -132,7 +141,9 @@ class OnboardingViewModel(application: Application): AndroidViewModel(applicatio
             Type(
                 name = context.getString(R.string.onboarding_defaultTypeShareInterest),
                 icon = TypeIcon.SHARES,
-                isHoursWorkedEditable = false
+                metadata = TypeMetadata(
+                    isHoursWorkedEditable = false
+                )
             ),
             false
         )

@@ -183,7 +183,7 @@ private fun TypeListItem(
         Icon(
             painter = painterResource(type.icon.drawableResourceId),
             contentDescription = "",
-            tint = if (type.isEnabledInQuickAccess) {
+            tint = if (type.metadata.isEnabledInQuickAccess) {
                 MaterialTheme.colorScheme.onSurface
             } else {
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
@@ -196,20 +196,20 @@ private fun TypeListItem(
             Text(
                 text = type.name,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (type.isEnabledInQuickAccess) {
+                color = if (type.metadata.isEnabledInQuickAccess) {
                     MaterialTheme.colorScheme.onSurface
                 } else {
                     MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 },
                 maxLines = 2,
-                textDecoration = if (type.isEnabledInQuickAccess) {
+                textDecoration = if (type.metadata.isEnabledInQuickAccess) {
                     TextDecoration.None
                 } else {
                     TextDecoration.LineThrough
                 },
                 overflow = TextOverflow.Ellipsis
             )
-            if (!type.isEnabledInQuickAccess) {
+            if (!type.metadata.isEnabledInQuickAccess) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -239,7 +239,7 @@ private fun TypeListItem(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_more),
-                    tint = if (type.isEnabledInQuickAccess) {
+                    tint = if (type.metadata.isEnabledInQuickAccess) {
                         MaterialTheme.colorScheme.onSurface
                     } else {
                         MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)

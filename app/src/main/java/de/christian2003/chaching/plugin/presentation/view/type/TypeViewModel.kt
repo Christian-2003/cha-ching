@@ -16,6 +16,7 @@ import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import de.christian2003.chaching.domain.type.TypeIcon
+import de.christian2003.chaching.domain.type.TypeMetadata
 
 
 /**
@@ -98,8 +99,8 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
                 isCreating = false
                 type = repository.getTypeById(typeId)
                 name = type!!.name
-                isHoursWorkedEditable = type!!.isHoursWorkedEditable
-                isEnabledInQuickAccess = type!!.isEnabledInQuickAccess
+                isHoursWorkedEditable = type!!.metadata.isHoursWorkedEditable
+                isEnabledInQuickAccess = type!!.metadata.isEnabledInQuickAccess
                 icon = type!!.icon
             }
             else {
@@ -125,17 +126,21 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             type = Type(
                 name = name,
                 icon = icon,
-                isHoursWorkedEditable = isHoursWorkedEditable,
-                isEnabledInQuickAccess = isEnabledInQuickAccess
+                metadata = TypeMetadata(
+                    isHoursWorkedEditable = isHoursWorkedEditable,
+                    isEnabledInQuickAccess = isEnabledInQuickAccess
+                )
             )
             repository.createNewType(type)
         }
         else {
             type.name = name
             type.icon = icon
-            type.isHoursWorkedEditable = isHoursWorkedEditable
-            type.isEnabledInQuickAccess = isEnabledInQuickAccess
-            type.edited = LocalDateTime.now()
+            type.metadata = type.metadata.copy(
+                isHoursWorkedEditable = isHoursWorkedEditable,
+                isEnabledInQuickAccess = isEnabledInQuickAccess,
+                edited = LocalDateTime.now()
+            )
             repository.updateExistingType(type)
         }
     }

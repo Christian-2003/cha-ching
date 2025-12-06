@@ -1,6 +1,7 @@
 package de.christian2003.chaching.plugin.infrastructure.db.mapper
 
 import de.christian2003.chaching.domain.type.Type
+import de.christian2003.chaching.domain.type.TypeMetadata
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 
 
@@ -20,10 +21,12 @@ class TypeDbMapper {
             name = entity.name,
             icon = entity.icon,
             id = entity.typeId,
-            isHoursWorkedEditable = entity.isHoursWorkedEditable,
-            isEnabledInQuickAccess = entity.isEnabledInQuickAccess,
-            created = entity.created,
-            edited = entity.edited
+            metadata = TypeMetadata(
+                isHoursWorkedEditable = entity.isHoursWorkedEditable,
+                isEnabledInQuickAccess = entity.isEnabledInQuickAccess,
+                created = entity.created,
+                edited = entity.edited
+            )
         )
     }
 
@@ -39,10 +42,10 @@ class TypeDbMapper {
             name = domain.name,
             icon = domain.icon,
             typeId = domain.id,
-            isHoursWorkedEditable = domain.isHoursWorkedEditable,
-            isEnabledInQuickAccess = domain.isEnabledInQuickAccess,
-            created = domain.created,
-            edited = domain.edited
+            isHoursWorkedEditable = domain.metadata.isHoursWorkedEditable,
+            isEnabledInQuickAccess = domain.metadata.isEnabledInQuickAccess,
+            created = domain.metadata.created,
+            edited = domain.metadata.edited
         )
     }
 

@@ -608,7 +608,7 @@ private fun FabMenu(
 			contentColor = MaterialTheme.colorScheme.onSurfaceVariant
 		)
 		types.forEach { type ->
-			if (type.isEnabledInQuickAccess) {
+			if (type.metadata.isEnabledInQuickAccess) {
 				FloatingActionButtonMenuItem(
 					onClick = {
 						onTypeClicked(type)

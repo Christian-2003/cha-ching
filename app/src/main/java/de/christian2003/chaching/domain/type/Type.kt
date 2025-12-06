@@ -7,45 +7,48 @@ import java.util.UUID
 /**
  * Domain entity models a type. Users can create transfers for a type which describes the transfer
  * in greater detail.
+ *
+ * @param name      Name of the type which is shown to the user. The user can identify the type using
+ *                  this name.
+ * @param icon      Icon of the type which is shown to the user.
+ * @param id        Unique ID of the type.
+ * @param metadata  Metadata for the type.
  */
 class Type(
+    name: String,
+    icon: TypeIcon,
+    val id: UUID = UUID.randomUUID(),
+    var metadata: TypeMetadata = TypeMetadata()
+) {
 
     /**
      * Name of the type which is shown to the user. The user can identify the type using this name.
      */
-    var name: String,
+    var name: String = name
+        set(value) {
+            require(value.isNotBlank()) { "Name cannot be blank" }
+            field = value
+            metadata = metadata.copy(edited = LocalDateTime.now())
+        }
 
     /**
      * Icon of the type which is shown to the user.
      */
-    var icon: TypeIcon,
+    var icon: TypeIcon = icon
+        set(value) {
+            field = value
+            metadata = metadata.copy(edited = LocalDateTime.now())
+        }
+
 
     /**
-     * Unique ID of the type.
+     * Initializes the type.
      */
-    val id: UUID = UUID.randomUUID(),
+    init {
+        this.name = name
+        this.icon = icon
+    }
 
-    /**
-     * Indicates whether the field "hours worked" should be tracked for transfers of this type.
-     */
-    var isHoursWorkedEditable: Boolean = true,
-
-    /**
-     * Indicates whether the type is available through the "+"-FAB on the main screen.
-     */
-    var isEnabledInQuickAccess: Boolean = true,
-
-    /**
-     * Stores the date time on which the type was created. This is for statistical purposes.
-     */
-    val created: LocalDateTime = LocalDateTime.now(),
-
-    /**
-     * Stores the date time on which the type was edited. This is for statistical purposes.
-     */
-    var edited: LocalDateTime = LocalDateTime.now()
-
-) {
 
     /**
      * Hash code for the type.
@@ -63,11 +66,7 @@ class Type(
      * @return  Whether the ID of the type passed is identical to the ID of this type.
      */
     override fun equals(other: Any?): Boolean {
-        return if (other is Type) {
-            other.id == id
-        } else {
-            false
-        }
+        return (other is Type) && (other.id == this.id)
     }
 
 }

@@ -1,6 +1,7 @@
 package de.christian2003.chaching.plugin.infrastructure.backup.mapper
 
 import de.christian2003.chaching.domain.type.Type
+import de.christian2003.chaching.domain.type.TypeMetadata
 import de.christian2003.chaching.plugin.infrastructure.backup.dto.TypeDto
 
 
@@ -20,10 +21,12 @@ class TypeBackupMapper {
             name = dto.name,
             icon = dto.icon,
             id = dto.id,
-            isHoursWorkedEditable = dto.isHoursWorkedEditable,
-            isEnabledInQuickAccess = dto.isEnabledInQuickAccess,
-            created = dto.created,
-            edited = dto.edited
+            metadata = TypeMetadata(
+                created = dto.created,
+                edited = dto.edited,
+                isHoursWorkedEditable = dto.isHoursWorkedEditable,
+                isEnabledInQuickAccess = dto.isEnabledInQuickAccess
+            )
         )
     }
 
@@ -39,10 +42,10 @@ class TypeBackupMapper {
             name = domain.name,
             icon = domain.icon,
             id = domain.id,
-            isHoursWorkedEditable = domain.isHoursWorkedEditable,
-            isEnabledInQuickAccess = domain.isEnabledInQuickAccess,
-            created = domain.created,
-            edited = domain.edited
+            isHoursWorkedEditable = domain.metadata.isHoursWorkedEditable,
+            isEnabledInQuickAccess = domain.metadata.isEnabledInQuickAccess,
+            created = domain.metadata.created,
+            edited = domain.metadata.edited
         )
     }
 

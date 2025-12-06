@@ -130,7 +130,7 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
                 throw IllegalStateException("Cannot create transfer where 'type = null'.")
             }
             this@TransferViewModel.type = type
-            isHoursWorkedEditable = type.isHoursWorkedEditable
+            isHoursWorkedEditable = type.metadata.isHoursWorkedEditable
 
             if (transferId != null) {
                 //Edit transfer:
