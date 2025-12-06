@@ -13,6 +13,7 @@ import java.time.LocalDate
 import java.util.Locale
 import java.util.UUID
 import de.christian2003.chaching.R
+import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
 import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
@@ -34,11 +35,6 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      * Repository through which to access and manipulate transfers.
      */
     private lateinit var transferRepository: TransferRepository
-
-    /**
-     * Repository through which to access types.
-     */
-    private lateinit var typeRepository: TypeRepository
 
     /**
      * Indicates whether the view model is initialized.
@@ -116,18 +112,17 @@ class TransferViewModel(application: Application): AndroidViewModel(application)
      * Instantiates the view model.
      *
      * @param transferRepository    Repository to access and manipulate types.
-     * @param typeRepository        Repository to access types.
+     * @param getTypeByIdUseCase    Use case to get a type by it's ID.
      * @param typeId                ID of the type with which to create the transfer.
      * @param transferId            ID of the transfer to edit. To create a new transfer, pass null.
      */
-    fun init(transferRepository: TransferRepository, typeRepository: TypeRepository, typeId: UUID, transferId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
+    fun init(transferRepository: TransferRepository, getTypeByIdUseCase: GetTypeByIdUseCase, typeId: UUID, transferId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
         if (!isInitialized) {
             this@TransferViewModel.transferRepository = transferRepository
-            this@TransferViewModel.typeRepository = typeRepository
             isHelpCardVisible = HelpCards.CREATE_TRANSFER.getVisible(getApplication<Application>().baseContext)
 
             //Get type:
-            val type: Type? = typeRepository.getTypeById(typeId)
+            val type: Type? = getTypeByIdUseCase.getTypeById(typeId)
             if (type == null) {
                 throw IllegalStateException("Cannot create transfer where 'type = null'.")
             }

@@ -9,14 +9,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.util.UUID
 import de.christian2003.chaching.R
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.application.usecases.type.CreateTypeUseCase
+import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
+import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
+import de.christian2003.chaching.application.usecases.type.UpdateTypeUseCase
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import de.christian2003.chaching.domain.type.TypeIcon
-import de.christian2003.chaching.domain.type.TypeMetadata
 
 
 /**
@@ -24,10 +25,8 @@ import de.christian2003.chaching.domain.type.TypeMetadata
  */
 class TypeViewModel(application: Application): AndroidViewModel(application) {
 
-    /**
-     * Repository from which to source data.
-     */
-    private lateinit var repository: TypeRepository
+    private lateinit var createTypeUseCase: CreateTypeUseCase
+    private lateinit var updateTypeUseCase: UpdateTypeUseCase
 
     private var isInitialized: Boolean = false
 
@@ -81,15 +80,25 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Instantiates the repository.
      *
-     * @param repository    Repository from which to source data.
-     * @param typeId        UUID of the type to edit. Pass null to create a new type.
+     * @param createTypeUseCase     Use case to create a new type.
+     * @param updateTypeUseCase     Use case to update an existing type.
+     * @param getTypeByIdUseCase    Use case to get a list of all types.
+     * @param getAllTypesUseCase    Use case to get a type by it's ID.
+     * @param typeId                UUID of the type to edit. Pass null to create a new type.
      */
-    fun init(repository: TypeRepository, typeId: UUID?) = viewModelScope.launch(Dispatchers.IO) {
+    fun init(
+        createTypeUseCase: CreateTypeUseCase,
+        updateTypeUseCase: UpdateTypeUseCase,
+        getAllTypesUseCase: GetAllTypesUseCase,
+        getTypeByIdUseCase: GetTypeByIdUseCase,
+        typeId: UUID?
+    ) = viewModelScope.launch(Dispatchers.IO) {
         if (!isInitialized) {
-            this@TypeViewModel.repository = repository
+            this@TypeViewModel.createTypeUseCase = createTypeUseCase
+            this@TypeViewModel.updateTypeUseCase = updateTypeUseCase
             isQuickAccessHelpVisible = false
             isHelpCardVisible = HelpCards.CREATE_TYPE.getVisible(getApplication<Application>().baseContext)
-            var size: Int = repository.getAllTypes().first().size
+            var size: Int = getAllTypesUseCase.getAllTypes().first().size
             if (typeId == null) {
                 size++
             }
@@ -97,7 +106,7 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
             if (typeId != null) {
                 //Edit type
                 isCreating = false
-                type = repository.getTypeById(typeId)
+                type = getTypeByIdUseCase.getTypeById(typeId)
                 name = type!!.name
                 isHoursWorkedEditable = type!!.metadata.isHoursWorkedEditable
                 isEnabledInQuickAccess = type!!.metadata.isEnabledInQuickAccess
@@ -121,27 +130,23 @@ class TypeViewModel(application: Application): AndroidViewModel(application) {
      * Saves the type by either inserting a new type or updating the type in the database.
      */
     fun save() = viewModelScope.launch(Dispatchers.IO) {
-        var type: Type? = this@TypeViewModel.type
+        val type: Type? = this@TypeViewModel.type
         if (type == null) {
-            type = Type(
+            createTypeUseCase.createType(
                 name = name,
                 icon = icon,
-                metadata = TypeMetadata(
-                    isHoursWorkedEditable = isHoursWorkedEditable,
-                    isEnabledInQuickAccess = isEnabledInQuickAccess
-                )
+                isHoursWorkedEditable = isHoursWorkedEditable,
+                isEnabledInQuickAccess = isEnabledInQuickAccess
             )
-            repository.createNewType(type)
         }
         else {
-            type.name = name
-            type.icon = icon
-            type.metadata = type.metadata.copy(
+            updateTypeUseCase.updateType(
+                typeId = type.id,
+                name = name,
+                icon = icon,
                 isHoursWorkedEditable = isHoursWorkedEditable,
-                isEnabledInQuickAccess = isEnabledInQuickAccess,
-                edited = LocalDateTime.now()
+                isEnabledInQuickAccess = isEnabledInQuickAccess
             )
-            repository.updateExistingType(type)
         }
     }
 

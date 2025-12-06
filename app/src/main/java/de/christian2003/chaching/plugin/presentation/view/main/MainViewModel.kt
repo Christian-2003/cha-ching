@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.domain.repository.TransferRepository
-import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.analysis.overview.OverviewCalcResult
@@ -27,8 +27,6 @@ class MainViewModel: ViewModel() {
 	 * Repository from which to source data.
 	 */
 	private lateinit var transferRepository: TransferRepository
-
-	private lateinit var typeRepository: TypeRepository
 
 	/**
 	 * Indicates whether the view model is initialized.
@@ -81,16 +79,15 @@ class MainViewModel: ViewModel() {
 	 * Instantiates the view model.
 	 *
 	 * @param transferRepository	Repository to access and manipulate transfers.
-	 * @param typeRepository		Repository to access types.
+	 * @param getAllTypesUseCase	Use case to get a list of all types.
 	 * @param updateManager			Update manager.
 	 */
-	fun init(transferRepository: TransferRepository, typeRepository: TypeRepository, updateManager: UpdateManager) {
+	fun init(transferRepository: TransferRepository, getAllTypesUseCase: GetAllTypesUseCase, updateManager: UpdateManager) {
 		isUpdateAvailable = updateManager.isUpdateAvailable
 		if (!isInitialized) {
 			this@MainViewModel.transferRepository = transferRepository
-			this@MainViewModel.typeRepository = typeRepository
 			this@MainViewModel.updateManager = updateManager
-			allTypes = typeRepository.getAllTypes()
+			allTypes = getAllTypesUseCase.getAllTypes()
 			recentTransfers = transferRepository.getRecentTransfers()
 			transfersLastMonth = transferRepository.getAllTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
 			isInitialized = true

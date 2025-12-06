@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.domain.repository.TransferRepository
-import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import kotlinx.coroutines.Dispatchers
@@ -20,11 +20,6 @@ class TransfersViewModel: ViewModel() {
      * Repository through which to access and manipulate transfers.
      */
     private lateinit var transferRepository: TransferRepository
-
-    /**
-     * Repository through which to access types.
-     */
-    private lateinit var typeRepository: TypeRepository
 
     /**
      * Indicates whether the view model has been initialized.
@@ -52,14 +47,13 @@ class TransfersViewModel: ViewModel() {
      * Instantiates the view model.
      *
      * @param transferRepository    Repository to access and manipulate transfers.
-     * @param typeRepository        Repository to access types.
+     * @param getAllTypesUseCase    Use case to get a list of all types.
      */
-    fun init(transferRepository: TransferRepository, typeRepository: TypeRepository) {
+    fun init(transferRepository: TransferRepository, getAllTypesUseCase: GetAllTypesUseCase) {
         if (!isInitialized) {
             this.transferRepository = transferRepository
-            this.typeRepository = typeRepository
             allTransfers = transferRepository.getAllTransfers()
-            allTypes = typeRepository.getAllTypes()
+            allTypes = getAllTypesUseCase.getAllTypes()
             isInitialized = true
         }
     }

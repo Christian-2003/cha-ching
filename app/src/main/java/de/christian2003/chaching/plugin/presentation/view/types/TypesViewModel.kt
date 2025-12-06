@@ -6,7 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.application.usecases.type.DeleteTypeUseCase
+import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +20,7 @@ import kotlinx.coroutines.launch
  */
 class TypesViewModel(application: Application): AndroidViewModel(application) {
 
-    /**
-     * Repository from which to source data.
-     */
-    private lateinit var repository: TypeRepository
+    private lateinit var deleteTypeUseCase: DeleteTypeUseCase
 
     private var isInitialized: Boolean = false
 
@@ -46,13 +44,14 @@ class TypesViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Instantiates the view model.
      *
-     * @param repository    Repository from which to source data.
+     * @param getAllTypesUseCase    Use case to get all types.
+     * @param deleteTypeUseCase     Use case to delete an existing type.
      */
-    fun init(repository: TypeRepository) {
+    fun init(getAllTypesUseCase: GetAllTypesUseCase, deleteTypeUseCase: DeleteTypeUseCase) {
         if (!isInitialized) {
-            this.repository = repository
+            this.deleteTypeUseCase = deleteTypeUseCase
             isHelpCardVisible = HelpCards.TYPES_LIST.getVisible(getApplication<Application>().baseContext)
-            allTypes = repository.getAllTypes()
+            allTypes = getAllTypesUseCase.getAllTypes()
             isInitialized = true
         }
     }
@@ -65,7 +64,7 @@ class TypesViewModel(application: Application): AndroidViewModel(application) {
         val type = typeToDelete
         if (type != null) {
             typeToDelete = null
-            repository.deleteType(type)
+            deleteTypeUseCase.deleteType(type.id)
         }
     }
 

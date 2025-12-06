@@ -3,42 +3,45 @@ package de.christian2003.chaching.application.usecases.type
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.type.TypeIcon
-import de.christian2003.chaching.domain.type.TypeMetadata
+import java.util.UUID
 
 
 /**
- * Use case to create a new type for transfers.
+ * Use case to update an existing type.
  *
  * @param repository    Repository through which to access types.
  */
-class CreateTypeUseCase(
+class UpdateTypeUseCase(
     private val repository: TypeRepository
 ) {
 
     /**
-     * Creates a new type with the values specified.
+     * Updates an existing type with the values specified. If no type with the specified ID exists,
+     * nothing happens.
      *
-     * @param name                      Name for the type.
-     * @param icon                      Icon for the type.
+     * @param typeId                    ID of the type to update.
+     * @param name                      New name for the type.
+     * @param icon                      New icon for the type.
      * @param isHoursWorkedEditable     Whether the "Hours worked" field should be editable.
      * @param isEnabledInQuickAccess    Whether the type is visible in quick access.
      */
-    suspend fun createType(
+    suspend fun updateType(
+        typeId: UUID,
         name: String,
         icon: TypeIcon,
         isHoursWorkedEditable: Boolean,
         isEnabledInQuickAccess: Boolean
     ) {
-        val type = Type(
-            name = name,
-            icon = icon,
-            metadata = TypeMetadata(
+        val type: Type? = repository.getTypeById(typeId)
+        if (type != null) {
+            type.name = name
+            type.icon = icon
+            type.metadata = type.metadata.copy(
                 isHoursWorkedEditable = isHoursWorkedEditable,
                 isEnabledInQuickAccess = isEnabledInQuickAccess
             )
-        )
-
-        repository.createNewType(type)
+            repository.updateExistingType(type)
+        }
     }
 
 }
