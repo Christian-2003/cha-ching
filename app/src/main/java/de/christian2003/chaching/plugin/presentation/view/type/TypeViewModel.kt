@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ import javax.inject.Inject
  * @param createTypeUseCase     Use case to create a new type.
  * @param updateTypeUseCase     Use case to update an existing type.
  */
+@HiltViewModel
 class TypeViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
@@ -45,7 +47,6 @@ class TypeViewModel @Inject constructor(
      * Type that is being edited. If a new type is being created, this is null.
      */
     private var type: Type? = null
-
 
     /**
      * Name of the type.
@@ -103,7 +104,7 @@ class TypeViewModel @Inject constructor(
             if (typeId == null) {
                 size++
             }
-            namePlaceholder = application.resources.getString(R.string.type_unnamed, size)
+            namePlaceholder = getApplication<Application>().resources.getString(R.string.type_unnamed, size)
             if (typeId != null) {
                 //Edit type
                 isCreating = false
