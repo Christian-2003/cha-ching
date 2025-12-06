@@ -3,6 +3,7 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.ksp)
 	alias(libs.plugins.compose.compiler)
+	alias(libs.plugins.hilt)
 	kotlin("plugin.serialization") version "2.1.21"
 }
 
@@ -101,6 +102,8 @@ dependencies {
 	implementation(libs.androidx.glance.material3)
 	implementation(libs.androidx.animation.graphics)
 	implementation(libs.okhttp)
+	implementation(libs.androidx.hilt.navigation.compose)
+	implementation(libs.hilt.android)
 
 	testImplementation(libs.junit)
 
@@ -117,4 +120,5 @@ dependencies {
 	annotationProcessor(libs.room.compiler)
 
 	ksp(libs.room.compiler)
+	ksp(libs.hilt.compiler)
 }
