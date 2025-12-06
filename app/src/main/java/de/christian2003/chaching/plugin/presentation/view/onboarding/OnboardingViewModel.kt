@@ -11,9 +11,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import de.christian2003.chaching.R
-import de.christian2003.chaching.application.usecases.transfer.CreateTransferUseCase
 import de.christian2003.chaching.application.usecases.type.CreateTypeUseCase
-import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.type.TypeIcon
 import de.christian2003.chaching.domain.type.TypeMetadata

@@ -9,7 +9,6 @@ import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUse
 import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetTransfersInDateRangeUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
-import de.christian2003.chaching.domain.repository.TransferRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.analysis.overview.OverviewCalcResult
