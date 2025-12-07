@@ -140,8 +140,8 @@ fun SettingsScreen(
                 indentToPrefixIcon = true
             )
             SettingsItemSwitch(
-                title = stringResource(R.string.settings_data_typesTitle),
-                info = stringResource(R.string.settings_data_typesInfo),
+                title = stringResource(R.string.settings_customization_globalThemeTitle),
+                info = stringResource(R.string.settings_customization_globalThemeInfo),
                 prefixIcon = painterResource(R.drawable.ic_theme),
                 checked = viewModel.useGlobalTheme,
                 onCheckedChange = {
