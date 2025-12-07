@@ -115,7 +115,15 @@
     <string name="settings_title">Einstellungen</string>
     <string name="settings_customization">Personalisierung</string>
     <string name="settings_customization_globalThemeTitle">Globales Farbschema</string>
-    <string name="settings_customization_globalThemeText">Globales Farbschema verwenden</string>
+    <string name="settings_customization_globalThemeInfo">Globales Farbschema verwenden</string>
+    <string name="settings_customization_contrastTitle">Kontrast</string>
+    <string name="settings_customization_contrastInfo">Farbkontrast wählen</string>
+    <string name="settings_customization_contrastDialog_title">Kontrast wählen</string>
+    <string name="settings_customization_contrastDialog_normal">Normal</string>
+    <string name="settings_customization_contrastDialog_medium">Mittel</string>
+    <string name="settings_customization_contrastDialog_high">Hoch</string>
+    <string name="settings_customization_contrastDialog_previewTitle">Vorschau</string>
+    <string name="settings_customization_contrastDialog_previewText">Beispieltext</string>
     <string name="settings_data">Daten</string>
     <string name="settings_data_exportTitle">Daten exportieren</string>
     <string name="settings_data_exportInfo">Daten in eine JSON-Datei exportieren</string>

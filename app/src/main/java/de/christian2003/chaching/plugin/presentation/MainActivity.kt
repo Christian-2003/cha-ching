@@ -73,6 +73,7 @@ import de.christian2003.chaching.application.usecases.type.UpdateTypeUseCase
 import de.christian2003.chaching.plugin.ChaChingApplication
 import de.christian2003.chaching.plugin.infrastructure.rest.apps.AppsRestRepository
 import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
+import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScreen
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
 import kotlinx.coroutines.delay
@@ -152,9 +153,11 @@ fun ChaChing(updateManager: UpdateManager) {
     val preferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("onboardingFinished", false)) }
     var useGlobalTheme: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("global_theme", false)) }
+    var themeContrast: ThemeContrast by rememberSaveable { mutableStateOf(ThemeContrast.entries[preferences.getInt("theme_contrast", 0)]) }
 
     ChaChingTheme(
-        dynamicColor = useGlobalTheme
+        dynamicColor = useGlobalTheme,
+        contrast = themeContrast
     ) {
         NavHost(
             navController = navController,
@@ -306,6 +309,9 @@ fun ChaChing(updateManager: UpdateManager) {
                     },
                     onUseGlobalThemeChange = {
                         useGlobalTheme = it
+                    },
+                    onThemeContrastChange = {
+                        themeContrast = it
                     }
                 )
             }

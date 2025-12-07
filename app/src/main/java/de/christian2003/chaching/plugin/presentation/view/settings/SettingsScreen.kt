@@ -45,6 +45,7 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import de.christian2003.chaching.domain.apps.AppItem
+import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import okhttp3.OkHttpClient
 import java.time.format.DateTimeFormatter
 
@@ -61,6 +62,7 @@ import java.time.format.DateTimeFormatter
  *                                  of help messages.
  * @param onNavigateToOnboarding    Callback invoked to navigate to the app onboarding.
  * @param onUseGlobalThemeChange    Callback invoked once the user changes whether to use global theme.
+ * @param onThemeContrastChange     Callback invoked once the theme contrast changes.
  */
 @Composable
 fun SettingsScreen(
@@ -70,7 +72,8 @@ fun SettingsScreen(
     onNavigateToLicenses: () -> Unit,
     onNavigateToHelpMessages: () -> Unit,
     onNavigateToOnboarding: () -> Unit,
-    onUseGlobalThemeChange: (Boolean) -> Unit
+    onUseGlobalThemeChange: (Boolean) -> Unit,
+    onThemeContrastChange: (ThemeContrast) -> Unit
 ) {
     val context: Context = LocalContext.current
     val exportSuccessMessage = stringResource(R.string.settings_data_exportSuccess)
@@ -146,6 +149,16 @@ fun SettingsScreen(
                     onUseGlobalThemeChange(it)
                 }
             )
+            AnimatedVisibility(!viewModel.useGlobalTheme) {
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_customization_contrastTitle),
+                    info = stringResource(R.string.settings_customization_contrastInfo),
+                    onClick = {
+                        viewModel.dialog = SettingsScreenDialog.Contrast
+                    },
+                    prefixIcon = painterResource(R.drawable.ic_contrast)
+                )
+            }
             HorizontalDivider()
 
 
@@ -263,6 +276,23 @@ fun SettingsScreen(
                     context.startActivity(intent)
                 }
             )
+        }
+
+        when (viewModel.dialog) {
+            SettingsScreenDialog.Contrast -> {
+                ContrastDialog(
+                    contrast = viewModel.themeContrast,
+                    onDismiss = {
+                        viewModel.dialog = SettingsScreenDialog.None
+                    },
+                    onSave = { themeContrast ->
+                        viewModel.dialog = SettingsScreenDialog.None
+                        viewModel.updateThemeContrast(themeContrast)
+                        onThemeContrastChange(themeContrast)
+                    }
+                )
+            }
+            else -> { }
         }
 
         if (viewModel.importUri != null) {

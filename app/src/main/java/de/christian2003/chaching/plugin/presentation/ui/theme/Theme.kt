@@ -1,7 +1,6 @@
 package de.christian2003.chaching.plugin.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
@@ -13,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.glance.GlanceTheme
 import androidx.glance.material3.ColorProviders
-import androidx.glance.unit.ColorProvider
 
 
 private val lightScheme = lightColorScheme(
@@ -54,6 +52,7 @@ private val lightScheme = lightColorScheme(
 	surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
+
 private val darkScheme = darkColorScheme(
 	primary = primaryDark,
 	onPrimary = onPrimaryDark,
@@ -91,6 +90,7 @@ private val darkScheme = darkColorScheme(
 	surfaceContainerHigh = surfaceContainerHighDark,
 	surfaceContainerHighest = surfaceContainerHighestDark,
 )
+
 
 private val mediumContrastLightColorScheme = lightColorScheme(
 	primary = primaryLightMediumContrast,
@@ -130,6 +130,7 @@ private val mediumContrastLightColorScheme = lightColorScheme(
 	surfaceContainerHighest = surfaceContainerHighestLightMediumContrast,
 )
 
+
 private val highContrastLightColorScheme = lightColorScheme(
 	primary = primaryLightHighContrast,
 	onPrimary = onPrimaryLightHighContrast,
@@ -167,6 +168,7 @@ private val highContrastLightColorScheme = lightColorScheme(
 	surfaceContainerHigh = surfaceContainerHighLightHighContrast,
 	surfaceContainerHighest = surfaceContainerHighestLightHighContrast,
 )
+
 
 private val mediumContrastDarkColorScheme = darkColorScheme(
 	primary = primaryDarkMediumContrast,
@@ -206,6 +208,7 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
 	surfaceContainerHighest = surfaceContainerHighestDarkMediumContrast,
 )
 
+
 private val highContrastDarkColorScheme = darkColorScheme(
 	primary = primaryDarkHighContrast,
 	onPrimary = onPrimaryDarkHighContrast,
@@ -244,6 +247,7 @@ private val highContrastDarkColorScheme = darkColorScheme(
 	surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+
 @Immutable
 data class ColorFamily(
 	val color: Color,
@@ -252,15 +256,24 @@ data class ColorFamily(
 	val onColorContainer: Color
 )
 
+
 val unspecified_scheme = ColorFamily(
 	Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
 )
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
+enum class ThemeContrast {
+	Normal,
+	Medium,
+	High
+}
+
+
 @Composable
 fun ChaChingTheme(
 	darkTheme: Boolean = isSystemInDarkTheme(),
 	dynamicColor: Boolean = false,
+	contrast: ThemeContrast = ThemeContrast.Normal,
 	content: @Composable() () -> Unit
 ) {
 	val colorScheme = when {
@@ -268,9 +281,16 @@ fun ChaChingTheme(
 			val context = LocalContext.current
 			if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
 		}
-
-		darkTheme -> darkScheme
-		else -> lightScheme
+		darkTheme -> when(contrast) {
+			ThemeContrast.Normal -> darkScheme
+			ThemeContrast.Medium -> mediumContrastDarkColorScheme
+			ThemeContrast.High -> highContrastDarkColorScheme
+		}
+		else -> when(contrast) {
+			ThemeContrast.Normal -> lightScheme
+			ThemeContrast.Medium -> mediumContrastLightColorScheme
+			ThemeContrast.High -> highContrastLightColorScheme
+		}
 	}
 
 	MaterialExpressiveTheme(

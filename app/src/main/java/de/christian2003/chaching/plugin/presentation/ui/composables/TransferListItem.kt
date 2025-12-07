@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -47,7 +46,6 @@ import java.time.format.FormatStyle
  * @param onDelete              Callback invoked to delete the transfer.
  * @param onQueryTransferType   Callback invoked to query the type for a transfer.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TransferListItem(
     transfer: Transfer,
@@ -137,7 +135,6 @@ fun TransferListItem(
  *
  * @param formattedValue    Formatted value to display.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun Value(
     formattedValue: String

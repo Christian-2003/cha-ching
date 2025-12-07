@@ -17,6 +17,7 @@ import de.christian2003.chaching.application.backup.BackupService
 import de.christian2003.chaching.application.backup.ImportStrategy
 import de.christian2003.chaching.application.usecases.apps.GetAllAppsUseCase
 import de.christian2003.chaching.domain.apps.AppItem
+import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,7 +46,15 @@ class SettingsViewModel @Inject constructor(
 
     val apps: MutableList<AppItem> = mutableStateListOf()
 
+    var dialog: SettingsScreenDialog by mutableStateOf(SettingsScreenDialog.None)
+
     var useGlobalTheme: Boolean by mutableStateOf(preferences.getBoolean("global_theme", false))
+        private set
+
+    /**
+     * Contrast for the theme colors.
+     */
+    var themeContrast: ThemeContrast by mutableStateOf(ThemeContrast.entries[preferences.getInt("theme_contrast", 0)])
         private set
 
 
@@ -94,6 +103,19 @@ class SettingsViewModel @Inject constructor(
             putBoolean("global_theme", useGlobalTheme)
         }
         this.useGlobalTheme = useGlobalTheme
+    }
+
+
+    /**
+     * Updates the theme contrast.
+     *
+     * @param themeContrast Theme contrast.
+     */
+    fun updateThemeContrast(themeContrast: ThemeContrast) {
+        preferences.edit {
+            putInt("theme_contrast", themeContrast.ordinal)
+        }
+        this.themeContrast = themeContrast
     }
 
 
