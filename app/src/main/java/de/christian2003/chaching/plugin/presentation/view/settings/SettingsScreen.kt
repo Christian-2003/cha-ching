@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -59,6 +60,7 @@ import java.time.format.DateTimeFormatter
  * @param onNavigateToHelpMessages  Callback invoked to navigate to the screen displaying the list
  *                                  of help messages.
  * @param onNavigateToOnboarding    Callback invoked to navigate to the app onboarding.
+ * @param onUseGlobalThemeChange    Callback invoked once the user changes whether to use global theme.
  */
 @Composable
 fun SettingsScreen(
@@ -67,7 +69,8 @@ fun SettingsScreen(
     onNavigateToTypes: () -> Unit,
     onNavigateToLicenses: () -> Unit,
     onNavigateToHelpMessages: () -> Unit,
-    onNavigateToOnboarding: () -> Unit
+    onNavigateToOnboarding: () -> Unit,
+    onUseGlobalThemeChange: (Boolean) -> Unit
 ) {
     val context: Context = LocalContext.current
     val exportSuccessMessage = stringResource(R.string.settings_data_exportSuccess)
@@ -126,6 +129,25 @@ fun SettingsScreen(
             //General
             GeneralSection()
             HorizontalDivider()
+
+
+            //Customization:
+            Headline(
+                title = stringResource(R.string.settings_customization),
+                indentToPrefixIcon = true
+            )
+            SettingsItemSwitch(
+                title = stringResource(R.string.settings_data_typesTitle),
+                info = stringResource(R.string.settings_data_typesInfo),
+                prefixIcon = painterResource(R.drawable.ic_theme),
+                checked = viewModel.useGlobalTheme,
+                onCheckedChange = {
+                    viewModel.updateUseGlobalTheme(it)
+                    onUseGlobalThemeChange(it)
+                }
+            )
+            HorizontalDivider()
+
 
             //Data
             Headline(
@@ -335,6 +357,69 @@ private fun SettingsItemButton(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
+    }
+}
+
+
+/**
+ * Composable displays an item switch.
+ *
+ * @param title             Title for the setting.
+ * @param info              Info for the setting.
+ * @param checked           Whether the switch is checked.
+ * @param onCheckedChange   Callback invoked once the switch is (un)checked.
+ * @param prefixIcon        Optional prefix icon.
+ */
+@Composable
+fun SettingsItemSwitch(
+    title: String,
+    info: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    prefixIcon: Painter? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onCheckedChange(!checked)
+            }
+            .padding(
+                vertical = dimensionResource(R.dimen.padding_vertical),
+                horizontal = dimensionResource(R.dimen.margin_horizontal)
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (prefixIcon != null) {
+            Icon(
+                painter = prefixIcon,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                    .size(dimensionResource(R.dimen.image_xs))
+            )
+        }
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = info,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+        )
     }
 }
 

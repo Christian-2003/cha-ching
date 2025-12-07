@@ -2,12 +2,14 @@ package de.christian2003.chaching.plugin.presentation.view.settings
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,9 +39,14 @@ class SettingsViewModel @Inject constructor(
     val client: OkHttpClient
 ): AndroidViewModel(application) {
 
+    private val preferences: SharedPreferences = application.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
     var importUri: Uri? by mutableStateOf(null)
 
     val apps: MutableList<AppItem> = mutableStateListOf()
+
+    var useGlobalTheme: Boolean by mutableStateOf(preferences.getBoolean("global_theme", false))
+        private set
 
 
     init {
@@ -74,6 +81,19 @@ class SettingsViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             onFinished(success)
         }
+    }
+
+
+    /**
+     * Updates whether to use the global theme.
+     *
+     * @param useGlobalTheme    Whether to use global theme.
+     */
+    fun updateUseGlobalTheme(useGlobalTheme: Boolean) {
+        preferences.edit {
+            putBoolean("global_theme", useGlobalTheme)
+        }
+        this.useGlobalTheme = useGlobalTheme
     }
 
 

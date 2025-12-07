@@ -1,6 +1,7 @@
 package de.christian2003.chaching.plugin.presentation
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -148,9 +149,13 @@ class MainActivity : ComponentActivity() {
 fun ChaChing(updateManager: UpdateManager) {
 	val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
-	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("onboardingFinished", false)) }
+    val preferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("onboardingFinished", false)) }
+    var useGlobalTheme: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("global_theme", false)) }
 
-    ChaChingTheme {
+    ChaChingTheme(
+        dynamicColor = useGlobalTheme
+    ) {
         NavHost(
             navController = navController,
             startDestination = if (isOnboardingFinished) {
@@ -298,6 +303,9 @@ fun ChaChing(updateManager: UpdateManager) {
                     },
                     onNavigateToOnboarding = {
                         navController.navigate("onboarding")
+                    },
+                    onUseGlobalThemeChange = {
+                        useGlobalTheme = it
                     }
                 )
             }
