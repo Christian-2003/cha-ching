@@ -1,6 +1,7 @@
 package de.christian2003.chaching.plugin.presentation.widget
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.ChaChingApplication
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
+import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -86,8 +88,17 @@ class OverviewWidget : GlanceAppWidget() {
             }
         }
 
+        val preferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val useGlobalTheme: Boolean = preferences.getBoolean("global_theme", false)
+        val themeContrast: ThemeContrast = ThemeContrast.entries[preferences.getInt("theme_contrast", 0)]
+
+
         provideContent {
-            ChaChingThemeGlance{
+            ChaChingThemeGlance(
+                context = context,
+                dynamicColor = useGlobalTheme,
+                contrast = themeContrast
+            ) {
                 if (isError) {
                     //Data cannot be loaded:
                     ErrorDisplay()

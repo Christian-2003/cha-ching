@@ -1,5 +1,6 @@
 package de.christian2003.chaching.plugin.presentation.ui.theme
 
+import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.lightColorScheme
@@ -301,13 +302,40 @@ fun ChaChingTheme(
 }
 
 
+/**
+ * App theme for glance widgets.
+ *
+ * @param context		Context required since LocalContext.current not present!
+ * @param dynamicColor	Whether to use dynamic colors.
+ * @param contrast		Contrast.
+ * @param content		Content.
+ */
 @Composable
 fun ChaChingThemeGlance(
+	context: Context,
+	dynamicColor: Boolean = false,
+	contrast: ThemeContrast = ThemeContrast.Normal,
 	content: @Composable() () -> Unit
 ) {
 	val colors = ColorProviders(
-		light = lightScheme,
-		dark = darkScheme
+		light = if(dynamicColor) {
+			dynamicLightColorScheme(context)
+		} else {
+			when(contrast) {
+				ThemeContrast.Normal -> lightScheme
+				ThemeContrast.Medium -> mediumContrastLightColorScheme
+				ThemeContrast.High -> highContrastLightColorScheme
+			}
+		},
+		dark = if(dynamicColor) {
+			dynamicDarkColorScheme(context)
+		} else {
+			when(contrast) {
+				ThemeContrast.Normal -> darkScheme
+				ThemeContrast.Medium -> mediumContrastDarkColorScheme
+				ThemeContrast.High -> highContrastDarkColorScheme
+			}
+		}
 	)
 
 	GlanceTheme(
