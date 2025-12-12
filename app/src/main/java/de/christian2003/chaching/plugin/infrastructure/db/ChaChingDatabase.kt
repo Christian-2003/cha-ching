@@ -22,7 +22,7 @@ import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 		TransferEntity::class,
 		TypeEntity::class
 	],
-	version = 2,
+	version = 3,
 	exportSchema = true
 )
 @TypeConverters(
@@ -58,6 +58,12 @@ abstract class ChaChingDatabase: RoomDatabase() {
 			}
 		}
 
+		private val MIGRATION_2_3 = object: Migration(2, 3) {
+			override fun migrate(db: SupportSQLiteDatabase) {
+				db.execSQL("ALTER TABLE types ADD COLUMN isDeleted INTEGER NOT NULL DEFAULT 1")
+			}
+		}
+
 
 		/**
 		 * Returns the singleton instance of the database.
@@ -74,8 +80,8 @@ abstract class ChaChingDatabase: RoomDatabase() {
 						klass = ChaChingDatabase::class.java,
 						name = "cha_ching_database"
 					)
-						.fallbackToDestructiveMigration(false)
 						.addMigrations(MIGRATION_1_2)
+						.addMigrations(MIGRATION_2_3)
 						.build()
 				}
 				return instance

@@ -19,6 +19,22 @@ interface TypeRepository {
 
 
     /**
+     * Returns a list of all types that are in the trash bin.
+     *
+     * @return  List of all types that are in the trash bin.
+     */
+    suspend fun getAllTypesInTrash(): Flow<List<Type>>
+
+
+    /**
+     * Returns a list of all types that are NOT in the trash bin.
+     *
+     * @return  List of all types that are not in the trash bin.
+     */
+    suspend fun getAllTypesNotInTrash(): Flow<List<Type>>
+
+
+    /**
      * Returns the type with the ID specified. If no type of the specified ID exists, null is
      * returned.
      *
@@ -44,6 +60,22 @@ interface TypeRepository {
      * @param type  Data with which to update the existing type.
      */
     suspend fun updateExistingType(type: Type)
+
+
+    /**
+     * Moves the specified type to the trash bin.
+     *
+     * @param type  Type to move to the trash bin.
+     */
+    suspend fun moveTypeToTrash(type: Type)
+
+
+    /**
+     * Restores the specified type from the trash bin.
+     *
+     * @param type  Type to restore from the trash bin.
+     */
+    suspend fun restoreTypeFromTrash(type: Type)
 
 
     /**

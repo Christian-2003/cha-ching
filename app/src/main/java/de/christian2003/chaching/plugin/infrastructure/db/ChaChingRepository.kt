@@ -82,6 +82,16 @@ class ChaChingRepository @Inject constructor(
 	private var types: Flow<List<Type>>? = null
 
 	/**
+	 * List of all types in the trash bin.
+	 */
+	private var typesInTrash: Flow<List<Type>>? = null
+
+	/**
+	 * List of all types not in the trash bin.
+	 */
+	private var typesNotInTrash: Flow<List<Type>>? = null
+
+	/**
 	 * List of all transfers.
 	 */
 	private var transfers: Flow<List<Transfer>>? = null
@@ -205,6 +215,40 @@ class ChaChingRepository @Inject constructor(
 
 
 	/**
+	 * Returns a list of all types that are in the trash bin.
+	 *
+	 * @return  List of all types that are in the trash bin.
+	 */
+	override suspend fun getAllTypesInTrash(): Flow<List<Type>> {
+		if (typesInTrash == null) {
+			typesInTrash = typeDao.selectAllTypesInTrashSortedByDate().map { list ->
+				list.map { type ->
+					typeMapper.toDomain(type)
+				}
+			}
+		}
+		return typesInTrash!!
+	}
+
+
+	/**
+	 * Returns a list of all types that are NOT in the trash bin.
+	 *
+	 * @return  List of all types that are not in the trash bin.
+	 */
+	override suspend fun getAllTypesNotInTrash(): Flow<List<Type>> {
+		if (typesNotInTrash == null) {
+			typesNotInTrash = typeDao.selectAllTypesNotInTrashSortedByDate().map { list ->
+				list.map { type ->
+					typeMapper.toDomain(type)
+				}
+			}
+		}
+		return typesNotInTrash!!
+	}
+
+
+	/**
 	 * Returns the type with the ID specified. If no type of the specified ID exists, null is
 	 * returned.
 	 *
@@ -240,6 +284,26 @@ class ChaChingRepository @Inject constructor(
 	 */
 	override suspend fun updateExistingType(type: Type) {
 		typeDao.update(typeMapper.toEntity(type))
+	}
+
+
+	/**
+	 * Moves the specified type to the trash bin.
+	 *
+	 * @param type  Type to move to the trash bin.
+	 */
+	override suspend fun moveTypeToTrash(type: Type) {
+		typeDao.moveToTrash(typeMapper.toEntity(type))
+	}
+
+
+	/**
+	 * Restores the specified type from the trash bin.
+	 *
+	 * @param type  Type to restore from the trash bin.
+	 */
+	override suspend fun restoreTypeFromTrash(type: Type) {
+		typeDao.restoreFromTrash(typeMapper.toEntity(type))
 	}
 
 

@@ -1,5 +1,6 @@
 package de.christian2003.chaching.plugin.infrastructure.db.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import de.christian2003.chaching.domain.type.TypeIcon
@@ -9,46 +10,26 @@ import java.util.UUID
 
 /**
  * Database entity for storing types.
+ *
+ * @param name                      Display name of the type.
+ * @param icon                      Icon of the type.
+ * @param typeId                    UUID of the type.
+ * @param isHoursWorkedEditable     Whether the hoursWorked-field of the transfers for this type can be edited.
+ * @param isEnabledInQuickAccess    Whether the type is available through the "+"-FAB on the main screen.
+ * @param isDeleted                 Indicates whether the detail is deleted (i.e. it is in the trash bin).
+ * @param created                   Date time on which the type was created. This is for statistical purposes.
+ * @param edited                    Date time on which the type was last edited. This is for statistical purposes.
  */
 @Entity(tableName = "types")
-class TypeEntity(
-
-    /**
-     * Display name of the type.
-     */
-    var name: String,
-
-    /**
-     * Icon of the type.
-     */
-    var icon: TypeIcon,
-
-    /**
-     * UUID of the type.
-     */
-    @PrimaryKey
-    val typeId: UUID = UUID.randomUUID(),
-
-    /**
-     * Whether the hoursWorked-field of the transfers for this type can be edited.
-     */
-    var isHoursWorkedEditable: Boolean = true,
-
-    /**
-     * Whether the type is available through the "+"-FAB on the main screen.
-     */
-    var isEnabledInQuickAccess: Boolean = true,
-
-    /**
-     * Date time on which the type was created. This is for statistical purposes.
-     */
-    val created: LocalDateTime = LocalDateTime.now(),
-
-    /**
-     * Date time on which the type was last edited. This is for statistical purposes.
-     */
-    var edited: LocalDateTime = LocalDateTime.now()
-
+data class TypeEntity(
+    @ColumnInfo("name") val name: String,
+    @ColumnInfo("icon") val icon: TypeIcon,
+    @ColumnInfo("typeId") @PrimaryKey val typeId: UUID = UUID.randomUUID(),
+    @ColumnInfo("isHoursWorkedEditable") val isHoursWorkedEditable: Boolean = true,
+    @ColumnInfo("isEnabledInQuickAccess") val isEnabledInQuickAccess: Boolean = true,
+    @ColumnInfo("isDeleted") val isDeleted: Boolean = false,
+    @ColumnInfo("created") val created: LocalDateTime = LocalDateTime.now(),
+    @ColumnInfo("edited") val edited: LocalDateTime = LocalDateTime.now()
 ) {
 
     override fun hashCode(): Int {

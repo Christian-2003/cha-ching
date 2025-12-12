@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
@@ -25,6 +26,22 @@ interface TypeDao {
      */
     @Query("SELECT * FROM types ORDER BY created DESC")
     fun selectAllTypesSortedByDate(): Flow<List<TypeEntity>>
+
+    /**
+     * Returns a list of all types that are in trash sorted by date of creation.
+     *
+     * @return  List of all types.
+     */
+    @Query("SELECT * FROM types WHERE isDeleted = 1 ORDER BY created DESC")
+    fun selectAllTypesInTrashSortedByDate(): Flow<List<TypeEntity>>
+
+    /**
+     * Returns a list of all types that are not in trash sorted by date of creation.
+     *
+     * @return  List of all types.
+     */
+    @Query("SELECT * FROM types WHERE isDeleted = 0 ORDER BY created DESC")
+    fun selectAllTypesNotInTrashSortedByDate(): Flow<List<TypeEntity>>
 
 
     /**
@@ -72,5 +89,19 @@ interface TypeDao {
 
     @Upsert
     suspend fun upsert(typeEntities: List<TypeEntity>)
+
+
+    @Transaction
+    suspend fun moveToTrash(typeEntity: TypeEntity) {
+        val updatedEntity: TypeEntity = typeEntity.copy(isDeleted = true)
+        update(updatedEntity)
+    }
+
+
+    @Transaction
+    suspend fun restoreFromTrash(typeEntity: TypeEntity) {
+        val updatedEntity: TypeEntity = typeEntity.copy(isDeleted = false)
+        update(updatedEntity)
+    }
 
 }
