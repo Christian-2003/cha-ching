@@ -1,0 +1,140 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "09ef420c987b2777e7f9c76174e10114",
+    "entities": [
+      {
+        "tableName": "transfers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`value` INTEGER NOT NULL, `hoursWorked` INTEGER NOT NULL, `isSalary` INTEGER NOT NULL, `valueDate` INTEGER NOT NULL, `type` BLOB NOT NULL, `transferId` BLOB NOT NULL, `created` INTEGER NOT NULL, `edited` INTEGER NOT NULL, PRIMARY KEY(`transferId`), FOREIGN KEY(`type`) REFERENCES `types`(`typeId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoursWorked",
+            "columnName": "hoursWorked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSalary",
+            "columnName": "isSalary",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueDate",
+            "columnName": "valueDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transferId",
+            "columnName": "transferId",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created",
+            "columnName": "created",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "edited",
+            "columnName": "edited",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "transferId"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "types",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "type"
+            ],
+            "referencedColumns": [
+              "typeId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "types",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `icon` INTEGER NOT NULL, `typeId` BLOB NOT NULL, `isHoursWorkedEditable` INTEGER NOT NULL, `isEnabledInQuickAccess` INTEGER NOT NULL, `created` INTEGER NOT NULL, `edited` INTEGER NOT NULL, PRIMARY KEY(`typeId`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "icon",
+            "columnName": "icon",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "typeId",
+            "columnName": "typeId",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isHoursWorkedEditable",
+            "columnName": "isHoursWorkedEditable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isEnabledInQuickAccess",
+            "columnName": "isEnabledInQuickAccess",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created",
+            "columnName": "created",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "edited",
+            "columnName": "edited",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "typeId"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '09ef420c987b2777e7f9c76174e10114')"
+    ]
+  }
+}

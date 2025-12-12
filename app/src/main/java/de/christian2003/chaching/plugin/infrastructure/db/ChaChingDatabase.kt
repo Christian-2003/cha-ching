@@ -23,7 +23,7 @@ import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 		TypeEntity::class
 	],
 	version = 2,
-	exportSchema = false
+	exportSchema = true
 )
 @TypeConverters(
 	LocalDateTimeConverter::class,

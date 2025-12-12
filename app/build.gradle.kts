@@ -3,6 +3,7 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.ksp)
 	alias(libs.plugins.compose.compiler)
+	alias(libs.plugins.androidx.room)
 	alias(libs.plugins.hilt)
 	kotlin("plugin.serialization") version "2.1.21"
 }
@@ -53,6 +54,14 @@ android {
 		resources {
 			excludes += "/META-INF/{AL2.0,LGPL2.1}"
 		}
+	}
+
+	room {
+		schemaDirectory("$projectDir/schemas")
+	}
+
+	sourceSets {
+		getByName("androidTest").assets.srcDir("$projectDir/schemas")
 	}
 }
 
