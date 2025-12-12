@@ -41,7 +41,7 @@ fun HelpCard(
                 onClick = onDismiss,
                 colors = ButtonDefaults.textButtonColors().copy(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.tertiary
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                 )
             ) {
                 Text(stringResource(R.string.button_dismissHelp))

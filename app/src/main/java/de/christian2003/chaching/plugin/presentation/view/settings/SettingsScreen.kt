@@ -8,6 +8,12 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -149,7 +155,11 @@ fun SettingsScreen(
                     onUseGlobalThemeChange(it)
                 }
             )
-            AnimatedVisibility(!viewModel.useGlobalTheme) {
+            AnimatedVisibility(
+                visible = !viewModel.useGlobalTheme,
+                enter = expandVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(spring(Spring.DampingRatioMediumBouncy)),
+                exit = shrinkVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(spring(Spring.DampingRatioMediumBouncy))
+            ) {
                 SettingsItemButton(
                     setting = stringResource(R.string.settings_customization_contrastTitle),
                     info = stringResource(R.string.settings_customization_contrastInfo),

@@ -22,14 +22,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
 import de.christian2003.chaching.plugin.infrastructure.update.UpdateManager
 import de.christian2003.chaching.plugin.presentation.ui.theme.ChaChingTheme
 import de.christian2003.chaching.plugin.presentation.view.help.HelpScreen
@@ -50,35 +48,17 @@ import de.christian2003.chaching.plugin.presentation.view.type.TypeScreen
 import de.christian2003.chaching.plugin.presentation.view.type.TypeViewModel
 import de.christian2003.chaching.plugin.presentation.view.types.TypesScreen
 import de.christian2003.chaching.plugin.presentation.view.types.TypesViewModel
-import java.util.UUID
 import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.chaching.R
-import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
-import de.christian2003.chaching.application.analysis.AnalysisSquasher
-import de.christian2003.chaching.application.usecases.apps.GetAllAppsUseCase
-import de.christian2003.chaching.application.usecases.transfer.CreateTransferUseCase
-import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
-import de.christian2003.chaching.application.usecases.transfer.GetAllTransfersUseCase
-import de.christian2003.chaching.application.usecases.transfer.GetTransferByIdUseCase
-import de.christian2003.chaching.application.usecases.transfer.UpdateTransferUseCase
-import de.christian2003.chaching.application.usecases.type.CreateTypeUseCase
-import de.christian2003.chaching.application.usecases.type.DeleteTypeUseCase
-import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
-import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
-import de.christian2003.chaching.application.usecases.type.UpdateTypeUseCase
-import de.christian2003.chaching.plugin.ChaChingApplication
-import de.christian2003.chaching.plugin.infrastructure.rest.apps.AppsRestRepository
-import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScreen
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
 
 
 /**
