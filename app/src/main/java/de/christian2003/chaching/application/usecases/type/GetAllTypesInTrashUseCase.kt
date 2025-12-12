@@ -20,7 +20,7 @@ class GetAllTypesInTrashUseCase @Inject constructor(
      *
      * @return  List of all types that are in trash.
      */
-    suspend fun getAllTypesInTrash(): Flow<List<Type>> {
+    fun getAllTypesInTrash(): Flow<List<Type>> {
         return repository.getAllTypesInTrash()
     }
 

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Cha Ching</string>
     <string name="confirm_delete">Confirm deletion</string>
+    <string name="confirm_moveToTrash">Confirm move</string>
     <string name="value_format">$ %1$s</string>
     <string-array name="months">
         <item>January</item>
@@ -81,7 +82,7 @@
     <string name="types_listTitle">Your types</string>
     <string name="types_invisible">Not visible in quick access</string>
     <string name="types_help">Types define which types of earnings you can manage. You can add, edit and delete types.</string>
-    <string name="types_confirmDelete">Deleting %1$s will also delete all associated earnings. Are you sure you want to delete this type?</string>
+    <string name="types_confirmDelete">Are you sure you want to move %1$s to the trash bin?</string>
 
 
     <string name="type_unnamed">Unnamed type %1$d</string>
@@ -125,6 +126,10 @@
     <string name="settings_customization_contrastDialog_previewTitle">Preview</string>
     <string name="settings_customization_contrastDialog_previewText">Example text</string>
     <string name="settings_data">Data</string>
+    <string name="settings_data_typesTitle">All types</string>
+    <string name="settings_data_typesInfo">Configure the types for which you can create earnings</string>
+    <string name="settings_data_trashTitle">Trash bin</string>
+    <string name="settings_data_trashInfo">Trash contains types that you have deleted</string>
     <string name="settings_data_exportTitle">Export data</string>
     <string name="settings_data_exportInfo">Export data to JSON file</string>
     <string name="settings_data_exportSuccess">Successfully exported data</string>
@@ -142,8 +147,6 @@
     <string name="settings_data_importDialog_replaceInfo">Imports data and replaces duplicates</string>
     <string name="settings_data_importDialog_ignoreTitle">Ignore duplicates</string>
     <string name="settings_data_importDialog_ignoreInfo">Imports data but does not restore duplicates</string>
-    <string name="settings_data_typesTitle">All Types</string>
-    <string name="settings_data_typesInfo">Configure the types for which you can create earnings</string>
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
@@ -162,6 +165,13 @@
     <string name="settings_apps">Other Apps</string>
 
 
+    <string name="trash_title">Trash bin</string>
+    <string name="trash_emptyPlaceholder_title">Trash bin empty</string>
+    <string name="trash_emptyPlaceholder_subtitle">Types that were deleted are shown here</string>
+    <string name="trash_help">From here, you can permanently delete or restore types that you have removed earlier.</string>
+    <string name="trash_confirmDelete">Deleting %1$s permanently will also delete all associated earnings. Are you sure you want to delete this type permanently?</string>
+
+
     <string name="help_title">Help messages</string>
     <string name="help_visible">Visible</string>
     <string name="help_invisible">Invisible</string>
@@ -171,6 +181,7 @@
     <string name="help_typesList">List of all earning types</string>
     <string name="help_createTransfer">Create new earnings</string>
     <string name="help_helpList">List of all help messages</string>
+    <string name="help_trash">Trash bin</string>
 
 
     <string name="licenses_title">Licenses</string>
@@ -201,6 +212,7 @@
     <string name="button_dismissHelp">Do not show again</string>
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>
+    <string name="button_deletePermanently">Delete permanently</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_confirm">Confirm</string>
     <string name="button_createType">Create type</string>
@@ -213,6 +225,9 @@
     <string name="button_download">Download</string>
     <string name="button_dismiss">Dismiss</string>
     <string name="button_close">Close</string>
+    <string name="button_restore">Restore</string>
+    <string name="button_undo">Undo</string>
+    <string name="button_moveToTrash">Move to trash</string>
 
 
     <!-- Widgets -->

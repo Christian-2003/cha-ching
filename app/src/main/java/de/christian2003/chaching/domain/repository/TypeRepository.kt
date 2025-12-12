@@ -23,7 +23,7 @@ interface TypeRepository {
      *
      * @return  List of all types that are in the trash bin.
      */
-    suspend fun getAllTypesInTrash(): Flow<List<Type>>
+    fun getAllTypesInTrash(): Flow<List<Type>>
 
 
     /**
@@ -31,7 +31,7 @@ interface TypeRepository {
      *
      * @return  List of all types that are not in the trash bin.
      */
-    suspend fun getAllTypesNotInTrash(): Flow<List<Type>>
+    fun getAllTypesNotInTrash(): Flow<List<Type>>
 
 
     /**

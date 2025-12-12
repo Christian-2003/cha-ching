@@ -63,6 +63,7 @@ import java.time.format.DateTimeFormatter
  * @param onNavigateUp              Callback invoked to navigate up on the navigation stack.
  * @param onNavigateToTypes         Callback invoked to navigate to the screen displaying the list
  *                                  of types.
+ * @param onNavigateToTrash         Callback invoked to navigate to the screen displaying the trash bin.
  * @param onNavigateToLicenses      Callback invoked to navigate to the screen displaying licenses.
  * @param onNavigateToHelpMessages  Callback invoked to navigate to the screen displaying the list
  *                                  of help messages.
@@ -75,6 +76,7 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     onNavigateUp: () -> Unit,
     onNavigateToTypes: () -> Unit,
+    onNavigateToTrash: () -> Unit,
     onNavigateToLicenses: () -> Unit,
     onNavigateToHelpMessages: () -> Unit,
     onNavigateToOnboarding: () -> Unit,
@@ -183,6 +185,13 @@ fun SettingsScreen(
                 onClick = onNavigateToTypes,
                 endIcon = painterResource(R.drawable.ic_next),
                 prefixIcon = painterResource(R.drawable.ic_types)
+            )
+            SettingsItemButton(
+                setting = stringResource(R.string.settings_data_trashTitle),
+                info = stringResource(R.string.settings_data_trashInfo),
+                onClick = onNavigateToTrash,
+                endIcon = painterResource(R.drawable.ic_next),
+                prefixIcon = painterResource(R.drawable.ic_delete)
             )
             SettingsItemButton(
                 setting = stringResource(R.string.settings_data_exportTitle),

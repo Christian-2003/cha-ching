@@ -57,6 +57,8 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScreen
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
+import de.christian2003.chaching.plugin.presentation.view.trash.TrashScreen
+import de.christian2003.chaching.plugin.presentation.view.trash.TrashViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -278,6 +280,9 @@ fun ChaChing(updateManager: UpdateManager) {
                     onNavigateToTypes = {
                         navController.navigate("types")
                     },
+                    onNavigateToTrash = {
+                        navController.navigate("trash")
+                    },
                     onNavigateToLicenses = {
                         navController.navigate("licenses")
                     },
@@ -292,6 +297,17 @@ fun ChaChing(updateManager: UpdateManager) {
                     },
                     onThemeContrastChange = {
                         themeContrast = it
+                    }
+                )
+            }
+
+
+            composable("trash") {
+                val viewModel: TrashViewModel = hiltViewModel()
+                TrashScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
                     }
                 )
             }

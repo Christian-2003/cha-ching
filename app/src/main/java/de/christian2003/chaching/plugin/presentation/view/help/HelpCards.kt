@@ -31,7 +31,9 @@ enum class HelpCards(
 
     CREATE_TRANSFER("help_transfer", R.string.help_createTransfer),
 
-    HELP_LIST("help_list", R.string.help_helpList);
+    HELP_LIST("help_list", R.string.help_helpList),
+
+    HELP_TRASH("help_trash", R.string.help_trash);
 
 
     /**

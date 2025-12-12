@@ -219,7 +219,7 @@ class ChaChingRepository @Inject constructor(
 	 *
 	 * @return  List of all types that are in the trash bin.
 	 */
-	override suspend fun getAllTypesInTrash(): Flow<List<Type>> {
+	override fun getAllTypesInTrash(): Flow<List<Type>> {
 		if (typesInTrash == null) {
 			typesInTrash = typeDao.selectAllTypesInTrashSortedByDate().map { list ->
 				list.map { type ->
@@ -236,7 +236,7 @@ class ChaChingRepository @Inject constructor(
 	 *
 	 * @return  List of all types that are not in the trash bin.
 	 */
-	override suspend fun getAllTypesNotInTrash(): Flow<List<Type>> {
+	override fun getAllTypesNotInTrash(): Flow<List<Type>> {
 		if (typesNotInTrash == null) {
 			typesNotInTrash = typeDao.selectAllTypesNotInTrashSortedByDate().map { list ->
 				list.map { type ->

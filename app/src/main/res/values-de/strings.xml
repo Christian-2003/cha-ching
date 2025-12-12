@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Cha Ching</string>
     <string name="confirm_delete">Löschen bestätigen</string>
+    <string name="confirm_moveToTrash">Verschieben bestätigen</string>
     <string name="value_format">%1$s €</string>
     <string-array name="months">
         <item>Januar</item>
@@ -81,7 +82,7 @@
     <string name="types_listTitle">Deine Einkommensarten</string>
     <string name="types_invisible">Im Schnellzugriff ausgeblendet</string>
     <string name="types_help">Einkommensarten definieren, welche Art von Einkommen du erfassen kannst. Du kannst Einkommensarten erstellen, bearbeiten und löschen.</string>
-    <string name="types_confirmDelete">Wenn du %1$s löschst, dann werden auch alle damit verbundenen Einkommen gelöscht. Bist du dir sicher, dass du diese Einkommensart löschen möchtest?</string>
+    <string name="types_confirmDelete">Bist du dir sicher, dass %1$s in den Papierkorb verschieben werden soll?</string>
 
 
     <string name="type_unnamed">Einkommensart %1$d</string>
@@ -125,6 +126,10 @@
     <string name="settings_customization_contrastDialog_previewTitle">Vorschau</string>
     <string name="settings_customization_contrastDialog_previewText">Beispieltext</string>
     <string name="settings_data">Daten</string>
+    <string name="settings_data_typesTitle">Alle Einkommensarten</string>
+    <string name="settings_data_typesInfo">Bearbeite die Einkommensarten</string>
+    <string name="settings_data_trashTitle">Papierkorb</string>
+    <string name="settings_data_trashInfo">Enthält alle Einkommensarten, die gelöscht wurden</string>
     <string name="settings_data_exportTitle">Daten exportieren</string>
     <string name="settings_data_exportInfo">Daten in eine JSON-Datei exportieren</string>
     <string name="settings_data_exportSuccess">Daten erfolgreich exportiert</string>
@@ -142,8 +147,6 @@
     <string name="settings_data_importDialog_replaceInfo">Beim Importieren werden Dupliakte ersetzt</string>
     <string name="settings_data_importDialog_ignoreTitle">Duplikate überspringen</string>
     <string name="settings_data_importDialog_ignoreInfo">Duplikate werden nicht importiert</string>
-    <string name="settings_data_typesTitle">Alle Einkommensarten</string>
-    <string name="settings_data_typesInfo">Bearbeite die Einkommensarten</string>
     <string name="settings_help">Hilfe</string>
     <string name="settings_help_helpMessagesTitle">Hinweise</string>
     <string name="settings_help_helpMessagesInfo">Deaktivierte Hinweisnachrichten wieder aktivieren</string>
@@ -162,6 +165,13 @@
     <string name="settings_apps">Weitere Apps</string>
 
 
+    <string name="trash_title">Papierkorb</string>
+    <string name="trash_emptyPlaceholder_title">Papierkorb leer</string>
+    <string name="trash_emptyPlaceholder_subtitle">Gelöschte Einkommensarten werden hier angezeigt</string>
+    <string name="trash_help">Von hier kannst du Einkommensarten, die du zuvor entfernt hast, permanent löschen oder wiederherstellen.</string>
+    <string name="trash_confirmDelete">Wenn du %1$s permanent löschst, dann werden auch alle damit verbundenen Einkommen gelöscht. Bist du dir sicher, dass du diese Einkommensart permanent löschen möchtest?</string>
+
+
     <string name="help_title">Hilfenachrichten</string>
     <string name="help_visible">Sichtbar</string>
     <string name="help_invisible">Ausgeblendet</string>
@@ -171,6 +181,7 @@
     <string name="help_typesList">List aller Eikommensarten</string>
     <string name="help_createTransfer">Neue Einnahme anlegen</string>
     <string name="help_helpList">Liste aller Hilfenachrichten</string>
+    <string name="help_trash">Papierkorb</string>
 
 
     <string name="licenses_title">Lizenzen</string>
@@ -201,6 +212,7 @@
     <string name="button_dismissHelp">Ausblenden</string>
     <string name="button_edit">Bearbeiten</string>
     <string name="button_delete">Löschen</string>
+    <string name="button_deletePermanently">Endgültig löschen</string>
     <string name="button_cancel">Abbrechen</string>
     <string name="button_confirm">Bestätigen</string>
     <string name="button_createType">Einkommensart erstellen</string>
@@ -213,6 +225,9 @@
     <string name="button_download">Herunterladen</string>
     <string name="button_dismiss">Später</string>
     <string name="button_close">Schließen</string>
+    <string name="button_restore">Wiederherstellen</string>
+    <string name="button_undo">Rückgängig</string>
+    <string name="button_moveToTrash">In Papierkorb verschieben</string>
 
 
     <!-- Widgets -->

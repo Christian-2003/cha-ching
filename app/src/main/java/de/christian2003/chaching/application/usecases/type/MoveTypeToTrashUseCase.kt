@@ -2,6 +2,7 @@ package de.christian2003.chaching.application.usecases.type
 
 import de.christian2003.chaching.domain.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -17,10 +18,13 @@ class MoveTypeToTrashUseCase @Inject constructor(
     /**
      * Moves the specified type to the trash bin.
      *
-     * @param type  Type to move to the trash.
+     * @param typeId    ID of the type to move to the trash bin.
      */
-    suspend fun moveTypeToTrash(type: Type) {
-        repository.moveTypeToTrash(type)
+    suspend fun moveTypeToTrash(typeId: UUID) {
+        val type: Type? = repository.getTypeById(typeId)
+        if (type != null) {
+            repository.moveTypeToTrash(type)
+        }
     }
 
 }

@@ -18,12 +18,14 @@ import de.christian2003.chaching.R
  * @param text      Information text to display to the user.
  * @param onDismiss Dismiss the dialog without deleting the item.
  * @param onConfirm Delete the item and dismiss the dialog.
+ * @param options   Options for the dialog.
  */
 @Composable
 fun ConfirmDeleteDialog(
     text: String,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    options: ConfirmDeleteDialogOptions = ConfirmDeleteDialogOptions.Delete
 ) {
     AlertDialog(
         icon = {
@@ -33,7 +35,12 @@ fun ConfirmDeleteDialog(
             )
         },
         title = {
-            Text(stringResource(R.string.confirm_delete))
+            Text(
+                text = when(options) {
+                    ConfirmDeleteDialogOptions.Delete -> stringResource(R.string.confirm_delete)
+                    ConfirmDeleteDialogOptions.MoveToTrash -> stringResource(R.string.confirm_moveToTrash)
+                }
+            )
         },
         text = {
             Text(text)
@@ -46,7 +53,12 @@ fun ConfirmDeleteDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.textButtonColors().copy(contentColor = MaterialTheme.colorScheme.error)
             ) {
-                Text(stringResource(R.string.button_delete))
+                Text(
+                    text = when(options) {
+                        ConfirmDeleteDialogOptions.Delete -> stringResource(R.string.button_delete)
+                        ConfirmDeleteDialogOptions.MoveToTrash -> stringResource(R.string.button_confirm)
+                    }
+                )
             }
         },
         dismissButton = {
@@ -57,4 +69,13 @@ fun ConfirmDeleteDialog(
             }
         }
     )
+}
+
+
+/**
+ * Options for the dialog through which to confirm deletion.
+ */
+enum class ConfirmDeleteDialogOptions {
+    Delete,
+    MoveToTrash
 }

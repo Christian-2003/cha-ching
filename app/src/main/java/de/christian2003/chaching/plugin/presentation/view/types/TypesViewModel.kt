@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.christian2003.chaching.application.usecases.type.DeleteTypeUseCase
-import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
+import de.christian2003.chaching.application.usecases.type.GetAllTypesNotInTrashUseCase
+import de.christian2003.chaching.application.usecases.type.MoveTypeToTrashUseCase
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
 import kotlinx.coroutines.Dispatchers
@@ -20,21 +20,21 @@ import javax.inject.Inject
 /**
  * View model for the TypesScreen.
  *
- * @param application           Application.
- * @param getAllTypesUseCase    Use case to get a list of all types.
- * @param deleteTypeUseCase     Use case to delete an existing type.
+ * @param application                   Application.
+ * @param getAllTypesNotInTrashUseCase  Use case to get a list of all types.
+ * @param moveTypeToTrashUseCase        Use case to move types to the trash bin.
  */
 @HiltViewModel
 class TypesViewModel @Inject constructor(
     application: Application,
-    getAllTypesUseCase: GetAllTypesUseCase,
-    private val deleteTypeUseCase: DeleteTypeUseCase
+    getAllTypesNotInTrashUseCase: GetAllTypesNotInTrashUseCase,
+    private val moveTypeToTrashUseCase: MoveTypeToTrashUseCase
 ): AndroidViewModel(application) {
 
     /**
      * List of all types available.
      */
-    val allTypes: Flow<List<Type>> = getAllTypesUseCase.getAllTypes()
+    val allTypes: Flow<List<Type>> = getAllTypesNotInTrashUseCase.getAllTypesNotInTrash()
 
     /**
      * Indicates whether the help card is visible.
@@ -55,7 +55,7 @@ class TypesViewModel @Inject constructor(
         val type = typeToDelete
         if (type != null) {
             typeToDelete = null
-            deleteTypeUseCase.deleteType(type.id)
+            moveTypeToTrashUseCase.moveTypeToTrash(type.id)
         }
     }
 
