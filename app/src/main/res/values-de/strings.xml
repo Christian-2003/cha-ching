@@ -74,6 +74,13 @@
     <string name="transfer_hoursWorkedLabel">Arbeitsstunden</string>
     <string name="transfer_hoursWorkedSuffix">Stunden</string>
     <string name="transfer_help">Gebe ein, wie hoch das Einkommen für das Wertstellungsdatum ist.</string>
+    <string name="transfer_isSalary_incomeTitle">Einkommen</string>
+    <string name="transfer_isSalary_incomeTextCreate">Du erstellst ein Einkommen</string>
+    <string name="transfer_isSalary_incomeTextEdit">Du bearbeitest ein Einkommen</string>
+    <string name="transfer_isSalary_expenseTitle">Ausgabe</string>
+    <string name="transfer_isSalary_expenseTextCreate">Du erstellst eine Ausgabe</string>
+    <string name="transfer_isSalary_expenseTextEdit">Du bearbeitest eine Ausgabe</string>
+    <string name="transfer_isSalary_budgetForecast">Budget Prognose</string>
 
 
     <string name="types_title">Einkommensarten</string>

@@ -27,12 +27,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
+import de.christian2003.chaching.application.services.ValueFormatterService
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import java.time.format.DateTimeFormatter
@@ -54,6 +56,7 @@ fun TransferListItem(
     onDelete: (Transfer) -> Unit,
     onQueryTransferType: suspend (Transfer) -> Type?
 ) {
+    val valueFormatter = ValueFormatterService()
     val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     var isExpanded: Boolean by remember { mutableStateOf(false) }
     val typeName: String by produceState("") {
@@ -91,7 +94,8 @@ fun TransferListItem(
                 )
             }
             Value(
-                formattedValue = transfer.getFormattedValue()
+                formattedValue = valueFormatter.format(transfer.transferValue),
+                isSalary = transfer.transferValue.isSalary
             )
         }
         AnimatedVisibility(
@@ -138,19 +142,29 @@ fun TransferListItem(
  * Displays a value.
  *
  * @param formattedValue    Formatted value to display.
+ * @param isSalary          Whether the value is a salary or not.
  */
 @Composable
 fun Value(
-    formattedValue: String
+    formattedValue: String,
+    isSalary: Boolean = true
 ) {
     Text(
         text = stringResource(R.string.value_format, formattedValue),
         style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onPrimaryContainer,
+        color = if (isSalary) {
+            MaterialTheme.colorScheme.onPrimaryContainer
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        },
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .clip(MaterialTheme.shapes.extraLargeIncreased)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(if (isSalary) {
+                MaterialTheme.colorScheme.primaryContainer
+            } else {
+                Color.Transparent
+            })
             .padding(
                 vertical = 4.dp,
                 horizontal = 12.dp

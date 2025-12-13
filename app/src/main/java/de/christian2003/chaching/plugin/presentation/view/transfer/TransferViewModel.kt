@@ -99,6 +99,11 @@ class TransferViewModel @Inject constructor(
     var isHoursWorkedEditable: Boolean by mutableStateOf(false)
 
     /**
+     * Indicates whether the transfer is a salary.
+     */
+    var isSalary: Boolean by mutableStateOf(true)
+
+    /**
      * Indicates whether the screen is used to create a new transfer.
      */
     var isCreating: Boolean = false
@@ -156,6 +161,7 @@ class TransferViewModel @Inject constructor(
                 hoursWorked = transfer.hoursWorked.toString()
                 hoursWorkedErrorMessage = null
                 valueDate = transfer.transferValue.date
+                isSalary = transfer.transferValue.isSalary
                 isSavable = true
             }
             else {
@@ -167,6 +173,7 @@ class TransferViewModel @Inject constructor(
                 hoursWorked = ""
                 hoursWorkedErrorMessage = null
                 valueDate = LocalDate.now()
+                isSalary = true
                 isSavable = false
             }
         }
@@ -265,7 +272,7 @@ class TransferViewModel @Inject constructor(
             createTransferUseCase.createTransfer(
                 value = value,
                 date = valueDate,
-                isSalary = true,
+                isSalary = isSalary,
                 hoursWorked = hoursWorked,
                 typeId = type!!.id
             )
@@ -275,7 +282,7 @@ class TransferViewModel @Inject constructor(
                 transferId = transfer!!.id,
                 value = value,
                 date = valueDate,
-                isSalary = true,
+                isSalary = isSalary,
                 hoursWorked = hoursWorked
             )
         }

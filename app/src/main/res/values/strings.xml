@@ -74,6 +74,13 @@
     <string name="transfer_hoursWorkedLabel">Hours worked</string>
     <string name="transfer_hoursWorkedSuffix">Hours</string>
     <string name="transfer_help">Enter how much money you earned on a specific date.</string>
+    <string name="transfer_isSalary_incomeTitle">Income</string>
+    <string name="transfer_isSalary_incomeTextCreate">You are creating an income</string>
+    <string name="transfer_isSalary_incomeTextEdit">You are editing an income</string>
+    <string name="transfer_isSalary_expenseTitle">Expense</string>
+    <string name="transfer_isSalary_expenseTextCreate">You are creating an expense</string>
+    <string name="transfer_isSalary_expenseTextEdit">You are editing an expense</string>
+    <string name="transfer_isSalary_budgetForecast">Budget forecast</string>
 
 
     <string name="types_title">Types</string>
