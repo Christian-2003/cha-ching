@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,10 +52,13 @@ fun TransferListItem(
     transfer: Transfer,
     onEdit: (Transfer) -> Unit,
     onDelete: (Transfer) -> Unit,
-    onQueryTransferType: (Transfer) -> Type?
+    onQueryTransferType: suspend (Transfer) -> Type?
 ) {
     val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     var isExpanded: Boolean by remember { mutableStateOf(false) }
+    val typeName: String by produceState("") {
+        value = onQueryTransferType(transfer)?.name ?: ""
+    }
     Column(
         horizontalAlignment = Alignment.End,
         modifier = Modifier
@@ -76,7 +80,7 @@ fun TransferListItem(
                     .padding(end = dimensionResource(R.dimen.padding_horizontal))
             ) {
                 Text(
-                    text = onQueryTransferType(transfer)?.name ?: "",
+                    text = typeName,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )

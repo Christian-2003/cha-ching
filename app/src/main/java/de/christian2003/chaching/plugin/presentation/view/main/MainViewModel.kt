@@ -6,9 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.chaching.application.services.GetTypeForTransferService
 import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetTransfersInDateRangeUseCase
+import de.christian2003.chaching.application.usecases.type.GetAllTypesNotInTrashUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
@@ -24,13 +26,23 @@ import javax.inject.Inject
 
 /**
  * View model for the MainScreen.
+ *
+ * @param getAllTypesUseCase				Use case to get a list of all types.
+ * @param getAllTypesNotInTrashUseCase		Use case to get a list of all types that are not in the
+ * 											trash bin.
+ * @param getRecentTransfersUseCase			Use case to get a list of recent transfers.
+ * @param getTransfersInDateRangeUseCase	Use case to get transfers in a date range.
+ * @param deleteTransferUseCase				Use case to delete a transfer.
+ * @param getTypeForTransferService			Service through which to query the type of a transfer.
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
 	getAllTypesUseCase: GetAllTypesUseCase,
+	getAllTypesNotInTrashUseCase: GetAllTypesNotInTrashUseCase,
 	getRecentTransfersUseCase: GetRecentTransfersUseCase,
 	getTransfersInDateRangeUseCase: GetTransfersInDateRangeUseCase,
-	private val deleteTransferUseCase: DeleteTransferUseCase
+	private val deleteTransferUseCase: DeleteTransferUseCase,
+	private val getTypeForTransferService: GetTypeForTransferService
 ): ViewModel() {
 
 	/**
@@ -53,6 +65,11 @@ class MainViewModel @Inject constructor(
 	 * List of all types.
 	 */
 	val allTypes: Flow<List<Type>> = getAllTypesUseCase.getAllTypes()
+
+	/**
+	 * List of all types that are not in trash.
+	 */
+	val allTypesNotInTrash: Flow<List<Type>> = getAllTypesNotInTrashUseCase.getAllTypesNotInTrash()
 
 	/**
 	 * List of recent transfers.
@@ -100,15 +117,8 @@ class MainViewModel @Inject constructor(
 	}
 
 
-	fun getTypeForTransfer(transfer: Transfer, types: List<Type>): Type? {
-		var transferType: Type? = null
-		types.forEach { type ->
-			if (type.id == transfer.type) {
-				transferType = type
-				return@forEach
-			}
-		}
-		return transferType
+	suspend fun getTypeForTransfer(transfer: Transfer): Type? {
+		return getTypeForTransferService.getType(transfer)
 	}
 
 

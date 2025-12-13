@@ -24,8 +24,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
@@ -42,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -82,7 +81,6 @@ import java.util.UUID
  * @param onCreateTransfer		Callback invoked to create a new transfer.
  * @param onNavigateToSettings	Callback invoked to navigate to the settings screen.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainScreen(
 	viewModel: MainViewModel,
@@ -94,7 +92,7 @@ fun MainScreen(
 	onNavigateToSettings: () -> Unit,
 	onNavigateToAnalysis: () -> Unit
 ) {
-	val allTypes by viewModel.allTypes.collectAsState(emptyList())
+	val allTypesNotInTrash by viewModel.allTypesNotInTrash.collectAsState(emptyList())
 	val recentTransfers by viewModel.recentTransfers.collectAsState(emptyList())
 
 	Scaffold(
@@ -119,7 +117,7 @@ fun MainScreen(
 		},
 		floatingActionButton = {
 			FabMenu(
-				types = allTypes,
+				types = allTypesNotInTrash,
 				onTypeClicked = { type ->
 					onCreateTransfer(type.id)
 				},
@@ -186,7 +184,7 @@ fun MainScreen(
 					},
 					onShowAllTransfers = onNavigateToTransfers,
 					onQueryTransferType = { transfer ->
-						viewModel.getTypeForTransfer(transfer, allTypes)
+						viewModel.getTypeForTransfer(transfer)
 					},
 					modifier = Modifier.padding(
 						start = dimensionResource(R.dimen.margin_horizontal),
@@ -198,12 +196,14 @@ fun MainScreen(
 		}
 
 
-		if (viewModel.transferToDelete != null) {
+		val transferToDelete: Transfer? = viewModel.transferToDelete
+		if (transferToDelete != null) {
+			val typeName: String by produceState("") {
+				value = viewModel.getTypeForTransfer(transferToDelete)?.name ?: ""
+			}
+
 			ConfirmDeleteDialog(
-				text = stringResource(
-					R.string.transfers_confirmDelete,
-					viewModel.getTypeForTransfer(viewModel.transferToDelete!!, allTypes)?.name ?: ""
-				),
+				text = stringResource(R.string.transfers_confirmDelete, typeName),
 				onDismiss = {
 					viewModel.transferToDelete = null
 				},
@@ -519,7 +519,7 @@ private fun TransferList(
 	onEditTransfer: (Transfer) -> Unit,
 	onDeleteTransfer: (Transfer) -> Unit,
 	onShowAllTransfers: () -> Unit,
-	onQueryTransferType: (Transfer) -> Type?,
+	onQueryTransferType: suspend (Transfer) -> Type?,
 	modifier: Modifier = Modifier
 ) {
 	Column(
@@ -558,7 +558,6 @@ private fun TransferList(
  * @param types			List of types to display in the FAB menu.
  * @param onTypeClicked	Callback invoked once a type is clicked.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun FabMenu(
 	types: List<Type>,

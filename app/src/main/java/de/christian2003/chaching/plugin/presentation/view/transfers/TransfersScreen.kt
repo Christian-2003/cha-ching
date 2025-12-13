@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -54,7 +55,6 @@ fun TransfersScreen(
     onNavigateUp: () -> Unit,
     onEditTransfer: (UUID, UUID) -> Unit
 ) {
-    val types: List<Type> by viewModel.allTypes.collectAsState(emptyList())
     val transfers: List<Transfer> by viewModel.allTransfers.collectAsState(emptyList())
     val appBarState: TopAppBarState = rememberTopAppBarState()
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
@@ -107,7 +107,7 @@ fun TransfersScreen(
                         viewModel.transferToDelete = transfer
                     },
                     onQueryTransferType = { transfer ->
-                        viewModel.getTypeForTransfer(transfer, types)
+                        viewModel.getTypeForTransfer(transfer)
                     },
                     windowInsets = WindowInsets(
                         bottom = innerPadding.calculateBottomPadding()
@@ -123,12 +123,13 @@ fun TransfersScreen(
             )
         )
 
-        if (viewModel.transferToDelete != null) {
+        val transferToDelete: Transfer? = viewModel.transferToDelete
+        if (transferToDelete != null) {
+            val typeName: String by produceState("") {
+                value = viewModel.getTypeForTransfer(transferToDelete)?.name ?: ""
+            }
             ConfirmDeleteDialog(
-                text = stringResource(
-                    R.string.transfers_confirmDelete,
-                    viewModel.getTypeForTransfer(viewModel.transferToDelete!!, types)?.name ?: ""
-                ),
+                text = stringResource(R.string.transfers_confirmDelete, typeName),
                 onDismiss = {
                     viewModel.transferToDelete = null
                 },
@@ -155,7 +156,7 @@ private fun TransferList(
     transfers: List<Transfer>,
     onEditTransfer: (Transfer) -> Unit,
     onDeleteTransfer: (Transfer) -> Unit,
-    onQueryTransferType: (Transfer) -> Type?,
+    onQueryTransferType: suspend (Transfer) -> Type?,
     windowInsets: WindowInsets
 ) {
     val groupedTransfers = transfers.groupBy { transfer ->
