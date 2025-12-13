@@ -130,6 +130,14 @@ fun TypeScreen(
                 text = stringResource(R.string.type_hoursWorkedEditableText)
             )
             Checkbox(
+                checked = viewModel.isSalaryByDefault,
+                onCheckedChange = {
+                    viewModel.isSalaryByDefault = it
+                },
+                title = stringResource(R.string.type_salaryByDefaultTitle),
+                text = stringResource(R.string.type_salaryByDefaultText)
+            )
+            Checkbox(
                 checked = viewModel.isEnabledInQuickAccess,
                 onCheckedChange = {
                     viewModel.isEnabledInQuickAccess = it

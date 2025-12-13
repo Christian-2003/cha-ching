@@ -24,6 +24,7 @@ class TypeDbMapper {
             metadata = TypeMetadata(
                 isHoursWorkedEditable = entity.isHoursWorkedEditable,
                 isEnabledInQuickAccess = entity.isEnabledInQuickAccess,
+                isSalaryByDefault = entity.isSalaryByDefault,
                 created = entity.created,
                 edited = entity.edited
             )
@@ -44,6 +45,7 @@ class TypeDbMapper {
             typeId = domain.id,
             isHoursWorkedEditable = domain.metadata.isHoursWorkedEditable,
             isEnabledInQuickAccess = domain.metadata.isEnabledInQuickAccess,
+            isSalaryByDefault = domain.metadata.isSalaryByDefault,
             created = domain.metadata.created,
             edited = domain.metadata.edited
         )

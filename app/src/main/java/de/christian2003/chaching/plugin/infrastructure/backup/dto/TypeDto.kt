@@ -24,6 +24,9 @@ data class TypeDto(
     @SerialName("isEnabledInQuickAccess")
     val isEnabledInQuickAccess: Boolean = true,
 
+    @SerialName("isSalaryByDefault")
+    val isSalaryByDefault: Boolean = true,
+
     @SerialName("id")
     @Serializable(with = UuidSerializer::class)
     val id: UUID,

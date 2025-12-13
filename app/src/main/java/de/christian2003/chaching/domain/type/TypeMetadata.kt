@@ -12,12 +12,15 @@ import java.time.LocalDateTime
  *                                  creating a new transfer for this type.
  * @param isEnabledInQuickAccess    Indicates whether transfers for this type can be created through
  *                                  the quick access on the main screen.
+ * @param isSalaryByDefault         Indicates whether transfers of this type should be a salary by
+ *                                  default.
  */
 data class TypeMetadata(
     val created: LocalDateTime = LocalDateTime.now(),
     val edited: LocalDateTime = LocalDateTime.now(),
     val isHoursWorkedEditable: Boolean = true,
-    val isEnabledInQuickAccess: Boolean = true
+    val isEnabledInQuickAccess: Boolean = true,
+    val isSalaryByDefault: Boolean = true
 ) {
 
     /**

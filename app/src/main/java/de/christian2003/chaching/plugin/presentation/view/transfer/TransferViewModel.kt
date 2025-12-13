@@ -173,7 +173,7 @@ class TransferViewModel @Inject constructor(
                 hoursWorked = ""
                 hoursWorkedErrorMessage = null
                 valueDate = LocalDate.now()
-                isSalary = true
+                isSalary = type.metadata.isSalaryByDefault
                 isSavable = false
             }
         }

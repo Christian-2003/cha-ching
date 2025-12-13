@@ -96,6 +96,8 @@
     <string name="type_nameLabel">Name</string>
     <string name="type_hoursWorkedEditableTitle">Hours Worked editable</string>
     <string name="type_hoursWorkedEditableText">Should earnings of this type track hours worked?</string>
+    <string name="type_salaryByDefaultTitle">Is salary by default</string>
+    <string name="type_salaryByDefaultText">Should earnings of this type be a salary by default?</string>
     <string name="type_quickAccessEnabledTitle">Visible in quick access</string>
     <string name="type_quickAccessEnabledText">Should this type be visible in the quick access on the home screen?</string>
     <string name="type_chooseIcon">Choose an icon</string>

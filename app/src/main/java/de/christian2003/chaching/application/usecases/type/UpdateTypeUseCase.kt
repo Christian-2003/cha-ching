@@ -25,13 +25,16 @@ class UpdateTypeUseCase @Inject constructor(
      * @param icon                      New icon for the type.
      * @param isHoursWorkedEditable     Whether the "Hours worked" field should be editable.
      * @param isEnabledInQuickAccess    Whether the type is visible in quick access.
+     * @param isSalaryByDefault         Whether transfers for this type should be created as salary
+     *                                  by default.
      */
     suspend fun updateType(
         typeId: UUID,
         name: String,
         icon: TypeIcon,
         isHoursWorkedEditable: Boolean,
-        isEnabledInQuickAccess: Boolean
+        isEnabledInQuickAccess: Boolean,
+        isSalaryByDefault: Boolean
     ) {
         val type: Type? = repository.getTypeById(typeId)
         if (type != null) {
@@ -39,7 +42,8 @@ class UpdateTypeUseCase @Inject constructor(
             type.icon = icon
             type.metadata = type.metadata.copy(
                 isHoursWorkedEditable = isHoursWorkedEditable,
-                isEnabledInQuickAccess = isEnabledInQuickAccess
+                isEnabledInQuickAccess = isEnabledInQuickAccess,
+                isSalaryByDefault = isSalaryByDefault
             )
             repository.updateExistingType(type)
         }

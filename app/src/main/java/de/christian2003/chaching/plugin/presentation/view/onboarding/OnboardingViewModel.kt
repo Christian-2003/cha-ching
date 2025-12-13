@@ -84,7 +84,8 @@ class OnboardingViewModel @Inject constructor(
                     name = type.name,
                     icon = type.icon,
                     isHoursWorkedEditable = type.metadata.isHoursWorkedEditable,
-                    isEnabledInQuickAccess = true
+                    isEnabledInQuickAccess = true,
+                    isSalaryByDefault = true
                 )
             }
         }

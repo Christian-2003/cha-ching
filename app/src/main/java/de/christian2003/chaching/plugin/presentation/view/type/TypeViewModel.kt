@@ -56,12 +56,17 @@ class TypeViewModel @Inject constructor(
     /**
      * Whether the hoursWorked-field of transfers for this type shall be editable.
      */
-    var isHoursWorkedEditable by mutableStateOf(true)
+    var isHoursWorkedEditable: Boolean by mutableStateOf(true)
 
     /**
      * Whether the type is visible in the "+"-FAB on the main screen.
      */
-    var isEnabledInQuickAccess by mutableStateOf(true)
+    var isEnabledInQuickAccess: Boolean by mutableStateOf(true)
+
+    /**
+     * Whether transfers od this type are created as salary by default.
+     */
+    var isSalaryByDefault: Boolean by mutableStateOf(true)
 
     /**
      * Icon selected by the user.
@@ -111,6 +116,7 @@ class TypeViewModel @Inject constructor(
                 type = getTypeByIdUseCase.getTypeById(typeId)
                 name = type!!.name
                 isHoursWorkedEditable = type!!.metadata.isHoursWorkedEditable
+                isSalaryByDefault = type!!.metadata.isSalaryByDefault
                 isEnabledInQuickAccess = type!!.metadata.isEnabledInQuickAccess
                 icon = type!!.icon
             }
@@ -120,6 +126,7 @@ class TypeViewModel @Inject constructor(
                 isCreating = true
                 name = ""
                 isHoursWorkedEditable = true
+                isSalaryByDefault = true
                 isEnabledInQuickAccess = true
                 icon = TypeIcon.CURRENCY
             }
@@ -137,7 +144,8 @@ class TypeViewModel @Inject constructor(
                 name = name,
                 icon = icon,
                 isHoursWorkedEditable = isHoursWorkedEditable,
-                isEnabledInQuickAccess = isEnabledInQuickAccess
+                isEnabledInQuickAccess = isEnabledInQuickAccess,
+                isSalaryByDefault = isSalaryByDefault
             )
         }
         else {
@@ -146,7 +154,8 @@ class TypeViewModel @Inject constructor(
                 name = name,
                 icon = icon,
                 isHoursWorkedEditable = isHoursWorkedEditable,
-                isEnabledInQuickAccess = isEnabledInQuickAccess
+                isEnabledInQuickAccess = isEnabledInQuickAccess,
+                isSalaryByDefault = isSalaryByDefault
             )
         }
     }
