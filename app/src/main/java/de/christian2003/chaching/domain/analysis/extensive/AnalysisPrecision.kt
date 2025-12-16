@@ -9,16 +9,16 @@ enum class AnalysisPrecision {
     /**
      * Monthly precision means that analysis results are calculated for each month.
      */
-    MONTH,
+    Month,
 
     /**
      * Quarterly precision means that analysis results are calculated for each quarter of a year.
      */
-    QUARTER,
+    Quarter,
 
     /**
      * Yearly precision means that analysis results are calculated for each year.
      */
-    YEAR
+    Year
 
 }

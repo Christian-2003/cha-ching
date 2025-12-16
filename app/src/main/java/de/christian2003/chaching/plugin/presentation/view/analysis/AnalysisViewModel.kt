@@ -66,11 +66,11 @@ class AnalysisViewModel @Inject constructor(
 
             val periodLength = analysisPeriod.endDate.toEpochDay() - analysisPeriod.startDate.toEpochDay()
             val precision: AnalysisPrecision = if (periodLength <= 365) {
-                AnalysisPrecision.MONTH //0 Months - 12 Months
+                AnalysisPrecision.Month //0 Months - 12 Months
             } else if (periodLength <= 1825) {
-                AnalysisPrecision.QUARTER //13 Months - 5 Years
+                AnalysisPrecision.Quarter //13 Months - 5 Years
             } else {
-                AnalysisPrecision.YEAR //More than 5 Years
+                AnalysisPrecision.Year //More than 5 Years
             }
 
             val result: AnalysisResult = analysisService.analyzeData(analysisPeriod.startDate, analysisPeriod.endDate, precision)

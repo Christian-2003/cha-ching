@@ -1,6 +1,6 @@
 package de.christian2003.chaching.application.services
 
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.application.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import java.util.UUID

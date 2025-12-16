@@ -8,6 +8,7 @@ import java.time.LocalDate
 /**
  * Analysis service can analyze the transfers for a specified period of time.
  */
+@Deprecated("Use use case instead")
 interface AnalysisService {
 
     /**

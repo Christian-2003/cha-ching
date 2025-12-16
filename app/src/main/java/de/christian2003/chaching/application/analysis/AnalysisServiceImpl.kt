@@ -4,8 +4,8 @@ import de.christian2003.chaching.domain.analysis.extensive.AnalysisDiagramLine
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisItem
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisResult
-import de.christian2003.chaching.domain.repository.TransferRepository
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.application.repository.TransferRepository
+import de.christian2003.chaching.application.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import kotlinx.coroutines.flow.first
@@ -18,6 +18,7 @@ import kotlin.collections.MutableMap
  * Analysis result generates the result for all transfers within the database in a specified period
  * of time.
  */
+@Deprecated("Use use case instead")
 class AnalysisServiceImpl @Inject constructor(
 
     /**
@@ -66,8 +67,8 @@ class AnalysisServiceImpl @Inject constructor(
         //Group transfers by analysis precision:
         val transfersGroupedByPrecision: Map<LocalDate, List<Transfer>> = transfers.reversed().groupBy { transfer ->
             when (precision) {
-                AnalysisPrecision.QUARTER -> transfer.transferValue.date.withMonth(transfer.transferValue.date.month.value - ((transfer.transferValue.date.month.value - 1) % 3)).withDayOfMonth(1)
-                AnalysisPrecision.YEAR -> transfer.transferValue.date.withMonth(1).withDayOfMonth(1)
+                AnalysisPrecision.Quarter -> transfer.transferValue.date.withMonth(transfer.transferValue.date.month.value - ((transfer.transferValue.date.month.value - 1) % 3)).withDayOfMonth(1)
+                AnalysisPrecision.Year -> transfer.transferValue.date.withMonth(1).withDayOfMonth(1)
                 else -> transfer.transferValue.date.withDayOfMonth(1)
             }
         }
@@ -196,7 +197,7 @@ class AnalysisServiceImpl @Inject constructor(
     private fun createListWithAllDates(firstDate: LocalDate, lastDate: LocalDate, precision: AnalysisPrecision): List<LocalDate> {
         val dates: MutableList<LocalDate> = mutableListOf()
         when (precision) {
-            AnalysisPrecision.MONTH -> {
+            AnalysisPrecision.Month -> {
                 var month = firstDate.month.value
                 var year = firstDate.year
                 while ((year < lastDate.year) || (month <= lastDate.month.value && year == lastDate.year)) {
@@ -208,7 +209,7 @@ class AnalysisServiceImpl @Inject constructor(
                     }
                 }
             }
-            AnalysisPrecision.QUARTER -> {
+            AnalysisPrecision.Quarter -> {
                 var quarter = getQuarterForDate(firstDate)
                 var year = firstDate.year
                 while ((year < lastDate.year) || (quarter <= getQuarterForDate(lastDate) && year == lastDate.year)) {
@@ -220,7 +221,7 @@ class AnalysisServiceImpl @Inject constructor(
                     }
                 }
             }
-            AnalysisPrecision.YEAR -> {
+            AnalysisPrecision.Year -> {
                 for (i in firstDate.year..lastDate.year) {
                     dates.add(LocalDate.of(i, 1, 1))
                 }

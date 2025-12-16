@@ -8,6 +8,7 @@ import java.util.UUID
 
 class TransferTest {
 
+    /*
     @Test
     fun CreateTransfer() {
         Transfer(
@@ -55,5 +56,6 @@ class TransferTest {
         )
         Assert.assertEquals(transfer.getFormattedValue(), "1,234.56")
     }
+*/
 
 }

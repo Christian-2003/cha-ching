@@ -12,6 +12,7 @@ import javax.inject.Inject
 /**
  * Analysis squasher reduces the number of result items (by type).
  */
+@Deprecated("Use use case instead")
 class AnalysisSquasher @Inject constructor(
 
     /**

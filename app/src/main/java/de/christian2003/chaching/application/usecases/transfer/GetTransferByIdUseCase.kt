@@ -1,6 +1,6 @@
 package de.christian2003.chaching.application.usecases.transfer
 
-import de.christian2003.chaching.domain.repository.TransferRepository
+import de.christian2003.chaching.application.repository.TransferRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import java.util.UUID
 import javax.inject.Inject

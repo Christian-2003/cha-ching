@@ -115,6 +115,7 @@ dependencies {
 	implementation(libs.hilt.android)
 
 	testImplementation(libs.junit)
+	testImplementation(libs.mockito.kotlin)
 
 	androidTestImplementation(libs.androidx.junit)
 	androidTestImplementation(libs.androidx.espresso.core)

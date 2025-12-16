@@ -1,4 +1,4 @@
-package de.christian2003.chaching.domain.repository
+package de.christian2003.chaching.application.repository
 
 import de.christian2003.chaching.domain.type.Type
 import kotlinx.coroutines.flow.Flow

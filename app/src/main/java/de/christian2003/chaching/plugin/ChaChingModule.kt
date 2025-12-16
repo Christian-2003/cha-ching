@@ -12,9 +12,9 @@ import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
 import de.christian2003.chaching.application.analysis.AnalysisSquasher
 import de.christian2003.chaching.application.backup.BackupImportRepository
 import de.christian2003.chaching.application.backup.BackupService
-import de.christian2003.chaching.domain.repository.AppsRepository
-import de.christian2003.chaching.domain.repository.TransferRepository
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.application.repository.AppsRepository
+import de.christian2003.chaching.application.repository.TransferRepository
+import de.christian2003.chaching.application.repository.TypeRepository
 import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
 import de.christian2003.chaching.plugin.infrastructure.rest.HttpClientProvider

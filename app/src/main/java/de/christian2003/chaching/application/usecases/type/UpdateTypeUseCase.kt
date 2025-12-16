@@ -1,6 +1,6 @@
 package de.christian2003.chaching.application.usecases.type
 
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.application.repository.TypeRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.type.TypeIcon
 import java.util.UUID

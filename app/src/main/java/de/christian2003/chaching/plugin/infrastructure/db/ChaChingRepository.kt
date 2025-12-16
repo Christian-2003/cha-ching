@@ -1,8 +1,8 @@
 package de.christian2003.chaching.plugin.infrastructure.db
 
 import de.christian2003.chaching.application.backup.BackupImportRepository
-import de.christian2003.chaching.domain.repository.TransferRepository
-import de.christian2003.chaching.domain.repository.TypeRepository
+import de.christian2003.chaching.application.repository.TransferRepository
+import de.christian2003.chaching.application.repository.TypeRepository
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TransferEntity
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity

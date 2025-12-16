@@ -1,7 +1,7 @@
 package de.christian2003.chaching.plugin.infrastructure.rest.apps
 
 import de.christian2003.chaching.domain.apps.AppItem
-import de.christian2003.chaching.domain.repository.AppsRepository
+import de.christian2003.chaching.application.repository.AppsRepository
 import de.christian2003.chaching.plugin.infrastructure.rest.apps.dto.AppsResponseDto
 import de.christian2003.chaching.plugin.infrastructure.rest.apps.mapper.AppItemRestMapper
 import kotlinx.serialization.json.Json

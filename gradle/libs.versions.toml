@@ -24,6 +24,7 @@ coroutines = "1.9.0"
 navigationRuntimeKtx = "2.9.0"
 navigationCompose = "2.9.0"
 material3 = "1.5.0-alpha10"
+mockito = "6.0.0"
 
 
 [libraries]
@@ -69,6 +70,7 @@ androidx-ui-test = { group = "androidx.compose.ui", name = "ui-test" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
 
 
 [plugins]

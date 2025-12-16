@@ -135,9 +135,9 @@ fun AnalysisScreen(
                     )
                     LineDiagram(
                         title = stringResource(R.string.analysis_diagram_transfers, when (viewModel.analysisResult!!.transfersByTypeDiagram.precision) {
-                            AnalysisPrecision.MONTH -> stringResource(R.string.analysis_precision_month)
-                            AnalysisPrecision.QUARTER -> stringResource(R.string.analysis_precision_quarter)
-                            AnalysisPrecision.YEAR -> stringResource(R.string.analysis_precision_year)
+                            AnalysisPrecision.Month -> stringResource(R.string.analysis_precision_month)
+                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_precision_quarter)
+                            AnalysisPrecision.Year -> stringResource(R.string.analysis_precision_year)
                         }),
                         diagram = viewModel.analysisResult!!.transfersByTypeDiagram,
                         curvedEdges = true,
@@ -148,9 +148,9 @@ fun AnalysisScreen(
                     )
                     LineDiagram(
                         title = stringResource(R.string.analysis_diagram_cumulated, when (viewModel.analysisResult!!.transfersByTypeDiagram.precision) {
-                            AnalysisPrecision.MONTH -> stringResource(R.string.analysis_precision_month)
-                            AnalysisPrecision.QUARTER -> stringResource(R.string.analysis_precision_quarter)
-                            AnalysisPrecision.YEAR -> stringResource(R.string.analysis_precision_year)
+                            AnalysisPrecision.Month -> stringResource(R.string.analysis_precision_month)
+                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_precision_quarter)
+                            AnalysisPrecision.Year -> stringResource(R.string.analysis_precision_year)
                         }),
                         diagram = viewModel.analysisResult!!.cumulatedTransfersByTypeDiagram,
                         curvedEdges = false,
@@ -422,14 +422,14 @@ fun LineDiagram(
         diagram.lines[0].data.forEach { analysisItem ->
             labels.add(
                 when (diagram.precision) {
-                    AnalysisPrecision.MONTH -> stringArrayResource(R.array.months)[analysisItem.date.month.value - 1]
-                    AnalysisPrecision.QUARTER -> when(analysisItem.date.month.value) {
+                    AnalysisPrecision.Month -> stringArrayResource(R.array.months)[analysisItem.date.month.value - 1]
+                    AnalysisPrecision.Quarter -> when(analysisItem.date.month.value) {
                         1 -> stringArrayResource(R.array.quarters)[0]
                         4 -> stringArrayResource(R.array.quarters)[1]
                         7 -> stringArrayResource(R.array.quarters)[2]
                         else -> stringArrayResource(R.array.quarters)[3]
                     }
-                    AnalysisPrecision.YEAR -> analysisItem.date.year.toString()
+                    AnalysisPrecision.Year -> analysisItem.date.year.toString()
                 }
             )
         }
