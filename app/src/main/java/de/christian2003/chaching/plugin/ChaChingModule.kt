@@ -12,6 +12,7 @@ import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
 import de.christian2003.chaching.application.analysis.AnalysisSquasher
 import de.christian2003.chaching.application.backup.BackupImportRepository
 import de.christian2003.chaching.application.backup.BackupService
+import de.christian2003.chaching.application.repository.AnalysisRepository
 import de.christian2003.chaching.application.repository.AppsRepository
 import de.christian2003.chaching.application.repository.TransferRepository
 import de.christian2003.chaching.application.repository.TypeRepository
@@ -44,6 +45,11 @@ abstract class BindingsModule {
     abstract fun bindImportRepository(
         impl: ChaChingRepository
     ): BackupImportRepository
+
+    @Binds
+    abstract fun bindAnalysisRepository(
+        impl: ChaChingRepository
+    ): AnalysisRepository
 
     @Binds
     abstract fun provideAppsRepository(

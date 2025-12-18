@@ -7,9 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.christian2003.chaching.application.analysis.AnalysisService
+import de.christian2003.chaching.application.analysis.ExtensiveAnalysisUseCase
+import de.christian2003.chaching.domain.analysis.AnalysisResult
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
-import de.christian2003.chaching.domain.analysis.extensive.AnalysisResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -20,36 +20,29 @@ import javax.inject.Inject
 /**
  * View model for the analysis screen.
  *
- * @param application       Application object.
- * @param analysisService   Service with which to analyze data.
+ * @param application               Application object.
+ * @param extensiveAnalysisUseCase  Use case through which to analyze the data.
  */
 @HiltViewModel
 class AnalysisViewModel @Inject constructor(
     application: Application,
-    private val analysisService: AnalysisService
+    private val extensiveAnalysisUseCase: ExtensiveAnalysisUseCase,
 ): AndroidViewModel(application) {
 
     /**
      * Period for which to analyze data.
      */
-    lateinit var analysisPeriod: AnalysisPeriod
+    var analysisPeriod: AnalysisPeriod = AnalysisPeriod.CURRENT_YEAR
 
-    /**
-     * Result of the analysis. This is null while the analysis is running.
-     */
     var analysisResult: AnalysisResult? by mutableStateOf(null)
-
-    /**
-     * Indicates whether to show the dialog through which to select a custom date range for the analysis.
-     */
-    var showDatePeriodPickerDialog: Boolean by mutableStateOf(false)
+        private set
 
 
     /**
      * Initializes the view model.
      */
     init {
-        startAnalysis(analysisPeriod = AnalysisPeriod.CURRENT_YEAR, force = true)
+        startAnalysis(force = true)
     }
 
 
@@ -59,10 +52,9 @@ class AnalysisViewModel @Inject constructor(
      * @param analysisPeriod    Time period for the analysis.
      * @param force             Whether to force start an analysis, even if one is already running.
      */
-    fun startAnalysis(analysisPeriod: AnalysisPeriod, force: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
+    fun startAnalysis(force: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
         if (analysisResult != null || force) {
             analysisResult = null
-            this@AnalysisViewModel.analysisPeriod = analysisPeriod
 
             val periodLength = analysisPeriod.endDate.toEpochDay() - analysisPeriod.startDate.toEpochDay()
             val precision: AnalysisPrecision = if (periodLength <= 365) {
@@ -72,8 +64,8 @@ class AnalysisViewModel @Inject constructor(
             } else {
                 AnalysisPrecision.Year //More than 5 Years
             }
+            val result: AnalysisResult = extensiveAnalysisUseCase.analyzeData(precision, analysisPeriod.startDate, analysisPeriod.endDate)
 
-            val result: AnalysisResult = analysisService.analyzeData(analysisPeriod.startDate, analysisPeriod.endDate, precision)
             analysisResult = result
         }
     }

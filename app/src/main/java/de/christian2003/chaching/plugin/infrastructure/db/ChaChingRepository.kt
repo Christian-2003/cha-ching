@@ -7,6 +7,7 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TransferEntity
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 import de.christian2003.chaching.application.backup.ImportStrategy
+import de.christian2003.chaching.application.repository.AnalysisRepository
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.infrastructure.db.mapper.TransferDbMapper
 import de.christian2003.chaching.plugin.infrastructure.db.mapper.TypeDbMapper
@@ -26,7 +27,7 @@ import javax.inject.Inject
 class ChaChingRepository @Inject constructor(
 	private val transferDao: TransferDao,
 	private val typeDao: TypeDao
-): TransferRepository, TypeRepository, BackupImportRepository {
+): TransferRepository, TypeRepository, BackupImportRepository, AnalysisRepository {
 
 	/**
 	 * Imports the data passed as arguments based on the specified import strategy.

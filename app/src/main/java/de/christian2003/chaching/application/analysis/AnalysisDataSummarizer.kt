@@ -6,6 +6,7 @@ import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import java.time.LocalDate
+import java.util.UUID
 
 
 /**
@@ -35,25 +36,30 @@ class AnalysisDataSummarizer(
      * @param types     Types to which to map the transfers.
      * @return          List of summaries by normalized date mapped to each type.
      */
-    fun summarizeData(transfers: List<Transfer>, types: List<Type>): Map<Type, List<GroupedTypeSum>> {
+    fun summarizeData(transfers: List<Transfer>, types: List<Type>): Map<UUID, List<GroupedTypeSum>> {
         //Group transfers by type:
-        val groupedTransfersByType: Map<Type, List<Transfer>> = groupTransfersByType(transfers, types)
+        val groupedTransfersByType: Map<UUID, List<Transfer>> = groupTransfersByType(transfers, types)
 
-        val result: MutableMap<Type, List<GroupedTypeSum>> = mutableMapOf()
+        val result: MutableMap<UUID, List<GroupedTypeSum>> = mutableMapOf()
 
         //For each type: Calculate summaries:
-        groupedTransfersByType.forEach { type, transfers ->
+        groupedTransfersByType.forEach { typeId, transfers ->
             val groupedTransfersByDate: Map<LocalDate, List<Transfer>> = groupTransfersByNormalizedDate(transfers)
 
+            //Calculate summary by normalized date:
             val groupedTypeSums: MutableList<GroupedTypeSum> = mutableListOf()
             groupedTransfersByDate.forEach { date, transfers ->
                 val groupedTypeSum: GroupedTypeSum = calculateGroupedTypeSumForTransfers(date, transfers)
                 groupedTypeSums.add(groupedTypeSum)
             }
 
-            val trimmedGroupTypeSums: List<GroupedTypeSum> = trimGroupedTypesSum(groupedTypeSums)
+            //Sort by date:
+            val sortedGroupedTypeSums: List<GroupedTypeSum> = groupedTypeSums.sortedBy { it.date }
 
-            result[type] = trimmedGroupTypeSums
+            //Make sure that all normalized dates between start and end are in the final result:
+            val trimmedGroupTypeSums: List<GroupedTypeSum> = trimGroupedTypesSum(sortedGroupedTypeSums)
+
+            result[typeId] = trimmedGroupTypeSums
         }
 
         return result
@@ -70,20 +76,16 @@ class AnalysisDataSummarizer(
      * @throws IllegalStateException    The list of transfers contains a type that is not available in
      *                                  the list of types.
      */
-    private fun groupTransfersByType(transfers: List<Transfer>, types: List<Type>): Map<Type, List<Transfer>> {
-        val groupedTransfers: MutableMap<Type, List<Transfer>> = transfers.groupBy { transfer ->
-            val type: Type? = types.find { type -> type.id == transfer.type }
-            if (type == null) {
-                throw IllegalStateException("Cannot find type ${transfer.type} for transfer ${transfer.id}")
-            }
-            return@groupBy type
+    private fun groupTransfersByType(transfers: List<Transfer>, types: List<Type>): Map<UUID, List<Transfer>> {
+        val groupedTransfers: MutableMap<UUID, List<Transfer>> = transfers.groupBy { transfer ->
+            transfer.type
         }.toMutableMap()
 
         if (groupedTransfers.size != types.size) {
             //Some types are missing in the map -> Add missing types:
             types.forEach { type ->
-                if (!groupedTransfers.containsKey(type)) {
-                    groupedTransfers[type] = emptyList()
+                if (!groupedTransfers.containsKey(type.id)) {
+                    groupedTransfers[type.id] = emptyList()
                 }
             }
         }

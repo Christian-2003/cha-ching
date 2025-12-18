@@ -14,8 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,6 +39,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
+import de.christian2003.chaching.domain.analysis.AnalysisResult
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisDiagram
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.type.Type
@@ -64,7 +63,82 @@ import java.time.format.FormatStyle
  * @param viewModel     View model from which to source data.
  * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun AnalysisScreen(
+    viewModel: AnalysisViewModel,
+    onNavigateUp: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(stringResource(R.string.analysis_title))
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = onNavigateUp
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_back),
+                            contentDescription = ""
+                        )
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            val analysisResult: AnalysisResult? = viewModel.analysisResult
+            if (analysisResult == null) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    LoadingIndicator()
+                }
+            }
+            else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    TotalOverview(
+                        formattedTotal = viewModel.buildIndicator(analysisResult.totalIncomes.transferSum),
+                        formattedAverage = viewModel.buildIndicator(analysisResult.totalIncomes.normalizedDateAvg),
+                        modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                    )
+                    TotalOverview(
+                        formattedTotal = viewModel.buildIndicator(analysisResult.totalExpenses.transferSum),
+                        formattedAverage = viewModel.buildIndicator(analysisResult.totalExpenses.normalizedDateAvg),
+                        modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 @Composable
 fun AnalysisScreen(
     viewModel: AnalysisViewModel,
@@ -176,6 +250,7 @@ fun AnalysisScreen(
         }
     }
 }
+*/
 
 
 /**
@@ -539,7 +614,6 @@ fun LineDiagram(
  * @param onDismiss                 Callback invoked to close the dialog without selecting a new
  *                                  date range.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DateRangePickerModal(
     selectedAnalysisPeriod: AnalysisPeriod,
