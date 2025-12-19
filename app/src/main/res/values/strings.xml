@@ -125,6 +125,31 @@
         <item>Incomes</item>
         <item>Expenses</item>
     </string-array>
+    <string name="analysis_incomes_total">Total incomes</string>
+    <string name="analysis_expenses_total">Total expenses</string>
+    <string name="analysis_data_transferAvg">Average per transfer</string>
+    <string name="analysis_data_monthAvg">Average per month</string>
+    <string name="analysis_data_quarterAvg">Average per quarter</string>
+    <string name="analysis_data_yearAvg">Average per year</string>
+    <string name="analysis_incomes_byType">Income by type</string>
+    <string name="analysis_expenses_byType">Expenses by type</string>
+    <string name="analysis_data_typesListTitle">Types</string>
+    <plurals name="analysis_data_typeListTransferCount">
+        <item quantity="one">%1$d transfer</item>
+        <item quantity="other">%1$d transfers</item>
+    </plurals>
+    <string name="analysis_incomes_monthDiagramValues">Incomes by month</string>
+    <string name="analysis_expenses_monthDiagramValues">Expenses by month</string>
+    <string name="analysis_incomes_quarterDiagramValues">Incomes by quarter</string>
+    <string name="analysis_expenses_quarterDiagramValues">Expenses by quarter</string>
+    <string name="analysis_incomes_yearDiagramValues">Incomes by year</string>
+    <string name="analysis_expenses_yearDiagramValues">Expenses by year</string>
+    <string name="analysis_incomes_monthDiagramCumulated">Cumulated incomes by month</string>
+    <string name="analysis_expenses_monthDiagramCumulated">Cumulated expenses by month</string>
+    <string name="analysis_incomes_quarterDiagramCumulated">Cumulated incomes by quarter</string>
+    <string name="analysis_expenses_quarterDiagramCumulated">Cumulated expenses by quarter</string>
+    <string name="analysis_incomes_yearDiagramCumulated">Cumulated incomes by year</string>
+    <string name="analysis_expenses_yearDiagramCumulated">Cumulated expenses by year</string>
 
 
     <string name="settings_title">Settings</string>

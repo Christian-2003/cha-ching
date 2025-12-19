@@ -8,12 +8,18 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.analysis.ExtensiveAnalysisUseCase
+import de.christian2003.chaching.application.services.ValueFormatterService
+import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
 import de.christian2003.chaching.domain.analysis.AnalysisResult
+import de.christian2003.chaching.domain.analysis.TypeResult
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
+import de.christian2003.chaching.domain.type.Type
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTypeDiagram
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -22,11 +28,14 @@ import javax.inject.Inject
  *
  * @param application               Application object.
  * @param extensiveAnalysisUseCase  Use case through which to analyze the data.
+ * @param valueFormatterService     Service used to format values.
  */
 @HiltViewModel
 class AnalysisViewModel @Inject constructor(
     application: Application,
     private val extensiveAnalysisUseCase: ExtensiveAnalysisUseCase,
+    private val valueFormatterService: ValueFormatterService,
+    private val getTypeByIdUseCase: GetTypeByIdUseCase
 ): AndroidViewModel(application) {
 
     /**
@@ -35,6 +44,24 @@ class AnalysisViewModel @Inject constructor(
     var analysisPeriod: AnalysisPeriod = AnalysisPeriod.CURRENT_YEAR
 
     var analysisResult: AnalysisResult? by mutableStateOf(null)
+        private set
+
+    var typeResultsIncomes: List<TypeResult> = listOf()
+        private set
+
+    var typeResultsExpenses: List<TypeResult> = listOf()
+        private set
+
+    lateinit var valuesDiagramIncomes: DataTypeDiagram
+        private set
+
+    lateinit var cumulatedDiagramIncomes: DataTypeDiagram
+        private set
+
+    lateinit var valuesDiagramExpenses: DataTypeDiagram
+        private set
+
+    lateinit var cumulatedDiagramExpenses: DataTypeDiagram
         private set
 
 
@@ -66,8 +93,41 @@ class AnalysisViewModel @Inject constructor(
             }
             val result: AnalysisResult = extensiveAnalysisUseCase.analyzeData(precision, analysisPeriod.startDate, analysisPeriod.endDate)
 
+            //Convert analysis result format so that it can be used in view:
+            typeResultsIncomes = result.typeResults.filter { it.incomes.transferSum > 0 }.sortedByDescending { it.incomes.transferSum }
+            typeResultsExpenses = result.typeResults.filter { it.expenses.transferCount > 0 }.sortedByDescending { it.expenses.transferSum }
+
+            valuesDiagramIncomes = DataTypeDiagram.Builder(typeResultsIncomes)
+                .setOptions(DataTabOptions.Incomes)
+                .setLimit(4)
+                .build()
+            cumulatedDiagramIncomes = DataTypeDiagram.Builder(typeResultsIncomes)
+                .setOptions(DataTabOptions.Incomes)
+                .setLimit(4)
+                .setCumulated()
+                .build()
+            valuesDiagramExpenses = DataTypeDiagram.Builder(typeResultsExpenses)
+                .setOptions(DataTabOptions.Expenses)
+                .setLimit(4)
+                .build()
+            cumulatedDiagramExpenses = DataTypeDiagram.Builder(typeResultsExpenses)
+                .setOptions(DataTabOptions.Expenses)
+                .setLimit(4)
+                .setCumulated()
+                .build()
+
             analysisResult = result
         }
+    }
+
+
+    fun formatValue(value: Double): String {
+        return valueFormatterService.format(value)
+    }
+
+
+    suspend fun queryType(typeId: UUID): Type? {
+        return getTypeByIdUseCase.getTypeById(typeId)
     }
 
 

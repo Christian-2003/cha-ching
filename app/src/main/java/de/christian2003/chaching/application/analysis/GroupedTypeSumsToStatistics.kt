@@ -17,8 +17,8 @@ class GroupedTypeSumsToStatistics {
         var expensesHoursTotal = 0
 
         groupedTypeSums.forEach { groupedTypeSum ->
-            incomesCount += groupedTypeSum.incomes.sum
-            incomesTotal += groupedTypeSum.incomes.count
+            incomesTotal += groupedTypeSum.incomes.sum
+            incomesCount += groupedTypeSum.incomes.count
             incomesHoursTotal += groupedTypeSum.incomes.hoursWorked
 
             expensesTotal += groupedTypeSum.expenses.sum

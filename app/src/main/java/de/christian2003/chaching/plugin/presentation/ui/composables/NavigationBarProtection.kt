@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 
 
 /**
@@ -23,7 +24,7 @@ import androidx.compose.ui.graphics.Color
  */
 @Composable
 fun NavigationBarProtection(
-    color: Color = MaterialTheme.colorScheme.surfaceContainer,
+    color: Color = MaterialTheme.colorScheme.surfaceContainer.copy(0.5f),
     windowInsets: WindowInsets
 ) {
     Box(
@@ -34,6 +35,35 @@ fun NavigationBarProtection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(windowInsets.asPaddingValues().calculateBottomPadding())
+        ) {
+            drawRect(
+                color = color,
+                size = Size(width = size.width, size.height)
+            )
+        }
+    }
+}
+
+
+/**
+ * Draws a background at the bottom of the screen that has the same height as the navigation bar.
+ *
+ * @param color     Color for the background.
+ * @param height    Height for the navigation bar protection.
+ */
+@Composable
+fun NavigationBarProtection(
+    color: Color = MaterialTheme.colorScheme.surfaceContainer.copy(0.5f),
+    height: Dp
+) {
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(height)
         ) {
             drawRect(
                 color = color,

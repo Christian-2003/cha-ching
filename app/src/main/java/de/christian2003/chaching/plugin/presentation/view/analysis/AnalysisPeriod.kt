@@ -1,6 +1,7 @@
 package de.christian2003.chaching.plugin.presentation.view.analysis
 
 import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
 import java.util.Objects
 
 
@@ -52,16 +53,16 @@ class AnalysisPeriod(
          * Default instance storing the time period for the last 12 months.
          */
         val CURRENT_YEAR = AnalysisPeriod(
-            startDate = LocalDate.now().minusYears(1).plusDays(1),
-            endDate = LocalDate.now()
+            startDate = LocalDate.now().minusYears(1).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1),
+            endDate = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth())
         )
 
         /**
          * Default instance storing a time period of 12 months one year ago.
          */
         val LAST_YEAR = AnalysisPeriod(
-            startDate = LocalDate.now().minusYears(2).plusDays(1),
-            endDate = LocalDate.now().minusYears(1)
+            startDate = LocalDate.now().minusYears(2).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1),
+            endDate = LocalDate.now().minusYears(2).with(TemporalAdjusters.lastDayOfMonth())
         )
 
     }

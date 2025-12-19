@@ -11,6 +11,18 @@ import java.text.NumberFormat
 class ValueFormatterService {
 
     /**
+     * Formats the specified double value and returns it as a string.
+     *
+     * @param value Value to format.
+     * @return      Formatted value.
+     */
+    fun format(value: Double): String {
+        val numberFormat: NumberFormat = DecimalFormat("#,###.00")
+        return numberFormat.format(value)
+    }
+
+
+    /**
      * Formats the specified value and returns it as string.
      *
      * @param cents         Value in cents.
