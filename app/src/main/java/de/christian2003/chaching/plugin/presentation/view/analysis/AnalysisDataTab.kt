@@ -1,5 +1,6 @@
 package de.christian2003.chaching.plugin.presentation.view.analysis
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Matrix
@@ -42,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.toPath
 import de.christian2003.chaching.domain.analysis.ResultSummary
@@ -52,6 +56,8 @@ import de.christian2003.chaching.domain.analysis.TypeResult
 import de.christian2003.chaching.domain.analysis.TypeResultSummary
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
+import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
+import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTypeDiagram
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.PieChart
@@ -140,7 +146,8 @@ fun AnalysisDataTab(
                     diagram = when (options) {
                         DataTabOptions.Incomes -> viewModel.valuesDiagramIncomes
                         DataTabOptions.Expenses -> viewModel.valuesDiagramExpenses
-                    }
+                    },
+                    labels = viewModel.diagramLabels
                 )
             }
             item {
@@ -164,7 +171,8 @@ fun AnalysisDataTab(
                     diagram = when (options) {
                         DataTabOptions.Incomes -> viewModel.cumulatedDiagramIncomes
                         DataTabOptions.Expenses -> viewModel.cumulatedDiagramExpenses
-                    }
+                    },
+                    labels = viewModel.diagramLabels
                 )
             }
             item {
@@ -374,6 +382,7 @@ private fun DataByTypeDiagram(
 @Composable
 private fun DataLineDiagram(
     diagram: DataTypeDiagram,
+    labels: List<String>,
     modifier: Modifier = Modifier
 ) {
     val diagramLines: MutableList<Line> = mutableListOf()
@@ -382,7 +391,7 @@ private fun DataLineDiagram(
             0 -> MaterialTheme.colorScheme.primary
             1 -> MaterialTheme.colorScheme.secondary
             2 -> MaterialTheme.colorScheme.tertiary
-            else -> MaterialTheme.colorScheme.onSurfaceVariant
+            else -> MaterialTheme.colorScheme.outline
         })
 
         val diagramLine = Line(
@@ -401,8 +410,6 @@ private fun DataLineDiagram(
         diagramLines.add(diagramLine)
     }
 
-    //TODO: Labels
-
     LineChart(
         data = diagramLines,
         gridProperties = GridProperties(
@@ -418,14 +425,14 @@ private fun DataLineDiagram(
                 lineCount = diagram.lines[0].values.size
             ),
         ),
-        /*labelHelperProperties = LabelHelperProperties(
-            enabled = false
-        ),
         labelProperties = LabelProperties(
             enabled = true,
             textStyle = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
             labels = labels,
             rotation = LabelProperties.Rotation(mode = LabelProperties.Rotation.Mode.Force, degree = -45f)
+        ),
+        /*labelHelperProperties = LabelHelperProperties(
+            enabled = false
         ),
         popupProperties = PopupProperties(
             enabled = true,
@@ -440,8 +447,9 @@ private fun DataLineDiagram(
         ),*/
         modifier = modifier
             .fillMaxWidth()
-            .height(240.dp)
             .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
+            .padding(bottom = 48.dp)
+            .height(240.dp)
     )
 }
 
@@ -467,116 +475,80 @@ private fun TypeListItem(
         DataTabOptions.Expenses -> typeResult.expenses
     }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                start = dimensionResource(R.dimen.margin_horizontal),
-                end = dimensionResource(R.dimen.margin_horizontal),
-                bottom = 4.dp
-            )
-            .clip(
-                RoundedCornerShape(
-                    topStart = if (isFirst) { 16.dp } else { 4.dp },
-                    topEnd = if (isFirst) { 16.dp } else { 4.dp },
-                    bottomStart = if (isLast) { 16.dp } else { 4.dp },
-                    bottomEnd = if (isLast) { 16.dp } else { 4.dp },
-                )
-            )
-            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-            .clickable {
-
-            }
-            .padding(
-                horizontal = dimensionResource(R.dimen.padding_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
-            )
     ) {
-        if (type != null) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(dimensionResource(R.dimen.image_m))
-            ) {
-                Shape(
-                    shape = TypeListShapes.entries[index % TypeListShapes.entries.size].shape,
-                    color = when (index) {
-                        0 -> MaterialTheme.colorScheme.primaryContainer
-                        1 -> MaterialTheme.colorScheme.secondaryContainer
-                        2 -> MaterialTheme.colorScheme.tertiaryContainer
-                        else -> MaterialTheme.colorScheme.surfaceContainer
-                    }
-                )
-                Icon(
-                    painter = painterResource(type!!.icon.drawableResourceId),
-                    contentDescription = "",
-                    tint = when (index) {
-                        0 -> MaterialTheme.colorScheme.onPrimaryContainer
-                        1 -> MaterialTheme.colorScheme.onSecondaryContainer
-                        2 -> MaterialTheme.colorScheme.onTertiaryContainer
-                        else -> labelColor
-                    },
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
-                    .weight(1f)
-            ) {
-                Text(
-                    text = type!!.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = labelColor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable {
 
-                Text(
-                    text = pluralStringResource(R.plurals.analysis_data_typeListTransferCount, typeResultSummary.transferCount, typeResultSummary.transferCount),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = labelColor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                }
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
                 )
-            }
-        }
-        else {
-            Box(modifier = Modifier.weight(1f))
-        }
-        Text(
-            text = onFormatValue(typeResultSummary.transferSum),
-            style = MaterialTheme.typography.bodyLarge,
-            color = valueColor
-        )
-    }
-}
-
-
-@Composable
-private fun Shape(
-    shape: RoundedPolygon,
-    color: Color,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .drawWithCache {
-                val polygonPath = shape.toPath().asComposePath()
-                val scaledPath = Path().apply {
-                    addPath(polygonPath)
-                    transform(
-                        Matrix().apply {
-                            scale(size.width, size.height)
+        ) {
+            if (type != null) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_m))
+                ) {
+                    Shape(
+                        shape = TypeListShapes.entries[index % TypeListShapes.entries.size].shape,
+                        color = when (index) {
+                            0 -> MaterialTheme.colorScheme.primaryContainer
+                            1 -> MaterialTheme.colorScheme.secondaryContainer
+                            2 -> MaterialTheme.colorScheme.tertiaryContainer
+                            else -> MaterialTheme.colorScheme.surfaceContainerHigh
                         }
                     )
+                    Icon(
+                        painter = painterResource(type!!.icon.drawableResourceId),
+                        contentDescription = "",
+                        tint = when (index) {
+                            0 -> MaterialTheme.colorScheme.onPrimaryContainer
+                            1 -> MaterialTheme.colorScheme.onSecondaryContainer
+                            2 -> MaterialTheme.colorScheme.onTertiaryContainer
+                            else -> labelColor
+                        },
+                        modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
+                    )
                 }
-                onDrawBehind {
-                    drawPath(scaledPath, color)
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = type!!.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = labelColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Text(
+                        text = pluralStringResource(R.plurals.analysis_data_typeListTransferCount, typeResultSummary.transferCount, typeResultSummary.transferCount),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = labelColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
-            .fillMaxSize()
-    )
+            else {
+                Box(modifier = Modifier.weight(1f))
+            }
+            Text(
+                text = onFormatValue(typeResultSummary.transferSum),
+                style = MaterialTheme.typography.bodyLarge,
+                color = valueColor
+            )
+        }
+    }
 }
 
 

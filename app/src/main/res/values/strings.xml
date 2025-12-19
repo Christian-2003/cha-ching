@@ -4,24 +4,24 @@
     <string name="confirm_moveToTrash">Confirm move</string>
     <string name="value_format">$ %1$s</string>
     <string-array name="months">
-        <item>January</item>
-        <item>February</item>
-        <item>March</item>
-        <item>April</item>
-        <item>May</item>
-        <item>June</item>
-        <item>July</item>
-        <item>August</item>
-        <item>September</item>
-        <item>October</item>
-        <item>November</item>
-        <item>December</item>
+        <item>January %1$d</item>
+        <item>February %1$d</item>
+        <item>March %1$d</item>
+        <item>April %1$d</item>
+        <item>May %1$d</item>
+        <item>June %1$d</item>
+        <item>July %1$d</item>
+        <item>August %1$d</item>
+        <item>September %1$d</item>
+        <item>October %1$d</item>
+        <item>November %1$d</item>
+        <item>December %1$d</item>
     </string-array>
     <string-array name="quarters">
-        <item>Q1</item>
-        <item>Q2</item>
-        <item>Q3</item>
-        <item>Q4</item>
+        <item>Q1 %1$d</item>
+        <item>Q2 %1$d</item>
+        <item>Q3 %1$d</item>
+        <item>Q4 %1$d</item>
     </string-array>
 
 

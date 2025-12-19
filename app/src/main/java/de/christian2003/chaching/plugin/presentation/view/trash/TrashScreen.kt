@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -101,9 +102,11 @@ fun TrashScreen(
                         )
                     }
                 }
-                items(types) { type ->
+                itemsIndexed(types) { index, type ->
                     TypeListItem(
                         type = type,
+                        isFirst = index == 0,
+                        isLast = index == types.size - 1,
                         onRestoreFromTrash = {
                             viewModel.restoreType(type)
                         },

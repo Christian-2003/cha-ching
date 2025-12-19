@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -108,9 +109,11 @@ fun TypesScreen(
                             }
                         )
                     }
-                    items(typeEntities) { type ->
+                    itemsIndexed(typeEntities) { index, type ->
                         TypeListItem(
                             type = type,
+                            isFirst = index == 0,
+                            isLast = index == typeEntities.size - 1,
                             onEdit = {
                                 onEditType(type.id)
                             },

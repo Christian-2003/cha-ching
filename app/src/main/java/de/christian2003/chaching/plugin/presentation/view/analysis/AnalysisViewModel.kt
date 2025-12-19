@@ -1,10 +1,12 @@
 package de.christian2003.chaching.plugin.presentation.view.analysis
 
 import android.app.Application
+import android.content.res.Resources
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.analysis.ExtensiveAnalysisUseCase
@@ -19,8 +21,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.time.LocalDate
 import java.util.UUID
 import javax.inject.Inject
+import de.christian2003.chaching.R
 
 
 /**
@@ -64,6 +68,8 @@ class AnalysisViewModel @Inject constructor(
     lateinit var cumulatedDiagramExpenses: DataTypeDiagram
         private set
 
+    var diagramLabels: List<String> = emptyList()
+        private set
 
     /**
      * Initializes the view model.
@@ -116,6 +122,8 @@ class AnalysisViewModel @Inject constructor(
                 .setCumulated()
                 .build()
 
+            createDiagramLabels(result.normalizedDates, precision)
+
             analysisResult = result
         }
     }
@@ -141,6 +149,34 @@ class AnalysisViewModel @Inject constructor(
         val numberFormat: NumberFormat = DecimalFormat("#,##0.00")
         val formattedNumber: String = numberFormat.format(value)
         return formattedNumber
+    }
+
+
+    private fun createDiagramLabels(normalizedDates: List<LocalDate>, precision: AnalysisPrecision) {
+        val labels: MutableList<String> = mutableListOf()
+        val resources: Resources = application.resources
+
+        normalizedDates.forEach { normalizedDate ->
+            when (precision) {
+                AnalysisPrecision.Month -> {
+                    val months: Array<String> = resources.getStringArray(R.array.months)
+                    val label: String = months[normalizedDate.monthValue - 1].format(normalizedDate.year)
+                    labels.add(label)
+                }
+                AnalysisPrecision.Quarter -> {
+                    val quarters: Array<String> = resources.getStringArray(R.array.quarters)
+                    val index: Int = (normalizedDate.monthValue - 1) / 3
+                    val label: String = quarters[index].format(normalizedDate.year)
+                    labels.add(label)
+                }
+                AnalysisPrecision.Year -> {
+                    val label: String = normalizedDate.year.toString()
+                    labels.add(label)
+                }
+            }
+        }
+
+        this.diagramLabels = labels
     }
 
 }
