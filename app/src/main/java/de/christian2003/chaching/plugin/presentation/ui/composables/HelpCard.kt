@@ -28,8 +28,8 @@ fun HelpCard(
 ) {
     Card(
         text = text,
-        foregroundColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+        foregroundColor = MaterialTheme.colorScheme.onSurface,
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
         icon = painterResource(R.drawable.ic_help),
         modifier = modifier
     ) {
@@ -40,8 +40,7 @@ fun HelpCard(
             TextButton(
                 onClick = onDismiss,
                 colors = ButtonDefaults.textButtonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    contentColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(stringResource(R.string.button_dismissHelp))

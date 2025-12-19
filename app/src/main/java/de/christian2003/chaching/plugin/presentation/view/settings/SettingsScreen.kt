@@ -15,16 +15,21 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,12 +40,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
@@ -51,6 +59,8 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import de.christian2003.chaching.domain.apps.AppItem
+import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
+import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import okhttp3.OkHttpClient
 import java.time.format.DateTimeFormatter
@@ -131,171 +141,201 @@ fun SettingsScreen(
             )
         }
     ) { innerPadding ->
-        Column(
+        val bottomPadding: Dp = innerPadding.calculateBottomPadding()
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+                .padding(
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    top = innerPadding.calculateTopPadding(),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                )
         ) {
             //General
-            GeneralSection()
-            HorizontalDivider()
+            item {
+                GeneralSection()
+            }
 
 
             //Customization:
-            Headline(
-                title = stringResource(R.string.settings_customization),
-                indentToPrefixIcon = true
-            )
-            SettingsItemSwitch(
-                title = stringResource(R.string.settings_customization_globalThemeTitle),
-                info = stringResource(R.string.settings_customization_globalThemeInfo),
-                prefixIcon = painterResource(R.drawable.ic_theme),
-                checked = viewModel.useGlobalTheme,
-                onCheckedChange = {
-                    viewModel.updateUseGlobalTheme(it)
-                    onUseGlobalThemeChange(it)
-                }
-            )
-            AnimatedVisibility(
-                visible = !viewModel.useGlobalTheme,
-                enter = expandVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(spring(Spring.DampingRatioMediumBouncy)),
-                exit = shrinkVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(spring(Spring.DampingRatioMediumBouncy))
-            ) {
-                SettingsItemButton(
-                    setting = stringResource(R.string.settings_customization_contrastTitle),
-                    info = stringResource(R.string.settings_customization_contrastInfo),
-                    onClick = {
-                        viewModel.dialog = SettingsScreenDialog.Contrast
-                    },
-                    prefixIcon = painterResource(R.drawable.ic_contrast)
+            item {
+                Headline(
+                    title = stringResource(R.string.settings_customization),
                 )
+                SettingsItemSwitch(
+                    title = stringResource(R.string.settings_customization_globalThemeTitle),
+                    info = stringResource(R.string.settings_customization_globalThemeInfo),
+                    prefixIcon = painterResource(R.drawable.ic_theme),
+                    checked = viewModel.useGlobalTheme,
+                    onCheckedChange = {
+                        viewModel.updateUseGlobalTheme(it)
+                        onUseGlobalThemeChange(it)
+                    },
+                    isFirst = true,
+                    isLast = viewModel.useGlobalTheme
+                )
+                AnimatedVisibility(
+                    visible = !viewModel.useGlobalTheme,
+                    enter = expandVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(spring(Spring.DampingRatioMediumBouncy)),
+                    exit = shrinkVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(spring(Spring.DampingRatioMediumBouncy))
+                ) {
+                    SettingsItemButton(
+                        setting = stringResource(R.string.settings_customization_contrastTitle),
+                        info = stringResource(R.string.settings_customization_contrastInfo),
+                        onClick = {
+                            viewModel.dialog = SettingsScreenDialog.Contrast
+                        },
+                        prefixIcon = painterResource(R.drawable.ic_contrast),
+                        isLast = true
+                    )
+                }
             }
-            HorizontalDivider()
 
 
             //Data
-            Headline(
-                title = stringResource(R.string.settings_data),
-                indentToPrefixIcon = true
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_data_typesTitle),
-                info = stringResource(R.string.settings_data_typesInfo),
-                onClick = onNavigateToTypes,
-                endIcon = painterResource(R.drawable.ic_next),
-                prefixIcon = painterResource(R.drawable.ic_types)
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_data_trashTitle),
-                info = stringResource(R.string.settings_data_trashInfo),
-                onClick = onNavigateToTrash,
-                endIcon = painterResource(R.drawable.ic_next),
-                prefixIcon = painterResource(R.drawable.ic_delete)
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_data_exportTitle),
-                info = stringResource(R.string.settings_data_exportInfo),
-                onClick = {
-                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-                    intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.setType("application/json")
-                    intent.putExtra(Intent.EXTRA_TITLE, exportFilename)
-                    exportLauncher.launch(intent)
-                },
-                prefixIcon = painterResource(R.drawable.ic_export)
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_data_importTitle),
-                info = stringResource(R.string.settings_data_importInfo),
-                onClick = {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                    intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.setType("application/json")
-                    importLauncher.launch(intent)
-                },
-                prefixIcon = painterResource(R.drawable.ic_import)
-            )
-            HorizontalDivider()
+            item {
+                Headline(
+                    title = stringResource(R.string.settings_data),
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_data_typesTitle),
+                    info = stringResource(R.string.settings_data_typesInfo),
+                    onClick = onNavigateToTypes,
+                    endIcon = painterResource(R.drawable.ic_next),
+                    prefixIcon = painterResource(R.drawable.ic_types),
+                    isFirst = true
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_data_trashTitle),
+                    info = stringResource(R.string.settings_data_trashInfo),
+                    onClick = onNavigateToTrash,
+                    endIcon = painterResource(R.drawable.ic_next),
+                    prefixIcon = painterResource(R.drawable.ic_delete)
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_data_exportTitle),
+                    info = stringResource(R.string.settings_data_exportInfo),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.setType("application/json")
+                        intent.putExtra(Intent.EXTRA_TITLE, exportFilename)
+                        exportLauncher.launch(intent)
+                    },
+                    prefixIcon = painterResource(R.drawable.ic_export)
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_data_importTitle),
+                    info = stringResource(R.string.settings_data_importInfo),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.setType("application/json")
+                        importLauncher.launch(intent)
+                    },
+                    prefixIcon = painterResource(R.drawable.ic_import),
+                    isLast = true
+                )
+            }
 
 
             //Help
-            Headline(
-                title = stringResource(R.string.settings_help),
-                indentToPrefixIcon = true
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_help_helpMessagesTitle),
-                info = stringResource(R.string.settings_help_helpMessagesInfo),
-                onClick = onNavigateToHelpMessages,
-                endIcon = painterResource(R.drawable.ic_next),
-                prefixIcon = painterResource(R.drawable.ic_help_outlined)
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_help_onboardingTitle),
-                info = stringResource(R.string.settings_help_onboardingInfo),
-                onClick = onNavigateToOnboarding,
-                endIcon = painterResource(R.drawable.ic_next),
-                prefixIcon = painterResource(R.drawable.ic_welcome)
-            )
-            HorizontalDivider()
+            item {
+                Headline(
+                    title = stringResource(R.string.settings_help),
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_help_helpMessagesTitle),
+                    info = stringResource(R.string.settings_help_helpMessagesInfo),
+                    onClick = onNavigateToHelpMessages,
+                    endIcon = painterResource(R.drawable.ic_next),
+                    prefixIcon = painterResource(R.drawable.ic_help_outlined),
+                    isFirst = true
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_help_onboardingTitle),
+                    info = stringResource(R.string.settings_help_onboardingInfo),
+                    onClick = onNavigateToOnboarding,
+                    endIcon = painterResource(R.drawable.ic_next),
+                    prefixIcon = painterResource(R.drawable.ic_welcome),
+                    isLast = true
+                )
+            }
 
 
             //About
-            Headline(
-                title = stringResource(R.string.settings_about),
-                indentToPrefixIcon = true
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_about_licensesTitle),
-                info = stringResource(R.string.settings_about_licensesInfo),
-                onClick = onNavigateToLicenses,
-                endIcon = painterResource(R.drawable.ic_next),
-                prefixIcon = painterResource(R.drawable.ic_license)
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_about_repoTitle),
-                info = stringResource(R.string.settings_about_repoInfo),
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/cha-ching".toUri())
-                    context.startActivity(intent)
-                },
-                endIcon = painterResource(R.drawable.ic_external),
-                prefixIcon = painterResource(R.drawable.ic_github)
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_about_issuesTitle),
-                info = stringResource(R.string.settings_about_issuesInfo),
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/cha-ching/issues".toUri())
-                    context.startActivity(intent)
-                },
-                endIcon = painterResource(R.drawable.ic_external),
-                prefixIcon = painterResource(R.drawable.ic_bug)
-            )
-            SettingsItemButton(
-                setting = stringResource(R.string.settings_about_moreTitle),
-                info = stringResource(R.string.settings_about_moreInfo),
-                onClick = {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", context.packageName, null)
-                    intent.setData(uri)
-                    context.startActivity(intent)
-                },
-                endIcon = painterResource(R.drawable.ic_external),
-                prefixIcon = painterResource(R.drawable.ic_android)
-            )
+            item {
+                Headline(
+                    title = stringResource(R.string.settings_about),
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_about_licensesTitle),
+                    info = stringResource(R.string.settings_about_licensesInfo),
+                    onClick = onNavigateToLicenses,
+                    endIcon = painterResource(R.drawable.ic_next),
+                    prefixIcon = painterResource(R.drawable.ic_license),
+                    isFirst = true
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_about_repoTitle),
+                    info = stringResource(R.string.settings_about_repoInfo),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/cha-ching".toUri())
+                        context.startActivity(intent)
+                    },
+                    endIcon = painterResource(R.drawable.ic_external),
+                    prefixIcon = painterResource(R.drawable.ic_github)
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_about_issuesTitle),
+                    info = stringResource(R.string.settings_about_issuesInfo),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/cha-ching/issues".toUri())
+                        context.startActivity(intent)
+                    },
+                    endIcon = painterResource(R.drawable.ic_external),
+                    prefixIcon = painterResource(R.drawable.ic_bug)
+                )
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_about_moreTitle),
+                    info = stringResource(R.string.settings_about_moreInfo),
+                    onClick = {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri = Uri.fromParts("package", context.packageName, null)
+                        intent.setData(uri)
+                        context.startActivity(intent)
+                    },
+                    endIcon = painterResource(R.drawable.ic_external),
+                    prefixIcon = painterResource(R.drawable.ic_android),
+                    isLast = true
+                )
+            }
+
 
             //Apps:
-            AppsSection(
-                apps = viewModel.apps,
-                client = viewModel.client,
-                onAppClick = { app ->
-                    val intent = Intent(Intent.ACTION_VIEW, app.url)
-                    context.startActivity(intent)
-                }
-            )
+            item {
+                AppsSection(
+                    apps = viewModel.apps,
+                    client = viewModel.client,
+                    onAppClick = { app ->
+                        val intent = Intent(Intent.ACTION_VIEW, app.url)
+                        context.startActivity(intent)
+                    }
+                )
+            }
+
+
+            //Spacer at the bottom to scroll beneath the navigation bar:
+            item {
+                Box(
+                    modifier = Modifier.height(bottomPadding)
+                )
+            }
         }
+
+        NavigationBarProtection(
+            height = bottomPadding
+        )
 
         when (viewModel.dialog) {
             SettingsScreenDialog.Contrast -> {
@@ -343,9 +383,13 @@ fun SettingsScreen(
 /**
  * Composable displays an item button.
  *
- * @param setting   Title for the setting.
- * @param info      Info for the setting.
- * @param onClick   Callback to invoke when the item button is clicked.
+ * @param setting       Title for the setting.
+ * @param info          Info for the setting.
+ * @param onClick       Callback to invoke when the item button is clicked.
+ * @param endIcon       End icon.
+ * @param isFirst       Whether this is the first item in the list.
+ * @param isLast        Whether this is the last item in the list.
+ * @param prefixIcon    Optional prefix icon.
  */
 @Composable
 private fun SettingsItemButton(
@@ -353,58 +397,65 @@ private fun SettingsItemButton(
     info: String,
     onClick: () -> Unit,
     endIcon: Painter? = null,
+    isFirst: Boolean = false,
+    isLast: Boolean = false,
     prefixIcon: Painter? = null
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable() {
-                onClick()
-            }
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
-            ),
-        verticalAlignment = Alignment.CenterVertically
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        if (prefixIcon != null) {
-            Icon(
-                painter = prefixIcon,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                    .size(dimensionResource(R.dimen.image_xs))
-            )
-        }
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = setting,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                if (endIcon != null) {
-                    Icon(
-                        painter = endIcon,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
-                            .size(dimensionResource(R.dimen.image_xxs))
-                    )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable() {
+                    onClick()
                 }
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (prefixIcon != null) {
+                Icon(
+                    painter = prefixIcon,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                        .size(dimensionResource(R.dimen.image_xs))
+                )
             }
-            Text(
-                text = info,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = setting,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (endIcon != null) {
+                        Icon(
+                            painter = endIcon,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
+                                .size(dimensionResource(R.dimen.image_xxs))
+                        )
+                    }
+                }
+                Text(
+                    text = info,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }
@@ -417,6 +468,8 @@ private fun SettingsItemButton(
  * @param info              Info for the setting.
  * @param checked           Whether the switch is checked.
  * @param onCheckedChange   Callback invoked once the switch is (un)checked.
+ * @param isFirst           Whether this is the first item in the list.
+ * @param isLast            Whether this is the last item in the list.
  * @param prefixIcon        Optional prefix icon.
  */
 @Composable
@@ -425,50 +478,57 @@ fun SettingsItemSwitch(
     info: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    isFirst: Boolean = false,
+    isLast: Boolean = false,
     prefixIcon: Painter? = null
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onCheckedChange(!checked)
-            }
-            .padding(
-                vertical = dimensionResource(R.dimen.padding_vertical),
-                horizontal = dimensionResource(R.dimen.margin_horizontal)
-            ),
-        verticalAlignment = Alignment.CenterVertically
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        if (prefixIcon != null) {
-            Icon(
-                painter = prefixIcon,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                    .size(dimensionResource(R.dimen.image_xs))
-            )
-        }
-        Column(
-            modifier = Modifier.weight(1f)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onCheckedChange(!checked)
+                }
+                .padding(
+                    vertical = dimensionResource(R.dimen.padding_vertical),
+                    horizontal = dimensionResource(R.dimen.padding_horizontal)
+                ),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = info,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium
+            if (prefixIcon != null) {
+                Icon(
+                    painter = prefixIcon,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                        .size(dimensionResource(R.dimen.image_xs))
+                )
+            }
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = info,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
             )
         }
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
-        )
     }
 }
 
@@ -484,7 +544,14 @@ private fun GeneralSection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                start = dimensionResource(R.dimen.margin_horizontal),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical)
+            )
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
                 vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
@@ -544,61 +611,64 @@ private fun AppsSection(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            HorizontalDivider()
             Headline(
                 title = stringResource(R.string.settings_apps),
-                indentToPrefixIcon = true
             )
-            apps.forEach { app ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onAppClick(app)
-                        }
-                        .padding(
-                            horizontal = dimensionResource(R.dimen.margin_horizontal),
-                            vertical = dimensionResource(R.dimen.padding_vertical)
-                        )
+            apps.forEachIndexed { index, app ->
+                ListItemContainer(
+                    isFirst = index == 0,
+                    isLast = index == apps.size - 1
                 ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(app.iconUrl)
-                            .build(),
-                        imageLoader = imageLoader,
-                        contentDescription = "",
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                            .size(dimensionResource(R.dimen.image_xs))
-                    )
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = app.displayName,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Bold
+                            .fillMaxWidth()
+                            .clickable {
+                                onAppClick(app)
+                            }
+                            .padding(
+                                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                                vertical = dimensionResource(R.dimen.padding_vertical)
                             )
-                            Icon(
-                                painter = painterResource(R.drawable.ic_external),
-                                tint = MaterialTheme.colorScheme.onSurface,
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
-                                    .size(dimensionResource(R.dimen.image_xxs))
-                            )
-                        }
-                        val scheme: String? = app.url.scheme
-                        val host: String? = app.url.host
-                        if (scheme != null && host != null) {
-                            Text(
-                                text = "$scheme://$host",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                    ) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(app.iconUrl)
+                                .build(),
+                            imageLoader = imageLoader,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                                .size(dimensionResource(R.dimen.image_xs))
+                        )
+                        Column {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = app.displayName,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_external),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    contentDescription = "",
+                                    modifier = Modifier
+                                        .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
+                                        .size(dimensionResource(R.dimen.image_xxs))
+                                )
+                            }
+                            val scheme: String? = app.url.scheme
+                            val host: String? = app.url.host
+                            if (scheme != null && host != null) {
+                                Text(
+                                    text = "$scheme://$host",
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
                         }
                     }
                 }

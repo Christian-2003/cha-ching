@@ -2,8 +2,12 @@ package de.christian2003.chaching.plugin.presentation.view.trash
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,14 +22,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.plugin.presentation.ui.composables.HelpCard
+import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.TypeListItem
 
 
@@ -61,10 +68,16 @@ fun TrashScreen(
             )
         }
     ) { innerPadding ->
+        val bottomPadding: Dp = innerPadding.calculateBottomPadding()
+
         if (types.isEmpty()) {
             Column(
                 modifier = Modifier
-                    .padding(innerPadding)
+                    .padding(
+                        start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                        top = innerPadding.calculateTopPadding(),
+                        end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                    )
                     .fillMaxSize()
             ) {
                 AnimatedVisibility(viewModel.isHelpCardVisible) {
@@ -88,7 +101,11 @@ fun TrashScreen(
         else {
             LazyColumn(
                 modifier = Modifier
-                    .padding(innerPadding)
+                    .padding(
+                        start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                        top = innerPadding.calculateTopPadding(),
+                        end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                    )
                     .fillMaxSize()
             ) {
                 item {
@@ -98,7 +115,11 @@ fun TrashScreen(
                             onDismiss = {
                                 viewModel.dismissHelpCard()
                             },
-                            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
+                            modifier = Modifier.padding(
+                                start = dimensionResource(R.dimen.margin_horizontal),
+                                end = dimensionResource(R.dimen.margin_horizontal),
+                                bottom = dimensionResource(R.dimen.padding_vertical) * 2
+                            )
                         )
                     }
                 }
@@ -115,8 +136,15 @@ fun TrashScreen(
                         }
                     )
                 }
+                item {
+                    Box(
+                        modifier = Modifier.height(bottomPadding)
+                    )
+                }
             }
         }
+
+        NavigationBarProtection(height = bottomPadding)
     }
 
     val typeToDelete: Type? = viewModel.typeToDelete

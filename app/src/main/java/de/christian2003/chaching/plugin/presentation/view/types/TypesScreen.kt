@@ -1,9 +1,13 @@
 package de.christian2003.chaching.plugin.presentation.view.types
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import de.christian2003.chaching.R
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialog
@@ -28,6 +34,7 @@ import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDelet
 import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.HelpCard
+import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.TypeListItem
 import java.util.UUID
 
@@ -63,14 +70,29 @@ fun TypesScreen(
                             contentDescription = ""
                         )
                     }
+                },
+                actions = {
+                    IconButton(
+                        onCreateType
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_add),
+                            contentDescription = ""
+                        )
+                    }
                 }
             )
         }
     ) { innerPadding ->
+        val bottomPadding: Dp = innerPadding.calculateBottomPadding()
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    top = innerPadding.calculateTopPadding(),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
+                )
         ) {
             if (typeEntities.isEmpty()) {
                 EmptyPlaceholder(
@@ -95,19 +117,12 @@ fun TypesScreen(
                                     viewModel.dismissHelpCard()
                                 },
                                 modifier = Modifier.padding(
-                                    horizontal = dimensionResource(R.dimen.margin_horizontal)
+                                    start = dimensionResource(R.dimen.margin_horizontal),
+                                    end = dimensionResource(R.dimen.margin_horizontal),
+                                    bottom = dimensionResource(R.dimen.padding_vertical) * 2
                                 )
                             )
                         }
-                    }
-                    item {
-                        Headline(
-                            title = stringResource(R.string.types_listTitle),
-                            endIcon = painterResource(R.drawable.ic_add),
-                            onClick = {
-                                onCreateType()
-                            }
-                        )
                     }
                     itemsIndexed(typeEntities) { index, type ->
                         TypeListItem(
@@ -120,6 +135,11 @@ fun TypesScreen(
                             onDelete = {
                                 viewModel.typeToDelete = type
                             }
+                        )
+                    }
+                    item {
+                        Box(
+                            modifier = Modifier.height(bottomPadding)
                         )
                     }
                 }
@@ -141,6 +161,8 @@ fun TypesScreen(
                 )
             }
         }
+
+        NavigationBarProtection(height = bottomPadding)
     }
 }
 
