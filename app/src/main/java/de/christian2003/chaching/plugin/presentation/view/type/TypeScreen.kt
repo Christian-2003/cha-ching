@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,8 +44,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.type.TypeIcon
+import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialogOptions
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.HelpCard
 import de.christian2003.chaching.plugin.presentation.ui.composables.TextInput
@@ -331,41 +335,54 @@ private fun QuickAccessHelp(
         }
     }
 
-    AlertDialog(
-        icon = {
-            Icon(
-                painter = painterResource(R.drawable.ic_info),
-                contentDescription = ""
-            )
-        },
-        title = {
-            Text(stringResource(R.string.type_quickAccessHelp_title))
-        },
-        text = {
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Card(
+            shape = MaterialTheme.shapes.extraLarge
+        ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp)
             ) {
+                //Title:
                 Text(
-                    text = stringResource(R.string.type_quickAccessHelp_text),
-                    modifier = Modifier.fillMaxWidth()
+                    text = stringResource(R.string.type_quickAccessHelp_title),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.headlineSmall
                 )
-                Image(
-                    painter = painter,
-                    contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_emptyPlaceholder))
-                )
-            }
-        },
-        onDismissRequest = {
-            onDismiss()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = onDismiss
-            ) {
-                Text(stringResource(R.string.button_close))
+
+                //Content:
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 16.dp,
+                            bottom = 24.dp
+                        )
+                ) {
+                    Text(
+                        text = stringResource(R.string.type_quickAccessHelp_text),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Image(
+                        painter = painter,
+                        contentDescription = "",
+                        modifier = Modifier.size(dimensionResource(R.dimen.image_emptyPlaceholder))
+                    )
+                }
+
+                //Close button:
+                TextButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text(stringResource(R.string.button_close))
+                }
             }
         }
-    )
+    }
 }
