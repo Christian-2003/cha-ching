@@ -17,7 +17,6 @@ import java.util.UUID
  * @param isHoursWorkedEditable     Whether the hoursWorked-field of the transfers for this type can be edited.
  * @param isEnabledInQuickAccess    Whether the type is available through the "+"-FAB on the main screen.
  * @param isSalaryByDefault         Whether the transfers of this type are salaries by default.
- * @param isDeleted                 Indicates whether the detail is deleted (i.e. it is in the trash bin).
  * @param created                   Date time on which the type was created. This is for statistical purposes.
  * @param edited                    Date time on which the type was last edited. This is for statistical purposes.
  */
@@ -29,7 +28,6 @@ data class TypeEntity(
     @ColumnInfo("isHoursWorkedEditable") val isHoursWorkedEditable: Boolean = true,
     @ColumnInfo("isEnabledInQuickAccess") val isEnabledInQuickAccess: Boolean = true,
     @ColumnInfo("isSalaryByDefault") val isSalaryByDefault: Boolean = true,
-    @ColumnInfo("isDeleted") val isDeleted: Boolean = false,
     @ColumnInfo("created") val created: LocalDateTime = LocalDateTime.now(),
     @ColumnInfo("edited") val edited: LocalDateTime = LocalDateTime.now()
 ) {

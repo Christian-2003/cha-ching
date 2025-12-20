@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import java.util.UUID
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
@@ -50,6 +52,7 @@ import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.TransferListItem
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
+import java.time.LocalDate
 
 
 /**
@@ -119,6 +122,12 @@ fun TransfersScreen(
                     onQueryTransferType = { transfer ->
                         viewModel.getTypeForTransfer(transfer)
                     },
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onFormatDate = {
+                        viewModel.formatDate(it)
+                    },
                     windowInsets = WindowInsets(
                         bottom = innerPadding.calculateBottomPadding()
                     )
@@ -159,6 +168,8 @@ fun TransfersScreen(
  * @param onEditTransfer        Callback invoked to edit a transfer.
  * @param onDeleteTransfer      Callback invoked to delete a transfer.
  * @param onQueryTransferType   Callback invoked to query the type for a transfer.
+ * @param onFormatValue         Callback invoked to format a currency value.
+ * @param onFormatDate          Callback invoked to format a date.
  * @param windowInsets          Insets for the screen.
  */
 @Composable
@@ -167,6 +178,8 @@ private fun TransferList(
     onEditTransfer: (Transfer) -> Unit,
     onDeleteTransfer: (Transfer) -> Unit,
     onQueryTransferType: suspend (Transfer) -> Type?,
+    onFormatValue: (TransferValue) -> String,
+    onFormatDate: (LocalDate) -> String,
     windowInsets: WindowInsets
 ) {
     val groupedTransfers = transfers.groupBy { transfer ->
@@ -176,18 +189,21 @@ private fun TransferList(
         groupedTransfers.forEach { (month, monthTransfer) ->
             item {
                 Column {
-                    HorizontalDivider()
                     Headline(
-                        title = stringArrayResource(R.array.months)[month.month.ordinal]
+                        title = String.format(stringArrayResource(R.array.months)[month.month.ordinal], month.year)
                     )
                 }
             }
-            items(monthTransfer) { transfer ->
+            itemsIndexed(monthTransfer) { index, transfer ->
                 TransferListItem(
                     transfer = transfer,
+                    isFirst = index == 0,
+                    isLast = index == monthTransfer.size - 1,
                     onEdit = onEditTransfer,
                     onDelete = onDeleteTransfer,
-                    onQueryTransferType = onQueryTransferType
+                    onQueryTransferType = onQueryTransferType,
+                    onFormatValue = onFormatValue,
+                    onFormatDate = onFormatDate
                 )
             }
         }

@@ -113,6 +113,7 @@ dependencies {
 	implementation(libs.okhttp)
 	implementation(libs.androidx.hilt.navigation.compose)
 	implementation(libs.hilt.android)
+	implementation("com.ibm.icu:icu4j:78.1")
 
 	testImplementation(libs.junit)
 	testImplementation(libs.mockito.kotlin)

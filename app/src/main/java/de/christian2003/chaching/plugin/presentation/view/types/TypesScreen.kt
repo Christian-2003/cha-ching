@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -134,6 +136,25 @@ fun TypesScreen(
                             },
                             onDelete = {
                                 viewModel.typeToDelete = type
+                            },
+                            sublineContent = {
+                                if (!type.metadata.isEnabledInQuickAccess) {
+                                    Row {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_invisible),
+                                            contentDescription = "",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                                            modifier = Modifier
+                                                .padding(end = dimensionResource(R.dimen.padding_horizontal) / 2)
+                                                .size(dimensionResource(R.dimen.image_xxs))
+                                        )
+                                        Text(
+                                            text = stringResource(R.string.types_invisible),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                                        )
+                                    }
+                                }
                             }
                         )
                     }

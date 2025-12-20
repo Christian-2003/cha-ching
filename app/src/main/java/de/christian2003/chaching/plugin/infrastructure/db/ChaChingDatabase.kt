@@ -10,6 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import de.christian2003.chaching.plugin.infrastructure.db.converter.LocalDateConverter
 import de.christian2003.chaching.plugin.infrastructure.db.converter.LocalDateTimeConverter
 import de.christian2003.chaching.plugin.infrastructure.db.converter.TypeIconConverter
+import de.christian2003.chaching.plugin.infrastructure.db.entities.DeletedTypeEntity
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TransferEntity
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 
@@ -20,7 +21,8 @@ import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 @Database(
 	entities = [
 		TransferEntity::class,
-		TypeEntity::class
+		TypeEntity::class,
+		DeletedTypeEntity::class
 	],
 	version = 3,
 	exportSchema = true
@@ -42,6 +44,11 @@ abstract class ChaChingDatabase: RoomDatabase() {
 	 */
 	abstract val typeDao: TypeDao
 
+	/**
+	 * DAO through which to access the deleted types.
+	 */
+	abstract val deletedTypeDao: DeletedTypeDao
+
 
 	companion object {
 
@@ -60,7 +67,12 @@ abstract class ChaChingDatabase: RoomDatabase() {
 
 		private val MIGRATION_2_3 = object: Migration(2, 3) {
 			override fun migrate(db: SupportSQLiteDatabase) {
-				db.execSQL("ALTER TABLE types ADD COLUMN isDeleted INTEGER NOT NULL DEFAULT 0")
+				//Create table for deleted types
+				db.execSQL("CREATE TABLE deletedTypes" +
+						"(typeId BLOB NOT NULL, deletedAt BLOB NOT NULL)," +
+						"FOREIGN KEY(typeId) REFERENCES types(typeId) ON UPDATE NO ACTION ON DELETE CASCADE")
+
+				//Update existing tables:
 				db.execSQL("ALTER TABLE types ADD COLUMN isSalaryByDefault INTEGER NOT NULL DEFAULT 1")
 			}
 		}

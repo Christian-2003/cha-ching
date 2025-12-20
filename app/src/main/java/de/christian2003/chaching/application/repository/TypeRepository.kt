@@ -1,5 +1,6 @@
 package de.christian2003.chaching.application.repository
 
+import de.christian2003.chaching.domain.type.DeletedType
 import de.christian2003.chaching.domain.type.Type
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -23,7 +24,7 @@ interface TypeRepository {
      *
      * @return  List of all types that are in the trash bin.
      */
-    fun getAllTypesInTrash(): Flow<List<Type>>
+    fun getAllTypesInTrash(): Flow<List<DeletedType>>
 
 
     /**
@@ -42,6 +43,8 @@ interface TypeRepository {
      * @return      Type of the ID specified.
      */
     suspend fun getTypeById(id: UUID): Type?
+
+    suspend fun getDeletedTypeById(id: UUID): DeletedType?
 
 
     /**
@@ -73,9 +76,9 @@ interface TypeRepository {
     /**
      * Restores the specified type from the trash bin.
      *
-     * @param type  Type to restore from the trash bin.
+     * @param deletedType   Type to restore from the trash bin.
      */
-    suspend fun restoreTypeFromTrash(type: Type)
+    suspend fun restoreTypeFromTrash(deletedType: DeletedType)
 
 
     /**

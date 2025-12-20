@@ -1,7 +1,6 @@
 package de.christian2003.chaching.application.services
 
 import de.christian2003.chaching.domain.transfer.TransferValue
-import java.text.DecimalFormat
 import java.text.NumberFormat
 
 
@@ -17,8 +16,8 @@ class ValueFormatterService {
      * @return      Formatted value.
      */
     fun format(value: Double): String {
-        val numberFormat: NumberFormat = DecimalFormat("#,###.00")
-        return numberFormat.format(value)
+        val formatter: NumberFormat = NumberFormat.getCurrencyInstance()
+        return formatter.format(value)
     }
 
 
@@ -30,11 +29,11 @@ class ValueFormatterService {
      * @return              Formatted value.
      */
     fun format(cents: Int, isNegative: Boolean = false): String {
-        val numberFormat: NumberFormat = DecimalFormat("#,###.00")
+        val formatter: NumberFormat = NumberFormat.getCurrencyInstance()
         val formattedNumber: String = if (isNegative) {
-            numberFormat.format(cents.toDouble() / -100.0)
+            formatter.format(cents.toDouble() / -100.0)
         } else {
-            numberFormat.format(cents.toDouble() / 100.0)
+            formatter.format(cents.toDouble() / 100.0)
         }
         return formattedNumber
     }

@@ -34,7 +34,10 @@ class ChaChingApplication(): Application() {
     fun getRepository(): ChaChingRepository {
         if (repository == null) {
             database = ChaChingDatabase.getInstance(this)
-            repository = ChaChingRepository(database.transferDao, database.typeDao)
+            repository = ChaChingRepository(
+                transferDao = database.transferDao,
+                typeDao = database.typeDao,
+                deletedTypeDao = database.deletedTypeDao)
         }
         return repository!!
     }

@@ -175,6 +175,7 @@
 
 
     <string name="trash_title">Papierkorb</string>
+    <string name="trash_deletedLabel">Gelöscht %1$s</string>
     <string name="trash_emptyPlaceholder_title">Papierkorb leer</string>
     <string name="trash_emptyPlaceholder_subtitle">Gelöschte Einkommensarten werden hier angezeigt</string>
     <string name="trash_help">Von hier kannst du Einkommensarten, die du zuvor entfernt hast, permanent löschen oder wiederherstellen.</string>

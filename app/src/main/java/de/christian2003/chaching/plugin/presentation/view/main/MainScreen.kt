@@ -11,11 +11,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -50,24 +54,29 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.analysis.overview.OverviewCalcResult
 import de.christian2003.chaching.domain.analysis.overview.OverviewCalcResultItem
+import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
+import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.TransferListItem
 import de.christian2003.chaching.plugin.presentation.ui.composables.Value
 import ir.ehsannarmani.compose_charts.PieChart
 import ir.ehsannarmani.compose_charts.models.Pie
+import java.time.LocalDate
 import java.util.UUID
 
 
@@ -125,6 +134,8 @@ fun MainScreen(
 			)
 		}
 	) { innerPadding ->
+		val bottomPadding: Dp = innerPadding.calculateBottomPadding()
+
 		if (recentTransfers.isEmpty()) {
 			EmptyPlaceholder(
 				title = stringResource(R.string.main_emptyPlaceholder_title),
@@ -132,15 +143,26 @@ fun MainScreen(
 				painter = painterResource(R.drawable.el_transfers),
 				modifier = Modifier
 					.fillMaxSize()
-					.padding(innerPadding)
+					.padding(
+						start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+						top = innerPadding.calculateTopPadding(),
+						end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+					)
 			)
 		}
 		else {
 			Column(
 				modifier = Modifier
 					.fillMaxSize()
-					.padding(innerPadding)
+					.padding(
+						start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+						top = innerPadding.calculateTopPadding(),
+						end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+					)
 					.verticalScroll(rememberScrollState())
+					.padding(
+						bottom = bottomPadding
+					)
 			) {
 				AnimatedVisibility(viewModel.isUpdateAvailable && !viewModel.isUpdateMessageDismissed) {
 					DownloadCard(
@@ -186,15 +208,22 @@ fun MainScreen(
 					onQueryTransferType = { transfer ->
 						viewModel.getTypeForTransfer(transfer)
 					},
+					onFormatValue = {
+						viewModel.formatValue(it)
+					},
+					onFormatDate = {
+						viewModel.formatDate(it)
+					},
 					modifier = Modifier.padding(
-						start = dimensionResource(R.dimen.margin_horizontal),
-						end = dimensionResource(R.dimen.margin_horizontal),
 						bottom = dimensionResource(R.dimen.padding_vertical)
 					)
 				)
 			}
 		}
 
+		NavigationBarProtection(
+			height = bottomPadding
+		)
 
 		val transferToDelete: Transfer? = viewModel.transferToDelete
 		if (transferToDelete != null) {
@@ -520,29 +549,26 @@ private fun TransferList(
 	onDeleteTransfer: (Transfer) -> Unit,
 	onShowAllTransfers: () -> Unit,
 	onQueryTransferType: suspend (Transfer) -> Type?,
+	onFormatValue: (TransferValue) -> String,
+	onFormatDate: (LocalDate) -> String,
 	modifier: Modifier = Modifier
 ) {
 	Column(
 		horizontalAlignment = Alignment.CenterHorizontally,
 		modifier = modifier
-			.border(
-				width = 1.dp,
-				color = MaterialTheme.colorScheme.outline,
-				shape = MaterialTheme.shapes.extraLarge
-			)
-			.clip(MaterialTheme.shapes.extraLarge)
 	) {
-		transfers.forEach { transfer ->
+		transfers.forEachIndexed { index, transfer ->
 			TransferListItem(
 				transfer = transfer,
+				isFirst = index == 0,
+				isLast = index == transfers.size - 1,
 				onEdit = onEditTransfer,
 				onDelete = onDeleteTransfer,
-				onQueryTransferType = onQueryTransferType
+				onQueryTransferType = onQueryTransferType,
+				onFormatValue = onFormatValue,
+				onFormatDate = onFormatDate
 			)
 		}
-		HorizontalDivider(
-			color = MaterialTheme.colorScheme.outline
-		)
 		TextButton(
 			onClick = onShowAllTransfers
 		) {

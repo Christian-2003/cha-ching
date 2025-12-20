@@ -8,7 +8,10 @@ import de.christian2003.chaching.plugin.infrastructure.db.entities.TransferEntit
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TypeEntity
 import de.christian2003.chaching.application.backup.ImportStrategy
 import de.christian2003.chaching.application.repository.AnalysisRepository
+import de.christian2003.chaching.domain.type.DeletedType
 import de.christian2003.chaching.domain.type.Type
+import de.christian2003.chaching.plugin.infrastructure.db.entities.DeletedTypeEntity
+import de.christian2003.chaching.plugin.infrastructure.db.mapper.DeletedTypeDbMapper
 import de.christian2003.chaching.plugin.infrastructure.db.mapper.TransferDbMapper
 import de.christian2003.chaching.plugin.infrastructure.db.mapper.TypeDbMapper
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +29,8 @@ import javax.inject.Inject
  */
 class ChaChingRepository @Inject constructor(
 	private val transferDao: TransferDao,
-	private val typeDao: TypeDao
+	private val typeDao: TypeDao,
+	private val deletedTypeDao: DeletedTypeDao
 ): TransferRepository, TypeRepository, BackupImportRepository, AnalysisRepository {
 
 	/**
@@ -76,6 +80,8 @@ class ChaChingRepository @Inject constructor(
 	 */
 	private val typeMapper: TypeDbMapper = TypeDbMapper()
 
+	private val deletedTypeMapper: DeletedTypeDbMapper = DeletedTypeDbMapper()
+
 
 	/**
 	 * List of all types.
@@ -85,7 +91,7 @@ class ChaChingRepository @Inject constructor(
 	/**
 	 * List of all types in the trash bin.
 	 */
-	private var typesInTrash: Flow<List<Type>>? = null
+	private var typesInTrash: Flow<List<DeletedType>>? = null
 
 	/**
 	 * List of all types not in the trash bin.
@@ -220,11 +226,14 @@ class ChaChingRepository @Inject constructor(
 	 *
 	 * @return  List of all types that are in the trash bin.
 	 */
-	override fun getAllTypesInTrash(): Flow<List<Type>> {
+	override fun getAllTypesInTrash(): Flow<List<DeletedType>> {
 		if (typesInTrash == null) {
-			typesInTrash = typeDao.selectAllTypesInTrashSortedByDate().map { list ->
-				list.map { type ->
-					typeMapper.toDomain(type)
+			typesInTrash = deletedTypeDao.selectAll().map { list ->
+				list.map { deletedTypeEntity ->
+					val typeEntity: TypeEntity? = typeDao.selectTypeById(deletedTypeEntity.typeId)
+					val typeDomain: Type = typeMapper.toDomain(typeEntity!!)
+					val deletedTypeDomain: DeletedType = deletedTypeMapper.toDomain(deletedTypeEntity, typeDomain)
+					return@map deletedTypeDomain
 				}
 			}
 		}
@@ -265,6 +274,19 @@ class ChaChingRepository @Inject constructor(
 		}
 	}
 
+	override suspend fun getDeletedTypeById(id: UUID): DeletedType? {
+		val deletedTypeEntity: DeletedTypeEntity? = deletedTypeDao.selectById(id)
+		if (deletedTypeEntity != null) {
+			val typeEntity: TypeEntity? = typeDao.selectTypeById(id)
+			if (typeEntity != null) {
+				val type: Type = typeMapper.toDomain(typeEntity)
+				val deletedType: DeletedType = deletedTypeMapper.toDomain(deletedTypeEntity, type)
+				return deletedType
+			}
+		}
+		return null
+	}
+
 
 	/**
 	 * Creates a new type.
@@ -294,17 +316,17 @@ class ChaChingRepository @Inject constructor(
 	 * @param type  Type to move to the trash bin.
 	 */
 	override suspend fun moveTypeToTrash(type: Type) {
-		typeDao.moveToTrash(typeMapper.toEntity(type))
+		deletedTypeDao.insert(DeletedTypeEntity(type.id))
 	}
 
 
 	/**
 	 * Restores the specified type from the trash bin.
 	 *
-	 * @param type  Type to restore from the trash bin.
+	 * @param deletedType	Type to restore from the trash bin.
 	 */
-	override suspend fun restoreTypeFromTrash(type: Type) {
-		typeDao.restoreFromTrash(typeMapper.toEntity(type))
+	override suspend fun restoreTypeFromTrash(deletedType: DeletedType) {
+		deletedTypeDao.delete(deletedTypeMapper.toEntity(deletedType))
 	}
 
 

@@ -9,10 +9,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -34,103 +36,151 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
-import de.christian2003.chaching.application.services.ValueFormatterService
 import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.domain.type.Type
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import de.christian2003.chaching.plugin.presentation.model.TypeShapes
+import java.time.LocalDate
 
 
 /**
  * Displays a single transfer as list item.
  *
  * @param transfer              Transfer to display.
+ * @param isFirst               Whether this is the first list item.
+ * @param isLast                Whether this is the last list item.
  * @param onEdit                Callback invoked to edit the transfer.
  * @param onDelete              Callback invoked to delete the transfer.
  * @param onQueryTransferType   Callback invoked to query the type for a transfer.
+ * @param onFormatValue         Callback invoked to format a value.
+ * @param onFormatDate          Callback invoked to format a date.
  */
 @Composable
 fun TransferListItem(
     transfer: Transfer,
+    isFirst: Boolean,
+    isLast: Boolean,
     onEdit: (Transfer) -> Unit,
     onDelete: (Transfer) -> Unit,
-    onQueryTransferType: suspend (Transfer) -> Type?
+    onQueryTransferType: suspend (Transfer) -> Type?,
+    onFormatValue: (TransferValue) -> String,
+    onFormatDate: (LocalDate) -> String
 ) {
-    val valueFormatter = ValueFormatterService()
-    val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     var isExpanded: Boolean by remember { mutableStateOf(false) }
-    val typeName: String by produceState("") {
-        value = onQueryTransferType(transfer)?.name ?: ""
+    val type: Type? by produceState(null) {
+        value = onQueryTransferType(transfer)
     }
-    Column(
-        horizontalAlignment = Alignment.End,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                isExpanded = !isExpanded
-            }
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
-            )
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    isExpanded = !isExpanded
+                }
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                )
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = typeName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = transfer.transferValue.date.format(formatter),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Value(
-                formattedValue = valueFormatter.format(transfer.transferValue),
-                isSalary = transfer.transferValue.isSalary
-            )
-        }
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(spring(Spring.DampingRatioMediumBouncy)),
-            exit = shrinkVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(spring(Spring.DampingRatioMediumBouncy))
-        ) {
-            Row {
-                FilledIconButton(
-                    onClick = {
-                        onEdit(transfer)
-                    },
-                    colors = IconButtonDefaults.filledIconButtonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                if (type != null) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                            .size(dimensionResource(R.dimen.image_m))
+                    ) {
+                        Shape(
+                            shape = TypeShapes.getShapeForTypeIcon(type!!.icon).shape,
+                            color = TypeShapes.getShapeColor(type!!.icon)
+                        )
+                        Icon(
+                            painter = painterResource(type!!.icon.drawableResourceId),
+                            contentDescription = "",
+                            tint = TypeShapes.getOnShapeColor(type!!.icon),
+                            modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
+                        )
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_edit),
-                        contentDescription = ""
+                    Text(
+                        text = type?.name ?: "",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = onFormatDate(transfer.transferValue.date),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                FilledIconButton(
-                    onClick = {
-                        onDelete(transfer)
+
+                Text(
+                    text = onFormatValue(transfer.transferValue),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (transfer.transferValue.isSalary) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
                     },
-                    colors = IconButtonDefaults.filledIconButtonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_delete),
-                        contentDescription = ""
-                    )
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.extraLargeIncreased)
+                        .background(if (transfer.transferValue.isSalary) {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } else {
+                            Color.Transparent
+                        })
+                        .padding(
+                            vertical = 4.dp,
+                            horizontal = 12.dp
+                        )
+                )
+            }
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = expandVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(spring(Spring.DampingRatioMediumBouncy)),
+                exit = shrinkVertically(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(spring(Spring.DampingRatioMediumBouncy))
+            ) {
+                Row {
+                    FilledIconButton(
+                        onClick = {
+                            onEdit(transfer)
+                        },
+                        colors = IconButtonDefaults.filledIconButtonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_edit),
+                            contentDescription = ""
+                        )
+                    }
+                    FilledIconButton(
+                        onClick = {
+                            onDelete(transfer)
+                        },
+                        colors = IconButtonDefaults.filledIconButtonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_delete),
+                            contentDescription = ""
+                        )
+                    }
                 }
             }
         }
@@ -145,6 +195,7 @@ fun TransferListItem(
  * @param isSalary          Whether the value is a salary or not.
  */
 @Composable
+@Deprecated("Do not use anymore")
 fun Value(
     formattedValue: String,
     isSalary: Boolean = true

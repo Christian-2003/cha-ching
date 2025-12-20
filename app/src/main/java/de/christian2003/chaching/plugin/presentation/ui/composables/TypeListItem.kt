@@ -39,6 +39,7 @@ import de.christian2003.chaching.plugin.presentation.model.TypeShapes
  * @param onDelete              Callback invoked to move the type to the trash bin.
  * @param onRestoreFromTrash    Callback invoked to restore the item from the trash bin.
  * @param onDeletePermanently   Callback invoked to delete the type permanently.
+ * @param sublineContent        Content for the subline (e.g. "Invisible in quick access" or "Deleted on ...").
  */
 @Composable
 fun TypeListItem(
@@ -48,7 +49,8 @@ fun TypeListItem(
     onEdit: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
     onRestoreFromTrash: (() -> Unit)? = null,
-    onDeletePermanently: (() -> Unit)? = null
+    onDeletePermanently: (() -> Unit)? = null,
+    sublineContent: @Composable (() -> Unit)? = null
 ) {
     var isDropdownVisible by remember { mutableStateOf(false) }
     ListItemContainer(
@@ -115,22 +117,8 @@ fun TypeListItem(
                     },
                     overflow = TextOverflow.Ellipsis
                 )
-                if (!type.metadata.isEnabledInQuickAccess) {
-                    Row {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_invisible),
-                            contentDescription = "",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
-                            modifier = Modifier
-                                .padding(end = dimensionResource(R.dimen.padding_horizontal) / 2)
-                                .size(dimensionResource(R.dimen.image_xxs))
-                        )
-                        Text(
-                            text = stringResource(R.string.types_invisible),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-                        )
-                    }
+                if (sublineContent != null) {
+                    sublineContent()
                 }
             }
 

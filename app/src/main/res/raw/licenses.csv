@@ -12,6 +12,7 @@ Core Kotlin Extensions,license_apache20
 Glance for App Widgets,license_apache20
 Glance Material,license_apache20
 Hilt Android,license_apache20
+ICU4J,license_icu4j
 Jetpack Compose Libraries BOM,license_apache20
 Kotlinx Coroutines Android,license_apache20
 Kotlinx Serialization JSON,license_apache20

@@ -1,6 +1,7 @@
 package de.christian2003.chaching.application.usecases.type
 
 import de.christian2003.chaching.application.repository.TypeRepository
+import de.christian2003.chaching.domain.type.DeletedType
 import de.christian2003.chaching.domain.type.Type
 import java.util.UUID
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class RestoreTypeFromTrashUseCase @Inject constructor(
      * @param typeId    ID of the type to restore from the trash bin.
      */
     suspend fun restoreTypeFromTrash(typeId: UUID) {
-        val type: Type? = repository.getTypeById(typeId)
+        val type: DeletedType? = repository.getDeletedTypeById(typeId)
         if (type != null) {
             repository.restoreTypeFromTrash(type)
         }

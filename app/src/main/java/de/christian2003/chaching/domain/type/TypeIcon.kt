@@ -6,15 +6,12 @@ import de.christian2003.chaching.R
 
 /**
  * Stores all icons that can be assigned to types.
+ *
+ * @param drawableResourceId    Resource ID of the drawable.
  */
 enum class TypeIcon(
-
-    /**
-     * Resource ID of the drawable.
-     */
     @DrawableRes
     val drawableResourceId: Int
-
 ) {
 
     CURRENCY(R.drawable.type_currency),

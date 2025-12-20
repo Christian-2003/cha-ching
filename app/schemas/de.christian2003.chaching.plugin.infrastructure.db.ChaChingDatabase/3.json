@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "1cf1995cd8f2f88cb9874355f6c8a2bf",
+    "identityHash": "3fb3c15617d60218eae3da51d41fb9f9",
     "entities": [
       {
         "tableName": "transfers",
@@ -79,7 +79,7 @@
       },
       {
         "tableName": "types",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `icon` INTEGER NOT NULL, `typeId` BLOB NOT NULL, `isHoursWorkedEditable` INTEGER NOT NULL, `isEnabledInQuickAccess` INTEGER NOT NULL, `isSalaryByDefault` INTEGER NOT NULL, `isDeleted` INTEGER NOT NULL, `created` INTEGER NOT NULL, `edited` INTEGER NOT NULL, PRIMARY KEY(`typeId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `icon` INTEGER NOT NULL, `typeId` BLOB NOT NULL, `isHoursWorkedEditable` INTEGER NOT NULL, `isEnabledInQuickAccess` INTEGER NOT NULL, `isSalaryByDefault` INTEGER NOT NULL, `created` INTEGER NOT NULL, `edited` INTEGER NOT NULL, PRIMARY KEY(`typeId`))",
         "fields": [
           {
             "fieldPath": "name",
@@ -118,12 +118,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "isDeleted",
-            "columnName": "isDeleted",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "created",
             "columnName": "created",
             "affinity": "INTEGER",
@@ -142,11 +136,48 @@
             "typeId"
           ]
         }
+      },
+      {
+        "tableName": "deletedTypes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`typeId` BLOB NOT NULL, `deletedAt` INTEGER NOT NULL, PRIMARY KEY(`typeId`), FOREIGN KEY(`typeId`) REFERENCES `types`(`typeId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "typeId",
+            "columnName": "typeId",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deletedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "typeId"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "types",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "typeId"
+            ],
+            "referencedColumns": [
+              "typeId"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1cf1995cd8f2f88cb9874355f6c8a2bf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3fb3c15617d60218eae3da51d41fb9f9')"
     ]
   }
 }
