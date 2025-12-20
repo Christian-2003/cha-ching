@@ -698,7 +698,8 @@ fun DownloadCard(
 				)
 				Text(
 					text = stringResource(R.string.main_downloadMessage),
-					color = MaterialTheme.colorScheme.onSurfaceVariant
+					color = MaterialTheme.colorScheme.onSurfaceVariant,
+					style = MaterialTheme.typography.bodyMedium
 				)
 			}
 			FlowRow(

@@ -385,6 +385,10 @@ private fun DataLineDiagram(
     labels: List<String>,
     modifier: Modifier = Modifier
 ) {
+    if (diagram.lines.isEmpty()) {
+        return
+    }
+
     val diagramLines: MutableList<Line> = mutableListOf()
     diagram.lines.forEachIndexed { index, line ->
         val color: Brush = SolidColor(when (index) {
