@@ -1,6 +1,5 @@
 package de.christian2003.chaching.plugin.presentation.view.type
 
-import androidx.compose.material3.AlertDialog
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
@@ -47,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.type.TypeIcon
-import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialogOptions
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.HelpCard
 import de.christian2003.chaching.plugin.presentation.ui.composables.TextInput

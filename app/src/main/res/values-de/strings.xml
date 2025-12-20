@@ -64,6 +64,10 @@
     <string name="transfers_emptyPlaceholder_title">Keine Einkommen</string>
     <string name="transfers_emptyPlaceholder_subtitle">Verfügbare Einkommen werden hier angezeigt</string>
     <string name="transfers_confirmDelete">Das Löschen von %1$s kann nicht rückgängig gemacht werden. Bist du dir sicher, dass du dieses Einkommen löschen möchtest?</string>
+    <plurals name="transfers_hiddenTransfersInfo">
+        <item quantity="one">%1$d Einkommen ist ausgeblendet, da einige Einkommensarten in den Papierkorb verschoben wurden.</item>
+        <item quantity="other">Es wurden %1$d Einkommen ausgeblendet, da einige Einkommensarten in den Papierkorb verschoben wurden.</item>
+    </plurals>
 
 
     <string name="transfer_titleEdit">%1$s bearbeiten</string>

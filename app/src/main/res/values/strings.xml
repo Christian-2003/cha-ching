@@ -64,6 +64,10 @@
     <string name="transfers_emptyPlaceholder_title">No data to show</string>
     <string name="transfers_emptyPlaceholder_subtitle">Available earnings are shown here</string>
     <string name="transfers_confirmDelete">Deleting %1$s cannot be undone. Are you sure you want to delete this earning?</string>
+    <plurals name="transfers_hiddenTransfersInfo">
+        <item quantity="one">%1$d transfer is hidden because some types were moved to the trash bin.</item>
+        <item quantity="other">A total of %1$d transfers are hidden because some types were moved to the trash bin.</item>
+    </plurals>
 
 
     <string name="transfer_titleEdit">Edit %1$s</string>

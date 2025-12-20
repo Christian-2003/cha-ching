@@ -38,6 +38,14 @@ interface TransferRepository {
 
 
     /**
+     * Returns the number of transfers that whose type is in the trash bin.
+     *
+     * @return  Number of transfers whose type is in trash bin.
+     */
+    suspend fun countTransfersWhoseTypeIsInTrash(): Int
+
+
+    /**
      * Returns the transfer of the ID passed as argument. If no transfer with the ID specified
      * exists, null is returned.
      *

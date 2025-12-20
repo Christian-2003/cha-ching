@@ -24,7 +24,7 @@ interface TransferDao {
 	 *
 	 * @return	List of all transfers.
 	 */
-	@Query("SELECT * FROM transfers ORDER BY valueDate DESC")
+	@Query("SELECT * FROM transfers t WHERE NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type) ORDER BY valueDate DESC")
 	fun selectAllTransfersSortedByDate(): Flow<List<TransferEntity>>
 
 	/**
@@ -33,7 +33,7 @@ interface TransferDao {
 	 * @return	Last three transfers.
 	 */
 	@Transaction
-	@Query("SELECT * FROM transfers ORDER BY valueDate DESC LIMIT 3")
+	@Query("SELECT * FROM transfers t WHERE NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type) ORDER BY valueDate DESC LIMIT 3")
 	fun selectRecentTransfers(): Flow<List<TransferEntity>>
 
 	/**
@@ -55,8 +55,12 @@ interface TransferDao {
 	 * @return				All transfers in the range specified.
 	 */
 	@Transaction
-	@Query("SELECT * FROM transfers WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay ORDER BY valueDate DESC")
+	@Query("SELECT * FROM transfers t WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay AND NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type) ORDER BY valueDate DESC")
 	fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferEntity>>
+
+
+	@Query("SELECT COUNT(*) FROM transfers t WHERE EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type)")
+	suspend fun countTransfersWhoseTypeIsInTrash(): Int
 
 
 	/**

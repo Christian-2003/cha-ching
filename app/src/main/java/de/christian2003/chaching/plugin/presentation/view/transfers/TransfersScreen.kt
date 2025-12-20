@@ -4,10 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,11 +35,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -113,6 +117,7 @@ fun TransfersScreen(
             else {
                 TransferList(
                     transfers = transfers,
+                    hiddenTransfersCount = viewModel.hiddenTransfersCount,
                     onEditTransfer = { transfer ->
                         onEditTransfer(transfer.type, transfer.id)
                     },
@@ -165,6 +170,7 @@ fun TransfersScreen(
  * Displays the list of transfers.
  *
  * @param transfers             List of transfers to display.
+ * @param hiddenTransfersCount  Number of hidden transfers.
  * @param onEditTransfer        Callback invoked to edit a transfer.
  * @param onDeleteTransfer      Callback invoked to delete a transfer.
  * @param onQueryTransferType   Callback invoked to query the type for a transfer.
@@ -175,6 +181,7 @@ fun TransfersScreen(
 @Composable
 private fun TransferList(
     transfers: List<Transfer>,
+    hiddenTransfersCount: Int?,
     onEditTransfer: (Transfer) -> Unit,
     onDeleteTransfer: (Transfer) -> Unit,
     onQueryTransferType: suspend (Transfer) -> Type?,
@@ -186,6 +193,11 @@ private fun TransferList(
         transfer.transferValue.date.withDayOfMonth(1)
     }
     LazyColumn {
+        item {
+            if (hiddenTransfersCount != null && hiddenTransfersCount > 0) {
+                HiddenTransfersCard(hiddenTransfersCount)
+            }
+        }
         groupedTransfers.forEach { (month, monthTransfer) ->
             item {
                 Column {
@@ -212,5 +224,43 @@ private fun TransferList(
                 modifier = Modifier.windowInsetsBottomHeight(windowInsets)
             )
         }
+    }
+}
+
+
+/**
+ * Card displays information on why some transfers are hidden.
+ */
+@Composable
+fun HiddenTransfersCard(
+    hiddenTransfersCount: Int
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = dimensionResource(R.dimen.margin_horizontal),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical)
+            )
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
+            )
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_info),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            contentDescription = "",
+            modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_horizontal))
+        )
+        Text(
+            text = pluralStringResource(R.plurals.transfers_hiddenTransfersInfo, hiddenTransfersCount, hiddenTransfersCount),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
