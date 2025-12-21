@@ -33,7 +33,7 @@ interface TransferDao {
 	 * @return	Last three transfers.
 	 */
 	@Transaction
-	@Query("SELECT * FROM transfers t WHERE NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type) ORDER BY valueDate DESC LIMIT 3")
+	@Query("SELECT * FROM transfers t WHERE NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type) ORDER BY valueDate DESC LIMIT 5")
 	fun selectRecentTransfers(): Flow<List<TransferEntity>>
 
 	/**
