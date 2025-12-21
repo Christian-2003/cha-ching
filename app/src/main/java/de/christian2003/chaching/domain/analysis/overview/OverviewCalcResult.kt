@@ -1,5 +1,6 @@
 package de.christian2003.chaching.domain.analysis.overview
 
+import de.christian2003.chaching.domain.analysis.small.OverviewComparisonConnection
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 

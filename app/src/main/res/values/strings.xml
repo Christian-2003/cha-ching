@@ -29,6 +29,13 @@
     <string name="main_overview_total">Earnings last 30 days</string>
     <string name="main_overview_otherTypes">Other</string>
     <string name="main_overview_noData">You have not earned any money in the last 30 days</string>
+    <string name="main_analysis_budgetLabel">Budget</string>
+    <string name="main_analysis_incomesLabel">Incomes</string>
+    <string name="main_analysis_expensesLabel">Expenses</string>
+    <string name="main_analysis_otherTypeLabel">Others</string>
+    <string name="main_analysis_upFromLastMonthLabel">Up &lt;b&gt;%1$s&lt;/b&gt; from last month</string>
+    <string name="main_analysis_downFromLastMonthLabel">Down &lt;b&gt;%1$s&lt;/b&gt; from last month</string>
+    <string name="main_analysis_noDiffToLastMonthLabel">Similar to last month</string>
     <string name="main_downloadMessage">A new version for Cha Ching is available. Do you want to download the update now?</string>
     <string name="main_quickActions_title">Quick actions</string>
     <string name="main_quickActions_analysis">Analysis</string>

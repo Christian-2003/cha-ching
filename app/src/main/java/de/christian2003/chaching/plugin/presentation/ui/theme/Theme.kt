@@ -3,6 +3,7 @@ package de.christian2003.chaching.plugin.presentation.ui.theme
 import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -10,6 +11,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.glance.GlanceTheme
 import androidx.glance.material3.ColorProviders
@@ -299,6 +301,12 @@ fun ChaChingTheme(
 		typography = AppTypography,
 		content = content
 	)
+}
+
+
+@Composable
+fun MaterialTheme.isDarkTheme(): Boolean {
+	return this.colorScheme.background.luminance() < 0.5f
 }
 
 

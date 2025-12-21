@@ -6,12 +6,14 @@ import java.time.LocalDateTime
 /**
  * Value object models the result of the small analysis.
  *
- * @param currentMonth  Result for the current month.
- * @param previousMonth Result for the previous month can be used for comparison.
- * @param time          Date time at which the analysis finished.
+ * @param currentMonth                  Result for the current month.
+ * @param previousMonth                 Result for the previous month can be used for comparison.
+ * @param overviewComparisonConnection  Overview comparison connection.
+ * @param time                          Date time at which the analysis finished.
  */
 data class SmallAnalysisResult(
     val currentMonth: SmallMonthResult,
     val previousMonth: SmallMonthResult,
+    val overviewComparisonConnection: OverviewComparisonConnection = OverviewComparisonConnection.getRandomComparisonConnection(),
     val time: LocalDateTime = LocalDateTime.now()
 )

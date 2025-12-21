@@ -1,9 +1,8 @@
-package de.christian2003.chaching.domain.analysis.overview
+package de.christian2003.chaching.domain.analysis.small
 
 import android.content.Context
 import android.icu.text.DecimalFormat
 import de.christian2003.chaching.R
-
 
 /**
  * Enum lists some household or everyday items, each containing a price. The MainScreen displays
@@ -64,10 +63,10 @@ enum class OverviewComparisonConnection(
      * @param value     Value used to format.
      * @return          Localized and formatted string.
      */
-    fun getLocalizedString(context: Context, value: Int): String {
-        val amount = value / price
+    fun getLocalizedString(context: Context, value: Double): String {
+        val amount = (value * 100) / price
         val valueFormat = DecimalFormat("#,###")
-        return context.resources.getStringArray(R.array.main_comparisons)[this.ordinal].format(valueFormat.format(amount))
+        return context.resources.getStringArray(R.array.main_comparisons)[this.ordinal].format(valueFormat.format(value))
     }
 
 

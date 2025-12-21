@@ -11,7 +11,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -182,18 +180,17 @@ fun MainScreen(
 					onTypesClicked = onNavigateToTypes,
 					modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
 				)
-				AnimatedVisibility(viewModel.overviewCalcResult != null) {
-					Column {
-						Headline(stringResource(R.string.main_overview_title))
-						Overview(
-							overviewCalcResult = viewModel.overviewCalcResult!!,
-							modifier = Modifier.padding(
-								start = dimensionResource(R.dimen.margin_horizontal),
-								end = dimensionResource(R.dimen.margin_horizontal),
-								bottom = dimensionResource(R.dimen.padding_vertical)
-							)
+				if (viewModel.analysisResult != null) {
+					SmallAnalysisOverview(
+						smallAnalysisResult = viewModel.analysisResult!!,
+						onQueryType = {
+							viewModel.queryType(it)
+						},
+						onFormatValue = { viewModel.formatValue(it) },
+						modifier = Modifier.padding(
+							horizontal = dimensionResource(R.dimen.margin_horizontal)
 						)
-					}
+					)
 				}
 				Headline(stringResource(R.string.main_recentTransfers))
 				TransferList(
@@ -206,7 +203,7 @@ fun MainScreen(
 					},
 					onShowAllTransfers = onNavigateToTransfers,
 					onQueryTransferType = { transfer ->
-						viewModel.getTypeForTransfer(transfer)
+						viewModel.queryType(transfer)
 					},
 					onFormatValue = {
 						viewModel.formatValue(it)
@@ -228,7 +225,7 @@ fun MainScreen(
 		val transferToDelete: Transfer? = viewModel.transferToDelete
 		if (transferToDelete != null) {
 			val typeName: String by produceState("") {
-				value = viewModel.getTypeForTransfer(transferToDelete)?.name ?: ""
+				value = viewModel.queryType(transferToDelete)?.name ?: ""
 			}
 
 			ConfirmDeleteDialog(
@@ -333,131 +330,6 @@ fun QuickActionsButton(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical) / 2)
 		)
-	}
-}
-
-
-/**
- * Displays the overview at the top of the screen.
- *
- * @param overviewCalcResult	Data for the overview.
- * @param modifier				Modifier.
- */
-@Composable
-private fun Overview(
-	overviewCalcResult: OverviewCalcResult,
-	modifier: Modifier = Modifier
-) {
-	val valueFormat = DecimalFormat("#,###.00")
-	if (overviewCalcResult.results.isNotEmpty()) {
-		val colors = listOf<Color>(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.tertiary)
-		Column(
-			modifier = modifier
-				.fillMaxWidth()
-				.border(
-					width = 1.dp,
-					color = MaterialTheme.colorScheme.outline,
-					shape = MaterialTheme.shapes.extraLarge
-				)
-				.clip(MaterialTheme.shapes.extraLarge)
-				.padding(
-					horizontal = dimensionResource(R.dimen.margin_horizontal),
-					vertical = dimensionResource(R.dimen.padding_vertical)
-				)
-		) {
-			//Total:
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				modifier = Modifier.fillMaxWidth()
-			) {
-				Text(
-					text = stringResource(R.string.main_overview_total),
-					color = MaterialTheme.colorScheme.onSurface,
-					style = MaterialTheme.typography.bodyLarge,
-					modifier = Modifier
-						.weight(1f)
-						.padding(end = dimensionResource(R.dimen.padding_horizontal))
-				)
-				Value(valueFormat.format(overviewCalcResult.totalValue.toDouble() / 100))
-			}
-			Text(
-				text = overviewCalcResult.overviewComparisonConnection.getLocalizedString(LocalContext.current, overviewCalcResult.totalValue),
-				color = MaterialTheme.colorScheme.onSurfaceVariant,
-				style = MaterialTheme.typography.bodyMedium,
-				textAlign = TextAlign.Center,
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(top = dimensionResource(R.dimen.padding_vertical))
-			)
-			HorizontalDivider(
-				color = MaterialTheme.colorScheme.outline,
-				modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
-			)
-
-			//Types:
-			Row(
-				modifier = Modifier.fillMaxWidth()
-			) {
-				//List:
-				Column(
-					modifier = Modifier.weight(1f)
-				) {
-					for (i in 0..overviewCalcResult.results.size - 1) {
-						if (i >= 3) {
-							break
-						}
-						OverviewItem(
-							overviewCalcResultItem = overviewCalcResult.results[i],
-							color = colors[i],
-							valueFormat = valueFormat
-						)
-					}
-				}
-
-				//Diagram:
-				OverviewChart(
-					overviewCalcResultItems = overviewCalcResult.results,
-					colors = colors,
-					modifier = Modifier
-						.align(Alignment.CenterVertically)
-						.padding(
-							start = dimensionResource(R.dimen.padding_horizontal),
-							top = dimensionResource(R.dimen.padding_vertical)
-						)
-				)
-			}
-		}
-	}
-	else {
-		Row(
-			verticalAlignment = Alignment.CenterVertically,
-			modifier = modifier
-				.fillMaxWidth()
-				.border(
-					width = 1.dp,
-					color = MaterialTheme.colorScheme.outline,
-					shape = MaterialTheme.shapes.extraLarge
-				)
-				.clip(MaterialTheme.shapes.extraLarge)
-				.padding(
-					horizontal = dimensionResource(R.dimen.margin_horizontal),
-					vertical = dimensionResource(R.dimen.padding_vertical)
-				)
-		) {
-			Text(
-				text = stringResource(R.string.main_overview_noData),
-				color = MaterialTheme.colorScheme.onSurface,
-				style = MaterialTheme.typography.bodyLarge,
-				modifier = Modifier
-					.weight(1f)
-					.padding(end = dimensionResource(R.dimen.padding_horizontal))
-			)
-			Image(
-				painter = painterResource(R.drawable.el_overview),
-				contentDescription = "",
-				modifier = Modifier.size(dimensionResource(R.dimen.image_emptyPlaceholderSmall))
-			)
-		}
 	}
 }
 
