@@ -204,6 +204,9 @@ fun ChaChing(updateManager: UpdateManager) {
                     },
                     onEditTransfer = { typeId, transferId ->
                         navController.navigate("transfer/$typeId/$transferId")
+                    },
+                    onNavigateToTrash = {
+                        navController.navigate("trash")
                     }
                 )
             }

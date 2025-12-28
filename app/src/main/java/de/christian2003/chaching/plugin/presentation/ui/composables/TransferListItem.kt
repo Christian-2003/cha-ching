@@ -34,6 +34,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.transfer.Transfer
@@ -116,7 +117,9 @@ fun TransferListItem(
                     Text(
                         text = type?.name ?: "",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = if (!isExpanded) { 1 } else { Int.MAX_VALUE },
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = onFormatDate(transfer.transferValue.date),

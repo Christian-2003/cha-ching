@@ -1,7 +1,6 @@
 package de.christian2003.chaching.plugin.presentation.view.transfers
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,18 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -44,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import java.util.UUID
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.transfer.Transfer
@@ -55,7 +48,6 @@ import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceho
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.TransferListItem
-import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import java.time.LocalDate
 
 
@@ -65,12 +57,14 @@ import java.time.LocalDate
  * @param viewModel         View model.
  * @param onNavigateUp      Callback invoked to navigate up on the navigation stack.
  * @param onEditTransfer    Callback invoked to navigate to the page to edit a transfer.
+ * @param onNavigateToTrash Callback invoked to navigate to the trash screen.
  */
 @Composable
 fun TransfersScreen(
     viewModel: TransfersViewModel,
     onNavigateUp: () -> Unit,
-    onEditTransfer: (UUID, UUID) -> Unit
+    onEditTransfer: (UUID, UUID) -> Unit,
+    onNavigateToTrash: () -> Unit
 ) {
     val transfers: List<Transfer> by viewModel.allTransfers.collectAsState(emptyList())
     val appBarState: TopAppBarState = rememberTopAppBarState()
@@ -133,6 +127,7 @@ fun TransfersScreen(
                     onFormatDate = {
                         viewModel.formatDate(it)
                     },
+                    onNavigateToTrash = onNavigateToTrash,
                     windowInsets = WindowInsets(
                         bottom = innerPadding.calculateBottomPadding()
                     )
@@ -176,6 +171,7 @@ fun TransfersScreen(
  * @param onQueryTransferType   Callback invoked to query the type for a transfer.
  * @param onFormatValue         Callback invoked to format a currency value.
  * @param onFormatDate          Callback invoked to format a date.
+ * @param onNavigateToTrash     Callback invoked to navigate to the trash screen.
  * @param windowInsets          Insets for the screen.
  */
 @Composable
@@ -187,15 +183,19 @@ private fun TransferList(
     onQueryTransferType: suspend (Transfer) -> Type?,
     onFormatValue: (TransferValue) -> String,
     onFormatDate: (LocalDate) -> String,
+    onNavigateToTrash: () -> Unit,
     windowInsets: WindowInsets
 ) {
     val groupedTransfers = transfers.groupBy { transfer ->
         transfer.transferValue.date.withDayOfMonth(1)
     }
     LazyColumn {
-        item {
-            if (hiddenTransfersCount != null && hiddenTransfersCount > 0) {
-                HiddenTransfersCard(hiddenTransfersCount)
+        if (hiddenTransfersCount != null && hiddenTransfersCount > 0) {
+            item {
+                HiddenTransfersCard(
+                    hiddenTransfersCount = hiddenTransfersCount,
+                    onNavigateToTrash = onNavigateToTrash
+                )
             }
         }
         groupedTransfers.forEach { (month, monthTransfer) ->
@@ -230,13 +230,17 @@ private fun TransferList(
 
 /**
  * Card displays information on why some transfers are hidden.
+ *
+ * @param hiddenTransfersCount  Number of hidden transfers.
+ * @param onNavigateToTrash     Callback invoked to navigate to the trash screen.
  */
 @Composable
 fun HiddenTransfersCard(
-    hiddenTransfersCount: Int
+    hiddenTransfersCount: Int,
+    onNavigateToTrash: () -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
+        horizontalAlignment = Alignment.End,
         modifier = Modifier
             .fillMaxWidth()
             .padding(
@@ -251,16 +255,26 @@ fun HiddenTransfersCard(
                 vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_info),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            contentDescription = "",
-            modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_horizontal))
-        )
-        Text(
-            text = pluralStringResource(R.plurals.transfers_hiddenTransfersInfo, hiddenTransfersCount, hiddenTransfersCount),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.bodyMedium
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_info),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                contentDescription = "",
+                modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_horizontal))
+            )
+            Text(
+                text = pluralStringResource(R.plurals.transfers_hiddenTransfersInfo, hiddenTransfersCount, hiddenTransfersCount),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        TextButton(
+            onClick = onNavigateToTrash
+        ) {
+            Text(stringResource(R.string.button_showTrash))
+        }
     }
 }

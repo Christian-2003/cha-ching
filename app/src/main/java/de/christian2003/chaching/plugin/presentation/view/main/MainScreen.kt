@@ -1,14 +1,11 @@
 package de.christian2003.chaching.plugin.presentation.view.main
 
-import android.icu.text.DecimalFormat
 import android.icu.text.NumberFormat
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +16,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,7 +28,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -176,28 +171,30 @@ fun MainScreen(
 						},
 						modifier = Modifier
 							.fillMaxWidth()
+							.background(MaterialTheme.colorScheme.surface)
 							.padding(
-								horizontal = dimensionResource(R.dimen.margin_horizontal),
-								vertical = dimensionResource(R.dimen.margin_horizontal)
+								start = dimensionResource(R.dimen.margin_horizontal),
+								end = dimensionResource(R.dimen.margin_horizontal),
+								bottom = dimensionResource(R.dimen.margin_horizontal)
 							)
 					)
 				}
 
 
-
 				//Quick access:
-				Headline(stringResource(R.string.main_quickActions_title))
+				Headline(
+					title = stringResource(R.string.main_quickActions_title),
+					modifier = Modifier
+						.fillMaxWidth()
+						.background(MaterialTheme.colorScheme.surface)
+				)
 				QuickActions(
 					onAnalysisClicked = onNavigateToAnalysis,
 					onTransfersClicked = onNavigateToTransfers,
 					onTypesClicked = onNavigateToTypes,
-					modifier = Modifier.fillMaxWidth()
+					modifier = Modifier
+						.fillMaxWidth()
 						.background(MaterialTheme.colorScheme.surface)
-						.clip(RoundedCornerShape(
-							bottomStart = 24.dp,
-							bottomEnd = 24.dp
-						))
-						.background(MaterialTheme.colorScheme.surfaceContainerLowest)
 						.padding(bottom = dimensionResource(R.dimen.padding_vertical))
 				)
 

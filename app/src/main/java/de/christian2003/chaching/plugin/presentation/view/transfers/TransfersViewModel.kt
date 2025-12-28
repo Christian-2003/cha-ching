@@ -18,6 +18,8 @@ import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.domain.type.Type
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -52,6 +54,7 @@ class TransfersViewModel @Inject constructor(
      * Number of transfers hidden because their type is in trash bin.
      */
     var hiddenTransfersCount: Int? by mutableStateOf(null)
+        private set
 
 
     /**
@@ -64,9 +67,9 @@ class TransfersViewModel @Inject constructor(
      * Initializes the view model.
      */
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        getAllTransfersUseCase.getAllTransfers().onEach {
             hiddenTransfersCount = countTransfersWhoseTypeIsInTrashUseCase.countTransfersWhoseTypeIsInTrash()
-        }
+        }.launchIn(viewModelScope)
     }
 
 

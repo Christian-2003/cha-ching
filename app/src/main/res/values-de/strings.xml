@@ -29,6 +29,13 @@
     <string name="main_overview_total">Einkommen der letzten 30 Tage</string>
     <string name="main_overview_otherTypes">Sonstiges</string>
     <string name="main_overview_noData">Es gibt keine Einkommen in den letzten 30 Tagen</string>
+    <string name="main_analysis_budgetLabel">Nettoeinkommen</string>
+    <string name="main_analysis_incomesLabel">Einkommen</string>
+    <string name="main_analysis_expensesLabel">Ausgaben</string>
+    <string name="main_analysis_otherTypeLabel">Sonstiges</string>
+    <string name="main_analysis_upFromLastMonthLabel">&lt;b&gt;%1$s&lt;/b&gt; mehr als letzten Monat</string>
+    <string name="main_analysis_downFromLastMonthLabel">&lt;b&gt;%1$s&lt;/b&gt; weniger als letzten Monat</string>
+    <string name="main_analysis_noDiffToLastMonthLabel">Identisch zu letztem Monat</string>
     <string name="main_downloadMessage">Eine neue Version von Cha Ching ist verfügbar. Möchtest du das Update jetzt herunterladen?</string>
     <string name="main_quickActions_title">Schnellzugriff</string>
     <string name="main_quickActions_analysis">Analyse</string>
@@ -242,6 +249,7 @@
     <string name="button_restore">Wiederherstellen</string>
     <string name="button_undo">Rückgängig</string>
     <string name="button_moveToTrash">In Papierkorb verschieben</string>
+    <string name="button_showTrash">Papierkorb anzeigen</string>
 
 
     <!-- Widgets -->

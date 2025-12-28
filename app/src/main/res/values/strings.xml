@@ -279,6 +279,7 @@
     <string name="button_restore">Restore</string>
     <string name="button_undo">Undo</string>
     <string name="button_moveToTrash">Move to trash</string>
+    <string name="button_showTrash">Show trash</string>
 
 
     <!-- Widgets -->

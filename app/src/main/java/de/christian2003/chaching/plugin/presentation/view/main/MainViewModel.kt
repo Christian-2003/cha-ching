@@ -192,7 +192,7 @@ class MainViewModel @Inject constructor(
 
 	private fun startAnalysis() = viewModelScope.launch(Dispatchers.Default) {
 		analysisResult = null
-		val result: SmallAnalysisResult = smallAnalysisUseCase.analyzeData(LocalDate.now()) //TODO: Remove minusMonths
+		val result: SmallAnalysisResult = smallAnalysisUseCase.analyzeData(LocalDate.now())
 		analysisResult = result
 	}
 
