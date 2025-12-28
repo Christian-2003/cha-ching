@@ -10,6 +10,7 @@ import androidx.room.Update
 import androidx.room.Upsert
 import de.christian2003.chaching.plugin.infrastructure.db.entities.TransferEntity
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 import java.util.UUID
 
 
@@ -61,6 +62,27 @@ interface TransferDao {
 
 	@Query("SELECT COUNT(*) FROM transfers t WHERE EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type)")
 	suspend fun countTransfersWhoseTypeIsInTrash(): Int
+
+
+	/**
+	 * Selects the latest cluster of transfers that are nearby based on their value date.
+	 *
+	 * @param date			Date from which to search for the latest cluster of dates.
+	 * @param maxClusterGap	Days between the clusters.
+	 */
+	@Query("""
+		WITH latest AS (
+			SELECT MAX(valueDate) AS maxDate FROM transfers t
+			WHERE t.valueDate <= :date
+			AND NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type)
+		)
+		SELECT * FROM transfers t
+		WHERE t.valueDate <= (SELECT maxDate FROM latest)
+		  AND t.valueDate >= (SELECT maxDate FROM latest) - :maxClusterGap
+		  AND NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type)
+		ORDER BY valueDate ASC
+	""")
+	fun selectLatestClusterByDate(date: LocalDate, maxClusterGap: Int = 10): Flow<List<TransferEntity>>
 
 
 	/**

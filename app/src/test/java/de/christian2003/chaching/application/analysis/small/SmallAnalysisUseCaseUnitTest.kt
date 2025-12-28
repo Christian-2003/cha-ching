@@ -44,57 +44,11 @@ class SmallAnalysisUseCaseUnitTest {
     fun `data without special cases should be analyzed`() = runTest {
         //Given:
         val month: LocalDate = LocalDate.of(2025, 4, 28)
-        val currentStart: LocalDate = LocalDate.of(2025, 4, 1)
-        val currentEnd: LocalDate = LocalDate.of(2025, 4, 30)
-        val previousStart: LocalDate = LocalDate.of(2025, 3, 1)
-        val previousEnd: LocalDate = LocalDate.of(2025, 3, 31)
-
-        //Rule for current month:
-        whenever(
-            repository.getAllTransfersInDateRange(
-                start = eq(currentStart),
-                end = eq(currentEnd)
-            )
-        ).thenReturn(flowOf(listOf(
-            //Incomes:
-            Transfer(
-                transferValue = TransferValue(1500_00, LocalDate.of(2025, 4, 15), true),
-                hoursWorked = 140,
-                type = salaryTypeId
-            ),
-            Transfer(
-                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 29), true),
-                hoursWorked = 160,
-                type = salaryTypeId
-            ),
-            Transfer(
-                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 4), true),
-                hoursWorked = 0,
-                type = sharesTypeId
-            ),
-            //Expenses:
-            Transfer(
-                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 15), false),
-                hoursWorked = 0,
-                type = taxesTypeId
-            ),
-            Transfer(
-                transferValue = TransferValue(100_00, LocalDate.of(2025, 4, 29), false),
-                hoursWorked = 0,
-                type = insuranceTypeId
-            ),
-            Transfer(
-                transferValue = TransferValue(1000_00, LocalDate.of(2025, 4, 4), false),
-                hoursWorked = 0,
-                type = insuranceTypeId
-            )
-        )))
 
         //Rule for previous month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = eq(previousStart),
-                end = eq(previousEnd)
+            repository.selectLatestTransfersClusterByDate(
+                date = any()
             )
         ).thenReturn(flowOf(listOf(
             //Incomes:
@@ -131,6 +85,46 @@ class SmallAnalysisUseCaseUnitTest {
             )
         )))
 
+        //Rule for current month:
+        whenever(
+            repository.selectLatestTransfersClusterByDate(
+                date = eq(month)
+            )
+        ).thenReturn(flowOf(listOf(
+            //Incomes:
+            Transfer(
+                transferValue = TransferValue(1500_00, LocalDate.of(2025, 4, 15), true),
+                hoursWorked = 140,
+                type = salaryTypeId
+            ),
+            Transfer(
+                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 16), true),
+                hoursWorked = 160,
+                type = salaryTypeId
+            ),
+            Transfer(
+                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 14), true),
+                hoursWorked = 0,
+                type = sharesTypeId
+            ),
+            //Expenses:
+            Transfer(
+                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 15), false),
+                hoursWorked = 0,
+                type = taxesTypeId
+            ),
+            Transfer(
+                transferValue = TransferValue(100_00, LocalDate.of(2025, 4, 13), false),
+                hoursWorked = 0,
+                type = insuranceTypeId
+            ),
+            Transfer(
+                transferValue = TransferValue(1000_00, LocalDate.of(2025, 4, 13), false),
+                hoursWorked = 0,
+                type = insuranceTypeId
+            )
+        )))
+
 
         //When:
         val result: SmallAnalysisResult = useCase.analyzeData(month)
@@ -139,8 +133,6 @@ class SmallAnalysisUseCaseUnitTest {
         //Then:
 
         //Current month:
-        Assert.assertEquals(currentStart, result.currentMonth.start)
-        Assert.assertEquals(currentEnd, result.currentMonth.end)
         Assert.assertEquals(2400.00, result.currentMonth.budget, 0.0)
 
         Assert.assertEquals(4000.00, result.currentMonth.incomes.totalSum, 0.0)
@@ -158,8 +150,6 @@ class SmallAnalysisUseCaseUnitTest {
         Assert.assertEquals(500.00, result.currentMonth.expenses.typeResults[1].sum, 0.0)
 
         //Previous month:
-        Assert.assertEquals(previousStart, result.previousMonth.start)
-        Assert.assertEquals(previousEnd, result.previousMonth.end)
         Assert.assertEquals(1600.00, result.previousMonth.budget, 0.0)
 
         Assert.assertEquals(3000.00, result.previousMonth.incomes.totalSum, 0.0)
@@ -182,23 +172,19 @@ class SmallAnalysisUseCaseUnitTest {
     fun `more types then limit should make last types grouped`() = runTest {
         //Given:
         val month: LocalDate = LocalDate.of(2025, 4, 28)
-        val currentStart: LocalDate = LocalDate.of(2025, 4, 1)
-        val currentEnd: LocalDate = LocalDate.of(2025, 4, 30)
 
 
         //Rule for previous month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = any(),
-                end = any()
+            repository.selectLatestTransfersClusterByDate(
+                date = any()
             )
         ).thenReturn(flowOf(listOf()))
 
         //Rule for current month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = eq(currentStart),
-                end = eq(currentEnd)
+            repository.selectLatestTransfersClusterByDate(
+                date = eq(month)
             )
         ).thenReturn(flowOf(listOf(
             //Incomes:
@@ -208,27 +194,27 @@ class SmallAnalysisUseCaseUnitTest {
                 type = salaryTypeId
             ),
             Transfer(
-                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 4), true),
+                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 14), true),
                 hoursWorked = 0,
                 type = taxesTypeId
             ),
             Transfer(
-                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 29), true),
+                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 16), true),
                 hoursWorked = 0,
                 type = insuranceTypeId
             ),
             Transfer(
-                transferValue = TransferValue(4000_00, LocalDate.of(2025, 4, 4), true),
+                transferValue = TransferValue(4000_00, LocalDate.of(2025, 4, 13), true),
                 hoursWorked = 0,
                 type = sharesTypeId
             ),
             Transfer(
-                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 4), true),
+                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 13), true),
                 hoursWorked = 0,
                 type = holidayPayTypeId
             ),
             Transfer(
-                transferValue = TransferValue(3000_00, LocalDate.of(2025, 4, 4), true),
+                transferValue = TransferValue(3000_00, LocalDate.of(2025, 4, 14), true),
                 hoursWorked = 0,
                 type = sickPayTypeId
             )
@@ -240,8 +226,6 @@ class SmallAnalysisUseCaseUnitTest {
 
 
         //Then:
-        Assert.assertEquals(currentStart, result.currentMonth.start)
-        Assert.assertEquals(currentEnd, result.currentMonth.end)
         Assert.assertEquals(11_500.00, result.currentMonth.budget, 0.0)
 
         Assert.assertEquals(11_500.00, result.currentMonth.incomes.totalSum, 0.0)
@@ -264,23 +248,19 @@ class SmallAnalysisUseCaseUnitTest {
     fun `exactly 3 types should not be grouped`() = runTest {
         //Given:
         val month: LocalDate = LocalDate.of(2025, 4, 28)
-        val currentStart: LocalDate = LocalDate.of(2025, 4, 1)
-        val currentEnd: LocalDate = LocalDate.of(2025, 4, 30)
 
 
         //Rule for previous month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = any(),
-                end = any()
+            repository.selectLatestTransfersClusterByDate(
+                date = any()
             )
         ).thenReturn(flowOf(listOf()))
 
         //Rule for current month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = eq(currentStart),
-                end = eq(currentEnd)
+            repository.selectLatestTransfersClusterByDate(
+                date = eq(month)
             )
         ).thenReturn(flowOf(listOf(
             //Incomes:
@@ -290,12 +270,12 @@ class SmallAnalysisUseCaseUnitTest {
                 type = salaryTypeId
             ),
             Transfer(
-                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 4), true),
+                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 14), true),
                 hoursWorked = 0,
                 type = taxesTypeId
             ),
             Transfer(
-                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 29), true),
+                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 16), true),
                 hoursWorked = 0,
                 type = insuranceTypeId
             )
@@ -307,8 +287,6 @@ class SmallAnalysisUseCaseUnitTest {
 
 
         //Then:
-        Assert.assertEquals(currentStart, result.currentMonth.start)
-        Assert.assertEquals(currentEnd, result.currentMonth.end)
         Assert.assertEquals(4000.00, result.currentMonth.budget, 0.0)
 
         Assert.assertEquals(4000.00, result.currentMonth.incomes.totalSum, 0.0)
@@ -329,23 +307,19 @@ class SmallAnalysisUseCaseUnitTest {
     fun `exactly 4 types where last type should get summarized`() = runTest {
         //Given:
         val month: LocalDate = LocalDate.of(2025, 4, 28)
-        val currentStart: LocalDate = LocalDate.of(2025, 4, 1)
-        val currentEnd: LocalDate = LocalDate.of(2025, 4, 30)
 
 
         //Rule for previous month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = any(),
-                end = any()
+            repository.selectLatestTransfersClusterByDate(
+                date = any()
             )
         ).thenReturn(flowOf(listOf()))
 
         //Rule for current month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = eq(currentStart),
-                end = eq(currentEnd)
+            repository.selectLatestTransfersClusterByDate(
+                date = eq(month)
             )
         ).thenReturn(flowOf(listOf(
             //Incomes:
@@ -355,17 +329,17 @@ class SmallAnalysisUseCaseUnitTest {
                 type = salaryTypeId
             ),
             Transfer(
-                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 4), true),
+                transferValue = TransferValue(500_00, LocalDate.of(2025, 4, 14), true),
                 hoursWorked = 0,
                 type = taxesTypeId
             ),
             Transfer(
-                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 29), true),
+                transferValue = TransferValue(2000_00, LocalDate.of(2025, 4, 15), true),
                 hoursWorked = 0,
                 type = insuranceTypeId
             ),
             Transfer(
-                transferValue = TransferValue(1000_00, LocalDate.of(2025, 4, 29), true),
+                transferValue = TransferValue(1000_00, LocalDate.of(2025, 4, 15), true),
                 hoursWorked = 0,
                 type = sharesTypeId
             )
@@ -377,8 +351,6 @@ class SmallAnalysisUseCaseUnitTest {
 
 
         //Then:
-        Assert.assertEquals(currentStart, result.currentMonth.start)
-        Assert.assertEquals(currentEnd, result.currentMonth.end)
         Assert.assertEquals(5000.00, result.currentMonth.budget, 0.0)
 
         Assert.assertEquals(5000.00, result.currentMonth.incomes.totalSum, 0.0)
@@ -402,17 +374,11 @@ class SmallAnalysisUseCaseUnitTest {
     fun `no data should return empty result`() = runTest {
         //Given:
         val month: LocalDate = LocalDate.of(2025, 4, 28)
-        val currentStart: LocalDate = LocalDate.of(2025, 4, 1)
-        val currentEnd: LocalDate = LocalDate.of(2025, 4, 30)
-        val previousStart: LocalDate = LocalDate.of(2025, 3, 1)
-        val previousEnd: LocalDate = LocalDate.of(2025, 3, 31)
-
 
         //Rule for previous month:
         whenever(
-            repository.getAllTransfersInDateRange(
-                start = any(),
-                end = any()
+            repository.selectLatestTransfersClusterByDate(
+                date = any()
             )
         ).thenReturn(flowOf(listOf()))
 
@@ -424,8 +390,6 @@ class SmallAnalysisUseCaseUnitTest {
         //Then:
 
         //Current year:
-        Assert.assertEquals(currentStart, result.currentMonth.start)
-        Assert.assertEquals(currentEnd, result.currentMonth.end)
         Assert.assertEquals(0.00, result.currentMonth.budget, 0.0)
 
         Assert.assertEquals(0.00, result.currentMonth.incomes.totalSum, 0.0)
@@ -435,8 +399,6 @@ class SmallAnalysisUseCaseUnitTest {
         Assert.assertEquals(0, result.currentMonth.expenses.typeResults.size)
 
         //Previous year:
-        Assert.assertEquals(previousStart, result.previousMonth.start)
-        Assert.assertEquals(previousEnd, result.previousMonth.end)
         Assert.assertEquals(0.00, result.previousMonth.budget, 0.0)
 
         Assert.assertEquals(0.00, result.previousMonth.incomes.totalSum, 0.0)

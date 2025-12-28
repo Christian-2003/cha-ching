@@ -8,7 +8,6 @@ import de.christian2003.chaching.domain.analysis.small.SmallTypeResult
 import de.christian2003.chaching.domain.transfer.Transfer
 import kotlinx.coroutines.flow.first
 import java.time.LocalDate
-import java.time.temporal.TemporalAdjusters
 import java.util.UUID
 import javax.inject.Inject
 
@@ -31,23 +30,26 @@ class SmallAnalysisUseCase @Inject constructor(
     /**
      * Analyzes the data from the last month.
      *
-     * @param month Month for which to generate the analysis.
+     * @param date  Date for which to generate the analysis.
      * @return      Analysis result.
      */
-    suspend fun analyzeData(month: LocalDate): SmallAnalysisResult {
-        //Get start and end dates:
-        val start: LocalDate = month.with(TemporalAdjusters.firstDayOfMonth())
-        val end: LocalDate = month.with(TemporalAdjusters.lastDayOfMonth())
+    suspend fun analyzeData(date: LocalDate): SmallAnalysisResult {
+        //Get cluster for current month:
+        val currentMonthTransfers: List<Transfer> = repository.selectLatestTransfersClusterByDate(date).first()
 
         //Get result of current month:
-        val currentMonthResult: SmallMonthResult = generateSmallMonthResult(start, end)
+        val currentMonthResult: SmallMonthResult = generateSmallMonthResult(currentMonthTransfers)
 
-        //Get time period for last month:
-        val previousStart: LocalDate = start.minusMonths(1)
-        val previousEnd: LocalDate = end.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth())
+        //Get cluster for the previous month:
+        val lastClusterDate: LocalDate = if (currentMonthTransfers.isEmpty()) {
+            LocalDate.now()
+        } else {
+            currentMonthTransfers.first().transferValue.date.minusDays(1)
+        }
+        val lastMonthTransfers: List<Transfer> = repository.selectLatestTransfersClusterByDate(lastClusterDate).first()
 
         //Get result for previous month:
-        val previousMonthResult: SmallMonthResult = generateSmallMonthResult(previousStart, previousEnd)
+        val previousMonthResult: SmallMonthResult = generateSmallMonthResult(lastMonthTransfers)
 
         //Return the final result:
         val result = SmallAnalysisResult(
@@ -61,21 +63,16 @@ class SmallAnalysisUseCase @Inject constructor(
     /**
      * Generates the mont result for the month in between the defined start and end dates.
      *
-     * @param start Start date for the month.
-     * @param end   End date for the month.
-     * @return      Result for the month.
+     * @param transfers List of transfers for which to generate the result.
+     * @return          Result for the month.
      */
-    private suspend fun generateSmallMonthResult(start: LocalDate, end: LocalDate): SmallMonthResult {
-        val transfers: List<Transfer> = repository.getAllTransfersInDateRange(start, end).first()
-
+    private fun generateSmallMonthResult(transfers: List<Transfer>): SmallMonthResult {
         //Generate results for incomes and expenses:
         val incomes: SmallAnalysisData = generateSmallAnalysisData(transfers, true)
         val expenses: SmallAnalysisData = generateSmallAnalysisData(transfers, false)
 
         //Return month result:
         val monthResult = SmallMonthResult(
-            start = start,
-            end = end,
             budget = incomes.totalSum - expenses.totalSum,
             incomes = incomes,
             expenses = expenses

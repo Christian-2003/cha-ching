@@ -164,6 +164,16 @@ class ChaChingRepository @Inject constructor(
 	}
 
 
+	override fun selectLatestTransfersClusterByDate(date: LocalDate): Flow<List<Transfer>> {
+		val transfers: Flow<List<TransferEntity>> = transferDao.selectLatestClusterByDate(date)
+		return transfers.map { list ->
+			list.map { transfer ->
+				transferMapper.toDomain(transfer)
+			}
+		}
+	}
+
+
 	/**
 	 * Returns the transfer of the ID passed as argument. If no transfer with the ID specified
 	 * exists, null is returned.

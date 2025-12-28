@@ -10,7 +10,8 @@ interface AnalysisRepository {
 
     fun getAllTransfersInDateRange(start: LocalDate, end: LocalDate): Flow<List<Transfer>>
 
-
     fun getAllTypes(): Flow<List<Type>>
+
+    fun selectLatestTransfersClusterByDate(date: LocalDate): Flow<List<Transfer>>
 
 }
