@@ -25,10 +25,7 @@
     </string-array>
 
 
-    <string name="main_overview_title">Übersicht</string>
-    <string name="main_overview_total">Einkommen der letzten 30 Tage</string>
     <string name="main_overview_otherTypes">Sonstiges</string>
-    <string name="main_overview_noData">Es gibt keine Einkommen in den letzten 30 Tagen</string>
     <string name="main_analysis_budgetLabel">Nettoeinkommen</string>
     <string name="main_analysis_incomesLabel">Einkommen</string>
     <string name="main_analysis_expensesLabel">Ausgaben</string>
@@ -39,11 +36,11 @@
     <string name="main_downloadMessage">Eine neue Version von Cha Ching ist verfügbar. Möchtest du das Update jetzt herunterladen?</string>
     <string name="main_quickActions_title">Schnellzugriff</string>
     <string name="main_quickActions_analysis">Analyse</string>
-    <string name="main_quickActions_transfers">Einkommen</string>
-    <string name="main_quickActions_types">Ein\u00ADkommens\u00ADarten</string>
-    <string name="main_recentTransfers">Letzte Einkommen</string>
+    <string name="main_quickActions_transfers">Buchungen</string>
+    <string name="main_quickActions_types">Kate\u00ADgorien</string>
+    <string name="main_recentTransfers">Letzte Buchungen</string>
     <string name="main_emptyPlaceholder_title">Keine Daten</string>
-    <string name="main_emptyPlaceholder_subtitle">Erstelle Einkommen um das volle Potenzial von Cha Ching freizuschalten</string>
+    <string name="main_emptyPlaceholder_subtitle">Erstelle Buchungen um das volle Potenzial von Cha Ching freizuschalten</string>
     <string-array name="main_comparisons">
         <item>Das ist so viel wie %1$s Tassen Kaffee</item>
         <item>Mit diesem Geld kannst du %1$s Kugel Eis kaufen</item>
@@ -67,13 +64,13 @@
     </string-array>
 
 
-    <string name="transfers_title">Deine Einkommen</string>
-    <string name="transfers_emptyPlaceholder_title">Keine Einkommen</string>
-    <string name="transfers_emptyPlaceholder_subtitle">Verfügbare Einkommen werden hier angezeigt</string>
-    <string name="transfers_confirmDelete">Das Löschen von %1$s kann nicht rückgängig gemacht werden. Bist du dir sicher, dass du dieses Einkommen löschen möchtest?</string>
+    <string name="transfers_title">Deine Buchungen</string>
+    <string name="transfers_emptyPlaceholder_title">Keine Buchungen</string>
+    <string name="transfers_emptyPlaceholder_subtitle">Verfügbare Buchungen werden hier angezeigt</string>
+    <string name="transfers_confirmDelete">Das Löschen von %1$s kann nicht rückgängig gemacht werden. Bist du dir sicher, dass du diese Buchung löschen möchtest?</string>
     <plurals name="transfers_hiddenTransfersInfo">
-        <item quantity="one">%1$d Einkommen ist ausgeblendet, da einige Einkommensarten in den Papierkorb verschoben wurden.</item>
-        <item quantity="other">Es wurden %1$d Einkommen ausgeblendet, da einige Einkommensarten in den Papierkorb verschoben wurden.</item>
+        <item quantity="one">%1$d Buchung ist ausgeblendet, da einige Kategorien in den Papierkorb verschoben wurden.</item>
+        <item quantity="other">Es wurden %1$d Buchungen ausgeblendet, da einige Kategorien in den Papierkorb verschoben wurden.</item>
     </plurals>
 
 
@@ -84,7 +81,7 @@
     <string name="transfer_valueSuffix">EUR</string>
     <string name="transfer_hoursWorkedLabel">Arbeitsstunden</string>
     <string name="transfer_hoursWorkedSuffix">Stunden</string>
-    <string name="transfer_help">Gebe ein, wie hoch das Einkommen für das Wertstellungsdatum ist.</string>
+    <string name="transfer_help">Lege fest, wie hoch die Buchung für das Wertstellungsdatum ist.</string>
     <string name="transfer_isSalary_incomeTitle">Einkommen</string>
     <string name="transfer_isSalary_incomeTextCreate">Du erstellst ein Einkommen</string>
     <string name="transfer_isSalary_incomeTextEdit">Du bearbeitest ein Einkommen</string>
@@ -94,39 +91,32 @@
     <string name="transfer_isSalary_budgetForecast">Budget Prognose</string>
 
 
-    <string name="types_title">Einkommensarten</string>
-    <string name="types_emptyPlaceholder_title">Keine Einkommensarten</string>
-    <string name="types_emptyPlaceholder_subtitle">Verfügbare Einkommensarten werden hier angezeigt</string>
-    <string name="types_listTitle">Deine Einkommensarten</string>
+    <string name="types_title">Kategorien</string>
+    <string name="types_emptyPlaceholder_title">Keine Kategorien</string>
+    <string name="types_emptyPlaceholder_subtitle">Verfügbare Kategorien werden hier angezeigt</string>
     <string name="types_invisible">Im Schnellzugriff ausgeblendet</string>
-    <string name="types_help">Einkommensarten definieren, welche Art von Einkommen du erfassen kannst. Du kannst Einkommensarten erstellen, bearbeiten und löschen.</string>
-    <string name="types_confirmDelete">Bist du dir sicher, dass %1$s in den Papierkorb verschieben werden soll?</string>
+    <string name="types_help">Kategorien definieren, welche Art von Buchungen du erfassen kannst. Du kannst Kategorien erstellen, bearbeiten und löschen.</string>
+    <string name="types_confirmDelete">Bist du dir sicher, dass %1$s in den Papierkorb verschoben werden soll?</string>
 
 
-    <string name="type_unnamed">Einkommensart %1$d</string>
+    <string name="type_unnamed">Kategorie %1$d</string>
     <string name="type_nameLabel">Name</string>
     <string name="type_hoursWorkedEditableTitle">Arbeitsstunden anzeigen</string>
-    <string name="type_hoursWorkedEditableText">Sollen Arbeitsstunden für diese Einkommensart erfasst werden?</string>
+    <string name="type_hoursWorkedEditableText">Sollen Arbeitsstunden für diese Kategorie erfasst werden?</string>
     <string name="type_salaryByDefaultTitle">Standardmäßig Einkommen</string>
-    <string name="type_salaryByDefaultText">Sollen Einkommen dieser Art standardmäßig als Einkommen erfasst werden?</string>
+    <string name="type_salaryByDefaultText">Sollen Buchungen dieser Kategorie standardmäßig als Einkommen erfasst werden?</string>
     <string name="type_quickAccessEnabledTitle">Im Schnellzugriff anzeigen</string>
-    <string name="type_quickAccessEnabledText">Soll diese Einkommensart auf dem Startbildschirm über den Schnellzugriff angezeigt werden?</string>
+    <string name="type_quickAccessEnabledText">Soll diese Kategorie auf dem Startbildschirm über den Schnellzugriff angezeigt werden?</string>
     <string name="type_chooseIcon">Wähle ein Bild aus</string>
-    <string name="type_help_create">Bearbeite die Einkommensart indem du einen Namen eingibst und ein Bild auswählst.</string>
+    <string name="type_help_create">Bearbeite die Kategorie indem du einen Namen eingibst und ein Bild auswählst.</string>
     <string name="type_quickAccessHelp_title">Im Schnellzugriff anzeigen</string>
-    <string name="type_quickAccessHelp_text">Der Schnellzugriff auf der Startseite erlaubt dir, für diese Einkommensart neue Einkommen zu erstellen. Mit dieser Einstellung legst du fest, ob diese Einkommensart auf der Startseite über den Schnellzugriff angezeigt werden soll.</string>
+    <string name="type_quickAccessHelp_text">Der Schnellzugriff auf der Startseite erlaubt dir, für diese Kategorie neue Buchungen zu erstellen. Mit dieser Einstellung legst du fest, ob diese Kategorie auf der Startseite über den Schnellzugriff angezeigt werden soll.</string>
 
 
     <string name="analysis_title">Analyse</string>
     <string name="analysis_other">Sonstige</string>
     <string name="analysis_total">Gesamt</string>
     <string name="analysis_average">Durchschnitt</string>
-    <string name="analysis_diagram_transfers">Einkommen nach %1$s</string>
-    <string name="analysis_diagram_cumulated">Kumuliertes Einkommen nach %1$s</string>
-    <string name="analysis_transfersByType">Einkommen nach Einkommensart</string>
-    <string name="analysis_precision_month">Monat</string>
-    <string name="analysis_precision_quarter">Quartal</string>
-    <string name="analysis_precision_year">Jahr</string>
     <string name="analysis_period_currentYear">Aktuelles Jahr</string>
     <string name="analysis_period_lastYear">Letztes Jahr</string>
     <string name="analysis_period_custom">Eigener Zeitraum</string>
@@ -146,10 +136,10 @@
     <string name="settings_customization_contrastDialog_previewTitle">Vorschau</string>
     <string name="settings_customization_contrastDialog_previewText">Beispieltext</string>
     <string name="settings_data">Daten</string>
-    <string name="settings_data_typesTitle">Alle Einkommensarten</string>
-    <string name="settings_data_typesInfo">Bearbeite die Einkommensarten</string>
+    <string name="settings_data_typesTitle">Alle Kategorien</string>
+    <string name="settings_data_typesInfo">Bearbeite die Kategorien</string>
     <string name="settings_data_trashTitle">Papierkorb</string>
-    <string name="settings_data_trashInfo">Enthält alle Einkommensarten, die gelöscht wurden</string>
+    <string name="settings_data_trashInfo">Enthält alle Kategorien, die gelöscht wurden</string>
     <string name="settings_data_exportTitle">Daten exportieren</string>
     <string name="settings_data_exportInfo">Daten in eine JSON-Datei exportieren</string>
     <string name="settings_data_exportSuccess">Daten erfolgreich exportiert</string>
@@ -188,9 +178,9 @@
     <string name="trash_title">Papierkorb</string>
     <string name="trash_deletedLabel">Gelöscht %1$s</string>
     <string name="trash_emptyPlaceholder_title">Papierkorb leer</string>
-    <string name="trash_emptyPlaceholder_subtitle">Gelöschte Einkommensarten werden hier angezeigt</string>
-    <string name="trash_help">Von hier kannst du Einkommensarten, die du zuvor entfernt hast, permanent löschen oder wiederherstellen.</string>
-    <string name="trash_confirmDelete">Wenn du %1$s permanent löschst, dann werden auch alle damit verbundenen Einkommen gelöscht. Bist du dir sicher, dass du diese Einkommensart permanent löschen möchtest?</string>
+    <string name="trash_emptyPlaceholder_subtitle">Gelöschte Kategorien werden hier angezeigt</string>
+    <string name="trash_help">Von hier kannst du Kategorien, die du zuvor entfernt hast, permanent löschen oder wiederherstellen.</string>
+    <string name="trash_confirmDelete">Wenn du %1$s permanent löschst, dann werden auch alle damit verbundenen Buchungen gelöscht. Bist du dir sicher, dass du diese Kategorie permanent löschen möchtest?</string>
 
 
     <string name="help_title">Hilfenachrichten</string>
@@ -198,9 +188,9 @@
     <string name="help_invisible">Ausgeblendet</string>
     <string name="help_clickToActivate">Klicken zum Einblenden</string>
     <string name="help_help">Aktiviere Hilfenachrichten, die du zuvor ausgeblendet hast.</string>
-    <string name="help_createType">Neue Einkommensart anlegen</string>
-    <string name="help_typesList">List aller Eikommensarten</string>
-    <string name="help_createTransfer">Neue Einnahme anlegen</string>
+    <string name="help_createType">Neue Kategorie erstellen</string>
+    <string name="help_typesList">List aller Kategorien</string>
+    <string name="help_createTransfer">Neue Buchung erstellen</string>
     <string name="help_helpList">Liste aller Hilfenachrichten</string>
     <string name="help_trash">Papierkorb</string>
 
@@ -208,12 +198,12 @@
     <string name="licenses_title">Lizenzen</string>
 
 
-    <string name="onboarding_page1_title">Dokumentiere deine Einkommen</string>
-    <string name="onboarding_page1_text">Dokumentiere alle deine Einkommen nach verschiedenen Einkommensarten, um die besten Analyseergebnisse zu erhalten</string>
-    <string name="onboarding_page2_title">Analysiere deine Einkommen</string>
-    <string name="onboarding_page2_text">Erhalte die besten Infos über deine Einkommen mit unseren Analysen</string>
-    <string name="onboarding_page3_title">Wähle aus, welche Einkommensarten du erfassen möchtest</string>
-    <string name="onboarding_page3_text">Du kannst später noch weitere Einkommensarten hinzufügen</string>
+    <string name="onboarding_page1_title">Dokumentiere deine Buchungen</string>
+    <string name="onboarding_page1_text">Dokumentiere alle deine Buchungen je nach Kategorie, um die besten Analyseergebnisse zu erhalten</string>
+    <string name="onboarding_page2_title">Analysiere deine Buchungen</string>
+    <string name="onboarding_page2_text">Erhalte die besten Infos über deine Buchungen mit unseren Analysen</string>
+    <string name="onboarding_page3_title">Wähle aus, welche Kategorien du erfassen möchtest</string>
+    <string name="onboarding_page3_text">Du kannst später noch weitere Kategorien hinzufügen</string>
     <string name="onboarding_defaultTypeSalary">Gehalt</string>
     <string name="onboarding_defaultTypeHolidayPay">Urlaubsgeld</string>
     <string name="onboarding_defaultTypeSickPay">Krankengeld</string>
@@ -228,18 +218,17 @@
 
 
     <!-- Button texts -->
-    <string name="button_createNewTransfer">Neues Einkommen erstellen</string>
-    <string name="button_createNewType">Neue Einkommensart erstellen</string>
+    <string name="button_createNewType">Neue Kategorie erstellen</string>
     <string name="button_dismissHelp">Ausblenden</string>
     <string name="button_edit">Bearbeiten</string>
     <string name="button_delete">Löschen</string>
     <string name="button_deletePermanently">Endgültig löschen</string>
     <string name="button_cancel">Abbrechen</string>
     <string name="button_confirm">Bestätigen</string>
-    <string name="button_createType">Einkommensart erstellen</string>
+    <string name="button_createType">Kategorie erstellen</string>
     <string name="button_save">Speichern</string>
     <string name="button_import">Importieren</string>
-    <string name="button_showAllTransfers">Alle Einkommen anzeigen</string>
+    <string name="button_showAllTransfers">Alle Buchungen anzeigen</string>
     <string name="button_next">Weiter</string>
     <string name="button_previous">Zurück</string>
     <string name="button_finish">Fertig</string>
@@ -247,7 +236,6 @@
     <string name="button_dismiss">Später</string>
     <string name="button_close">Schließen</string>
     <string name="button_restore">Wiederherstellen</string>
-    <string name="button_undo">Rückgängig</string>
     <string name="button_moveToTrash">In Papierkorb verschieben</string>
     <string name="button_showTrash">Papierkorb anzeigen</string>
 
