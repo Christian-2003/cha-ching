@@ -11,20 +11,29 @@ This document describes the analysis algorithm used in Cha Ching.
     1. [Workflow](#11-workflow)
     2. [Analysis Steps](#12-analysis-steps)
     3. [Final Result](#13-final-result)
+    4. [Test Strategy](#14-test-strategy)
 2. [Large Analysis](#2-large-analysis)
 
 
 <br/>
 
+***
+
 ## 1 Small Analysis
 The small analysis is the less powerful out of the two analysis algorithms used in Cha Ching. This section describes the small analysis.
+
+<br/>
 
 ### 1.1 Workflow
 The following workflow illustrates how the analysis works internally:
 ![Small analysis workflow](../img/development/analysis/small_workflow.drawio.svg)
 
+<br/>
+
 ### 1.2 Analysis Steps
 This section describes each of the analysis steps that are mentioned [above](#11-workflow).
+
+<br/>
 
 #### 1.2.1 Query Clusters
 First, the analysis queries the two latest clusters from the database. The query to get a cluster looks as follows:, where `:date` is the epoch day from which to begin searching for the latest cluster:
@@ -47,13 +56,13 @@ For example, assume the following transfers are available in the app:
 
 If `:date` is something like Dec 29, 2025, the analysis would group the transfers into the following two clusters:
 
-**Latest cluster:**
+Latest cluster:
 * Share Investment (Dec 25, 2025)
 * Health Insurance (Dec 24, 2025)
 * Salary (Dec 22, 2025)
 * Taxes (Dec 22, 2025)
 
-**Previous cluster:**
+Previous cluster:
 * Health Insurance (Nov 28, 2025)
 * Salary (Nov 26, 2025)
 * Taxes (Dec 26, 2025)
@@ -68,6 +77,8 @@ The algorithm assures that a maximum of three types is returned for incomes and 
 
 This algorithm is called two tines: Once to calculate the sums of incomes and once to calculate the sums of expenses.
 
+<br/>
+
 ### 1.3 Final Result
 The final result of the small analysis is described by the following UML diagram:  
 ![Small UML classes](../img/development/analysis/small_uml_classes.drawio.svg)
@@ -78,6 +89,22 @@ The presentation layer displays the result as follows on the main screen:
 <img src="../img/development/analysis/small_example_result.png" height="512"/>
 
 <br/>
+
+### 1.4 Test Strategy
+The small analysis is implemented using a single use case class in the application layer. This is only suitable since the analysis algorithm is rather simple and hence does not need any separation into further isolated testable steps. Therefore, we use unit tests to test the final outcome of the analysis for correctness.
+
+Currently, the following test cases are implemented:
+Test | State
+--- | ---
+data without special cases should be analyzed | :green_circle: Passing
+more types then limit should make last types grouped | :green_circle: Passing
+exactly 3 types should not be grouped | :green_circle: Passing
+exactly 4 types where last type should get summarized | :green_circle: Passing
+no data should return empty result | :green_circle: Passing
+
+<br/>
+
+***
 
 ## 2 Large Analysis
 The large analysis is the mroe powerful out of the two analysis algorithms used in Cha Ching. This section describes the large analysis.
@@ -105,5 +132,5 @@ The following schematic describes the result of the summarizer:
 
 ***
 
-2025-12-16  
+2025-12-29  
 &copy; Christian-2003
