@@ -21,7 +21,7 @@ import de.christian2003.chaching.application.usecases.transfer.UpdateTransferUse
 import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
+import de.christian2003.chaching.plugin.presentation.model.HelpCards
 import java.text.DecimalFormat
 import javax.inject.Inject
 import kotlin.math.roundToInt

@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,7 @@ import java.time.LocalDate
  * @param onQueryTransferType   Callback invoked to query the type for a transfer.
  * @param onFormatValue         Callback invoked to format a value.
  * @param onFormatDate          Callback invoked to format a date.
+ * @param isClickable           Whether the list item is clickable.
  */
 @Composable
 fun TransferListItem(
@@ -65,7 +67,8 @@ fun TransferListItem(
     onDelete: (Transfer) -> Unit,
     onQueryTransferType: suspend (Transfer) -> Type?,
     onFormatValue: (TransferValue) -> String,
-    onFormatDate: (LocalDate) -> String
+    onFormatDate: (LocalDate) -> String,
+    isClickable: Boolean = true
 ) {
     var isExpanded: Boolean by remember { mutableStateOf(false) }
     val type: Type? by produceState(null) {
@@ -79,7 +82,7 @@ fun TransferListItem(
             horizontalAlignment = Alignment.End,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
+                .clickable(isClickable) {
                     isExpanded = !isExpanded
                 }
                 .padding(

@@ -25,9 +25,11 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -208,7 +210,8 @@ fun SettingsScreen(
                     info = stringResource(R.string.settings_data_trashInfo),
                     onClick = onNavigateToTrash,
                     endIcon = painterResource(R.drawable.ic_next),
-                    prefixIcon = painterResource(R.drawable.ic_delete)
+                    prefixIcon = painterResource(R.drawable.ic_delete),
+                    badgeCount = viewModel.numberOfTypesInTrash
                 )
                 SettingsItemButton(
                     setting = stringResource(R.string.settings_data_exportTitle),
@@ -346,6 +349,12 @@ fun SettingsScreen(
                         viewModel.dialog = SettingsScreenDialog.None
                         viewModel.updateThemeContrast(themeContrast)
                         onThemeContrastChange(themeContrast)
+                    },
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onFormatDate = {
+                        viewModel.formatDate(it)
                     }
                 )
             }
@@ -388,6 +397,7 @@ fun SettingsScreen(
  * @param isFirst       Whether this is the first item in the list.
  * @param isLast        Whether this is the last item in the list.
  * @param prefixIcon    Optional prefix icon.
+ * @param badgeCount    Count to show in the badge. If this is 0, the badge is hidden.
  */
 @Composable
 private fun SettingsItemButton(
@@ -397,7 +407,8 @@ private fun SettingsItemButton(
     endIcon: Painter? = null,
     isFirst: Boolean = false,
     isLast: Boolean = false,
-    prefixIcon: Painter? = null
+    prefixIcon: Painter? = null,
+    badgeCount: Int = 0
 ) {
     ListItemContainer(
         isFirst = isFirst,
@@ -416,14 +427,29 @@ private fun SettingsItemButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (prefixIcon != null) {
-                Icon(
-                    painter = prefixIcon,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    contentDescription = "",
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .padding(end = dimensionResource(R.dimen.padding_horizontal))
                         .size(dimensionResource(R.dimen.image_xs))
-                )
+                ) {
+                    Icon(
+                        painter = prefixIcon,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        contentDescription = "",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    if (badgeCount > 0) {
+                        Badge(
+                            modifier = Modifier.offset(
+                                x = dimensionResource(R.dimen.image_xs) / 3,
+                                y = dimensionResource(R.dimen.image_xs) / -3
+                            )
+                        ) {
+                            Text(badgeCount.toString())
+                        }
+                    }
+                }
             }
             Column(
                 modifier = Modifier.weight(1f)

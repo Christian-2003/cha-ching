@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.usecases.type.GetAllTypesNotInTrashUseCase
 import de.christian2003.chaching.application.usecases.type.MoveTypeToTrashUseCase
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
+import de.christian2003.chaching.plugin.presentation.model.HelpCards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

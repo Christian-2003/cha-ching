@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.AndroidViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.chaching.plugin.presentation.model.HelpCards
 import javax.inject.Inject
 
 

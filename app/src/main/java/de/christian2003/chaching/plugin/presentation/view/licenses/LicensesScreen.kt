@@ -2,18 +2,22 @@ package de.christian2003.chaching.plugin.presentation.view.licenses
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -24,12 +28,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import de.christian2003.chaching.R
+import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
+import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -117,9 +124,11 @@ fun LicensesList(
     onLicenseClicked: (License) -> Unit
 ) {
     LazyColumn {
-        items(licenses) { license ->
+        itemsIndexed(licenses) { index, license ->
             LicensesListRow(
                 license = license,
+                isFirst = index == 0,
+                isLast = index == licenses.size - 1,
                 onLicenseClicked = onLicenseClicked
             )
         }
@@ -131,27 +140,59 @@ fun LicensesList(
  * Composable displays a single license that is used by the app.
  *
  * @param license           License to display.
+ * @param isFirst           Whether this is the first item in the list.
+ * @param isLast            Whether this is the last item in the list.
  * @param onLicenseClicked  Callback invoked once the license is clicked.
  */
 @Composable
 fun LicensesListRow(
     license: License,
+    isFirst: Boolean,
+    isLast: Boolean,
     onLicenseClicked: (License) -> Unit
 ) {
-    Text(
-        text = license.softwareName,
-        color = MaterialTheme.colorScheme.onSurface,
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onLicenseClicked(license)
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onLicenseClicked(license)
+                }
+                .padding(
+                    vertical = dimensionResource(R.dimen.padding_vertical),
+                    horizontal = dimensionResource(R.dimen.padding_horizontal)
+                )
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                    .size(dimensionResource(R.dimen.image_m))
+            ) {
+                Shape(
+                    shape = MaterialShapes.Cookie12Sided,
+                    color = MaterialTheme.colorScheme.surface
+                )
+                Icon(
+                    painter = painterResource(R.drawable.ic_license),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = "",
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
+                )
             }
-            .padding(
-                vertical = dimensionResource(R.dimen.padding_vertical),
-                horizontal = dimensionResource(R.dimen.margin_horizontal)
+            Text(
+                text = license.softwareName,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
-    )
+        }
+    }
 }
 
 

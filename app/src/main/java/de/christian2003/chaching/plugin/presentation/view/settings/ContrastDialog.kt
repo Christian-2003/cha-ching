@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -23,19 +22,24 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import de.christian2003.chaching.R
+import de.christian2003.chaching.domain.transfer.Transfer
+import de.christian2003.chaching.domain.transfer.TransferValue
+import de.christian2003.chaching.domain.type.Type
+import de.christian2003.chaching.domain.type.TypeIcon
+import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
+import de.christian2003.chaching.plugin.presentation.ui.composables.TransferListItem
 import de.christian2003.chaching.plugin.presentation.ui.composables.Value
 import de.christian2003.chaching.plugin.presentation.ui.theme.ChaChingTheme
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
@@ -44,6 +48,7 @@ import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.UUID
 
 
 /**
@@ -57,7 +62,9 @@ import java.time.format.FormatStyle
 fun ContrastDialog(
     contrast: ThemeContrast,
     onDismiss: () -> Unit,
-    onSave: (ThemeContrast) -> Unit
+    onSave: (ThemeContrast) -> Unit,
+    onFormatValue: (TransferValue) -> String,
+    onFormatDate: (LocalDate) -> String
 ) {
     var mutableContrast: ThemeContrast by rememberSaveable { mutableStateOf(contrast) }
 
@@ -72,8 +79,6 @@ fun ContrastDialog(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                val formatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-                val numberFormat: NumberFormat = DecimalFormat("#,###.00")
                 //This material theme applies the selected contrast to the preview:
                 ChaChingTheme(
                     contrast = mutableContrast
@@ -84,43 +89,72 @@ fun ContrastDialog(
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.surface)
                             .padding(
-                                start = 24.dp,
-                                top = 24.dp,
-                                end = 24.dp,
                                 bottom = 16.dp
                             )
                     ) {
                         Column(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(
-                                text = stringResource(R.string.settings_customization_contrastDialog_previewTitle),
-                                color = MaterialTheme.colorScheme.primary,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
-                            )
-                            Row (
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.settings_customization_contrastDialog_previewText),
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                    Text(
-                                        text = LocalDate.now().format(formatter),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Value(
-                                    numberFormat.format(1234.56)
+                            val previewTransfer1: Transfer = remember {
+                                Transfer(
+                                    transferValue = TransferValue(
+                                        value = 1234_56,
+                                        date = LocalDate.now(),
+                                        isSalary = true
+                                    ),
+                                    hoursWorked = 0,
+                                    type = UUID.randomUUID()
                                 )
                             }
+                            val previewTransfer2: Transfer = remember {
+                                Transfer(
+                                    transferValue = TransferValue(
+                                        value = 42_00,
+                                        date = LocalDate.now(),
+                                        isSalary = false
+                                    ),
+                                    hoursWorked = 0,
+                                    type = UUID.randomUUID()
+                                )
+                            }
+                            val previewTypeName: String = stringResource(R.string.settings_customization_contrastDialog_previewText)
+                            val previewType1: Type = remember {
+                                Type(
+                                    name = previewTypeName,
+                                    icon = TypeIcon.CURRENCY
+                                )
+                            }
+                            val previewType2: Type = remember {
+                                Type(
+                                    name = previewTypeName,
+                                    icon = TypeIcon.COIN
+                                )
+                            }
+                            Headline(
+                                title = stringResource(R.string.settings_customization_contrastDialog_previewTitle)
+                            )
+                            TransferListItem(
+                                transfer = previewTransfer1,
+                                isFirst = true,
+                                isLast = false,
+                                onEdit = { },
+                                onDelete = { },
+                                onQueryTransferType = { previewType1 },
+                                onFormatValue = onFormatValue,
+                                onFormatDate = onFormatDate,
+                                isClickable = false
+                            )
+                            TransferListItem(
+                                transfer = previewTransfer2,
+                                isFirst = false,
+                                isLast = true,
+                                onEdit = { },
+                                onDelete = { },
+                                onQueryTransferType = { previewType2 },
+                                onFormatValue = onFormatValue,
+                                onFormatDate = onFormatDate,
+                                isClickable = false
+                            )
                         }
                     }
                 }

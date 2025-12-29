@@ -18,7 +18,7 @@ import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
 import de.christian2003.chaching.application.usecases.type.UpdateTypeUseCase
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.plugin.presentation.view.help.HelpCards
+import de.christian2003.chaching.plugin.presentation.model.HelpCards
 import de.christian2003.chaching.domain.type.TypeIcon
 import javax.inject.Inject
 

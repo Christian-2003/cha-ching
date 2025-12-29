@@ -1,4 +1,4 @@
-package de.christian2003.chaching.plugin.presentation.view.help
+package de.christian2003.chaching.plugin.presentation.model
 
 import android.content.Context
 import androidx.annotation.StringRes

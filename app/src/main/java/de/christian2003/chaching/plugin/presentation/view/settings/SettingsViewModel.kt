@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,27 +16,40 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.chaching.application.backup.BackupService
 import de.christian2003.chaching.application.backup.ImportStrategy
+import de.christian2003.chaching.application.services.DateTimeFormatterService
+import de.christian2003.chaching.application.services.ValueFormatterService
 import de.christian2003.chaching.application.usecases.apps.GetAllAppsUseCase
+import de.christian2003.chaching.application.usecases.type.GetAllTypesInTrashUseCase
 import de.christian2003.chaching.domain.apps.AppItem
+import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import java.time.LocalDate
 import javax.inject.Inject
 
 
 /**
  * View model for the screen displaying the app settings.
  *
- * @param application       Application.
- * @param getAllAppsUseCase Use case to get a list of all apps.
- * @param backupService     Backup service.
+ * @param application               Application.
+ * @param getAllAppsUseCase         Use case to get a list of all apps.
+ * @param getAllTypesInTrashUseCase Use case to get all types that are in the trash bin.
+ * @param valueFormatterService     Service to format values.
+ * @param dateTimeFormatterService  Service to format date times.
+ * @param backupService             Backup service.
  */
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     application: Application,
     getAllAppsUseCase: GetAllAppsUseCase,
+    getAllTypesInTrashUseCase: GetAllTypesInTrashUseCase,
+    private val valueFormatterService: ValueFormatterService,
+    private val dateTimeFormatterService: DateTimeFormatterService,
     private val backupService: BackupService,
     val client: OkHttpClient
 ): AndroidViewModel(application) {
@@ -51,6 +65,9 @@ class SettingsViewModel @Inject constructor(
     var useGlobalTheme: Boolean by mutableStateOf(preferences.getBoolean("global_theme", false))
         private set
 
+    var numberOfTypesInTrash: Int by mutableIntStateOf(0)
+        private set
+
     /**
      * Contrast for the theme colors.
      */
@@ -59,6 +76,10 @@ class SettingsViewModel @Inject constructor(
 
 
     init {
+        getAllTypesInTrashUseCase.getAllTypesInTrash().onEach { typesInTrash ->
+            numberOfTypesInTrash = typesInTrash.size
+        }.launchIn(viewModelScope)
+
         viewModelScope.launch(Dispatchers.IO) {
             val apps: List<AppItem> = getAllAppsUseCase.getAllApps()
             this@SettingsViewModel.apps.clear()
@@ -116,6 +137,15 @@ class SettingsViewModel @Inject constructor(
             putInt("theme_contrast", themeContrast.ordinal)
         }
         this.themeContrast = themeContrast
+    }
+
+
+    fun formatValue(value: TransferValue): String {
+        return valueFormatterService.format(value)
+    }
+
+    fun formatDate(date: LocalDate): String {
+        return dateTimeFormatterService.format(date)
     }
 
 
