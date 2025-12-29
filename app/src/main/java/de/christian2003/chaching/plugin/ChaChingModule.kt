@@ -7,9 +7,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import de.christian2003.chaching.application.analysis.AnalysisService
-import de.christian2003.chaching.application.analysis.AnalysisServiceImpl
-import de.christian2003.chaching.application.analysis.AnalysisSquasher
 import de.christian2003.chaching.application.backup.BackupImportRepository
 import de.christian2003.chaching.application.backup.BackupService
 import de.christian2003.chaching.application.repository.AnalysisRepository
@@ -77,12 +74,6 @@ class ProvidersModule {
     fun provideChaChingRepository(
         @ApplicationContext context: Context
     ): ChaChingRepository = (context as ChaChingApplication).getRepository()
-
-    @Provides
-    fun provideAnalysisService(
-        transferRepository: TransferRepository,
-        typeRepository: TypeRepository
-    ): AnalysisService = AnalysisSquasher(AnalysisServiceImpl(transferRepository, typeRepository))
 
     @Provides
     fun provideValueFormatterService(): ValueFormatterService = ValueFormatterService()

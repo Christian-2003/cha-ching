@@ -2,6 +2,7 @@ package de.christian2003.chaching.plugin.presentation.widget
 
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import de.christian2003.chaching.plugin.presentation.widget.overview.OverviewWidget
 
 
 /**
