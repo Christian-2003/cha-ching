@@ -150,18 +150,20 @@ private fun SmallAnalysisBudgetOverview(
             style = MaterialTheme.typography.labelLarge,
             maxLines = 1
         )
-        Text(
-            text = smallAnalysisResult.overviewComparisonConnection.getLocalizedString(
-                context = LocalContext.current,
-                value = smallAnalysisResult.currentMonth.budget
-            ),
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = dimensionResource(R.dimen.padding_vertical))
-        )
+        if (smallAnalysisResult.currentMonth.budget > 0) {
+            Text(
+                text = smallAnalysisResult.overviewComparisonConnection.getLocalizedString(
+                    context = LocalContext.current,
+                    value = smallAnalysisResult.currentMonth.budget
+                ),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(R.dimen.padding_vertical))
+            )
+        }
     }
 }
 

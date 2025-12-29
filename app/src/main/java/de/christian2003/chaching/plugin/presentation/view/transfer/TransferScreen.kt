@@ -48,6 +48,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.composables.HelpCard
@@ -73,13 +74,17 @@ fun TransferScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(if (viewModel.type != null) {
-                        if (viewModel.isCreating) {
-                            stringResource(R.string.transfer_titleCreate, viewModel.type!!.name)
-                        } else {
-                            stringResource(R.string.transfer_titleEdit, viewModel.type!!.name)
-                        }
-                    } else { "" })
+                    Text(
+                        text = if (viewModel.type != null) {
+                            if (viewModel.isCreating) {
+                                stringResource(R.string.transfer_titleCreate, viewModel.type!!.name)
+                            } else {
+                                stringResource(R.string.transfer_titleEdit, viewModel.type!!.name)
+                            }
+                        } else { "" },
+                        maxLines = 1,
+                        overflow = TextOverflow.MiddleEllipsis
+                    )
                 },
                 navigationIcon = {
                     IconButton(
