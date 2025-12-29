@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,24 +22,28 @@ import javax.inject.Inject
 
 /**
  * View model for the OnboardingScreen.
+ *
+ * @param application           Application.
+ * @param savedStateHandle      Saved state handle.
+ * @param createTypeUseCase     Use case to create a type.
  */
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     application: Application,
+    savedStateHandle: SavedStateHandle,
     private val createTypeUseCase: CreateTypeUseCase
 ): AndroidViewModel(application) {
-
-    /**
-     * Indicates whether the view model has been initialized.
-     */
-    private var isInitialized: Boolean = false
-
 
     /**
      * Map of default types maps each default type to a boolean which indicates whether the
      * corresponding type has been selected by the user.
      */
     val defaultTypes: MutableMap<Type, Boolean> = mutableStateMapOf()
+
+    /**
+     * Whether to show the interactive page of the onboarding.
+     */
+    val showInteractivePage: Boolean = !((savedStateHandle["isShownFromSettings"] as Boolean?) ?: false)
 
     /**
      * Indicates whether the user has selected a type (i.e. at least one default type within

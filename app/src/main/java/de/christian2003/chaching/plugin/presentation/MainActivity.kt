@@ -52,6 +52,7 @@ import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavArgument
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
@@ -146,7 +147,7 @@ fun ChaChing(updateManager: UpdateManager) {
             startDestination = if (isOnboardingFinished) {
                 "main"
             } else {
-                "onboarding"
+                "onboarding/false"
             },
             enterTransition = {
                 slideIntoContainer(
@@ -293,7 +294,7 @@ fun ChaChing(updateManager: UpdateManager) {
                         navController.navigate("help")
                     },
                     onNavigateToOnboarding = {
-                        navController.navigate("onboarding")
+                        navController.navigate("onboarding/true")
                     },
                     onUseGlobalThemeChange = {
                         useGlobalTheme = it
@@ -338,7 +339,12 @@ fun ChaChing(updateManager: UpdateManager) {
             }
 
 
-            composable("onboarding") {
+            composable(
+                route = "onboarding/{isShownFromSettings}",
+                arguments = listOf(
+                    navArgument("isShownFromSettings") { type = NavType.BoolType }
+                )
+            ) {
                 val viewModel: OnboardingViewModel = hiltViewModel()
                 OnboardingScreen(
                     viewModel = viewModel,
@@ -350,7 +356,7 @@ fun ChaChing(updateManager: UpdateManager) {
                                 putBoolean("onboardingFinished", true)
                             }
                             navController.navigate("main") {
-                                popUpTo("onboarding") {
+                                popUpTo("onboarding/false") {
                                     inclusive = true
                                 }
                             }

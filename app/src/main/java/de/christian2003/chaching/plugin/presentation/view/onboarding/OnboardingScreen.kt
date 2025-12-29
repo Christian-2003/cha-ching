@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,19 +53,17 @@ import kotlinx.coroutines.launch
  * @param viewModel     View model.
  * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
  */
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun OnboardingScreen(
     viewModel: OnboardingViewModel,
     onNavigateUp: () -> Unit
 ) {
-    val pagerState = rememberPagerState(pageCount = { 3 })
+    val pagerState = rememberPagerState(pageCount = { if (viewModel.showInteractivePage) { 3 } else { 2 } })
     val scope = rememberCoroutineScope()
 
     Scaffold { innerPadding ->
         Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier.padding(innerPadding)
+            contentAlignment = Alignment.BottomCenter
         ) {
             HorizontalPager(
                 state = pagerState,
@@ -73,20 +75,23 @@ fun OnboardingScreen(
                         title = stringResource(R.string.onboarding_page1_title),
                         text = stringResource(R.string.onboarding_page1_text),
                         backgroundColor = MaterialTheme.colorScheme.primary,
-                        foregroundColor = MaterialTheme.colorScheme.onPrimary
+                        foregroundColor = MaterialTheme.colorScheme.onPrimary,
+                        innerPadding = innerPadding
                     )
                     1 -> OnboardingPageStatic(
                         painter = painterResource(R.drawable.onboarding_analysis),
                         title = stringResource(R.string.onboarding_page2_title),
                         text = stringResource(R.string.onboarding_page2_text),
                         backgroundColor = MaterialTheme.colorScheme.secondary,
-                        foregroundColor = MaterialTheme.colorScheme.onSecondary
+                        foregroundColor = MaterialTheme.colorScheme.onSecondary,
+                        innerPadding = innerPadding
                     )
                     2 -> OnboardingPageDynamic(
                         defaultTypes = viewModel.defaultTypes,
                         onTypeClick = { type, selected ->
                             viewModel.changeTypeSelected(type, selected)
-                        }
+                        },
+                        innerPadding = innerPadding
                     )
                 }
             }
@@ -95,7 +100,9 @@ fun OnboardingScreen(
                 pageCount = pagerState.pageCount,
                 onNextClick = {
                     if (pagerState.currentPage == pagerState.pageCount - 1) {
-                        viewModel.save()
+                        if (viewModel.showInteractivePage) {
+                            viewModel.save()
+                        }
                         onNavigateUp()
                     }
                     else {
@@ -109,7 +116,8 @@ fun OnboardingScreen(
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
                 },
-                nextButtonVisible = viewModel.typesSelected || pagerState.currentPage != pagerState.pageCount - 1
+                nextButtonVisible = !viewModel.showInteractivePage || (viewModel.typesSelected || pagerState.currentPage != pagerState.pageCount - 1),
+                innerPadding = innerPadding
             )
         }
     }
@@ -123,6 +131,7 @@ fun OnboardingScreen(
  * @param pageCount         Number of pages.
  * @param onNextClick       Callback invoked to navigate to the next page.
  * @param onPreviousClick   Callback invoked to navigate to the previous page.
+ * @param innerPadding      Inner scaffold padding.
  * @param modifier          Modifier.
  * @param nextButtonVisible Indicates whether the "next" button is visible.
  */
@@ -131,11 +140,12 @@ private fun BottomRow(
     page: Int,
     pageCount: Int,
     onNextClick: () -> Unit,
-    onPreviousClick: ()  -> Unit,
+    onPreviousClick: () -> Unit,
+    innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     nextButtonVisible: Boolean = true
 ) {
-    var color: Color = when (page) {
+    val color: Color = when (page) {
         0 -> MaterialTheme.colorScheme.onPrimary
         1 -> MaterialTheme.colorScheme.onSecondary
         else -> MaterialTheme.colorScheme.onSurface
@@ -148,6 +158,11 @@ private fun BottomRow(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
+                    bottom = innerPadding.calculateBottomPadding()
+                )
                 .padding(
                     horizontal = dimensionResource(R.dimen.margin_horizontal),
                     vertical = dimensionResource(R.dimen.padding_vertical)
@@ -201,9 +216,9 @@ private fun BottomRow(
  * @param text              Text for the page.
  * @param backgroundColor   Background color.
  * @param foregroundColor   Foreground color.
+ * @param innerPadding      Inner scaffold padding.
  * @param modifier          Modifier.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun OnboardingPageStatic(
     painter: Painter,
@@ -211,6 +226,7 @@ private fun OnboardingPageStatic(
     text: String,
     backgroundColor: Color,
     foregroundColor: Color,
+    innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -218,6 +234,7 @@ private fun OnboardingPageStatic(
         modifier = modifier
             .fillMaxSize()
             .background(backgroundColor)
+            .padding(innerPadding)
     ) {
         Image(
             painter = painter,
@@ -262,18 +279,20 @@ private fun OnboardingPageStatic(
  *
  * @param defaultTypes  Default types.
  * @param onTypeClick   Callback invoked once one of the default types has been (un-)selected.
+ * @param innerPadding  Inner scaffold padding.
  * @param modifier      Modifier.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun OnboardingPageDynamic(
     defaultTypes: Map<Type, Boolean>,
     onTypeClick: (Type, Boolean) -> Unit,
+    innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .padding(innerPadding)
             .padding(
                 horizontal = dimensionResource(R.dimen.margin_horizontal),
                 vertical = dimensionResource(R.dimen.padding_vertical)
