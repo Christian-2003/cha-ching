@@ -59,29 +59,6 @@ abstract class ChaChingDatabase: RoomDatabase() {
 		private var INSTANCE: ChaChingDatabase? = null
 
 
-		private val MIGRATION_1_2 = object: Migration(1, 2) {
-			override fun migrate(db: SupportSQLiteDatabase) {
-				db.execSQL("ALTER TABLE types ADD COLUMN isEnabledInQuickAccess INTEGER NOT NULL DEFAULT 1")
-			}
-		}
-
-		private val MIGRATION_2_3 = object: Migration(2, 3) {
-			override fun migrate(db: SupportSQLiteDatabase) {
-				//Create table for deleted types
-				db.execSQL("""CREATE TABLE deletedTypes (
-					typeId BLOB NOT NULL,
-					deletedAt INTEGER NOT NULL,
-					FOREIGN KEY (typeId) REFERENCES types(typeId)
-						ON UPDATE NO ACTION
-						ON DELETE CASCADE
-				)""")
-
-				//Update existing tables:
-				db.execSQL("ALTER TABLE types ADD COLUMN isSalaryByDefault INTEGER NOT NULL DEFAULT 1")
-			}
-		}
-
-
 		/**
 		 * Returns the singleton instance of the database.
 		 *
@@ -107,4 +84,28 @@ abstract class ChaChingDatabase: RoomDatabase() {
 
 	}
 
+}
+
+
+val MIGRATION_1_2 = object: Migration(1, 2) {
+	override fun migrate(db: SupportSQLiteDatabase) {
+		db.execSQL("ALTER TABLE types ADD COLUMN isEnabledInQuickAccess INTEGER NOT NULL DEFAULT 1")
+	}
+}
+
+val MIGRATION_2_3 = object: Migration(2, 3) {
+	override fun migrate(db: SupportSQLiteDatabase) {
+		//Create table for deleted types
+		db.execSQL("""CREATE TABLE deletedTypes (
+					typeId BLOB NOT NULL,
+					deletedAt INTEGER NOT NULL,
+					PRIMARY KEY (typeId),
+					FOREIGN KEY (typeId) REFERENCES types(typeId)
+						ON UPDATE NO ACTION
+						ON DELETE CASCADE
+				)""")
+
+		//Update existing tables:
+		db.execSQL("ALTER TABLE types ADD COLUMN isSalaryByDefault INTEGER NOT NULL DEFAULT 1")
+	}
 }
