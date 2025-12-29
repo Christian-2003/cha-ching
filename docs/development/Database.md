@@ -12,7 +12,7 @@ This document describes the database architecture for the app Cha Ching.
 ## Database Scheme
 The database scheme can be described through the following UML diagram:
 
-![](../img/development/database_scheme.drawio.svg)
+![](../img/development/database/database_scheme.drawio.svg)
 
 ###### `transfers` Table
 The database table transfers is modeled through the class `TransferEntity`. The table has the following attributes:
@@ -39,13 +39,15 @@ Primary Key | typeId | Unique type 4 UUID for the type within the database.
 &nbsp; | isHoursWorkedEditable | Field indicates whether transfers for this type should track the hours worked. If this is set to `false`, the hours worked will not be tracked.
 &nbsp; | created | Stores the date and time on which the type was created in epoch seconds. This is used for statistical purposes.
 &nbsp; | edited | Stores the date and time on which the type was last edited in epoch seconds. This is used for statistical purposes.
+&nbsp; | isEnabledInQuickAccess | Indicates whether transfers of this type can be created through the quick access.
+&nbsp; | isSalaryByDefault | Indicates whether transfers of this type are created as salary by default.
 
 <br/>
 
 ## Relations
 The tables `transfers` and `types` have a many-to-one relation.
 
-![](../img/development/database_relations.drawio.svg)
+![](../img/development/database/database_relations.drawio.svg)
 
 Each transfer must have exactly one corresponding type. Therefore, each type can have an unlimited number of transfers.
 
@@ -57,5 +59,5 @@ If a type is deleted, the deletion is cascaded so that all associated transfers 
 
 ***
 
-2025-06-25  
+2025-12-29  
 &copy; Christian-2003
