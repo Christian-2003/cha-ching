@@ -244,10 +244,12 @@
     <string name="widget_overview_descriptionLabel">Übersicht</string>
     <string name="widget_overview_descriptionText">Zeigt dein Einkommen des letzten Monats</string>
     <string name="widget_overview_text">Einkommen diesen Monat</string>
-    <string name="widget_overview_errorTitle">Etwas ist schief gegangen</string>
-    <string name="widget_overview_errorText">Wir können leider gerade keine Daten anzeigen</string>
-    <string name="widget_overview_emptyTitle">Kein Ein\u00ADkom\u00ADmen</string>
-    <string name="widget_overview_emptyText">Du hast im letzten Monat kein Geld verdient</string>
     <string name="widget_overview_previewValue">1.234,56 €</string>
+    <string name="widget_overview_budget">Netto</string>
+    <string name="widget_overview_incomes">Einkommen</string>
+    <string name="widget_overview_expenses">Ausgaben</string>
+    <string name="widget_overview_upFromLastMonthLabel">%1$s mehr als letzten Monat</string>
+    <string name="widget_overview_downFromLastMonthLabel">%1$s weniger als letzten Monath</string>
+    <string name="widget_overview_noDiffToLastMonthLabel">Identisch zu letztem Monat</string>
 
 </resources>

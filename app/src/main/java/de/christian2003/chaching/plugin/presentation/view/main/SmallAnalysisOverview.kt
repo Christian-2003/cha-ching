@@ -347,13 +347,6 @@ private fun SmallAnalysisDataDifferenceToPreviousMonth(
     modifier: Modifier = Modifier
 ) {
     val differenceToPreviousMonth: Double = analysisData.totalSum - previousAnalysisData.totalSum
-    val foregroundColor: Color = when {
-        (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.colorScheme.onPrimaryContainer
-        (differenceToPreviousMonth < 0.0) && isSalary -> MaterialTheme.colorScheme.onErrorContainer
-        (differenceToPreviousMonth > 0.0) && !isSalary -> MaterialTheme.colorScheme.onErrorContainer
-        (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.colorScheme.onPrimaryContainer
-        else -> MaterialTheme.colorScheme.onSurface
-    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -363,7 +356,7 @@ private fun SmallAnalysisDataDifferenceToPreviousMonth(
                 (differenceToPreviousMonth < 0.0) && isSalary -> MaterialTheme.colorScheme.errorContainer
                 (differenceToPreviousMonth > 0.0) && !isSalary -> MaterialTheme.colorScheme.errorContainer
                 (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.colorScheme.primaryContainer
-                else -> MaterialTheme.colorScheme.surfaceContainer
+                else -> MaterialTheme.colorScheme.surfaceContainerHighest
             })
     ) {
         Box(
@@ -384,7 +377,13 @@ private fun SmallAnalysisDataDifferenceToPreviousMonth(
             Icon(
                 painter = painterResource(R.drawable.ic_increase),
                 contentDescription = "",
-                tint = foregroundColor,
+                tint = when {
+                    (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.colorScheme.primary
+                    (differenceToPreviousMonth < 0.0) && isSalary -> MaterialTheme.colorScheme.error
+                    (differenceToPreviousMonth > 0.0) && !isSalary -> MaterialTheme.colorScheme.error
+                    (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.onSurface
+                },
                 modifier = Modifier
                     .size(dimensionResource(R.dimen.image_xs))
                     .rotate(if (differenceToPreviousMonth > 0.0) { 0f } else if (differenceToPreviousMonth < 0.0) { 180f } else { 90f })
@@ -398,7 +397,13 @@ private fun SmallAnalysisDataDifferenceToPreviousMonth(
             } else {
                 AnnotatedString.fromHtml(stringResource(R.string.main_analysis_noDiffToLastMonthLabel))
             },
-            color = foregroundColor,
+            color = when {
+                (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.colorScheme.onPrimaryContainer
+                (differenceToPreviousMonth < 0.0) && isSalary -> MaterialTheme.colorScheme.onErrorContainer
+                (differenceToPreviousMonth > 0.0) && !isSalary -> MaterialTheme.colorScheme.onErrorContainer
+                (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.colorScheme.onPrimaryContainer
+                else -> MaterialTheme.colorScheme.onSurface
+            },
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,

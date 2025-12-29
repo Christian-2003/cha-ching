@@ -272,10 +272,12 @@
     <string name="widget_overview_descriptionLabel">Overview</string>
     <string name="widget_overview_descriptionText">Shows your transactions of the last month</string>
     <string name="widget_overview_text">Transactions this month</string>
-    <string name="widget_overview_errorTitle">Something went wrong</string>
-    <string name="widget_overview_errorText">Sorry, but we cannot display any data right now</string>
-    <string name="widget_overview_emptyTitle">No trans\u00ADactions</string>
-    <string name="widget_overview_emptyText">You have not earned any money in the past month</string>
-    <string name="widget_overview_previewValue">$ 1,234.56</string>
+    <string name="widget_overview_previewValue">$1,234.56</string>
+    <string name="widget_overview_budget">Budget</string>
+    <string name="widget_overview_incomes">Incomes</string>
+    <string name="widget_overview_expenses">Expenses</string>
+    <string name="widget_overview_upFromLastMonthLabel">Up %1$s from last month</string>
+    <string name="widget_overview_downFromLastMonthLabel">Down %1$s from last month</string>
+    <string name="widget_overview_noDiffToLastMonthLabel">Similar to last month</string>
 
 </resources>
