@@ -43,7 +43,7 @@ _`:date`: Epoch day from which to begin searching for the latest cluster_
 _`:maxClusterGap`: Max number of days that is considered a cluster_
 
 For example, assume the following transfers are available in the app:  
-![Small example transfers](../img/development/analysis/small_example_transfers.png)
+<img src="../img/development/analysis/small_example_transfers.png" height="512"/>
 
 If `:date` is something like Dec 29, 2025, the analysis would group the transfers into the following two clusters:
 
@@ -75,7 +75,7 @@ The final result of the small analysis is described by the following UML diagram
 The result contains two instances of `SmallMonthResult`, one for each cluster queried at the start. These can be used to display differences between the last two months (or clusters) in the user interface.
 
 The presentation layer displays the result as follows on the main screen:  
-![Small example result](../img/development/analysis/small_example_result.png)
+<img src="../img/development/analysis/small_example_result.png" height="512"/>
 
 <br/>
 
