@@ -68,9 +68,13 @@ abstract class ChaChingDatabase: RoomDatabase() {
 		private val MIGRATION_2_3 = object: Migration(2, 3) {
 			override fun migrate(db: SupportSQLiteDatabase) {
 				//Create table for deleted types
-				db.execSQL("CREATE TABLE deletedTypes" +
-						"(typeId BLOB NOT NULL, deletedAt BLOB NOT NULL)," +
-						"FOREIGN KEY(typeId) REFERENCES types(typeId) ON UPDATE NO ACTION ON DELETE CASCADE")
+				db.execSQL("""CREATE TABLE deletedTypes (
+					typeId BLOB NOT NULL,
+					deletedAt INTEGER NOT NULL,
+					FOREIGN KEY (typeId) REFERENCES types(typeId)
+						ON UPDATE NO ACTION
+						ON DELETE CASCADE
+				)""")
 
 				//Update existing tables:
 				db.execSQL("ALTER TABLE types ADD COLUMN isSalaryByDefault INTEGER NOT NULL DEFAULT 1")

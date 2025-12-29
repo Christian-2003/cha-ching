@@ -1,0 +1,69 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0" version="29.2.9">
+  <diagram name="Page-1" id="_P3TirobrGA3r948e84h">
+    <mxGraphModel dx="983" dy="504" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_fcNBIayLKDQo19MgVI4-3" edge="1" parent="1" source="Odlx7jqZGb1Ja2aAXEwa-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Odlx7jqZGb1Ja2aAXEwa-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Odlx7jqZGb1Ja2aAXEwa-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Start" vertex="1">
+          <mxGeometry height="40" width="100" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-4" edge="1" parent="1" source="Odlx7jqZGb1Ja2aAXEwa-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Odlx7jqZGb1Ja2aAXEwa-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Odlx7jqZGb1Ja2aAXEwa-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;div&gt;Get two latest&lt;/div&gt;&lt;div&gt;clusters of transfers&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="100" x="120" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-5" edge="1" parent="1" source="Odlx7jqZGb1Ja2aAXEwa-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Odlx7jqZGb1Ja2aAXEwa-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-11" connectable="0" parent="_fcNBIayLKDQo19MgVI4-5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="&lt;div&gt;Next&lt;/div&gt;&lt;div&gt;cluster&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2" y="-2" as="geometry">
+            <mxPoint x="1" y="-19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-9" edge="1" parent="1" source="Odlx7jqZGb1Ja2aAXEwa-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="_fcNBIayLKDQo19MgVI4-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-10" connectable="0" parent="_fcNBIayLKDQo19MgVI4-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Finish" vertex="1">
+          <mxGeometry relative="1" x="-0.36" as="geometry">
+            <mxPoint x="17" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Odlx7jqZGb1Ja2aAXEwa-4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="For each cluster" vertex="1">
+          <mxGeometry height="80" width="80" x="240" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-6" edge="1" parent="1" source="Odlx7jqZGb1Ja2aAXEwa-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Odlx7jqZGb1Ja2aAXEwa-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Odlx7jqZGb1Ja2aAXEwa-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Summarize transfers by type" vertex="1">
+          <mxGeometry height="60" width="100" x="360" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-7" edge="1" parent="1" source="Odlx7jqZGb1Ja2aAXEwa-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="_fcNBIayLKDQo19MgVI4-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Odlx7jqZGb1Ja2aAXEwa-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Group transfer summaries by incomes and expenses" vertex="1">
+          <mxGeometry height="60" width="100" x="480" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-8" edge="1" parent="1" source="_fcNBIayLKDQo19MgVI4-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="60" />
+              <mxPoint x="720" y="10" />
+              <mxPoint x="230" y="10" />
+            </Array>
+            <mxPoint x="230" y="60" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Calculate budget" vertex="1">
+          <mxGeometry height="60" width="100" x="600" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_fcNBIayLKDQo19MgVI4-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="End" vertex="1">
+          <mxGeometry height="40" width="100" x="230" y="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
