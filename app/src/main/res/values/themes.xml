@@ -7,7 +7,7 @@
 
     <!-- Theme for the splash screen -->
     <style name="Theme.ChaChing.SplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenBackground">@color/md_theme_surface</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
         <item name="windowSplashScreenAnimationDuration">@integer/splash_duration</item>
         <item name="android:windowSplashScreenBrandingImage">@drawable/ic_splash_branding</item>

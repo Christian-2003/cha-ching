@@ -7,7 +7,7 @@
     android:propertyName="fillColor"
     android:valueType="colorType"
     android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-    android:valueFrom="@color/splash_background"
-    android:valueTo="@color/splash_foreground">
+    android:valueFrom="@color/md_theme_surface"
+    android:valueTo="@color/md_theme_primary">
 
 </objectAnimator>

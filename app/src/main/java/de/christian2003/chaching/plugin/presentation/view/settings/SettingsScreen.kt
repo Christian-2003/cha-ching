@@ -78,6 +78,7 @@ import java.time.format.DateTimeFormatter
  * @param onNavigateToHelpMessages  Callback invoked to navigate to the screen displaying the list
  *                                  of help messages.
  * @param onNavigateToOnboarding    Callback invoked to navigate to the app onboarding.
+ * @param onNavigateToWidgets       Callback invoked to navigate to the widget settings.
  * @param onUseGlobalThemeChange    Callback invoked once the user changes whether to use global theme.
  * @param onThemeContrastChange     Callback invoked once the theme contrast changes.
  */
@@ -90,6 +91,7 @@ fun SettingsScreen(
     onNavigateToLicenses: () -> Unit,
     onNavigateToHelpMessages: () -> Unit,
     onNavigateToOnboarding: () -> Unit,
+    onNavigateToWidgets: () -> Unit,
     onUseGlobalThemeChange: (Boolean) -> Unit,
     onThemeContrastChange: (ThemeContrast) -> Unit
 ) {
@@ -171,8 +173,7 @@ fun SettingsScreen(
                         viewModel.updateUseGlobalTheme(it)
                         onUseGlobalThemeChange(it)
                     },
-                    isFirst = true,
-                    isLast = viewModel.useGlobalTheme
+                    isFirst = true
                 )
                 AnimatedVisibility(
                     visible = !viewModel.useGlobalTheme,
@@ -185,10 +186,17 @@ fun SettingsScreen(
                         onClick = {
                             viewModel.dialog = SettingsScreenDialog.Contrast
                         },
-                        prefixIcon = painterResource(R.drawable.ic_contrast),
-                        isLast = true
+                        prefixIcon = painterResource(R.drawable.ic_contrast)
                     )
                 }
+                SettingsItemButton(
+                    setting = stringResource(R.string.settings_customization_widgetsTitle),
+                    info = stringResource(R.string.settings_customization_widgetsInfo),
+                    prefixIcon = painterResource(R.drawable.ic_widgets),
+                    endIcon = painterResource(R.drawable.ic_next),
+                    onClick = onNavigateToWidgets,
+                    isLast = true
+                )
             }
 
 

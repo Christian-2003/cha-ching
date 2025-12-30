@@ -9,6 +9,8 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.action.Action
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.layout.Alignment
@@ -23,8 +25,10 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
+import androidx.glance.unit.ColorProvider
 import de.christian2003.chaching.domain.analysis.small.SmallAnalysisResult
 import de.christian2003.chaching.R
+import de.christian2003.chaching.plugin.presentation.widget.ProviderMode
 
 
 /**
@@ -32,11 +36,15 @@ import de.christian2003.chaching.R
  *
  * @param smallAnalysisResult   Analysis result to display.
  * @param onFormatValue         Callback invoked to format a value.
+ * @param onProvideColor        Callback invoked to provide a color.
+ * @param onClick               Action invoked once the widget is clicked.
  */
 @Composable
 fun OverviewWidget1x4(
     smallAnalysisResult: SmallAnalysisResult,
-    onFormatValue: (Double) -> String
+    onFormatValue: (Double) -> String,
+    onProvideColor: (ColorProvider, ProviderMode) -> ColorProvider,
+    onClick: Action
 ) {
     val differenceToLastMonth: Double = smallAnalysisResult.currentMonth.budget - smallAnalysisResult.previousMonth.budget
     Row(
@@ -44,18 +52,23 @@ fun OverviewWidget1x4(
         verticalAlignment = Alignment.CenterVertically,
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(GlanceTheme.colors.surface)
+            .background(onProvideColor(GlanceTheme.colors.surface, ProviderMode.Surface))
+            .clickable(onClick)
             .padding(12.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = GlanceModifier
                 .size(48.dp)
-                .background(when {
-                    differenceToLastMonth > 0.0 -> GlanceTheme.colors.primaryContainer
-                    differenceToLastMonth < 0.0 -> GlanceTheme.colors.errorContainer
-                    else -> GlanceTheme.colors.surfaceVariant
-                })
+                .background(
+                    colorProvider = onProvideColor(
+                        when {
+                            differenceToLastMonth > 0.0 -> GlanceTheme.colors.primaryContainer
+                            differenceToLastMonth < 0.0 -> GlanceTheme.colors.errorContainer
+                            else -> GlanceTheme.colors.surfaceVariant
+                        },
+                        ProviderMode.TrendContainer
+                    ))
                 .cornerRadius(24.dp)
         ) {
             Image(

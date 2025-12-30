@@ -135,6 +135,8 @@
     <string name="settings_customization_contrastDialog_high">Hoch</string>
     <string name="settings_customization_contrastDialog_previewTitle">Vorschau</string>
     <string name="settings_customization_contrastDialog_previewText">Beispieltext</string>
+    <string name="settings_customization_widgetsTitle">Widgets</string>
+    <string name="settings_customization_widgetsInfo">Widget-Einstellungen bearbeiten</string>
     <string name="settings_data">Daten</string>
     <string name="settings_data_typesTitle">Alle Kategorien</string>
     <string name="settings_data_typesInfo">Bearbeite die Kategorien</string>
@@ -193,6 +195,7 @@
     <string name="help_createTransfer">Neue Buchung erstellen</string>
     <string name="help_helpList">Liste aller Hilfenachrichten</string>
     <string name="help_trash">Papierkorb</string>
+    <string name="help_widgets">Widget-Einstellungen</string>
 
 
     <string name="licenses_title">Lizenzen</string>
@@ -209,6 +212,21 @@
     <string name="onboarding_defaultTypeSickPay">Krankengeld</string>
     <string name="onboarding_defaultTypeSpecialPay">Sonderzahlungen</string>
     <string name="onboarding_defaultTypeShareInterest">Aktienerlöse</string>
+
+
+    <string name="widgets_title">Widget-Einstellungen</string>
+    <string name="widgets_help">Bearbeite das Aussehen und Verhalten der Widgets.</string>
+    <string name="widgets_globalSettingsInfo">Du hast mehrere Instanzen des Widgets erzeugt. Änderungen werden auf alle Instanzen angewendet.</string>
+    <string name="widgets_pinInLauncherInfo">Du hast das Widget noch nicht auf deinem Startbildschirm hinzugefügt.</string>
+    <string name="widgets_pinInLauncherButton">Hinzufügen</string>
+    <string name="widgets_opacityLabel">Sichtbarkeit</string>
+    <string name="widgets_valueOption">Darstellung von Werten</string>
+    <string name="widgets_valueOption_cleartextLabel">Werte im Klartext anzeigen</string>
+    <string name="widgets_valueOption_obfuscateLabel">Werte verschleiern</string>
+    <string name="widgets_clickAction">Aktion beim Anklicken</string>
+    <string name="widgets_clickAction_openApp">App öffnen</string>
+    <string name="widgets_clickAction_openAnalysis">App öffnen und Analyse starten</string>
+    <string name="widgets_clickAction_openSettings">Widget-Einstellungen öffnen</string>
 
 
     <!-- Error messages -->
@@ -241,9 +259,8 @@
 
 
     <!-- Widgets -->
-    <string name="widget_overview_descriptionLabel">Übersicht</string>
-    <string name="widget_overview_descriptionText">Zeigt dein Einkommen des letzten Monats</string>
-    <string name="widget_overview_text">Einkommen diesen Monat</string>
+    <string name="widget_overview_descriptionLabel">Übersicht Netto</string>
+    <string name="widget_overview_descriptionText">Zeigt dein Nettoeinkommen des letzten Monats</string>
     <string name="widget_overview_previewValue">1.234,56 €</string>
     <string name="widget_overview_budget">Netto</string>
     <string name="widget_overview_incomes">Einkommen</string>

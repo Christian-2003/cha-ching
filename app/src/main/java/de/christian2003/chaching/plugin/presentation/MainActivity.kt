@@ -16,6 +16,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -60,6 +61,8 @@ import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisScree
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
 import de.christian2003.chaching.plugin.presentation.view.trash.TrashScreen
 import de.christian2003.chaching.plugin.presentation.view.trash.TrashViewModel
+import de.christian2003.chaching.plugin.presentation.view.widgets.WidgetsScreen
+import de.christian2003.chaching.plugin.presentation.view.widgets.WidgetsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -95,6 +98,9 @@ class MainActivity : ComponentActivity() {
 			keepSplashScreen = false
 		}
 
+        //Extras:
+        val destination: String? = intent.extras?.getString(KEY_DESTINATION)
+
 		//App content:
         enableEdgeToEdge(
             navigationBarStyle = if (isNightMode()) {
@@ -110,6 +116,7 @@ class MainActivity : ComponentActivity() {
         )
 		setContent {
 			ChaChing(
+                destination = destination,
 				updateManager = updateManager!!
 			)
 		}
@@ -121,22 +128,41 @@ class MainActivity : ComponentActivity() {
         return currentMode == Configuration.UI_MODE_NIGHT_YES
     }
 
+
+    companion object {
+        const val KEY_DESTINATION: String = "destination"
+    }
+
 }
 
 
 /**
  * Root composable for the ChaChing-app.
  *
+ * @param destination   Optional destination to which to navigate immediately after showing the screen:
  * @param updateManager	Update manager which detects app updates.
  */
 @Composable
-fun ChaChing(updateManager: UpdateManager) {
+fun ChaChing(
+    destination: String?,
+    updateManager: UpdateManager
+) {
 	val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
     val preferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 	var isOnboardingFinished: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("onboardingFinished", false)) }
     var useGlobalTheme: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("global_theme", false)) }
     var themeContrast: ThemeContrast by rememberSaveable { mutableStateOf(ThemeContrast.entries[preferences.getInt("theme_contrast", 0)]) }
+
+    if (destination != null && destination != "main") {
+        var navigationFinished: Boolean = rememberSaveable { false }
+        LaunchedEffect(Unit) {
+            if (!navigationFinished) {
+                navigationFinished = true
+                navController.navigate(destination)
+            }
+        }
+    }
 
     ChaChingTheme(
         dynamicColor = useGlobalTheme,
@@ -296,6 +322,9 @@ fun ChaChing(updateManager: UpdateManager) {
                     onNavigateToOnboarding = {
                         navController.navigate("onboarding/true")
                     },
+                    onNavigateToWidgets = {
+                        navController.navigate("widgets")
+                    },
                     onUseGlobalThemeChange = {
                         useGlobalTheme = it
                     },
@@ -331,6 +360,17 @@ fun ChaChing(updateManager: UpdateManager) {
             composable("help") {
                 val viewModel: HelpViewModel = hiltViewModel()
                 HelpScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+
+            composable("widgets") {
+                val viewModel: WidgetsViewModel = hiltViewModel()
+                WidgetsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()

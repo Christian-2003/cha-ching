@@ -9,6 +9,8 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.action.Action
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.layout.Alignment
@@ -24,9 +26,11 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
+import androidx.glance.unit.ColorProvider
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.analysis.small.SmallAnalysisData
 import de.christian2003.chaching.domain.analysis.small.SmallAnalysisResult
+import de.christian2003.chaching.plugin.presentation.widget.ProviderMode
 
 
 /**
@@ -34,22 +38,28 @@ import de.christian2003.chaching.domain.analysis.small.SmallAnalysisResult
  *
  * @param smallAnalysisResult   Analysis result to display.
  * @param onFormatValue         Callback invoked to format a value.
+ * @param onProvideColor        Callback invoked to provide a color.
+ * @param onClick               Action invoked once the widget is clicked.
  */
 @Composable
 fun OverviewWidget2x2(
     smallAnalysisResult: SmallAnalysisResult,
-    onFormatValue: (Double) -> String
+    onFormatValue: (Double) -> String,
+    onProvideColor: (ColorProvider, ProviderMode) -> ColorProvider,
+    onClick: Action
 ) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(GlanceTheme.colors.surface)
+            .background(onProvideColor(GlanceTheme.colors.surface, ProviderMode.Surface))
+            .clickable(onClick)
             .padding(12.dp)
     ) {
         //Budget:
         OverviewWidgetBudgetSmall(
             smallAnalysisResult = smallAnalysisResult,
-            onFormatValue = onFormatValue
+            onFormatValue = onFormatValue,
+            onProvideColor = onProvideColor
         )
 
         //Incomes and expenses:
@@ -62,6 +72,7 @@ fun OverviewWidget2x2(
                 smallAnalysisDataPrevious = smallAnalysisResult.previousMonth.incomes,
                 isIncome = true,
                 onFormatValue = onFormatValue,
+                onProvideColor = onProvideColor,
                 modifier = GlanceModifier.padding(top = 12.dp)
             )
             OverviewWidgetSmallAnalysisData(
@@ -69,6 +80,7 @@ fun OverviewWidget2x2(
                 smallAnalysisDataPrevious = smallAnalysisResult.previousMonth.expenses,
                 isIncome = false,
                 onFormatValue = onFormatValue,
+                onProvideColor = onProvideColor,
                 modifier = GlanceModifier.padding(top = 12.dp)
             )
         }
@@ -83,6 +95,7 @@ fun OverviewWidget2x2(
  * @param smallAnalysisDataPrevious Analysis data for the previous month.
  * @param isIncome                  Whether this is used to display income (or expenses).
  * @param onFormatValue             Callback invoked to format a value.
+ * @param onProvideColor        Callback invoked to provide a color.
  * @param modifier                  Modifier.
  */
 @Composable
@@ -91,6 +104,7 @@ private fun OverviewWidgetSmallAnalysisData(
     smallAnalysisDataPrevious: SmallAnalysisData,
     isIncome: Boolean,
     onFormatValue: (Double) -> String,
+    onProvideColor: (ColorProvider, ProviderMode) -> ColorProvider,
     modifier: GlanceModifier = GlanceModifier
 ) {
     val differenceToLastMonth: Double = smallAnalysisDataCurrent.totalSum - smallAnalysisDataPrevious.totalSum
@@ -134,13 +148,17 @@ private fun OverviewWidgetSmallAnalysisData(
                 contentAlignment = Alignment.Center,
                 modifier = GlanceModifier
                     .size(32.dp)
-                    .background(when {
-                        differenceToLastMonth > 0.0 && isIncome -> GlanceTheme.colors.primaryContainer
-                        differenceToLastMonth < 0.0 && isIncome -> GlanceTheme.colors.errorContainer
-                        differenceToLastMonth > 0.0 -> GlanceTheme.colors.errorContainer
-                        differenceToLastMonth < 0.0 -> GlanceTheme.colors.primaryContainer
-                        else -> GlanceTheme.colors.surfaceVariant
-                    })
+                    .background(
+                        colorProvider = onProvideColor(
+                            when {
+                                differenceToLastMonth > 0.0 && isIncome -> GlanceTheme.colors.primaryContainer
+                                differenceToLastMonth < 0.0 && isIncome -> GlanceTheme.colors.errorContainer
+                                differenceToLastMonth > 0.0 -> GlanceTheme.colors.errorContainer
+                                differenceToLastMonth < 0.0 -> GlanceTheme.colors.primaryContainer
+                                else -> GlanceTheme.colors.surfaceVariant
+                            },
+                            ProviderMode.TrendContainer
+                        ))
                     .cornerRadius(100.dp)
             ) {
                 Image(

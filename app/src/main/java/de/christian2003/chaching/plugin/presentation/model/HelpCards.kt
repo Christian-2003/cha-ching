@@ -33,7 +33,9 @@ enum class HelpCards(
 
     HELP_LIST("help_list", R.string.help_helpList),
 
-    HELP_TRASH("help_trash", R.string.help_trash);
+    HELP_TRASH("help_trash", R.string.help_trash),
+
+    HELP_WIDGETS("help_widgets", R.string.help_widgets);
 
 
     /**

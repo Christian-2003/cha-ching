@@ -163,6 +163,8 @@
     <string name="settings_customization_contrastDialog_high">High</string>
     <string name="settings_customization_contrastDialog_previewTitle">Preview</string>
     <string name="settings_customization_contrastDialog_previewText">Example text</string>
+    <string name="settings_customization_widgetsTitle">Widgets</string>
+    <string name="settings_customization_widgetsInfo">Change widgets settings</string>
     <string name="settings_data">Data</string>
     <string name="settings_data_typesTitle">All categories</string>
     <string name="settings_data_typesInfo">Configure the categories for which you can create transactions</string>
@@ -221,6 +223,7 @@
     <string name="help_createTransfer">Create new transaction</string>
     <string name="help_helpList">List of all help messages</string>
     <string name="help_trash">Trash bin</string>
+    <string name="help_widgets">Widget settings</string>
 
 
     <string name="licenses_title">Licenses</string>
@@ -237,6 +240,21 @@
     <string name="onboarding_defaultTypeSickPay">Sick Pay</string>
     <string name="onboarding_defaultTypeSpecialPay">Special Pay</string>
     <string name="onboarding_defaultTypeShareInterest">Share Interest</string>
+
+
+    <string name="widgets_title">Widget settings</string>
+    <string name="widgets_help">Change the appearance and behavior of the app widgets.</string>
+    <string name="widgets_globalSettingsInfo">You have multiple instances of this widget. Changes are applied to all instances.</string>
+    <string name="widgets_pinInLauncherInfo">You do not have created a widget yet.</string>
+    <string name="widgets_pinInLauncherButton">Create widget</string>
+    <string name="widgets_opacityLabel">Widget Opacity</string>
+    <string name="widgets_valueOption">How to display values?</string>
+    <string name="widgets_valueOption_cleartextLabel">Cleartext values</string>
+    <string name="widgets_valueOption_obfuscateLabel">Obfuscate values</string>
+    <string name="widgets_clickAction">Click action</string>
+    <string name="widgets_clickAction_openApp">Launch app</string>
+    <string name="widgets_clickAction_openAnalysis">Launch app and start analysis</string>
+    <string name="widgets_clickAction_openSettings">Open widget settings</string>
 
 
     <!-- Error messages -->
@@ -269,10 +287,10 @@
 
 
     <!-- Widgets -->
-    <string name="widget_overview_descriptionLabel">Overview</string>
-    <string name="widget_overview_descriptionText">Shows your transactions of the last month</string>
-    <string name="widget_overview_text">Transactions this month</string>
+    <string name="widget_overview_descriptionLabel">Budget overview</string>
+    <string name="widget_overview_descriptionText">Shows your budget for the last month</string>
     <string name="widget_overview_previewValue">$1,234.56</string>
+    <string name="widget_overview_obfuscatedValue" translatable="false">•••••</string> <!-- '•' is U+2022  -->
     <string name="widget_overview_budget">Budget</string>
     <string name="widget_overview_incomes">Incomes</string>
     <string name="widget_overview_expenses">Expenses</string>
