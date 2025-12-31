@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 
 /**
- * Use case for the small and less powerful analysis. The result is displayed on the MainScreen.
+ * Use case for the small and less powerful analysis. The result is displayed on the MainScreen and
+ * the OverviewWidget.
  *
  * @param repository    Repository through which to access data.
  */
