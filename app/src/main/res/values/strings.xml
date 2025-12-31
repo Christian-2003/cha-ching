@@ -17,6 +17,20 @@
         <item>November %1$d</item>
         <item>December %1$d</item>
     </string-array>
+    <string-array name="months_short">
+        <item>Jan %1$s</item>
+        <item>Feb %1$s</item>
+        <item>Mar %1$s</item>
+        <item>Apr %1$s</item>
+        <item>May %1$s</item>
+        <item>Jun %1$s</item>
+        <item>Jul %1$s</item>
+        <item>Aug %1$s</item>
+        <item>Sep %1$s</item>
+        <item>Oct %1$s</item>
+        <item>Nov %1$s</item>
+        <item>Dec %1$s</item>
+    </string-array>
     <string-array name="quarters">
         <item>Q1 %1$d</item>
         <item>Q2 %1$d</item>

@@ -2,8 +2,10 @@ package de.christian2003.chaching.application.analysis
 
 import de.christian2003.chaching.application.analysis.dto.DataLines
 import de.christian2003.chaching.application.analysis.dto.GroupedStatisticsResult
-import de.christian2003.chaching.application.analysis.dto.GroupedTypeSum
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerGroupedTypeResult
+import de.christian2003.chaching.application.analysis.large.algorithms.AnalysisDataSummarizer
 import de.christian2003.chaching.application.repository.AnalysisRepository
+import de.christian2003.chaching.application.services.NormalizedDateConverterService
 import de.christian2003.chaching.domain.analysis.AnalysisDiagram
 import de.christian2003.chaching.domain.analysis.AnalysisResult
 import de.christian2003.chaching.domain.analysis.ResultSummary
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 
 class ExtensiveAnalysisUseCase @Inject constructor(
-    private val repository: AnalysisRepository
+    private val repository: AnalysisRepository,
+    private val normalizedDateConverterService: NormalizedDateConverterService
 ) {
 
     suspend fun analyzeData(precision: AnalysisPrecision, start: LocalDate, end: LocalDate): AnalysisResult {
@@ -28,8 +31,8 @@ class ExtensiveAnalysisUseCase @Inject constructor(
         val types: List<Type> = repository.getAllTypes().first()
 
         //Summarize data:
-        val analysisDataSummarizer = AnalysisDataSummarizer(precision, start, end)
-        val summarizedResults: Map<UUID, List<GroupedTypeSum>> = analysisDataSummarizer.summarizeData(transfers, types)
+        val analysisDataSummarizer = AnalysisDataSummarizer(precision, start, end, normalizedDateConverterService)
+        val summarizedResults: Map<UUID, List<SummarizerGroupedTypeResult>> = analysisDataSummarizer.summarizeData(transfers, types)
 
         //Get list of normalized dates:
         val normalizedDates: List<LocalDate> = getListOfNormalizedDates(summarizedResults)
@@ -54,7 +57,7 @@ class ExtensiveAnalysisUseCase @Inject constructor(
     }
 
 
-    private fun generateTypeResults(summarizedResults: Map<UUID, List<GroupedTypeSum>>): List<TypeResult> {
+    private fun generateTypeResults(summarizedResults: Map<UUID, List<SummarizerGroupedTypeResult>>): List<TypeResult> {
         val groupedTypeSumToDataLineConverter = GroupedTypeSumToDataLineConverter()
         val groupedTypeSumsToStatistics = GroupedTypeSumsToStatistics()
         val cumulatedDateLineGenerator = CumulatedDateLineGenerator()
@@ -110,7 +113,7 @@ class ExtensiveAnalysisUseCase @Inject constructor(
     }
 
 
-    private fun generateIncomesResultSummary(summarizedResults: Map<UUID, List<GroupedTypeSum>>, normalizedDateCount: Int): ResultSummary {
+    private fun generateIncomesResultSummary(summarizedResults: Map<UUID, List<SummarizerGroupedTypeResult>>, normalizedDateCount: Int): ResultSummary {
         var incomesTransferSum = 0
         var incomesTransferCount = 0
 
@@ -144,7 +147,7 @@ class ExtensiveAnalysisUseCase @Inject constructor(
     }
 
 
-    private fun generateExpensesResultSummary(summarizedResults: Map<UUID, List<GroupedTypeSum>>, normalizedDateCount: Int): ResultSummary {
+    private fun generateExpensesResultSummary(summarizedResults: Map<UUID, List<SummarizerGroupedTypeResult>>, normalizedDateCount: Int): ResultSummary {
         var expensesTransferSum = 0
         var expensesTransferCount = 0
 
@@ -178,12 +181,12 @@ class ExtensiveAnalysisUseCase @Inject constructor(
     }
 
 
-    private fun getListOfNormalizedDates(summarizedResults: Map<UUID, List<GroupedTypeSum>>): List<LocalDate> {
+    private fun getListOfNormalizedDates(summarizedResults: Map<UUID, List<SummarizerGroupedTypeResult>>): List<LocalDate> {
         val normalizedDates: MutableList<LocalDate> = mutableListOf()
 
         if (summarizedResults.isNotEmpty()) {
             //Get normalized dates:
-            val groupedTypeSums: List<GroupedTypeSum> = summarizedResults.values.first()
+            val groupedTypeSums: List<SummarizerGroupedTypeResult> = summarizedResults.values.first()
             if (groupedTypeSums.isNotEmpty()) {
                 groupedTypeSums.forEach { groupedTypeSum ->
                     normalizedDates.add(groupedTypeSum.date)

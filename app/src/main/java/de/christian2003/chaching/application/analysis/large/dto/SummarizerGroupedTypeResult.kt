@@ -1,4 +1,4 @@
-package de.christian2003.chaching.application.analysis.dto
+package de.christian2003.chaching.application.analysis.large.dto
 
 import java.time.LocalDate
 
@@ -10,8 +10,8 @@ import java.time.LocalDate
  * @param incomes   Type sum for the incomes.
  * @param expenses  Type sum for the expenses.
  */
-data class GroupedTypeSum(
+data class SummarizerGroupedTypeResult(
     val date: LocalDate,
-    val incomes: TypeSum,
-    val expenses: TypeSum
+    val incomes: SummarizerTypeResult,
+    val expenses: SummarizerTypeResult
 )

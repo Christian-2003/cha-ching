@@ -1,8 +1,8 @@
 package de.christian2003.chaching.application.analysis
 
 import de.christian2003.chaching.application.analysis.dto.DataLines
-import de.christian2003.chaching.application.analysis.dto.GroupedTypeSum
-import de.christian2003.chaching.application.analysis.dto.TypeSum
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerGroupedTypeResult
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerTypeResult
 import org.junit.Assert
 import org.junit.Test
 import java.time.LocalDate
@@ -12,21 +12,21 @@ class GroupedTypeSumToDataLineConverterUnitTest {
 
     @Test
     fun groupNormally() {
-        val groupedTypeSums: List<GroupedTypeSum> = listOf(
-            GroupedTypeSum(
+        val groupedTypeSums: List<SummarizerGroupedTypeResult> = listOf(
+            SummarizerGroupedTypeResult(
                 date = LocalDate.of(2025, 1, 1),
-                incomes = TypeSum(1500, 3, 140),
-                expenses = TypeSum(1000, 2, 0)
+                incomes = SummarizerTypeResult(1500, 3, 140),
+                expenses = SummarizerTypeResult(1000, 2, 0)
             ),
-            GroupedTypeSum(
+            SummarizerGroupedTypeResult(
                 date = LocalDate.of(2025, 2, 1),
-                incomes = TypeSum(3000, 2, 160),
-                expenses = TypeSum(500, 1, 0)
+                incomes = SummarizerTypeResult(3000, 2, 160),
+                expenses = SummarizerTypeResult(500, 1, 0)
             ),
-            GroupedTypeSum(
+            SummarizerGroupedTypeResult(
                 date = LocalDate.of(2025, 3, 1),
-                incomes = TypeSum(2000, 3, 120),
-                expenses = TypeSum(2000, 4, 0)
+                incomes = SummarizerTypeResult(2000, 3, 120),
+                expenses = SummarizerTypeResult(2000, 4, 0)
             )
         )
 

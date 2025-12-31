@@ -1,7 +1,7 @@
 package de.christian2003.chaching.application.analysis
 
 import de.christian2003.chaching.application.analysis.dto.DataLines
-import de.christian2003.chaching.application.analysis.dto.GroupedTypeSum
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerGroupedTypeResult
 
 
 /**
@@ -15,7 +15,7 @@ class GroupedTypeSumToDataLineConverter{
      * @param groupedTypeSums   List of grouped type sums.
      * @return                  Data lines.
      */
-    fun getDataLine(groupedTypeSums: List<GroupedTypeSum>): DataLines {
+    fun getDataLine(groupedTypeSums: List<SummarizerGroupedTypeResult>): DataLines {
         val incomes: MutableList<Int> = mutableListOf()
         val expenses: MutableList<Int> = mutableListOf()
 

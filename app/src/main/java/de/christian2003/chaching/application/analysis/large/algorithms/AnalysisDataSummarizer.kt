@@ -1,7 +1,8 @@
-package de.christian2003.chaching.application.analysis
+package de.christian2003.chaching.application.analysis.large.algorithms
 
-import de.christian2003.chaching.application.analysis.dto.GroupedTypeSum
-import de.christian2003.chaching.application.analysis.dto.TypeSum
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerGroupedTypeResult
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerTypeResult
+import de.christian2003.chaching.application.services.NormalizedDateConverterService
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
@@ -17,14 +18,16 @@ import java.util.UUID
  * Year:    [2025-01-01, 2026-01-01, 2027-01-01, ...]
  * This list is grouped by type. This means, that for each type, there is a separate list.
  *
- * @param precision Analysis precision.
- * @param start     Start date for the analysis.
- * @param end       End date for the analysis.
+ * @param precision                         Analysis precision.
+ * @param start                             Start date for the analysis.
+ * @param end                               End date for the analysis.
+ * @param normalizedDateConverterService    Service through which to convert normalized dates.
  */
 class AnalysisDataSummarizer(
     private val precision: AnalysisPrecision,
     private val start: LocalDate,
-    private val end: LocalDate
+    private val end: LocalDate,
+    private val normalizedDateConverterService: NormalizedDateConverterService
 ) {
 
     /**
@@ -36,28 +39,28 @@ class AnalysisDataSummarizer(
      * @param types     Types to which to map the transfers.
      * @return          List of summaries by normalized date mapped to each type.
      */
-    fun summarizeData(transfers: List<Transfer>, types: List<Type>): Map<UUID, List<GroupedTypeSum>> {
+    fun summarizeData(transfers: List<Transfer>, types: List<Type>): Map<UUID, List<SummarizerGroupedTypeResult>> {
         //Group transfers by type:
         val groupedTransfersByType: Map<UUID, List<Transfer>> = groupTransfersByType(transfers, types)
 
-        val result: MutableMap<UUID, List<GroupedTypeSum>> = mutableMapOf()
+        val result: MutableMap<UUID, List<SummarizerGroupedTypeResult>> = mutableMapOf()
 
         //For each type: Calculate summaries:
         groupedTransfersByType.forEach { typeId, transfers ->
             val groupedTransfersByDate: Map<LocalDate, List<Transfer>> = groupTransfersByNormalizedDate(transfers)
 
             //Calculate summary by normalized date:
-            val groupedTypeSums: MutableList<GroupedTypeSum> = mutableListOf()
+            val groupedTypeSums: MutableList<SummarizerGroupedTypeResult> = mutableListOf()
             groupedTransfersByDate.forEach { date, transfers ->
-                val groupedTypeSum: GroupedTypeSum = calculateGroupedTypeSumForTransfers(date, transfers)
+                val groupedTypeSum: SummarizerGroupedTypeResult = calculateGroupedTypeSumForTransfers(date, transfers)
                 groupedTypeSums.add(groupedTypeSum)
             }
 
             //Sort by date:
-            val sortedGroupedTypeSums: List<GroupedTypeSum> = groupedTypeSums.sortedBy { it.date }
+            val sortedGroupedTypeSums: List<SummarizerGroupedTypeResult> = groupedTypeSums.sortedBy { it.date }
 
             //Make sure that all normalized dates between start and end are in the final result:
-            val trimmedGroupTypeSums: List<GroupedTypeSum> = trimGroupedTypesSum(sortedGroupedTypeSums)
+            val trimmedGroupTypeSums: List<SummarizerGroupedTypeResult> = trimGroupedTypesSum(sortedGroupedTypeSums)
 
             result[typeId] = trimmedGroupTypeSums
         }
@@ -120,18 +123,7 @@ class AnalysisDataSummarizer(
      * @return      Converted date.
      */
     private fun getNormalizedDate(date: LocalDate): LocalDate {
-        when (precision) {
-            AnalysisPrecision.Month -> {
-                return date.withDayOfMonth(1)
-            }
-            AnalysisPrecision.Quarter -> {
-                val quarterMonth = ((date.month.value - 1) / 3) * 3 + 1 //Q1=1, Q2=4, Q3=7, Q4=10
-                return date.withDayOfMonth(1).withMonth(quarterMonth)
-            }
-            AnalysisPrecision.Year -> {
-                return date.withDayOfYear(1)
-            }
-        }
+        return normalizedDateConverterService.getNormalizedDate(date, precision)
     }
 
 
@@ -142,7 +134,7 @@ class AnalysisDataSummarizer(
      * @param transfers Transfers to use for the calculation.
      * @return          Grouped type sum.
      */
-    private fun calculateGroupedTypeSumForTransfers(date: LocalDate, transfers: List<Transfer>): GroupedTypeSum {
+    private fun calculateGroupedTypeSumForTransfers(date: LocalDate, transfers: List<Transfer>): SummarizerGroupedTypeResult {
         var incomeSum = 0
         var incomeCount = 0
         var incomeHours = 0
@@ -163,14 +155,14 @@ class AnalysisDataSummarizer(
             }
         }
 
-        return GroupedTypeSum(
+        return SummarizerGroupedTypeResult(
             date = date,
-            incomes = TypeSum(
+            incomes = SummarizerTypeResult(
                 sum = incomeSum,
                 count = incomeCount,
                 hoursWorked = incomeHours
             ),
-            expenses = TypeSum(
+            expenses = SummarizerTypeResult(
                 sum = expenseSum,
                 count = expenseCount,
                 hoursWorked = expenseHours
@@ -186,7 +178,7 @@ class AnalysisDataSummarizer(
      * @param groupedTypeSums   Grouped type sums to trim.
      * @return                  Trimmed grouped type sums.
      */
-    private fun trimGroupedTypesSum(groupedTypeSums: List<GroupedTypeSum>): List<GroupedTypeSum> {
+    private fun trimGroupedTypesSum(groupedTypeSums: List<SummarizerGroupedTypeResult>): List<SummarizerGroupedTypeResult> {
         var current: LocalDate = getNormalizedDate(getNormalizedDate(start))
         val endNormalized: LocalDate = getNormalizedDate(getNormalizedDate(end))
 
@@ -195,20 +187,20 @@ class AnalysisDataSummarizer(
             AnalysisPrecision.Quarter -> 3
             AnalysisPrecision.Year -> 12
         }
-        val result: MutableList<GroupedTypeSum> = mutableListOf()
+        val result: MutableList<SummarizerGroupedTypeResult> = mutableListOf()
 
         while (!current.isAfter(endNormalized)) {
-            val existingItem: GroupedTypeSum? = groupedTypeSums.find { it.date == current }
+            val existingItem: SummarizerGroupedTypeResult? = groupedTypeSums.find { it.date == current }
             if (existingItem != null) {
                 //Item exists:
                 result.add(existingItem)
             }
             else {
                 //Item missing:
-                val newItem = GroupedTypeSum(
+                val newItem = SummarizerGroupedTypeResult(
                     date = current,
-                    incomes = TypeSum(0, 0, 0),
-                    expenses = TypeSum(0, 0, 0)
+                    incomes = SummarizerTypeResult(0, 0, 0),
+                    expenses = SummarizerTypeResult(0, 0, 0)
                 )
                 result.add(newItem)
             }

@@ -19,13 +19,11 @@ import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.domain.analysis.overview.OverviewCalcResult
 import de.christian2003.chaching.domain.analysis.small.SmallAnalysisResult
 import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.plugin.infrastructure.update.UpdateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -101,11 +99,6 @@ class MainViewModel @Inject constructor(
 	 */
 	var transferToDelete: Transfer? by mutableStateOf(null)
 
-	/**
-	 * Result for the overview.
-	 */
-	var overviewCalcResult: OverviewCalcResult? by mutableStateOf(null)
-
 	var analysisResult: SmallAnalysisResult? by mutableStateOf(null)
 		private set
 
@@ -137,12 +130,6 @@ class MainViewModel @Inject constructor(
 		if (!isInitialized) {
 			this@MainViewModel.updateManager = updateManager
 			isInitialized = true
-			//All code after 'collect' is not called, therefore, this must be the last method call of the init-function!
-			viewModelScope.launch(Dispatchers.IO) {
-				transfersLastMonth.collect { transfersList ->
-					overviewCalcResult = OverviewCalcResult(transfersList, allTypes.first())
-				}
-			}
 		}
 	}
 

@@ -73,7 +73,6 @@ kotlin {
 			"-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
 			"-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
 			"-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-			"-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi"
 		)
 	}
 }
@@ -115,7 +114,6 @@ dependencies {
 	implementation(libs.androidx.hilt.navigation.compose)
 	implementation(libs.hilt.android)
 	implementation(libs.icu4j)
-	implementation("com.google.accompanist:accompanist-permissions:0.37.3")
 
 	testImplementation(libs.junit)
 	testImplementation(libs.mockito.kotlin)

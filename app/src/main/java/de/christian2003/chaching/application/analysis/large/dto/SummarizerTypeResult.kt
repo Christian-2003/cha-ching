@@ -1,4 +1,4 @@
-package de.christian2003.chaching.application.analysis.dto
+package de.christian2003.chaching.application.analysis.large.dto
 
 
 /**
@@ -8,7 +8,7 @@ package de.christian2003.chaching.application.analysis.dto
  * @param count         Count of the transfers that were summarized.
  * @param hoursWorked   Hours worked for the type.
  */
-data class TypeSum(
+data class SummarizerTypeResult(
     val sum: Int,
     val count: Int,
     val hoursWorked: Int

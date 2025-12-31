@@ -1,6 +1,5 @@
 package de.christian2003.chaching.plugin.presentation.view.analysis
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -27,15 +25,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Matrix
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -45,30 +35,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
-import androidx.graphics.shapes.toPath
 import de.christian2003.chaching.domain.analysis.ResultSummary
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.R
-import de.christian2003.chaching.domain.analysis.AnalysisDiagram
 import de.christian2003.chaching.domain.analysis.TypeResult
 import de.christian2003.chaching.domain.analysis.TypeResultSummary
 import de.christian2003.chaching.domain.type.Type
+import de.christian2003.chaching.plugin.presentation.model.ChartColorGenerator
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
 import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
+import de.christian2003.chaching.plugin.presentation.ui.composables.chart.ColumnChart
+import de.christian2003.chaching.plugin.presentation.ui.theme.isDarkTheme
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTypeDiagram
-import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.PieChart
-import ir.ehsannarmani.compose_charts.models.DotProperties
-import ir.ehsannarmani.compose_charts.models.GridProperties
-import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
-import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
-import ir.ehsannarmani.compose_charts.models.LabelProperties
-import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.Pie
-import ir.ehsannarmani.compose_charts.models.PopupProperties
 import java.util.UUID
 
 
@@ -143,11 +125,18 @@ fun AnalysisDataTab(
             }
             item {
                 DataLineDiagram(
+                    options = options,
                     diagram = when (options) {
                         DataTabOptions.Incomes -> viewModel.valuesDiagramIncomes
                         DataTabOptions.Expenses -> viewModel.valuesDiagramExpenses
                     },
-                    labels = viewModel.diagramLabels
+                    labels = viewModel.diagramLabels,
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onQueryType = {
+                        viewModel.queryType(it)
+                    }
                 )
             }
             item {
@@ -168,11 +157,18 @@ fun AnalysisDataTab(
             }
             item {
                 DataLineDiagram(
+                    options = options,
                     diagram = when (options) {
                         DataTabOptions.Incomes -> viewModel.cumulatedDiagramIncomes
                         DataTabOptions.Expenses -> viewModel.cumulatedDiagramExpenses
                     },
-                    labels = viewModel.diagramLabels
+                    labels = viewModel.diagramLabels,
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onQueryType = {
+                        viewModel.queryType(it)
+                    }
                 )
             }
             item {
@@ -381,80 +377,47 @@ private fun DataByTypeDiagram(
 
 @Composable
 private fun DataLineDiagram(
+    options: DataTabOptions,
     diagram: DataTypeDiagram,
     labels: List<String>,
+    onFormatValue: (Double) -> String,
+    onQueryType: suspend (UUID) -> Type?,
     modifier: Modifier = Modifier
 ) {
     if (diagram.lines.isEmpty()) {
         return
     }
 
-    val diagramLines: MutableList<Line> = mutableListOf()
-    diagram.lines.forEachIndexed { index, line ->
-        val color: Brush = SolidColor(when (index) {
-            0 -> MaterialTheme.colorScheme.primary
-            1 -> MaterialTheme.colorScheme.secondary
-            2 -> MaterialTheme.colorScheme.tertiary
-            else -> MaterialTheme.colorScheme.outline
-        })
-
-        val diagramLine = Line(
-            label = "",
-            values = line.values,
-            color = color,
-            curvedEdges = !diagram.isCumulated,
-            dotProperties = DotProperties(
-                enabled = true,
-                color = SolidColor(MaterialTheme.colorScheme.surface),
-                strokeWidth = 2.dp,
-                radius = 2.dp,
-                strokeColor = color
-            )
-        )
-        diagramLines.add(diagramLine)
+    val dataLines: MutableList<List<Double>> = mutableListOf()
+    diagram.lines.forEach { line ->
+        dataLines.add(line.values)
     }
 
-    LineChart(
-        data = diagramLines,
-        gridProperties = GridProperties(
-            xAxisProperties = GridProperties.AxisProperties(
-                enabled = true,
-                color = SolidColor(MaterialTheme.colorScheme.outlineVariant),
-                thickness = 1.dp
-            ),
-            yAxisProperties = GridProperties.AxisProperties(
-                enabled = true,
-                color = SolidColor(MaterialTheme.colorScheme.outlineVariant),
-                thickness = 1.dp,
-                lineCount = diagram.lines[0].values.size
-            ),
-        ),
-        labelProperties = LabelProperties(
-            enabled = true,
-            textStyle = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
+    val colorGenerator = ChartColorGenerator()
+    val colors: MutableList<Color> = colorGenerator.generateChartColors(
+        primary = when (options) {
+            DataTabOptions.Incomes -> MaterialTheme.colorScheme.primary
+            DataTabOptions.Expenses -> MaterialTheme.colorScheme.tertiary
+        },
+        darkTheme = MaterialTheme.isDarkTheme()
+    ).toMutableList()
+    colors.add(MaterialTheme.colorScheme.outlineVariant)
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ColumnChart(
+            dataLines = dataLines,
             labels = labels,
-            rotation = LabelProperties.Rotation(mode = LabelProperties.Rotation.Mode.Force, degree = -45f)
-        ),
-        /*labelHelperProperties = LabelHelperProperties(
-            enabled = false
-        ),
-        popupProperties = PopupProperties(
-            enabled = true,
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            textStyle = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
-            contentBuilder = indicatorBuilder
-        ),
-        indicatorProperties = HorizontalIndicatorProperties(
-            enabled = true,
-            textStyle = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
-            contentBuilder = indicatorBuilder
-        ),*/
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
-            .padding(bottom = 48.dp)
-            .height(240.dp)
-    )
+            colors = colors,
+            onFormatValue = onFormatValue,
+            modifier = modifier
+        )
+
+        diagram.lines.take(3).forEach { diagramLine ->
+
+        }
+    }
 }
 
 

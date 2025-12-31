@@ -1,6 +1,5 @@
 package de.christian2003.chaching.plugin.presentation.view.main
 
-import android.icu.text.NumberFormat
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -48,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -61,15 +59,12 @@ import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.domain.analysis.overview.OverviewCalcResultItem
 import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.TransferListItem
-import ir.ehsannarmani.compose_charts.PieChart
-import ir.ehsannarmani.compose_charts.models.Pie
 import java.time.LocalDate
 import java.util.UUID
 
@@ -379,77 +374,6 @@ fun QuickActionsButton(
 			modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical) / 2)
 		)
 	}
-}
-
-
-/**
- * Displays an item of the overview.
- *
- * @param overviewCalcResultItem	Item to display.
- * @param color						Color with which to display the item.
- * @param valueFormat				Number format to format the item value.
- */
-@Composable
-private fun OverviewItem(
-	overviewCalcResultItem: OverviewCalcResultItem,
-	color: Color,
-	valueFormat: NumberFormat
-) {
-	Row(
-		verticalAlignment = Alignment.CenterVertically,
-		modifier = Modifier.padding(
-			top = dimensionResource(R.dimen.padding_vertical),
-			end = dimensionResource(R.dimen.padding_horizontal)
-		)
-	) {
-		Text(
-			text = if (overviewCalcResultItem.type != null) { overviewCalcResultItem.type.name } else { stringResource(R.string.main_overview_otherTypes) },
-			color = MaterialTheme.colorScheme.onSurface,
-			style = MaterialTheme.typography.bodyMedium,
-			modifier = Modifier
-				.weight(1f)
-				.padding(end = dimensionResource(R.dimen.padding_horizontal))
-		)
-		Text(
-			text = stringResource(R.string.value_format, valueFormat.format(overviewCalcResultItem.value.toDouble() / 100)),
-			color = color,
-			style = MaterialTheme.typography.bodyMedium
-		)
-	}
-}
-
-
-/**
- * Displays a pie chart for the types of the overview.
- *
- * @param overviewCalcResultItems	Result items for which to display the chart.
- * @param colors					Colors with which to display the items.
- * @param modifier					Modifier.
- */
-@Composable
-private fun OverviewChart(
-	overviewCalcResultItems: List<OverviewCalcResultItem>,
-	colors: List<Color>,
-	modifier: Modifier = Modifier
-) {
-	val data: MutableList<Pie> = mutableListOf()
-	for (i in 0..overviewCalcResultItems.size - 1) {
-		if (i >= 3) {
-			break
-		}
-		data.add(Pie(
-			label = if (overviewCalcResultItems[i].type != null) { overviewCalcResultItems[i].type!!.name } else { stringResource(R.string.main_overview_otherTypes) },
-			data = overviewCalcResultItems[i].value.toDouble(),
-			color = colors[i]
-		))
-	}
-
-	PieChart(
-		data = data.toList(),
-		style = Pie.Style.Stroke(width = 24.dp),
-		scaleAnimEnterSpec = spring(),
-		modifier = modifier.size(96.dp)
-	)
 }
 
 

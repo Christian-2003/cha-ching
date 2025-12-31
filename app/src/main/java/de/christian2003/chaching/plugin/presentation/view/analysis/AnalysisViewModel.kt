@@ -25,6 +25,7 @@ import java.time.LocalDate
 import java.util.UUID
 import javax.inject.Inject
 import de.christian2003.chaching.R
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -155,18 +156,19 @@ class AnalysisViewModel @Inject constructor(
     private fun createDiagramLabels(normalizedDates: List<LocalDate>, precision: AnalysisPrecision) {
         val labels: MutableList<String> = mutableListOf()
         val resources: Resources = application.resources
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yy")
 
         normalizedDates.forEach { normalizedDate ->
             when (precision) {
                 AnalysisPrecision.Month -> {
-                    val months: Array<String> = resources.getStringArray(R.array.months)
-                    val label: String = months[normalizedDate.monthValue - 1].format(normalizedDate.year)
+                    val months: Array<String> = resources.getStringArray(R.array.months_short)
+                    val label: String = months[normalizedDate.monthValue - 1].format(normalizedDate.format(formatter))
                     labels.add(label)
                 }
                 AnalysisPrecision.Quarter -> {
                     val quarters: Array<String> = resources.getStringArray(R.array.quarters)
                     val index: Int = (normalizedDate.monthValue - 1) / 3
-                    val label: String = quarters[index].format(normalizedDate.year)
+                    val label: String = quarters[index].format(normalizedDate.format(formatter))
                     labels.add(label)
                 }
                 AnalysisPrecision.Year -> {

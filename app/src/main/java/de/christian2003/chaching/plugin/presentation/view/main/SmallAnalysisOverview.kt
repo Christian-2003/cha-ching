@@ -152,7 +152,7 @@ private fun SmallAnalysisBudgetOverview(
         )
         if (smallAnalysisResult.currentMonth.budget > 0) {
             Text(
-                text = smallAnalysisResult.overviewComparisonConnection.getLocalizedString(
+                text = smallAnalysisResult.smallAnalysisProductPrices.getLocalizedString(
                     context = LocalContext.current,
                     value = smallAnalysisResult.currentMonth.budget
                 ),

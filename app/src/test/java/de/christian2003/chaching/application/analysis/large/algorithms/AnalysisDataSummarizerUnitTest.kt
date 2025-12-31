@@ -1,6 +1,7 @@
-package de.christian2003.chaching.application.analysis
+package de.christian2003.chaching.application.analysis.large.algorithms
 
-import de.christian2003.chaching.application.analysis.dto.GroupedTypeSum
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerGroupedTypeResult
+import de.christian2003.chaching.application.services.NormalizedDateConverterService
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.transfer.TransferValue
@@ -20,6 +21,8 @@ class AnalysisDataSummarizerUnitTest {
     private val insuranceType: Type = Type("Insurance", TypeIcon.CURRENCY)
 
     private val types: List<Type> = listOf(salaryType, shareType, taxesType, insuranceType)
+
+    private val normalizedDateConverterService = NormalizedDateConverterService()
 
 
     @Test
@@ -68,10 +71,11 @@ class AnalysisDataSummarizerUnitTest {
         val summarizer = AnalysisDataSummarizer(
             precision = AnalysisPrecision.Month,
             start = LocalDate.of(2025, 1, 15),
-            end = LocalDate.of(2025, 12, 1)
+            end = LocalDate.of(2025, 12, 1),
+            normalizedDateConverterService = normalizedDateConverterService
         )
 
-        val result: Map<UUID, List<GroupedTypeSum>> = summarizer.summarizeData(transfers, types)
+        val result: Map<UUID, List<SummarizerGroupedTypeResult>> = summarizer.summarizeData(transfers, types)
 
         //Test whether all types are present in result:
         Assert.assertEquals(4, result.size)
@@ -83,7 +87,7 @@ class AnalysisDataSummarizerUnitTest {
         Assert.assertEquals(12, result[insuranceType.id]!!.size)
 
         //Test salary type result:
-        val salaryResult: List<GroupedTypeSum> = result[salaryType.id]!!
+        val salaryResult: List<SummarizerGroupedTypeResult> = result[salaryType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), salaryResult[0].date)
 
         Assert.assertEquals(0, salaryResult[0].incomes.sum)
@@ -183,7 +187,7 @@ class AnalysisDataSummarizerUnitTest {
 
 
         //Test share type result:
-        val shareResult: List<GroupedTypeSum> = result[shareType.id]!!
+        val shareResult: List<SummarizerGroupedTypeResult> = result[shareType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), shareResult[0].date)
 
         Assert.assertEquals(0, shareResult[0].incomes.sum)
@@ -283,7 +287,7 @@ class AnalysisDataSummarizerUnitTest {
 
 
         //Test taxes type result:
-        val taxesResult: List<GroupedTypeSum> = result[taxesType.id]!!
+        val taxesResult: List<SummarizerGroupedTypeResult> = result[taxesType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), taxesResult[0].date)
 
         Assert.assertEquals(0, taxesResult[0].incomes.sum)
@@ -384,7 +388,7 @@ class AnalysisDataSummarizerUnitTest {
 
 
         //Test salary type result:
-        val insuranceResult: List<GroupedTypeSum> = result[insuranceType.id]!!
+        val insuranceResult: List<SummarizerGroupedTypeResult> = result[insuranceType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), insuranceResult[0].date)
 
         Assert.assertEquals(0, insuranceResult[0].incomes.sum)
@@ -530,10 +534,11 @@ class AnalysisDataSummarizerUnitTest {
         val summarizer = AnalysisDataSummarizer(
             precision = AnalysisPrecision.Quarter,
             start = LocalDate.of(2025, 1, 15),
-            end = LocalDate.of(2025, 12, 1)
+            end = LocalDate.of(2025, 12, 1),
+            normalizedDateConverterService = normalizedDateConverterService
         )
 
-        val result: Map<UUID, List<GroupedTypeSum>> = summarizer.summarizeData(transfers, types)
+        val result: Map<UUID, List<SummarizerGroupedTypeResult>> = summarizer.summarizeData(transfers, types)
 
         //Test whether all types are present in result:
         Assert.assertEquals(4, result.size)
@@ -545,7 +550,7 @@ class AnalysisDataSummarizerUnitTest {
         Assert.assertEquals(4, result[insuranceType.id]!!.size)
 
         //Test salary type:
-        val salaryResult: List<GroupedTypeSum> = result[salaryType.id]!!
+        val salaryResult: List<SummarizerGroupedTypeResult> = result[salaryType.id]!!
 
         Assert.assertEquals(LocalDate.of(2025, 1, 1), salaryResult[0].date)
         Assert.assertEquals(9500, salaryResult[0].incomes.sum)
@@ -627,10 +632,11 @@ class AnalysisDataSummarizerUnitTest {
         val summarizer = AnalysisDataSummarizer(
             precision = AnalysisPrecision.Year,
             start = LocalDate.of(2023, 1, 1),
-            end = LocalDate.of(2026, 12, 31)
+            end = LocalDate.of(2026, 12, 31),
+            normalizedDateConverterService = normalizedDateConverterService
         )
 
-        val result: Map<UUID, List<GroupedTypeSum>> = summarizer.summarizeData(transfers, types)
+        val result: Map<UUID, List<SummarizerGroupedTypeResult>> = summarizer.summarizeData(transfers, types)
 
         //Test whether all types are present in result:
         Assert.assertEquals(4, result.size)
@@ -642,7 +648,7 @@ class AnalysisDataSummarizerUnitTest {
         Assert.assertEquals(4, result[insuranceType.id]!!.size)
 
         //Test salary type:
-        val salaryResult: List<GroupedTypeSum> = result[salaryType.id]!!
+        val salaryResult: List<SummarizerGroupedTypeResult> = result[salaryType.id]!!
 
         Assert.assertEquals(LocalDate.of(2023, 1, 1), salaryResult[0].date)
         Assert.assertEquals(9500, salaryResult[0].incomes.sum)
@@ -685,10 +691,11 @@ class AnalysisDataSummarizerUnitTest {
         val summarizer = AnalysisDataSummarizer(
             precision = AnalysisPrecision.Month,
             start = LocalDate.of(2025, 1, 1),
-            end = LocalDate.of(2025, 3, 1)
+            end = LocalDate.of(2025, 3, 1),
+            normalizedDateConverterService = normalizedDateConverterService
         )
 
-        val result: Map<UUID, List<GroupedTypeSum>> = summarizer.summarizeData(transfers, types)
+        val result: Map<UUID, List<SummarizerGroupedTypeResult>> = summarizer.summarizeData(transfers, types)
 
         //Test whether all types are present in result:
         Assert.assertEquals(4, result.size)
@@ -702,7 +709,7 @@ class AnalysisDataSummarizerUnitTest {
 
 
         //Test salary type result:
-        val salaryResult: List<GroupedTypeSum> = result[salaryType.id]!!
+        val salaryResult: List<SummarizerGroupedTypeResult> = result[salaryType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), salaryResult[0].date)
 
         Assert.assertEquals(0, salaryResult[0].incomes.sum)
@@ -730,7 +737,7 @@ class AnalysisDataSummarizerUnitTest {
 
 
         //Test share type result:
-        val shareResult: List<GroupedTypeSum> = result[shareType.id]!!
+        val shareResult: List<SummarizerGroupedTypeResult> = result[shareType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), shareResult[0].date)
 
         Assert.assertEquals(0, shareResult[0].incomes.sum)
@@ -758,7 +765,7 @@ class AnalysisDataSummarizerUnitTest {
 
 
         //Test taxes type result:
-        val taxesResult: List<GroupedTypeSum> = result[taxesType.id]!!
+        val taxesResult: List<SummarizerGroupedTypeResult> = result[taxesType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), taxesResult[0].date)
 
         Assert.assertEquals(0, taxesResult[0].incomes.sum)
@@ -786,7 +793,7 @@ class AnalysisDataSummarizerUnitTest {
 
 
         //Test salary type result:
-        val insuranceResult: List<GroupedTypeSum> = result[insuranceType.id]!!
+        val insuranceResult: List<SummarizerGroupedTypeResult> = result[insuranceType.id]!!
         Assert.assertEquals(LocalDate.of(2025, 1, 1), insuranceResult[0].date)
 
         Assert.assertEquals(0, insuranceResult[0].incomes.sum)

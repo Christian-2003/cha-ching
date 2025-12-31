@@ -1,13 +1,13 @@
 package de.christian2003.chaching.application.analysis
 
 import de.christian2003.chaching.application.analysis.dto.GroupedStatisticsResult
-import de.christian2003.chaching.application.analysis.dto.GroupedTypeSum
+import de.christian2003.chaching.application.analysis.large.dto.SummarizerGroupedTypeResult
 import de.christian2003.chaching.application.analysis.dto.StatisticsResult
 
 
 class GroupedTypeSumsToStatistics {
 
-    fun toStatistics(groupedTypeSums: List<GroupedTypeSum>): GroupedStatisticsResult {
+    fun toStatistics(groupedTypeSums: List<SummarizerGroupedTypeResult>): GroupedStatisticsResult {
         var incomesTotal = 0
         var incomesCount = 0
         var incomesHoursTotal = 0

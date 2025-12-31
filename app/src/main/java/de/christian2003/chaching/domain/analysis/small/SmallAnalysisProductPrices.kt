@@ -8,7 +8,7 @@ import de.christian2003.chaching.R
  * Enum lists some household or everyday items, each containing a price. The MainScreen displays
  * to the user, how many of a random item the user can afford with their current income.
  */
-enum class OverviewComparisonConnection(
+enum class SmallAnalysisProductPrices(
 
     /**
      * Price for an item of the type.
@@ -77,7 +77,7 @@ enum class OverviewComparisonConnection(
          *
          * @return  Random field.
          */
-        fun getRandomComparisonConnection(): OverviewComparisonConnection {
+        fun getRandomComparisonConnection(): SmallAnalysisProductPrices {
             val ordinal = (0..entries.size - 1).random()
             return entries[ordinal]
         }
