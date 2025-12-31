@@ -1,7 +1,6 @@
 package de.christian2003.chaching.plugin.presentation.ui.composables.chart
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,27 +31,16 @@ import de.christian2003.chaching.R
 
 @Composable
 fun ColumnChart(
-    dataLines: List<List<Double>>,
-    labels: List<String>,
+    columns: List<ChartColumn>,
     colors: List<Color>,
     modifier: Modifier = Modifier,
     onFormatValue: ((Double) -> String) = { it.toString() },
-    backgroundColor: Color = Color.Transparent,
     columnHeight: Dp = 256.dp
 ) {
-    val maxColumns: Int = dataLines.maxOfOrNull { it.size } ?: 0
-    val columns: List<List<Double>> = rememberSaveable{
-        (0 until maxColumns).map { columnIndex ->
-            dataLines.mapNotNull { row ->
-                row.getOrNull(columnIndex)
-            }
-        }
-    }
-
     val maxValue: Double = rememberSaveable {
         columns.maxOfOrNull { row ->
             var sum = 0.0
-            row.forEach { value -> sum += value }
+            row.values.forEach { value -> sum += value }
             return@maxOfOrNull sum
         } ?: 0.0
     }
@@ -75,12 +63,10 @@ fun ColumnChart(
                 .horizontalScroll(rememberScrollState(initial = Int.MAX_VALUE))
                 .padding(end = dimensionResource(R.dimen.margin_horizontal))
         ) {
-            columns.forEachIndexed { index, dataLineValues ->
+            columns.forEachIndexed { index, column ->
                 ChartColumnWithLabel(
-                    values = dataLineValues,
+                    column = column,
                     colors = colors,
-                    backgroundColor = backgroundColor,
-                    label = labels.getOrNull(index) ?: "",
                     columnHeight = columnHeight,
                     maxValue = maxValue
                 )
@@ -124,10 +110,8 @@ private fun ChartYAxis(
 
 @Composable
 private fun ChartColumnWithLabel(
-    values: List<Double>,
+    column: ChartColumn,
     colors: List<Color>,
-    backgroundColor: Color,
-    label: String,
     columnHeight: Dp,
     maxValue: Double,
     modifier: Modifier = Modifier
@@ -139,16 +123,15 @@ private fun ChartColumnWithLabel(
             .width(28.dp)
     ) {
         ChartColumn(
-            values = values,
+            column = column,
             colors = colors,
-            backgroundColor = backgroundColor,
             maxValue = maxValue,
             modifier = modifier
                 .height(columnHeight)
                 .fillMaxWidth()
         )
         Text(
-            text = label,
+            text = column.label,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.labelSmall,
             textAlign = TextAlign.Center,
@@ -161,20 +144,17 @@ private fun ChartColumnWithLabel(
 
 @Composable
 private fun ChartColumn(
-    values: List<Double>,
+    column: ChartColumn,
     colors: List<Color>,
-    backgroundColor: Color,
     maxValue: Double,
     modifier: Modifier = Modifier
 ) {
     Canvas(
-        modifier = modifier
-            .clip(MaterialTheme.shapes.extraLargeIncreased)
-            .background(backgroundColor)
+        modifier = modifier.clip(MaterialTheme.shapes.extraLargeIncreased)
     ) {
         val cumulatedValues: MutableList<Double> = mutableListOf()
         var totalCumulatedValue = 0.0
-        values.take(colors.size).forEach { value ->
+        column.values.take(colors.size).forEach { value ->
             totalCumulatedValue += value
             cumulatedValues.add(totalCumulatedValue)
         }

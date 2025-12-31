@@ -36,11 +36,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
-import de.christian2003.chaching.domain.analysis.ResultSummary
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.R
-import de.christian2003.chaching.domain.analysis.TypeResult
-import de.christian2003.chaching.domain.analysis.TypeResultSummary
+import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.model.ChartColorGenerator
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
@@ -48,7 +46,7 @@ import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemCont
 import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
 import de.christian2003.chaching.plugin.presentation.ui.composables.chart.ColumnChart
 import de.christian2003.chaching.plugin.presentation.ui.theme.isDarkTheme
-import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTypeDiagram
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.DiagramDto
 import ir.ehsannarmani.compose_charts.PieChart
 import ir.ehsannarmani.compose_charts.models.Pie
 import java.util.UUID
@@ -60,16 +58,12 @@ fun AnalysisDataTab(
     bottomPadding: Dp,
     options: DataTabOptions
 ) {
-    //Data for the analysis (Depending on options)
-    val resultSummary: ResultSummary? = when (options) {
-        DataTabOptions.Incomes -> viewModel.analysisResult?.totalIncomes
-        DataTabOptions.Expenses -> viewModel.analysisResult?.totalExpenses
+    val analysisResult: LargeAnalysisResult? = viewModel.analysisResult
+    if (analysisResult == null) {
+        return
     }
-    val typeResults: List<TypeResult> = when (options) {
-        DataTabOptions.Incomes -> viewModel.typeResultsIncomes
-        DataTabOptions.Expenses -> viewModel.typeResultsExpenses
-    }
-    val precision: AnalysisPrecision = viewModel.analysisResult?.precision ?: AnalysisPrecision.Month
+
+    val precision: AnalysisPrecision = analysisResult.metadata.precision
 
     //Colors for the analysis:
     val labelColor: Color = when (options) {
@@ -81,123 +75,80 @@ fun AnalysisDataTab(
         DataTabOptions.Expenses -> MaterialTheme.colorScheme.onSurface
     }
 
-    if (resultSummary != null) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            item {
-                DataOverviewCard(
-                    options = options,
-                    transferSumFormatted = viewModel.formatValue(resultSummary.transferSum),
-                    transferAvgFormatted = viewModel.formatValue(resultSummary.transferAvg),
-                    normalizedDateAvgFormatted = viewModel.formatValue(resultSummary.normalizedDateAvg),
-                    labelColor = labelColor,
-                    valueColor = valueColor,
-                    precision = precision,
-                    modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
-                )
-            }
-            item {
-                DataByTypeDiagram(
-                    options = options,
-                    typeResults = typeResults,
-                    labelColor = labelColor,
-                    valueColor = valueColor,
-                    precision = precision,
-                    modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
-                )
-            }
-            item {
-                Headline(
-                    title = when (options) {
-                        DataTabOptions.Incomes -> when (precision) {
-                            AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramValues)
-                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramValues)
-                            AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramValues)
-                        }
-                        DataTabOptions.Expenses -> when (precision) {
-                            AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramValues)
-                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramValues)
-                            AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramValues)
-                        }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        item {
+            Headline(
+                title = when (options) {
+                    DataTabOptions.Incomes -> when (precision) {
+                        AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramValues)
+                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramValues)
+                        AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramValues)
                     }
-                )
-            }
-            item {
-                DataLineDiagram(
-                    options = options,
-                    diagram = when (options) {
-                        DataTabOptions.Incomes -> viewModel.valuesDiagramIncomes
-                        DataTabOptions.Expenses -> viewModel.valuesDiagramExpenses
-                    },
-                    labels = viewModel.diagramLabels,
-                    onFormatValue = {
-                        viewModel.formatValue(it)
-                    },
-                    onQueryType = {
-                        viewModel.queryType(it)
+                    DataTabOptions.Expenses -> when (precision) {
+                        AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramValues)
+                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramValues)
+                        AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramValues)
                     }
-                )
-            }
-            item {
-                Headline(
-                    title = when (options) {
-                        DataTabOptions.Incomes -> when (precision) {
-                            AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramCumulated)
-                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramCumulated)
-                            AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramCumulated)
-                        }
-                        DataTabOptions.Expenses -> when (precision) {
-                            AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramCumulated)
-                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramCumulated)
-                            AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramCumulated)
-                        }
+                }
+            )
+        }
+        item {
+            DataLineDiagram(
+                options = options,
+                diagram = when (options) {
+                    DataTabOptions.Incomes -> viewModel.incomesTabData.valuesDiagram
+                    DataTabOptions.Expenses -> viewModel.expensesTabData.cumulatedDiagram
+                },
+                onFormatValue = {
+                    viewModel.formatValue(it)
+                },
+                onQueryType = {
+                    viewModel.queryType(it)
+                }
+            )
+        }
+        item {
+            Headline(
+                title = when (options) {
+                    DataTabOptions.Incomes -> when (precision) {
+                        AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramCumulated)
+                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramCumulated)
+                        AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramCumulated)
                     }
-                )
-            }
-            item {
-                DataLineDiagram(
-                    options = options,
-                    diagram = when (options) {
-                        DataTabOptions.Incomes -> viewModel.cumulatedDiagramIncomes
-                        DataTabOptions.Expenses -> viewModel.cumulatedDiagramExpenses
-                    },
-                    labels = viewModel.diagramLabels,
-                    onFormatValue = {
-                        viewModel.formatValue(it)
-                    },
-                    onQueryType = {
-                        viewModel.queryType(it)
+                    DataTabOptions.Expenses -> when (precision) {
+                        AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramCumulated)
+                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramCumulated)
+                        AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramCumulated)
                     }
-                )
-            }
-            item {
-                Headline(
-                    title = stringResource(R.string.analysis_data_typesListTitle)
-                )
-            }
-            itemsIndexed(items = typeResults) { index, typeResult ->
-                TypeListItem(
-                    options = options,
-                    index = index,
-                    typeResult = typeResult,
-                    isFirst = index == 0,
-                    isLast = index == typeResults.size - 1,
-                    labelColor = labelColor,
-                    valueColor = valueColor,
-                    onQueryType = { typeId ->
-                        viewModel.queryType(typeId)
-                    },
-                    onFormatValue = { value ->
-                        viewModel.formatValue(value)
-                    }
-                )
-            }
-            item {
-                Box(
-                    modifier = Modifier.height(bottomPadding)
-                )
-            }
+                }
+            )
+        }
+        item {
+            DataLineDiagram(
+                options = options,
+                diagram = when (options) {
+                    DataTabOptions.Incomes -> viewModel.incomesTabData.cumulatedDiagram
+                    DataTabOptions.Expenses -> viewModel.expensesTabData.cumulatedDiagram
+                },
+                onFormatValue = {
+                    viewModel.formatValue(it)
+                },
+                onQueryType = {
+                    viewModel.queryType(it)
+                }
+            )
+        }
+        item {
+            Headline(
+                title = stringResource(R.string.analysis_data_typesListTitle)
+            )
+        }
+        item {
+            Box(
+                modifier = Modifier.height(bottomPadding)
+            )
         }
     }
 }
@@ -335,62 +286,16 @@ private fun DataOverviewCardAverageItem(
 }
 
 
-
-@Composable
-private fun DataByTypeDiagram(
-    options: DataTabOptions,
-    typeResults: List<TypeResult>,
-    labelColor: Color,
-    valueColor: Color,
-    precision: AnalysisPrecision,
-    modifier: Modifier = Modifier
-) {
-    val pieSegments: MutableList<Pie> = mutableListOf()
-    typeResults.take(4).forEachIndexed { index, typeResult ->
-        val pieSegment = Pie(
-            data = when (options) {
-                DataTabOptions.Incomes -> typeResult.incomes.transferSum
-                DataTabOptions.Expenses -> typeResult.expenses.transferSum
-            },
-            color = when (index) {
-                0 -> MaterialTheme.colorScheme.primary
-                1 -> MaterialTheme.colorScheme.secondary
-                2 -> MaterialTheme.colorScheme.tertiary
-                else -> MaterialTheme.colorScheme.onSurfaceVariant
-            }
-        )
-        pieSegments.add(pieSegment)
-    }
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        PieChart(
-            data = pieSegments,
-            modifier = modifier
-                .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
-                .size(192.dp)
-        )
-    }
-}
-
-
 @Composable
 private fun DataLineDiagram(
     options: DataTabOptions,
-    diagram: DataTypeDiagram,
-    labels: List<String>,
+    diagram: DiagramDto,
     onFormatValue: (Double) -> String,
     onQueryType: suspend (UUID) -> Type?,
     modifier: Modifier = Modifier
 ) {
-    if (diagram.lines.isEmpty()) {
+    if (diagram.chartColumns.isEmpty()) {
         return
-    }
-
-    val dataLines: MutableList<List<Double>> = mutableListOf()
-    diagram.lines.forEach { line ->
-        dataLines.add(line.values)
     }
 
     val colorGenerator = ChartColorGenerator()
@@ -407,123 +312,10 @@ private fun DataLineDiagram(
         modifier = Modifier.fillMaxWidth()
     ) {
         ColumnChart(
-            dataLines = dataLines,
-            labels = labels,
+            columns = diagram.chartColumns,
             colors = colors,
             onFormatValue = onFormatValue,
             modifier = modifier
         )
-
-        diagram.lines.take(3).forEach { diagramLine ->
-
-        }
     }
-}
-
-
-@Composable
-private fun TypeListItem(
-    options: DataTabOptions,
-    index: Int,
-    typeResult: TypeResult,
-    isFirst: Boolean,
-    isLast: Boolean,
-    labelColor: Color,
-    valueColor: Color,
-    onQueryType: suspend (UUID) -> Type?,
-    onFormatValue: (Double) -> String,
-    modifier: Modifier = Modifier
-) {
-    val type: Type? by produceState(null) {
-        value = onQueryType(typeResult.typeId)
-    }
-    val typeResultSummary: TypeResultSummary = when (options) {
-        DataTabOptions.Incomes -> typeResult.incomes
-        DataTabOptions.Expenses -> typeResult.expenses
-    }
-
-    ListItemContainer(
-        isFirst = isFirst,
-        isLast = isLast,
-        modifier = modifier
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable {
-
-                }
-                .padding(
-                    horizontal = dimensionResource(R.dimen.padding_horizontal),
-                    vertical = dimensionResource(R.dimen.padding_vertical)
-                )
-        ) {
-            if (type != null) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_m))
-                ) {
-                    Shape(
-                        shape = TypeListShapes.entries[index % TypeListShapes.entries.size].shape,
-                        color = when (index) {
-                            0 -> MaterialTheme.colorScheme.primaryContainer
-                            1 -> MaterialTheme.colorScheme.secondaryContainer
-                            2 -> MaterialTheme.colorScheme.tertiaryContainer
-                            else -> MaterialTheme.colorScheme.surfaceContainerHigh
-                        }
-                    )
-                    Icon(
-                        painter = painterResource(type!!.icon.drawableResourceId),
-                        contentDescription = "",
-                        tint = when (index) {
-                            0 -> MaterialTheme.colorScheme.onPrimaryContainer
-                            1 -> MaterialTheme.colorScheme.onSecondaryContainer
-                            2 -> MaterialTheme.colorScheme.onTertiaryContainer
-                            else -> labelColor
-                        },
-                        modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
-                        .weight(1f)
-                ) {
-                    Text(
-                        text = type!!.name,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = labelColor,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    Text(
-                        text = pluralStringResource(R.plurals.analysis_data_typeListTransferCount, typeResultSummary.transferCount, typeResultSummary.transferCount),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = labelColor,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-            else {
-                Box(modifier = Modifier.weight(1f))
-            }
-            Text(
-                text = onFormatValue(typeResultSummary.transferSum),
-                style = MaterialTheme.typography.bodyLarge,
-                color = valueColor
-            )
-        }
-    }
-}
-
-
-private enum class TypeListShapes(
-    val shape: RoundedPolygon
-) {
-    Sunny(MaterialShapes.Sunny),
-    Cookie(MaterialShapes.Cookie6Sided),
-    Leaf(MaterialShapes.Clover8Leaf),
-    Burst(MaterialShapes.SoftBurst)
 }
