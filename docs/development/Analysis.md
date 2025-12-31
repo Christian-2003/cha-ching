@@ -130,7 +130,7 @@ The following schematic describes the result of the summarizer:
 
 ### 2.3 Final Result
 The final result of the large analysis is described by the following UML diagram:
-![Large analysis workflow](../img/development/analysis/large_workflow.drawio.svg)
+![Large analysis workflow](../img/development/analysis/large_uml_classes.drawio.svg)
 
 <br/>
 
