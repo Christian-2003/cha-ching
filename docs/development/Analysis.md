@@ -110,8 +110,8 @@ no data should return empty result | :green_circle: Passing
 The large analysis is the mroe powerful out of the two analysis algorithms used in Cha Ching. This section describes the large analysis.
 
 ### 2.1 Workflow
-> [!NOTE]
-> Global workflow is introduced once all analysis steps are finished
+The following workflow illustrates how the analysis works internally:
+![Large analysis workflow](../img/development/analysis/large_workflow.drawio.svg)
 
 ### 2.2 Analysis Steps
 This section describes each of the analysis steps that are mentioned [above](#21-workflow).
@@ -128,9 +128,13 @@ The following schematic describes the result of the summarizer:
 
 ![Analysis result summarizer](../img/development/analysis/analysis_result_summarizer.drawio.svg)
 
+### 2.3 Final Result
+The final result of the large analysis is described by the following UML diagram:
+![Large analysis workflow](../img/development/analysis/large_workflow.drawio.svg)
+
 <br/>
 
 ***
 
-2025-12-29  
+2025-12-31  
 &copy; Christian-2003

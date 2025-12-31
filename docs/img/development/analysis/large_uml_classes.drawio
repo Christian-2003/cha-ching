@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0" version="29.2.9">
   <diagram name="Page-1" id="_P3TirobrGA3r948e84h">
-    <mxGraphModel dx="1783" dy="914" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1240" dy="636" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -61,7 +61,7 @@
         <mxCell id="4eZsn6jXp7uA5U5PrkPx-18" parent="4eZsn6jXp7uA5U5PrkPx-16" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ valueResult: LargeTypeValue" vertex="1">
           <mxGeometry height="26" width="280" y="52" as="geometry" />
         </mxCell>
-        <mxCell id="4eZsn6jXp7uA5U5PrkPx-20" parent="4eZsn6jXp7uA5U5PrkPx-16" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ hoursWorkedResult: LargeTypeHoursWorked?" vertex="1">
+        <mxCell id="4eZsn6jXp7uA5U5PrkPx-20" parent="4eZsn6jXp7uA5U5PrkPx-16" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ hoursWorkedResult: LargeTypeHoursWorked" vertex="1">
           <mxGeometry height="26" width="280" y="78" as="geometry" />
         </mxCell>
         <mxCell id="4eZsn6jXp7uA5U5PrkPx-65" parent="4eZsn6jXp7uA5U5PrkPx-16" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ transferCount: Int" vertex="1">
