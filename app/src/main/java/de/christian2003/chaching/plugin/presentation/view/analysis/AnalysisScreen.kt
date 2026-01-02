@@ -54,6 +54,8 @@ import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.Value
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisPeriod
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.DotProperties
 import ir.ehsannarmani.compose_charts.models.GridProperties

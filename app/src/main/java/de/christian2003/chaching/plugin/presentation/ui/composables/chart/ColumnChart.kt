@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,21 +28,39 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 
 @Composable
 fun ColumnChart(
     columns: List<ChartColumn>,
-    colors: List<Color>,
+    positiveColors: List<Color>,
     modifier: Modifier = Modifier,
     onFormatValue: ((Double) -> String) = { it.toString() },
+    negativeColors: List<Color> = positiveColors,
     columnHeight: Dp = 256.dp
 ) {
-    val maxValue: Double = rememberSaveable {
+    val positiveMaxValue: Double = rememberSaveable {
         columns.maxOfOrNull { row ->
             var sum = 0.0
-            row.values.forEach { value -> sum += value }
+            row.values.forEach { value ->
+                if (value > 0.0) {
+                    sum += value
+                }
+            }
             return@maxOfOrNull sum
+        } ?: 0.0
+    }
+    val negativeMaxValue: Double = rememberSaveable {
+        columns.minOfOrNull { row ->
+            var sum = 0.0
+            row.values.forEach { value ->
+                if (value < 0.0) {
+                    sum += value
+                }
+            }
+            return@minOfOrNull sum
         } ?: 0.0
     }
 
@@ -49,7 +68,8 @@ fun ColumnChart(
         modifier = modifier.fillMaxWidth()
     ) {
         ChartYAxis(
-            maxValue = maxValue,
+            positiveMaxValue = positiveMaxValue,
+            negativeMaxValue = negativeMaxValue,
             columnHeight = columnHeight,
             onFormatValue = onFormatValue,
             modifier = Modifier.padding(
@@ -66,9 +86,11 @@ fun ColumnChart(
             columns.forEachIndexed { index, column ->
                 ChartColumnWithLabel(
                     column = column,
-                    colors = colors,
+                    positiveColors = positiveColors,
+                    negativeColors = negativeColors,
                     columnHeight = columnHeight,
-                    maxValue = maxValue
+                    positiveMaxValue = positiveMaxValue,
+                    negativeMaxValue = negativeMaxValue
                 )
             }
         }
@@ -78,31 +100,62 @@ fun ColumnChart(
 
 @Composable
 private fun ChartYAxis(
-    maxValue: Double,
+    positiveMaxValue: Double,
+    negativeMaxValue: Double,
     columnHeight: Dp,
     onFormatValue: (Double) -> String,
     modifier: Modifier = Modifier,
-    steps: Int = 5
+    steps: Int = 4
 ) {
-    val labelValues: MutableList<Double> = mutableListOf()
-    val stepSize: Double = maxValue / steps
-    for (i in 0..(steps - 1)) {
-        labelValues.add(stepSize * i)
-    }
+    val hasPositiveValues: Boolean = positiveMaxValue > 0.0
+    val hasNegativeValues: Boolean = negativeMaxValue < 0.0
+
+    val totalValue: Double = positiveMaxValue + abs(negativeMaxValue)
+    val positiveChartHeight: Dp = columnHeight * (positiveMaxValue / totalValue).toFloat()
+    val negativeChartHeight: Dp = columnHeight * (abs(negativeMaxValue) / totalValue).toFloat()
+    val baseline = positiveChartHeight
+
+    val positiveSteps: Int = (steps.toDouble() * (positiveMaxValue / totalValue)).roundToInt()
+    val negativeSteps: Int = (steps.toDouble() * (abs(negativeMaxValue) / totalValue)).roundToInt()
+
+    val positiveStepSize: Double = if (hasPositiveValues) { positiveMaxValue / positiveSteps } else { 0.0 }
+    val negativeStepSize: Double = if (hasNegativeValues) { negativeMaxValue / negativeSteps } else { 0.0 }
 
     Box(
         modifier = modifier
             .height(columnHeight)
     ) {
-        labelValues.reversed().forEachIndexed { index, value ->
-            Text(
-                text = onFormatValue(value),
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.offset(
-                    y = (columnHeight / (steps - 1)) * index
+        if (hasPositiveValues) {
+            for (i in 0..positiveSteps) {
+                val value: Double = positiveStepSize * i
+                val yOffset = baseline - (positiveChartHeight / positiveSteps) * i
+
+                Text(
+                    text = onFormatValue(value),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.offset(
+                        y = yOffset
+                    )
                 )
-            )
+            }
+        }
+
+        if (hasNegativeValues) {
+            val start: Int = if (hasPositiveValues) { 1 } else { 0 }
+            for (i in start..negativeSteps) {
+                val value: Double = negativeStepSize * i
+                val yOffset = baseline + (negativeChartHeight / negativeSteps) * i
+
+                Text(
+                    text = onFormatValue(if (value == 0.0) { 0.0 } else { value }),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.offset(
+                        y = yOffset
+                    )
+                )
+            }
         }
     }
 }
@@ -111,24 +164,41 @@ private fun ChartYAxis(
 @Composable
 private fun ChartColumnWithLabel(
     column: ChartColumn,
-    colors: List<Color>,
+    positiveColors: List<Color>,
+    negativeColors: List<Color>,
     columnHeight: Dp,
-    maxValue: Double,
+    positiveMaxValue: Double,
+    negativeMaxValue: Double,
     modifier: Modifier = Modifier
 ) {
+    val totalValue: Double = positiveMaxValue + abs(negativeMaxValue)
+    val positiveChartHeight: Dp = columnHeight * (positiveMaxValue / totalValue).toFloat()
+    val negativeChartHeight: Dp = columnHeight * (abs(negativeMaxValue) / totalValue).toFloat()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .padding(horizontal = 1.dp)
-            .width(28.dp)
+            .width(30.dp)
     ) {
         ChartColumn(
             column = column,
-            colors = colors,
-            maxValue = maxValue,
+            colors = positiveColors,
+            maxValue = positiveMaxValue,
+            isNegative = false,
             modifier = modifier
-                .height(columnHeight)
+                .height(positiveChartHeight)
                 .fillMaxWidth()
+                .padding(horizontal = 1.dp)
+        )
+        HorizontalDivider()
+        ChartColumn(
+            column = column,
+            colors = negativeColors,
+            maxValue = negativeMaxValue,
+            isNegative = true,
+            modifier = modifier
+                .height(negativeChartHeight)
+                .fillMaxWidth()
+                .padding(horizontal = 1.dp)
         )
         Text(
             text = column.label,
@@ -136,7 +206,9 @@ private fun ChartColumnWithLabel(
             style = MaterialTheme.typography.labelSmall,
             textAlign = TextAlign.Center,
             maxLines = 2,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 1.dp)
         )
     }
 }
@@ -147,32 +219,41 @@ private fun ChartColumn(
     column: ChartColumn,
     colors: List<Color>,
     maxValue: Double,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isNegative: Boolean = false
 ) {
+    val absMaxValue: Double = abs(maxValue)
     Canvas(
         modifier = modifier.clip(MaterialTheme.shapes.extraLargeIncreased)
     ) {
         val cumulatedValues: MutableList<Double> = mutableListOf()
         var totalCumulatedValue = 0.0
         column.values.take(colors.size).forEach { value ->
-            totalCumulatedValue += value
+            if (isNegative && value < 0.0) {
+                totalCumulatedValue -= value
+            }
+            else if (!isNegative && value > 0.0) {
+                totalCumulatedValue += value
+            }
             cumulatedValues.add(totalCumulatedValue)
         }
 
         cumulatedValues.reversed().forEachIndexed { index, value ->
-            val height: Float = size.height * (value / maxValue).toFloat()
-            drawRoundRect(
-                color = colors[cumulatedValues.size - (index % colors.size) - 1],
-                size = Size(
-                    width = size.width,
-                    height = height
-                ),
-                topLeft = Offset(
-                    x = 0f,
-                    y = size.height - height
-                ),
-                cornerRadius = CornerRadius(100f, 100f)
-            )
+            if ((isNegative && column.values[column.values.size - 1 - index] < 0.0) || (!isNegative && column.values[column.values.size - 1 - index] > 0.0)) {
+                val height: Float = size.height * (value / absMaxValue).toFloat()
+                drawRoundRect(
+                    color = colors[cumulatedValues.size - (index % colors.size) - 1],
+                    size = Size(
+                        width = size.width,
+                        height = height
+                    ),
+                    topLeft = Offset(
+                        x = 0f,
+                        y = if (isNegative) { 0f } else { size.height - height }
+                    ),
+                    cornerRadius = CornerRadius(100f, 100f)
+                )
+            }
         }
     }
 }

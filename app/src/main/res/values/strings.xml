@@ -153,16 +153,20 @@
     </plurals>
     <string name="analysis_incomes_monthDiagramValues">Incomes by month</string>
     <string name="analysis_expenses_monthDiagramValues">Expenses by month</string>
+    <string name="analysis_types_monthDiagramValues">%1$s by month</string>
     <string name="analysis_incomes_quarterDiagramValues">Incomes by quarter</string>
     <string name="analysis_expenses_quarterDiagramValues">Expenses by quarter</string>
+    <string name="analysis_types_quarterDiagramValues">%1$s by quarter</string>
     <string name="analysis_incomes_yearDiagramValues">Incomes by year</string>
     <string name="analysis_expenses_yearDiagramValues">Expenses by year</string>
+    <string name="analysis_types_yearDiagramValues">%1$s by year</string>
     <string name="analysis_incomes_monthDiagramCumulated">Cumulated incomes by month</string>
     <string name="analysis_expenses_monthDiagramCumulated">Cumulated expenses by month</string>
     <string name="analysis_incomes_quarterDiagramCumulated">Cumulated incomes by quarter</string>
     <string name="analysis_expenses_quarterDiagramCumulated">Cumulated expenses by quarter</string>
     <string name="analysis_incomes_yearDiagramCumulated">Cumulated incomes by year</string>
     <string name="analysis_expenses_yearDiagramCumulated">Cumulated expenses by year</string>
+    <string name="analysis_types_diagramDifference">Difference to previous time span</string>
 
 
     <string name="settings_title">Settings</string>

@@ -1,9 +1,8 @@
-package de.christian2003.chaching.plugin.presentation.view.analysis
+package de.christian2003.chaching.plugin.presentation.view.analysis.model
 
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import java.util.Objects
-
 
 /**
  * Analysis period models a period of time that can be selected by the user for analysis.

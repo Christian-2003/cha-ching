@@ -1,18 +1,22 @@
 package de.christian2003.chaching.plugin.presentation.view.analysis.model
 
+import android.util.Log
 import de.christian2003.chaching.domain.analysis.large.LargeTimeSpanResult
 import de.christian2003.chaching.domain.analysis.large.LargeTypeDiagram
 import de.christian2003.chaching.domain.analysis.large.LargeTypeResult
 import de.christian2003.chaching.plugin.presentation.ui.composables.chart.ChartColumn
+import java.util.UUID
 
 
 /**
  * DTO for the column charts displayed on the analysis screen.
  *
- * @param chartColumns  List of columns for the chart.
+ * @param chartColumns      List of columns for the chart.
+ * @param dataLineTypeIds   Type IDs of the data lines.
  */
 data class DiagramDto(
-    val chartColumns: List<ChartColumn>
+    val chartColumns: List<ChartColumn>,
+    val dataLineTypeIds: List<UUID>
 ) {
 
     /**
@@ -41,17 +45,21 @@ data class DiagramDto(
             labels: List<String>,
             limit: Int = 3
         ): DiagramDto {
-            val sortedTypeResults: List<LargeTypeResult> = timeSpanResult.typeResults.sortedByDescending { it.valueResult.sum }
+            val filteredTypeResults: List<LargeTypeResult> = timeSpanResult.typeResults.sortedByDescending {
+                it.valueResult.sum
+            }.filter {
+                it.valueResult.sum > 0.0
+            }
 
             //Determine number of columns:
             val numberOfColumns: Int = when (diagramType) {
-                DiagramType.Values -> sortedTypeResults.firstOrNull()?.valuesDiagram?.values?.size ?: 0
-                DiagramType.Cumulated -> sortedTypeResults.firstOrNull()?.cumulatedDiagram?.values?.size ?: 0
+                DiagramType.Values -> filteredTypeResults.firstOrNull()?.valuesDiagram?.values?.size ?: 0
+                DiagramType.Cumulated -> filteredTypeResults.firstOrNull()?.cumulatedDiagram?.values?.size ?: 0
             }
 
             //Generate column values:
             val columns: List<MutableList<Double>> = (0 until numberOfColumns).map { mutableListOf() }
-            sortedTypeResults.forEach { typeResult ->
+            filteredTypeResults.forEach { typeResult ->
                 val diagram: LargeTypeDiagram = when (diagramType) {
                     DiagramType.Values -> typeResult.valuesDiagram
                     DiagramType.Cumulated -> typeResult.cumulatedDiagram
@@ -77,9 +85,62 @@ data class DiagramDto(
                 chartColumns.add(chartColumn)
             }
 
+            //Generate data line type IDs:
+            val dataLineTypeIds: MutableList<UUID> = mutableListOf()
+            filteredTypeResults.forEach { typeResult ->
+                dataLineTypeIds.add(typeResult.typeId)
+            }
+
             //Generate result:
             val result = DiagramDto(
-                chartColumns = chartColumns
+                chartColumns = chartColumns,
+                dataLineTypeIds = dataLineTypeIds
+            )
+
+            return result
+        }
+
+
+        fun getInstance(
+            typeResult: LargeTypeResult,
+            labels: List<String>
+        ): DiagramDto {
+            val chartColumns: MutableList<ChartColumn> = mutableListOf()
+            typeResult.valuesDiagram.values.forEachIndexed { index, value ->
+                val chartColumn = ChartColumn(
+                    values = listOf(value),
+                    label = labels.getOrNull(index) ?: ""
+                )
+                chartColumns.add(chartColumn)
+            }
+
+            val result = DiagramDto(
+                chartColumns = chartColumns,
+                dataLineTypeIds = listOf(typeResult.typeId)
+            )
+
+            return result
+        }
+
+
+        fun getInstance(
+            currentTypeResult: LargeTypeResult,
+            previousTypeResult: LargeTypeResult?,
+            labels: List<String>
+        ): DiagramDto {
+            val chartColumns: MutableList<ChartColumn> = mutableListOf()
+            currentTypeResult.valuesDiagram.values.forEachIndexed { index, value ->
+                val previousValue: Double = previousTypeResult?.valuesDiagram?.values?.getOrNull(index) ?: 0.0
+                val chartColumn = ChartColumn(
+                    values = listOf(value - previousValue),
+                    label = labels.getOrNull(index) ?: ""
+                )
+                chartColumns.add(chartColumn)
+            }
+
+            val result = DiagramDto(
+                chartColumns = chartColumns,
+                dataLineTypeIds = listOf(currentTypeResult.typeId)
             )
 
             return result

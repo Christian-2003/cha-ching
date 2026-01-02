@@ -21,7 +21,10 @@ import javax.inject.Inject
 import de.christian2003.chaching.R
 import de.christian2003.chaching.application.analysis.large.LargeAnalysisUseCase
 import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisPeriod
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabDto
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabTypeDto
 import java.time.format.DateTimeFormatter
 
 
@@ -56,6 +59,8 @@ class AnalysisViewModel @Inject constructor(
 
     var diagramLabels: List<String> = emptyList()
         private set
+
+    var displayedTypeInfo: DataTabTypeDto? by mutableStateOf(null)
 
     /**
      * Initializes the view model.

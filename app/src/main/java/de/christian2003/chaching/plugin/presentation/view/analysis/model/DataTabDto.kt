@@ -2,7 +2,8 @@ package de.christian2003.chaching.plugin.presentation.view.analysis.model
 
 import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
 import de.christian2003.chaching.domain.analysis.large.LargeTimeSpanResult
-import de.christian2003.chaching.plugin.presentation.view.analysis.DataTabOptions
+import de.christian2003.chaching.domain.analysis.large.LargeTypeResult
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
 
 
 /**
@@ -11,11 +12,13 @@ import de.christian2003.chaching.plugin.presentation.view.analysis.DataTabOption
  * @param overview          Overview for the tab.
  * @param valuesDiagram     Values diagram.
  * @param cumulatedDiagram  Cumulated values diagram.
+ * @param types             Individual result for each type.
  */
 data class DataTabDto(
     val overview: DataTabOverviewDto,
     val valuesDiagram: DiagramDto,
-    val cumulatedDiagram: DiagramDto
+    val cumulatedDiagram: DiagramDto,
+    val types: List<DataTabTypeDto>
 ) {
 
     companion object {
@@ -41,14 +44,21 @@ data class DataTabDto(
                 DataTabOptions.Expenses -> analysisResult.previousSpan.expenses
             }
 
+            //Calculate total transfer count:
+            var totalTransferCount = 0
+            currentTimeSpanResult.typeResults.forEach { typeResult ->
+                totalTransferCount += typeResult.transferCount
+            }
+
             //Generate overview:
             val overview = DataTabOverviewDto(
                 sum = currentTimeSpanResult.totalSum,
-                avgPerTransaction = currentTimeSpanResult.totalAvgPerTransfer,
-                avgPerNormalizedDate = currentTimeSpanResult.totalSum,
+                avgPerTransfer = currentTimeSpanResult.totalAvgPerTransfer,
+                avgPerNormalizedDate = currentTimeSpanResult.totalAvgPerNormalizedDate,
                 sumDifferenceToPreviousTimeSpan = currentTimeSpanResult.totalSum - previousTimeSpanResult.totalSum,
-                avgPerTransactionDifferenceToPreviousTimeSpan = currentTimeSpanResult.totalAvgPerTransfer - previousTimeSpanResult.totalAvgPerTransfer,
-                avgPerNormalizedDateDifferenceToPreviousTimeSpan = currentTimeSpanResult.totalAvgPerNormalizedDate - previousTimeSpanResult.totalAvgPerNormalizedDate
+                avgPerTransferDifferenceToPreviousTimeSpan = currentTimeSpanResult.totalAvgPerTransfer - previousTimeSpanResult.totalAvgPerTransfer,
+                avgPerNormalizedDateDifferenceToPreviousTimeSpan = currentTimeSpanResult.totalAvgPerNormalizedDate - previousTimeSpanResult.totalAvgPerNormalizedDate,
+                transferCount = totalTransferCount
             )
 
             //Generate values diagram:
@@ -65,11 +75,28 @@ data class DataTabDto(
                 labels = diagramLabels
             )
 
+            //Generate results for types:
+            val types: MutableList<DataTabTypeDto> = mutableListOf()
+            currentTimeSpanResult.typeResults.filter { typeResult ->
+                typeResult.valueResult.sum > 0.0
+            }.sortedByDescending { typeResult ->
+                typeResult.valueResult.sum
+            }.forEach { typeResult ->
+                val previousTypeResult: LargeTypeResult? = previousTimeSpanResult.typeResults.find { it.typeId == typeResult.typeId }
+                val type: DataTabTypeDto = DataTabTypeDto.getInstance(
+                    currentTypeResult = typeResult,
+                    previousTypeResult = previousTypeResult,
+                    diagramLabels = diagramLabels
+                )
+                types.add(type)
+            }
+
             //Generate result:
             val result = DataTabDto(
                 overview = overview,
                 valuesDiagram = valuesDiagram,
-                cumulatedDiagram = cumulatedDiagram
+                cumulatedDiagram = cumulatedDiagram,
+                types = types
             )
 
             return result
