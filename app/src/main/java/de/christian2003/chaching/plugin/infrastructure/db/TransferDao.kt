@@ -57,7 +57,18 @@ interface TransferDao {
 	 */
 	@Transaction
 	@Query("SELECT * FROM transfers t WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay AND NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type) ORDER BY valueDate DESC")
-	fun selectTransfersWithValueDateRange(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferEntity>>
+	fun selectTransfersInTimeSpan(startEpochDay: Long, endEpochDay: Long): Flow<List<TransferEntity>>
+
+	/**
+	 * Returns all transfers in the range between the epoch days passed.
+	 *
+	 * @param startEpochDay	First epoch day of the range.
+	 * @param endEpochDay	Last epoch day of the range.
+	 * @return				All transfers in the range specified.
+	 */
+	@Transaction
+	@Query("SELECT * FROM transfers t WHERE type = :typeId AND valueDate BETWEEN :startEpochDay AND :endEpochDay AND NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type) ORDER BY valueDate DESC")
+	fun selectTransfersByTypeInTimeSpan(typeId: UUID, startEpochDay: Long, endEpochDay: Long): Flow<List<TransferEntity>>
 
 
 	@Query("SELECT COUNT(*) FROM transfers t WHERE EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type)")

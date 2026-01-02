@@ -14,14 +14,14 @@ class ChartColorGenerator {
     /**
      * Generates the chart colors.
      *
-     * @param primary   Seed color
+     * @param seed      Seed color
      * @param darkTheme Whether the system is in dark theme.
      */
     fun generateChartColors(
-        primary: Color,
+        seed: Color,
         darkTheme: Boolean
     ): List<Color> {
-        val baseHsl: FloatArray = colorToHsl(primary)
+        val baseHsl: FloatArray = colorToHsl(seed)
         val baseHue: Float = baseHsl[0]
         val baseLightness: Float = if (darkTheme) { 0.65f } else { 0.45f }
 
@@ -45,6 +45,31 @@ class ChartColorGenerator {
                 l = (baseLightness + lOffset).coerceIn(0.3f, 0.8f)
             )
         }
+    }
+
+
+    /**
+     * Generates a "positive" color based on the provided negative color (usually
+     * MaterialTheme.colorScheme.error).
+     *
+     * @param negative  Negative color to use as seed.
+     * @param darkTheme Whether the system is in dark theme.
+     */
+    fun generatePositiveColorFromNegativeColor(
+        negative: Color,
+        darkTheme: Boolean
+    ): Color {
+        val baseHsl: FloatArray = colorToHsl(negative)
+
+        val hue = (baseHsl[0] + 140f) % 360f
+        val saturation = 0.65f
+        val lightness = if(darkTheme) { 0.65f } else { 0.5f }
+
+        return hslToColor(
+            h = hue,
+            s = saturation,
+            l = lightness
+        )
     }
 
 

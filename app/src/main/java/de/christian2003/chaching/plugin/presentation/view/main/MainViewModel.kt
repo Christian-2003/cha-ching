@@ -13,9 +13,7 @@ import de.christian2003.chaching.application.services.ValueFormatterService
 import de.christian2003.chaching.application.usecases.transfer.DeleteTransferUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetAllTransfersUseCase
 import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
-import de.christian2003.chaching.application.usecases.transfer.GetTransfersInDateRangeUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesNotInTrashUseCase
-import de.christian2003.chaching.application.usecases.type.GetAllTypesUseCase
 import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
@@ -35,12 +33,10 @@ import javax.inject.Inject
 /**
  * View model for the MainScreen.
  *
- * @param getAllTypesUseCase				Use case to get a list of all types.
  * @param getAllTypesNotInTrashUseCase		Use case to get a list of all types that are not in the
  * 											trash bin.
  * @param getRecentTransfersUseCase			Use case to get a list of recent transfers.
  * @param getAllTransfersUseCase			Use case to get a list of all transfers.
- * @param getTransfersInDateRangeUseCase	Use case to get transfers in a date range.
  * @param deleteTransferUseCase				Use case to delete a transfer.
  * @param smallAnalysisUseCase				Use case to perform the small analysis.
  * @param getTypeByIdUseCase				Use case to get a type by it's ID.
@@ -50,11 +46,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-	getAllTypesUseCase: GetAllTypesUseCase,
 	getAllTypesNotInTrashUseCase: GetAllTypesNotInTrashUseCase,
 	getRecentTransfersUseCase: GetRecentTransfersUseCase,
 	getAllTransfersUseCase: GetAllTransfersUseCase,
-	getTransfersInDateRangeUseCase: GetTransfersInDateRangeUseCase,
 	private val deleteTransferUseCase: DeleteTransferUseCase,
 	private val smallAnalysisUseCase: SmallAnalysisUseCase,
 	private val getTypeByIdUseCase: GetTypeByIdUseCase,
@@ -69,20 +63,10 @@ class MainViewModel @Inject constructor(
 	private var isInitialized: Boolean = false
 
 	/**
-	 * Stores all transfers from the last month.
-	 */
-	private val transfersLastMonth: Flow<List<Transfer>> = getTransfersInDateRangeUseCase.getTransfersInDateRange(LocalDate.now().minusDays(30), LocalDate.now())
-
-	/**
 	 * Stores the update manager.
 	 */
 	private lateinit var updateManager: UpdateManager
 
-
-	/**
-	 * List of all types.
-	 */
-	val allTypes: Flow<List<Type>> = getAllTypesUseCase.getAllTypes()
 
 	/**
 	 * List of all types that are not in trash.

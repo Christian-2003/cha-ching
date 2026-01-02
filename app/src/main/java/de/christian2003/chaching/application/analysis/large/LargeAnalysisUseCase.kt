@@ -75,7 +75,7 @@ class LargeAnalysisUseCase @Inject constructor(
      * @return          Generated LargeTimeSpan-instance.
      */
     private suspend fun generateLargeTimeSpan(precision: AnalysisPrecision, start: LocalDate, end: LocalDate): LargeTimeSpan {
-        val transfers: List<Transfer> = repository.getAllTransfersInDateRange(start, end).first()
+        val transfers: List<Transfer> = repository.getAllTransfersInTimeSpan(start, end).first()
         val types: List<Type> = repository.getAllTypes().first()
 
         //Summarize data:

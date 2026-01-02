@@ -167,6 +167,8 @@
     <string name="analysis_incomes_yearDiagramCumulated">Cumulated incomes by year</string>
     <string name="analysis_expenses_yearDiagramCumulated">Cumulated expenses by year</string>
     <string name="analysis_types_diagramDifference">Difference to previous time span</string>
+    <string name="analysis_types_transfers">Transactions</string>
+    <string name="analysis_types_payPerHour">%1$s/h</string>
 
 
     <string name="settings_title">Settings</string>

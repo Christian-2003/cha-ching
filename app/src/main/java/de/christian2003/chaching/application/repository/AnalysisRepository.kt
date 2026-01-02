@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 interface AnalysisRepository {
 
-    fun getAllTransfersInDateRange(start: LocalDate, end: LocalDate): Flow<List<Transfer>>
+    fun getAllTransfersInTimeSpan(start: LocalDate, end: LocalDate): Flow<List<Transfer>>
 
     fun getAllTypes(): Flow<List<Type>>
 

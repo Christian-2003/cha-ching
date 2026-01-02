@@ -125,12 +125,32 @@ class ChaChingRepository @Inject constructor(
 	/**
 	 * Returns as list of all transfers with a value date within the range specified.
 	 *
-	 * @param start Start day of the range.
-	 * @param end   End day of the range.
-	 * @return      List of all transfers within the date range specified.
+	 * @param typeId	ID of the type.
+	 * @param start 	Start day of the range.
+	 * @param end   	End day of the range.
+	 * @return      	List of all transfers within the date range specified.
 	 */
-	override fun getAllTransfersInDateRange(start: LocalDate, end: LocalDate): Flow<List<Transfer>> {
-		val transfers: Flow<List<TransferEntity>> = transferDao.selectTransfersWithValueDateRange(start.toEpochDay(), end.toEpochDay())
+	override fun getAllTransfersInTimeSpan(start: LocalDate, end: LocalDate): Flow<List<Transfer>> {
+		val transfers: Flow<List<TransferEntity>> = transferDao.selectTransfersInTimeSpan(start.toEpochDay(), end.toEpochDay())
+		return transfers.map { list ->
+			list.map { transfer ->
+				transferMapper.toDomain(transfer)
+			}
+		}
+	}
+
+
+	/**
+	 * Returns as list of all transfers of the provided type with a value date within the range
+	 * specified.
+	 *
+	 * @param typeId	ID of the type.
+	 * @param start 	Start day of the range.
+	 * @param end   	End day of the range.
+	 * @return      	List of all transfers within the date range specified.
+	 */
+	override fun getAllTransfersByTypeInTimeSpan(typeId: UUID, start: LocalDate, end: LocalDate): Flow<List<Transfer>> {
+		val transfers: Flow<List<TransferEntity>> = transferDao.selectTransfersByTypeInTimeSpan(typeId, start.toEpochDay(), end.toEpochDay())
 		return transfers.map { list ->
 			list.map { transfer ->
 				transferMapper.toDomain(transfer)

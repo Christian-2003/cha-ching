@@ -257,7 +257,7 @@ private fun SmallAnalysisDataOverview(
 ) {
     val colorGenerator = ChartColorGenerator()
     val colors: List<Color> = colorGenerator.generateChartColors(
-        primary = if (isSalary) {
+        seed = if (isSalary) {
             MaterialTheme.colorScheme.primary
         } else {
             MaterialTheme.colorScheme.tertiary

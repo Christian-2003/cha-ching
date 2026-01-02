@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
+import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.model.ChartColorGenerator
 import de.christian2003.chaching.plugin.presentation.model.TypeShapes
@@ -191,7 +193,7 @@ fun AnalysisDataTab(
                 isFirst = index == 0,
                 isLast = index == data.types.size - 1,
                 onClick = {
-                    viewModel.displayedTypeInfo = type
+                    viewModel.displayType(type)
                 },
                 onFormatValue = {
                     viewModel.formatValue(it)
@@ -210,16 +212,24 @@ fun AnalysisDataTab(
 
     val displayedTypeInfo: DataTabTypeDto? = viewModel.displayedTypeInfo
     if (displayedTypeInfo != null) {
+        val transfers: List<Transfer> by viewModel.transfersOfDisplayedType.collectAsState(emptyList())
         AnalysisTypeSheet(
             options = options,
             valueColor = valueColor,
             precision = precision,
             typeData = displayedTypeInfo,
+            transfers = transfers,
             onDismiss = {
-                viewModel.displayedTypeInfo = null
+                viewModel.dismissDisplayedType()
             },
             onFormatValue = {
                 viewModel.formatValue(it)
+            },
+            onFormatTransferValue = {
+                viewModel.formatValue(it)
+            },
+            onFormatDate = {
+                viewModel.formatDate(it)
             },
             onQueryType = {
                 viewModel.queryType(it)
@@ -432,7 +442,7 @@ fun DataLineDiagram(
 
     val colorGenerator = ChartColorGenerator()
     val positiveColors: MutableList<Color> = colorGenerator.generateChartColors(
-        primary = when (options) {
+        seed = when (options) {
             DataTabOptions.Incomes -> MaterialTheme.colorScheme.primary
             DataTabOptions.Expenses -> MaterialTheme.colorScheme.tertiary
         },
@@ -440,7 +450,7 @@ fun DataLineDiagram(
     ).toMutableList()
     positiveColors.add(MaterialTheme.colorScheme.outlineVariant)
     val negativeColors: MutableList<Color> = colorGenerator.generateChartColors(
-        primary = MaterialTheme.colorScheme.error,
+        seed = MaterialTheme.colorScheme.error,
         darkTheme = MaterialTheme.isDarkTheme()
     ).toMutableList()
     negativeColors.add(MaterialTheme.colorScheme.outlineVariant)

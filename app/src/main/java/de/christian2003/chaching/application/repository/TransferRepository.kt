@@ -22,11 +22,12 @@ interface TransferRepository {
     /**
      * Returns a list of all transfers with a value date within the range specified.
      *
-     * @param start Start day of the range.
-     * @param end   End day of the range.
-     * @return      List of all transfers within the date range specified.
+     * @param typeId    ID of the tye.
+     * @param start     Start day of the range.
+     * @param end       End day of the range.
+     * @return          List of all transfers within the date range specified.
      */
-    fun getAllTransfersInDateRange(start: LocalDate, end: LocalDate): Flow<List<Transfer>>
+    fun getAllTransfersByTypeInTimeSpan(typeId: UUID, start: LocalDate, end: LocalDate): Flow<List<Transfer>>
 
 
     /**
