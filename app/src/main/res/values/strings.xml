@@ -169,6 +169,15 @@
     <string name="analysis_types_diagramDifference">Difference to previous time span</string>
     <string name="analysis_types_transfers">Transactions</string>
     <string name="analysis_types_payPerHour">%1$s/h</string>
+    <string name="analysis_trend_upTitle">Up %1$s from before</string>
+    <string name="analysis_trend_upTextIncomes">In the time span from %1$s to %2$s, income rose from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
+    <string name="analysis_trend_upTextExpenses">In the time span from %1$s to %2$s, expenses rose from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
+    <string name="analysis_trend_downTitle">Down %1$s from before</string>
+    <string name="analysis_trend_downTextIncomes">In the time span from %1$s to %2$s, income reduced from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
+    <string name="analysis_trend_downTextExpenses">In the time span from %1$s to %2$s, expenses reduced from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
+    <string name="analysis_trend_identicalTitle">Identical to before</string>
+    <string name="analysis_trend_identicalTextIncomes">In the time span from %1$s to %2$s, income stayed the same compared to the time span from %3$s to %4$s.</string>
+    <string name="analysis_trend_identicalTextExpenses">In the time span from %1$s to %2$s, expenses stayed the same compared to the time span from %3$s to %4$s.</string>
 
 
     <string name="settings_title">Settings</string>

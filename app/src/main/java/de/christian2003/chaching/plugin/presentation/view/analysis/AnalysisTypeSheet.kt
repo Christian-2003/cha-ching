@@ -60,6 +60,10 @@ fun AnalysisTypeSheet(
     valueColor: Color,
     precision: AnalysisPrecision,
     typeData: DataTabTypeDto,
+    currentStart: LocalDate,
+    currentEnd: LocalDate,
+    previousStart: LocalDate,
+    previousEnd: LocalDate,
     transfers: List<Transfer>,
     onDismiss: () -> Unit,
     onFormatValue: (Double) -> String,
@@ -136,7 +140,12 @@ fun AnalysisTypeSheet(
                             overview = typeData.overview,
                             valueColor = valueColor,
                             precision = precision,
+                            currentStart = currentStart,
+                            currentEnd = currentEnd,
+                            previousStart = previousStart,
+                            previousEnd = previousEnd,
                             onFormatValue = onFormatValue,
+                            onFormatDate = onFormatDate,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.surfaceContainerLow)

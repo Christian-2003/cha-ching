@@ -19,7 +19,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,7 +37,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -54,7 +61,9 @@ import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTab
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOverviewDto
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabTypeDto
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DiagramDto
+import java.time.LocalDate
 import java.util.UUID
+import kotlin.math.abs
 
 
 @Composable
@@ -91,8 +100,15 @@ fun AnalysisDataTab(
                 overview = data.overview,
                 valueColor = valueColor,
                 precision = precision,
+                currentStart = analysisResult.currentSpan.start,
+                currentEnd = analysisResult.currentSpan.end,
+                previousStart = analysisResult.previousSpan.start,
+                previousEnd = analysisResult.previousSpan.end,
                 onFormatValue = {
                     viewModel.formatValue(it)
+                },
+                onFormatDate = {
+                    viewModel.formatDate(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -218,6 +234,10 @@ fun AnalysisDataTab(
             valueColor = valueColor,
             precision = precision,
             typeData = displayedTypeInfo,
+            currentStart = analysisResult.currentSpan.start,
+            currentEnd = analysisResult.currentSpan.end,
+            previousStart = analysisResult.previousSpan.start,
+            previousEnd = analysisResult.previousSpan.end,
             transfers = transfers,
             onDismiss = {
                 viewModel.dismissDisplayedType()
@@ -245,7 +265,12 @@ fun OverviewCard(
     overview: DataTabOverviewDto,
     valueColor: Color,
     precision: AnalysisPrecision,
+    currentStart: LocalDate,
+    currentEnd: LocalDate,
+    previousStart: LocalDate,
+    previousEnd: LocalDate,
     onFormatValue: (Double) -> String,
+    onFormatDate: (LocalDate) -> String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -284,8 +309,15 @@ fun OverviewCard(
             }
             TrendIcon(
                 options = options,
-                differenceToPrevious = overview.sumDifferenceToPreviousTimeSpan,
+                currentStart = currentStart,
+                currentEnd = currentEnd,
+                currentValue = overview.sum,
+                previousStart = previousStart,
+                previousEnd = previousEnd,
+                previousValue = overview.sum - overview.sumDifferenceToPreviousTimeSpan,
                 size = dimensionResource(R.dimen.image_m),
+                onFormatValue = onFormatValue,
+                onFormatDate = onFormatDate,
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
             )
         }
@@ -300,10 +332,15 @@ fun OverviewCard(
             OverviewCardAvgItem(
                 options = options,
                 label = stringResource(R.string.analysis_data_transferAvg),
+                currentStart = currentStart,
+                currentEnd = currentEnd,
                 currentAvg = overview.avgPerTransfer,
-                differenceToPrevious = overview.avgPerTransferDifferenceToPreviousTimeSpan,
+                previousStart = previousStart,
+                previousEnd = previousEnd,
+                previousAvg = overview.avgPerTransfer - overview.avgPerTransferDifferenceToPreviousTimeSpan,
                 valueColor = valueColor,
                 onFormatValue = onFormatValue,
+                onFormatDate = onFormatDate,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -316,10 +353,15 @@ fun OverviewCard(
                     AnalysisPrecision.Quarter -> stringResource(R.string.analysis_data_quarterAvg)
                     AnalysisPrecision.Year -> stringResource(R.string.analysis_data_yearAvg)
                 },
+                currentStart = currentStart,
+                currentEnd = currentEnd,
                 currentAvg = overview.avgPerNormalizedDate,
-                differenceToPrevious = overview.avgPerNormalizedDateDifferenceToPreviousTimeSpan,
+                previousStart = previousStart,
+                previousEnd = previousEnd,
+                previousAvg = overview.avgPerNormalizedDate - overview.avgPerNormalizedDateDifferenceToPreviousTimeSpan,
                 valueColor = valueColor,
                 onFormatValue = onFormatValue,
+                onFormatDate = onFormatDate,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -333,10 +375,15 @@ fun OverviewCard(
 private fun OverviewCardAvgItem(
     options: DataTabOptions,
     label: String,
-    currentAvg: Double,
-    differenceToPrevious: Double,
     valueColor: Color,
+    currentStart: LocalDate,
+    currentEnd: LocalDate,
+    currentAvg: Double,
+    previousStart: LocalDate,
+    previousEnd: LocalDate,
+    previousAvg: Double,
     onFormatValue: (Double) -> String,
+    onFormatDate: (LocalDate) -> String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -374,8 +421,15 @@ private fun OverviewCardAvgItem(
                 )
                 TrendIcon(
                     options = options,
-                    differenceToPrevious = differenceToPrevious,
+                    currentStart = currentStart,
+                    currentEnd = currentEnd,
+                    currentValue = currentAvg,
+                    previousStart = previousStart,
+                    previousEnd = previousEnd,
+                    previousValue = previousAvg,
                     size = dimensionResource(R.dimen.image_s),
+                    onFormatValue = onFormatValue,
+                    onFormatDate = onFormatDate,
                     modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
                 )
             }
@@ -387,42 +441,154 @@ private fun OverviewCardAvgItem(
 @Composable
 private fun TrendIcon(
     options: DataTabOptions,
-    differenceToPrevious: Double,
+    currentStart: LocalDate,
+    currentEnd: LocalDate,
+    currentValue: Double,
+    previousStart: LocalDate,
+    previousEnd: LocalDate,
+    previousValue: Double,
     size: Dp,
+    onFormatValue: (Double) -> String,
+    onFormatDate: (LocalDate) -> String,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.size(size)
+    val differenceToPrevious: Double = currentValue - previousValue
+
+    TrendIconTooltip(
+        options = options,
+        currentStart = currentStart,
+        currentEnd = currentEnd,
+        currentValue = currentValue,
+        previousStart = previousStart,
+        previousEnd = previousEnd,
+        previousValue = previousValue,
+        onFormatValue = onFormatValue,
+        onFormatDate = onFormatDate
     ) {
-        Shape(
-            shape = MaterialShapes.Cookie7Sided,
-            color = when {
-                differenceToPrevious > 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.primaryContainer
-                differenceToPrevious < 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.errorContainer
-                differenceToPrevious > 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.errorContainer
-                differenceToPrevious < 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.primaryContainer
-                else -> MaterialTheme.colorScheme.surface
-            }
-        )
-        Icon(
-            painter = when {
-                differenceToPrevious > 0.0 -> painterResource(R.drawable.ic_increase)
-                differenceToPrevious < 0.0 -> painterResource(R.drawable.ic_decrease)
-                else -> painterResource(R.drawable.ic_identical)
-            },
-            tint = when {
-                differenceToPrevious > 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.onPrimaryContainer
-                differenceToPrevious < 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.onErrorContainer
-                differenceToPrevious > 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.onErrorContainer
-                differenceToPrevious < 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.onPrimaryContainer
-                else -> MaterialTheme.colorScheme.onSurfaceVariant
-            },
-            contentDescription = "",
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(size / 4)
-        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier.size(size)
+        ) {
+            Shape(
+                shape = MaterialShapes.Cookie7Sided,
+                color = when {
+                    differenceToPrevious > 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.primaryContainer
+                    differenceToPrevious < 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.errorContainer
+                    differenceToPrevious > 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.errorContainer
+                    differenceToPrevious < 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.primaryContainer
+                    else -> MaterialTheme.colorScheme.surface
+                }
+            )
+            Icon(
+                painter = when {
+                    differenceToPrevious > 0.0 -> painterResource(R.drawable.ic_increase)
+                    differenceToPrevious < 0.0 -> painterResource(R.drawable.ic_decrease)
+                    else -> painterResource(R.drawable.ic_identical)
+                },
+                tint = when {
+                    differenceToPrevious > 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.onPrimaryContainer
+                    differenceToPrevious < 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.onErrorContainer
+                    differenceToPrevious > 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.onErrorContainer
+                    differenceToPrevious < 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.onPrimaryContainer
+                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                contentDescription = "",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(size / 4)
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun TrendIconTooltip(
+    options: DataTabOptions,
+    currentStart: LocalDate,
+    currentEnd: LocalDate,
+    currentValue: Double,
+    previousStart: LocalDate,
+    previousEnd: LocalDate,
+    previousValue: Double,
+    onFormatValue: (Double) -> String,
+    onFormatDate: (LocalDate) -> String,
+    content: @Composable () -> Unit
+) {
+    val difference: Double = currentValue - previousValue
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+            positioning = TooltipAnchorPosition.Below
+        ),
+        tooltip = {
+            RichTooltip(
+                title = {
+                    Text(
+                        text = when {
+                            difference > 0.0 -> stringResource(R.string.analysis_trend_upTitle, onFormatValue(abs(difference)))
+                            difference < 0.0 -> stringResource(R.string.analysis_trend_downTitle, onFormatValue(abs(difference)))
+                            else -> stringResource(R.string.analysis_trend_identicalTitle, onFormatValue(abs(difference)))
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                text = {
+                    Text(
+                        text = AnnotatedString.fromHtml(when {
+                            (options == DataTabOptions.Incomes) && (difference > 0.0) -> stringResource(R.string.analysis_trend_upTextIncomes,
+                                onFormatDate(currentStart),
+                                onFormatDate(currentEnd),
+                                onFormatValue(previousValue),
+                                onFormatValue(currentValue),
+                                onFormatDate(previousStart),
+                                onFormatDate(previousEnd)
+                            )
+                            (options == DataTabOptions.Incomes) && (difference < 0.0) -> stringResource(R.string.analysis_trend_downTextIncomes,
+                                onFormatDate(currentStart),
+                                onFormatDate(currentEnd),
+                                onFormatValue(previousValue),
+                                onFormatValue(currentValue),
+                                onFormatDate(previousStart),
+                                onFormatDate(previousEnd)
+                            )
+                            options == DataTabOptions.Incomes -> stringResource(R.string.analysis_trend_identicalTextIncomes,
+                                onFormatDate(currentStart),
+                                onFormatDate(currentEnd),
+                                onFormatDate(previousStart),
+                                onFormatDate(previousEnd)
+                            )
+                            (options == DataTabOptions.Expenses) && (difference > 0.0) -> stringResource(R.string.analysis_trend_upTextExpenses,
+                                onFormatDate(currentStart),
+                                onFormatDate(currentEnd),
+                                onFormatValue(previousValue),
+                                onFormatValue(currentValue),
+                                onFormatDate(previousStart),
+                                onFormatDate(previousEnd)
+                            )
+                            (options == DataTabOptions.Expenses) && (difference < 0.0) -> stringResource(R.string.analysis_trend_downTextExpenses,
+                                onFormatDate(currentStart),
+                                onFormatDate(currentEnd),
+                                onFormatValue(previousValue),
+                                onFormatValue(currentValue),
+                                onFormatDate(previousStart),
+                                onFormatDate(previousEnd)
+                            )
+                            else -> stringResource(R.string.analysis_trend_identicalTextExpenses,
+                                onFormatDate(currentStart),
+                                onFormatDate(currentEnd),
+                                onFormatDate(previousStart),
+                                onFormatDate(previousEnd)
+                            )
+                        }),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            )
+        },
+        state = rememberTooltipState()
+    ) {
+        content()
     }
 }
 
@@ -584,3 +750,4 @@ private fun TypeResultItem(
         }
     }
 }
+
