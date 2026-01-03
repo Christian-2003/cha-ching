@@ -32,6 +32,16 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
+/**
+ * Displays a stacked column chart with positive and negative values.
+ *
+ * @param columns           Chart columns to display.
+ * @param positiveColors    List of colors for positive data lines.
+ * @param modifier          Modifier.
+ * @param onFormatValue     Callback invoked to format a value.
+ * @param negativeColors    List of colors for negative data lines.
+ * @param columnHeight      Height for the columns.
+ */
 @Composable
 fun ColumnChart(
     columns: List<ChartColumn>,
@@ -98,6 +108,16 @@ fun ColumnChart(
 }
 
 
+/**
+ * Displays the y-axis for the chart.
+ *
+ * @param positiveMaxValue  Max positive value.
+ * @param negativeMaxValue  Max negative value.
+ * @param columnHeight      Height for the chart columns.
+ * @param onFormatValue     Callback invoked to format a value.
+ * @param modifier          Modifier.
+ * @param steps             Number of labels for the axis (+ label for "0.0").
+ */
 @Composable
 private fun ChartYAxis(
     positiveMaxValue: Double,
@@ -125,7 +145,7 @@ private fun ChartYAxis(
         modifier = modifier
             .height(columnHeight)
     ) {
-        if (hasPositiveValues) {
+        if (positiveSteps > 0) {
             for (i in 0..positiveSteps) {
                 val value: Double = positiveStepSize * i
                 val yOffset = baseline - (positiveChartHeight / positiveSteps) * i
@@ -141,8 +161,8 @@ private fun ChartYAxis(
             }
         }
 
-        if (hasNegativeValues) {
-            val start: Int = if (hasPositiveValues) { 1 } else { 0 }
+        if (negativeSteps > 0) {
+            val start: Int = if (positiveSteps > 0) { 1 } else { 0 }
             for (i in start..negativeSteps) {
                 val value: Double = negativeStepSize * i
                 val yOffset = baseline + (negativeChartHeight / negativeSteps) * i
@@ -161,6 +181,18 @@ private fun ChartYAxis(
 }
 
 
+/**
+ * Displays a chart column with labels. The chart column will display both positive and negative
+ * values.
+ *
+ * @param column            Chart column to display.
+ * @param positiveColors    List of colors for the positive data lines.
+ * @param negativeColors    List of colors for the negative data lines.
+ * @param columnHeight      Height for the chart column.
+ * @param positiveMaxValue  Max positive value.
+ * @param negativeMaxValue  Max negative value.
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun ChartColumnWithLabel(
     column: ChartColumn,
@@ -214,6 +246,16 @@ private fun ChartColumnWithLabel(
 }
 
 
+/**
+ * Displays a chart column. A chart column displays either positive OR negative values for a single
+ * column of the chart.
+ *
+ * @param column        Chart column to display.
+ * @param colors        Colors with which to display each data line in the column.
+ * @param maxValue      Maximum value (either positive or negative).
+ * @param modifier      Modifier.
+ * @param isNegative    Whether the column is used to display negative values.
+ */
 @Composable
 private fun ChartColumn(
     column: ChartColumn,

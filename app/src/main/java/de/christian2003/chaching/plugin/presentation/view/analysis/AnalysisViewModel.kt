@@ -145,7 +145,7 @@ class AnalysisViewModel @Inject constructor(
         if (analysisResult != null) {
             transfersOfDisplayedType = getTransfersByTypeInTimeSpanUseCase.getTransfersByTypeInTimeSpan(
                 typeId = type.typeId,
-                start =analysisResult.currentSpan.start,
+                start = analysisResult.currentSpan.start,
                 end = analysisResult.currentSpan.end
             )
         }

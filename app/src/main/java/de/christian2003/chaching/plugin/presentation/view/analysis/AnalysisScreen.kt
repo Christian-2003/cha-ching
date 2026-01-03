@@ -56,6 +56,8 @@ import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBa
 import de.christian2003.chaching.plugin.presentation.ui.composables.Value
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisPeriod
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
+import de.christian2003.chaching.plugin.presentation.view.analysis.view.AnalysisDataTab
+import de.christian2003.chaching.plugin.presentation.view.analysis.view.AnalysisOverviewTab
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.DotProperties
 import ir.ehsannarmani.compose_charts.models.GridProperties

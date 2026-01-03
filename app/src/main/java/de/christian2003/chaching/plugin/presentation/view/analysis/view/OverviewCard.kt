@@ -1,7 +1,6 @@
-package de.christian2003.chaching.plugin.presentation.view.analysis
+package de.christian2003.chaching.plugin.presentation.view.analysis.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -13,9 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -26,239 +22,42 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.R
-import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
-import de.christian2003.chaching.domain.transfer.Transfer
-import de.christian2003.chaching.domain.type.Type
-import de.christian2003.chaching.plugin.presentation.model.ChartColorGenerator
-import de.christian2003.chaching.plugin.presentation.model.TypeShapes
-import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
-import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
+import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
-import de.christian2003.chaching.plugin.presentation.ui.composables.chart.ColumnChart
-import de.christian2003.chaching.plugin.presentation.ui.theme.isDarkTheme
-import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabDto
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOverviewDto
-import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabTypeDto
-import de.christian2003.chaching.plugin.presentation.view.analysis.model.DiagramDto
 import java.time.LocalDate
-import java.util.UUID
 import kotlin.math.abs
 
 
-@Composable
-fun AnalysisDataTab(
-    viewModel: AnalysisViewModel,
-    bottomPadding: Dp,
-    options: DataTabOptions
-) {
-    val analysisResult: LargeAnalysisResult? = viewModel.analysisResult
-    if (analysisResult == null) {
-        return
-    }
-
-    val data: DataTabDto = when (options) {
-        DataTabOptions.Incomes -> viewModel.incomesTabData
-        DataTabOptions.Expenses -> viewModel.expensesTabData
-    }
-    val precision: AnalysisPrecision = analysisResult.metadata.precision
-
-    //Colors for the analysis:
-    val valueColor: Color = when (options) {
-        DataTabOptions.Incomes -> MaterialTheme.colorScheme.primary
-        DataTabOptions.Expenses -> MaterialTheme.colorScheme.tertiary
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-    ) {
-        item {
-            OverviewCard(
-                options = options,
-                overview = data.overview,
-                valueColor = valueColor,
-                precision = precision,
-                currentStart = analysisResult.currentSpan.start,
-                currentEnd = analysisResult.currentSpan.end,
-                previousStart = analysisResult.previousSpan.start,
-                previousEnd = analysisResult.previousSpan.end,
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onFormatDate = {
-                    viewModel.formatDate(it)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.margin_horizontal),
-                        vertical = dimensionResource(R.dimen.padding_vertical)
-                    )
-            )
-        }
-        item {
-            Headline(
-                title = when (options) {
-                    DataTabOptions.Incomes -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramValues)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramValues)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramValues)
-                    }
-                    DataTabOptions.Expenses -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramValues)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramValues)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramValues)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-            )
-        }
-        item {
-            DataLineDiagram(
-                options = options,
-                diagram = data.valuesDiagram,
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onQueryType = {
-                    viewModel.queryType(it)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
-            )
-        }
-        item {
-            Headline(
-                title = when (options) {
-                    DataTabOptions.Incomes -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramCumulated)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramCumulated)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramCumulated)
-                    }
-                    DataTabOptions.Expenses -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramCumulated)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramCumulated)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramCumulated)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-            )
-        }
-        item {
-            DataLineDiagram(
-                options = options,
-                diagram = data.cumulatedDiagram,
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onQueryType = {
-                    viewModel.queryType(it)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
-            )
-        }
-        item {
-            Headline(
-                title = stringResource(R.string.analysis_data_typesListTitle),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .clip(RoundedCornerShape(
-                        topStart = 24.dp,
-                        topEnd = 24.dp
-                    ))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-            )
-        }
-        itemsIndexed(data.types) { index, type ->
-            TypeResultItem(
-                typeResult = type,
-                valueColor = valueColor,
-                isFirst = index == 0,
-                isLast = index == data.types.size - 1,
-                onClick = {
-                    viewModel.displayType(type)
-                },
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onQueryType = {
-                    viewModel.queryType(it)
-                }
-            )
-        }
-        item {
-            Box(
-                modifier = Modifier.height(bottomPadding)
-            )
-        }
-    }
-
-    val displayedTypeInfo: DataTabTypeDto? = viewModel.displayedTypeInfo
-    if (displayedTypeInfo != null) {
-        val transfers: List<Transfer> by viewModel.transfersOfDisplayedType.collectAsState(emptyList())
-        AnalysisTypeSheet(
-            options = options,
-            valueColor = valueColor,
-            precision = precision,
-            typeData = displayedTypeInfo,
-            currentStart = analysisResult.currentSpan.start,
-            currentEnd = analysisResult.currentSpan.end,
-            previousStart = analysisResult.previousSpan.start,
-            previousEnd = analysisResult.previousSpan.end,
-            transfers = transfers,
-            onDismiss = {
-                viewModel.dismissDisplayedType()
-            },
-            onFormatValue = {
-                viewModel.formatValue(it)
-            },
-            onFormatTransferValue = {
-                viewModel.formatValue(it)
-            },
-            onFormatDate = {
-                viewModel.formatDate(it)
-            },
-            onQueryType = {
-                viewModel.queryType(it)
-            }
-        )
-    }
-}
-
-
+/**
+ * Overview card displays an overview of incomes or expenses.
+ *
+ * @param options       Data tab options.
+ * @param overview      Overview data to display.
+ * @param valueColor    Color with which to display the value.
+ * @param precision     Analysis precision.
+ * @param currentStart  Start date of the current time span.
+ * @param currentEnd    End date of the current time span.
+ * @param previousStart Start date of the previous time span.
+ * @param previousEnd   End date of the previous time span.
+ * @param onFormatValue Callback invoked to format a value.
+ * @param onFormatDate  Callback invoked to format a date.
+ * @param modifier      Modifier.
+ */
 @Composable
 fun OverviewCard(
     options: DataTabOptions,
@@ -371,6 +170,22 @@ fun OverviewCard(
 }
 
 
+/**
+ * Item within the overview card that displays the average per month OR per transfer.
+ *
+ * @param options       Data tab options.
+ * @param label         Label for the item.
+ * @param valueColor    Color with which to display the value.
+ * @param currentStart  Start date of the current time span.
+ * @param currentEnd    End date of the current time span.
+ * @param currentAvg    Value if the current time span.
+ * @param previousStart Start date of the previous time span.
+ * @param previousEnd   End date of the previous time span.
+ * @param previousAvg   Value of the previous time span.
+ * @param onFormatValue Callback invoked to format a value.
+ * @param onFormatDate  Callback invoked to format a date.
+ * @param modifier      Modifier.
+ */
 @Composable
 private fun OverviewCardAvgItem(
     options: DataTabOptions,
@@ -438,6 +253,22 @@ private fun OverviewCardAvgItem(
 }
 
 
+/**
+ * Trend icon shows whether a value increases, decreases or stays the same in between the current
+ * time span and the previous time span.
+ *
+ * @param options       Data tab options.
+ * @param currentStart  Start date of the current time span.
+ * @param currentEnd    End date of the current time span.
+ * @param currentValue  Value if the current time span.
+ * @param previousStart Start date of the previous time span.
+ * @param previousEnd   End date of the previous time span.
+ * @param previousValue Value of the previous time span.
+ * @param size          Size for the trend icon.
+ * @param onFormatValue Callback invoked to format a value.
+ * @param onFormatDate  Callback invoked to format a date.
+ * @param modifier      Modifier.
+ */
 @Composable
 private fun TrendIcon(
     options: DataTabOptions,
@@ -502,6 +333,20 @@ private fun TrendIcon(
 }
 
 
+/**
+ * Tooltip container for the trend icon.
+ *
+ * @param options       Data tab options.
+ * @param currentStart  Start date of the current time span.
+ * @param currentEnd    End date of the current time span.
+ * @param currentValue  Value if the current time span.
+ * @param previousStart Start date of the previous time span.
+ * @param previousEnd   End date of the previous time span.
+ * @param previousValue Value of the previous time span.
+ * @param onFormatValue Callback invoked to format a value.
+ * @param onFormatDate  Callback invoked to format a date.
+ * @param content       Composable content for the tooltip container.
+ */
 @Composable
 private fun TrendIconTooltip(
     options: DataTabOptions,
@@ -591,163 +436,3 @@ private fun TrendIconTooltip(
         content()
     }
 }
-
-
-@Composable
-fun DataLineDiagram(
-    options: DataTabOptions,
-    diagram: DiagramDto,
-    onFormatValue: (Double) -> String,
-    onQueryType: suspend (UUID) -> Type?,
-    modifier: Modifier = Modifier,
-    showLegend: Boolean = true
-) {
-    if (diagram.chartColumns.isEmpty()) {
-        return
-    }
-
-    val colorGenerator = ChartColorGenerator()
-    val positiveColors: MutableList<Color> = colorGenerator.generateChartColors(
-        seed = when (options) {
-            DataTabOptions.Incomes -> MaterialTheme.colorScheme.primary
-            DataTabOptions.Expenses -> MaterialTheme.colorScheme.tertiary
-        },
-        darkTheme = MaterialTheme.isDarkTheme()
-    ).toMutableList()
-    positiveColors.add(MaterialTheme.colorScheme.outlineVariant)
-    val negativeColors: MutableList<Color> = colorGenerator.generateChartColors(
-        seed = MaterialTheme.colorScheme.error,
-        darkTheme = MaterialTheme.isDarkTheme()
-    ).toMutableList()
-    negativeColors.add(MaterialTheme.colorScheme.outlineVariant)
-
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        //Diagram:
-        ColumnChart(
-            columns = diagram.chartColumns,
-            positiveColors = positiveColors,
-            negativeColors = negativeColors,
-            onFormatValue = onFormatValue
-        )
-
-        //Legend:
-        if (showLegend) {
-            diagram.dataLineTypeIds.take(positiveColors.size).forEachIndexed { index, typeId ->
-                val type: Type? by produceState(null) {
-                    value = onQueryType(typeId)
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
-                ) {
-                    Shape(
-                        shape = if (type != null && index < positiveColors.size - 1) {
-                            TypeShapes.getShapeForTypeIcon(type!!.icon).shape
-                        } else {
-                            MaterialShapes.Circle
-                        },
-                        color = if (index < positiveColors.size) { positiveColors[index] } else { MaterialTheme.colorScheme.outlineVariant },
-                        modifier = Modifier.size(dimensionResource(R.dimen.image_xxs))
-                    )
-                    Text(
-                        text = if (type != null && index < positiveColors.size - 1) {
-                            type!!.name
-                        } else {
-                            stringResource(R.string.main_analysis_otherTypeLabel)
-                        },
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
-                    )
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun TypeResultItem(
-    typeResult: DataTabTypeDto,
-    valueColor: Color,
-    isFirst: Boolean,
-    isLast: Boolean,
-    onClick: () -> Unit,
-    onFormatValue: (Double) -> String,
-    onQueryType: suspend (UUID) -> Type?,
-    modifier: Modifier = Modifier
-) {
-    val type: Type? by produceState(null) {
-        value = onQueryType(typeResult.typeId)
-    }
-    ListItemContainer(
-        isFirst = isFirst,
-        isLast = isLast,
-        modifier = modifier
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onClick()
-                }
-                .padding(
-                    horizontal = dimensionResource(R.dimen.padding_horizontal),
-                    vertical = dimensionResource(R.dimen.padding_vertical)
-                )
-        ) {
-            if (type != null) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                        .size(dimensionResource(R.dimen.image_m))
-                ) {
-                    Shape(
-                        shape = TypeShapes.getShapeForTypeIcon(type!!.icon).shape,
-                        color = TypeShapes.getShapeColor(type!!.icon)
-                    )
-                    Icon(
-                        painter = painterResource(type!!.icon.drawableResourceId),
-                        contentDescription = "",
-                        tint = TypeShapes.getOnShapeColor(type!!.icon),
-                        modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
-                    )
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
-            ) {
-                Text(
-                    text = type?.name ?: "",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = pluralStringResource(R.plurals.analysis_data_typeListTransferCount, typeResult.overview.transferCount, typeResult.overview.transferCount),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Text(
-                text = onFormatValue(typeResult.overview.sum),
-                style = MaterialTheme.typography.bodyMedium,
-                color = valueColor
-            )
-        }
-    }
-}
-

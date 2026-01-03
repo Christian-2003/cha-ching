@@ -1,16 +1,20 @@
-package de.christian2003.chaching.plugin.presentation.view.analysis
+package de.christian2003.chaching.plugin.presentation.view.analysis.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,10 +34,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
@@ -43,6 +50,7 @@ import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.model.ChartColorGenerator
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
+import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.composables.chart.ColumnChart
 import de.christian2003.chaching.plugin.presentation.ui.theme.isDarkTheme
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
@@ -54,6 +62,24 @@ import java.time.LocalDate
 import java.util.UUID
 
 
+/**
+ * Sheet displays the analysis result for a single type.
+ *
+ * @param options               Data tab options.
+ * @param valueColor            Color with which to display values.
+ * @param precision             Analysis precision.
+ * @param typeData              Type data to display.
+ * @param currentStart          Start date of the current time span.
+ * @param currentEnd            End date of the current time span.
+ * @param previousStart         Start date of the previous time span.
+ * @param previousEnd           End date of the previous time span.
+ * @param transfers             List of transfers to display.
+ * @param onDismiss             Callback invoked to dismiss the sheet.
+ * @param onFormatValue         Callback invoked to format a value.
+ * @param onFormatTransferValue Callback invoked to format a transfer value.
+ * @param onFormatDate          Callback invoked to format a date.
+ * @param onQueryType           Callback invoked to query a type by it's ID.
+ */
 @Composable
 fun AnalysisTypeSheet(
     options: DataTabOptions,
@@ -73,6 +99,8 @@ fun AnalysisTypeSheet(
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val defaultInsets = BottomSheetDefaults.windowInsets
+    val bottomPadding: Dp = defaultInsets.asPaddingValues().calculateBottomPadding()
 
     val type: Type? by produceState(null) {
         value = onQueryType(typeData.typeId)
@@ -82,7 +110,15 @@ fun AnalysisTypeSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         dragHandle = null,
-        sheetGesturesEnabled = false
+        sheetGesturesEnabled = false,
+        contentWindowInsets = {
+            val customInsets = WindowInsets(
+                left = defaultInsets.getLeft(LocalDensity.current, LocalLayoutDirection.current),
+                top = defaultInsets.getTop(LocalDensity.current),
+                right = defaultInsets.getRight(LocalDensity.current, LocalLayoutDirection.current)
+            )
+            customInsets
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -129,106 +165,120 @@ fun AnalysisTypeSheet(
                 }
             }
             else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    item {
-                        OverviewCard(
-                            options = options,
-                            overview = typeData.overview,
-                            valueColor = valueColor,
-                            precision = precision,
-                            currentStart = currentStart,
-                            currentEnd = currentEnd,
-                            previousStart = previousStart,
-                            previousEnd = previousEnd,
-                            onFormatValue = onFormatValue,
-                            onFormatDate = onFormatDate,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                                .padding(
-                                    horizontal = dimensionResource(R.dimen.margin_horizontal),
-                                    vertical = dimensionResource(R.dimen.padding_vertical)
-                                )
-                        )
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                    ) {
+                        item {
+                            OverviewCard(
+                                options = options,
+                                overview = typeData.overview,
+                                valueColor = valueColor,
+                                precision = precision,
+                                currentStart = currentStart,
+                                currentEnd = currentEnd,
+                                previousStart = previousStart,
+                                previousEnd = previousEnd,
+                                onFormatValue = onFormatValue,
+                                onFormatDate = onFormatDate,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                                    .padding(
+                                        horizontal = dimensionResource(R.dimen.margin_horizontal),
+                                        vertical = dimensionResource(R.dimen.padding_vertical)
+                                    )
+                            )
+                        }
+
+                        item {
+                            Headline(
+                                title = when (precision) {
+                                    AnalysisPrecision.Month -> stringResource(R.string.analysis_types_monthDiagramValues, type!!.name)
+                                    AnalysisPrecision.Quarter -> stringResource(R.string.analysis_types_quarterDiagramValues, type!!.name)
+                                    AnalysisPrecision.Year -> stringResource(R.string.analysis_types_yearDiagramValues, type!!.name)
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                            )
+                        }
+
+                        item {
+                            DataLineDiagram(
+                                options = options,
+                                diagram = typeData.valuesDiagram,
+                                onFormatValue = onFormatValue,
+                                onQueryType = { type },
+                                showLegend = false,
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                                    .fillMaxWidth()
+                                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                            )
+                        }
+
+                        item {
+                            Headline(
+                                title = stringResource(R.string.analysis_types_diagramDifference),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                            )
+                        }
+
+                        item {
+                            DifferenceDataLineDiagram(
+                                options = options,
+                                diagram = typeData.differencesDiagram,
+                                onFormatValue = onFormatValue,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                            )
+                        }
+
+                        item {
+                            Headline(
+                                title = stringResource(R.string.analysis_types_transfers),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                                    .clip(RoundedCornerShape(
+                                        topStart = 24.dp,
+                                        topEnd = 24.dp
+                                    ))
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                            )
+                        }
+
+                        itemsIndexed(transfers) { index, transfer ->
+                            TransferListItem(
+                                transfer = transfer,
+                                isFirst = index == 0,
+                                isLast = index == transfers.size - 1,
+                                valueColor = valueColor,
+                                onFormatValue = onFormatValue,
+                                onFormatTransferValue = onFormatTransferValue,
+                                onFormatDate = onFormatDate
+                            )
+                        }
+
+                        item {
+                            Box(
+                                modifier = Modifier.height(bottomPadding)
+                            )
+                        }
                     }
 
-                    item {
-                        Headline(
-                            title = when (precision) {
-                                AnalysisPrecision.Month -> stringResource(R.string.analysis_types_monthDiagramValues, type!!.name)
-                                AnalysisPrecision.Quarter -> stringResource(R.string.analysis_types_quarterDiagramValues, type!!.name)
-                                AnalysisPrecision.Year -> stringResource(R.string.analysis_types_yearDiagramValues, type!!.name)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                        )
-                    }
-
-                    item {
-                        DataLineDiagram(
-                            options = options,
-                            diagram = typeData.valuesDiagram,
-                            onFormatValue = onFormatValue,
-                            onQueryType = { type },
-                            showLegend = false,
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                                .fillMaxWidth()
-                                .padding(bottom = dimensionResource(R.dimen.padding_vertical))
-                        )
-                    }
-
-                    item {
-                        Headline(
-                            title = stringResource(R.string.analysis_types_diagramDifference),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                        )
-                    }
-
-                    item {
-                        DifferenceDataLineDiagram(
-                            options = options,
-                            diagram = typeData.differencesDiagram,
-                            onFormatValue = onFormatValue,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                                .padding(bottom = dimensionResource(R.dimen.padding_vertical))
-                        )
-                    }
-
-                    item {
-                        Headline(
-                            title = stringResource(R.string.analysis_types_transfers),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                                .clip(RoundedCornerShape(
-                                    topStart = 24.dp,
-                                    topEnd = 24.dp
-                                ))
-                                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                        )
-                    }
-
-                    itemsIndexed(transfers) { index, transfer ->
-                        TransferListItem(
-                            transfer = transfer,
-                            isFirst = index == 0,
-                            isLast = index == transfers.size - 1,
-                            valueColor = valueColor,
-                            onFormatValue = onFormatValue,
-                            onFormatTransferValue = onFormatTransferValue,
-                            onFormatDate = onFormatDate
-                        )
-                    }
+                    NavigationBarProtection(
+                        height = bottomPadding
+                    )
                 }
             }
         }
@@ -236,6 +286,14 @@ fun AnalysisTypeSheet(
 }
 
 
+/**
+ * Displays the diagram which shows the difference to the previous time span.
+ *
+ * @param options       Data tab options.
+ * @param diagram       Diagram data.
+ * @param onFormatValue Callback invoked to format a value.
+ * @param modifier      Modifier.
+ */
 @Composable
 private fun DifferenceDataLineDiagram(
     options: DataTabOptions,
@@ -270,6 +328,18 @@ private fun DifferenceDataLineDiagram(
 }
 
 
+/**
+ * Displays a transfer list item.
+ *
+ * @param transfer              Transfer to display.
+ * @param isFirst               Whether this is the first item in the list.
+ * @param isLast                Whether this is the last item in the list.
+ * @param valueColor            Color with which to display the values.
+ * @param onFormatValue         Callback invoked to format a value.
+ * @param onFormatTransferValue Callback invoked to format a transfer value.
+ * @param onFormatDate          Callback invoked to format a date.
+ * @param modifier              Modifier.
+ */
 @Composable
 private fun TransferListItem(
     transfer: Transfer,
@@ -329,7 +399,7 @@ private fun TransferListItem(
                 }
             }
             Text(
-                text = onFormatTransferValue(transfer.transferValue),
+                text = onFormatTransferValue(transfer.transferValue.copy(isSalary = true)),
                 color = valueColor,
                 style = MaterialTheme.typography.bodyLarge
             )

@@ -53,7 +53,6 @@ import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavArgument
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast

@@ -1,7 +1,5 @@
 package de.christian2003.chaching.plugin.presentation.ui.composables.chart
 
-import androidx.compose.ui.graphics.Color
-
 
 /**
  * Models a single column for the column chart.
