@@ -14,7 +14,9 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -26,6 +28,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -97,91 +100,108 @@ fun TransferScreen(
                     }
                 }
             )
-        }
+        },
+        modifier = Modifier.imePadding()
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(innerPadding)
-                .consumeWindowInsets(innerPadding)
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
         ) {
-            AnimatedVisibility(viewModel.isHelpCardVisible) {
-                HelpCard(
-                    text = stringResource(R.string.transfer_help),
-                    onDismiss = {
-                        viewModel.dismissHelpCard()
-                    },
-                    modifier = Modifier.padding(
-                        bottom = dimensionResource(R.dimen.padding_vertical)
+            //Scrollable content:
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
+                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
+            ) {
+                AnimatedVisibility(viewModel.isHelpCardVisible) {
+                    HelpCard(
+                        text = stringResource(R.string.transfer_help),
+                        onDismiss = {
+                            viewModel.dismissHelpCard()
+                        },
+                        modifier = Modifier.padding(
+                            bottom = dimensionResource(R.dimen.padding_vertical)
+                        )
                     )
+                }
+                IsSalaryCard(
+                    isCreating = viewModel.isCreating,
+                    isSalary = viewModel.isSalary,
+                    onIsSalaryChange = {
+                        viewModel.isSalary = it
+                    },
+                    modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
                 )
-            }
-            IsSalaryCard(
-                isCreating = viewModel.isCreating,
-                isSalary = viewModel.isSalary,
-                onIsSalaryChange = {
-                    viewModel.isSalary = it
-                },
-                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
-            )
-            TextInput(
-                value = viewModel.valueDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
-                onValueChange = { },
-                label = stringResource(R.string.transfer_valueDateLabel),
-                keyboardOptions = KeyboardOptions(showKeyboardOnFocus = false),
-                prefixIcon = painterResource(R.drawable.ic_date),
-                modifier = Modifier.pointerInput(null) {
-                    awaitEachGesture {
-                        awaitFirstDown(pass = PointerEventPass.Initial)
-                        val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                        if (upEvent != null) {
-                            viewModel.isDatePickerVisible = true
+                TextInput(
+                    value = viewModel.valueDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+                    onValueChange = { },
+                    label = stringResource(R.string.transfer_valueDateLabel),
+                    keyboardOptions = KeyboardOptions(showKeyboardOnFocus = false),
+                    prefixIcon = painterResource(R.drawable.ic_date),
+                    modifier = Modifier.pointerInput(null) {
+                        awaitEachGesture {
+                            awaitFirstDown(pass = PointerEventPass.Initial)
+                            val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                            if (upEvent != null) {
+                                viewModel.isDatePickerVisible = true
+                            }
                         }
                     }
-                }
-            )
-            TextInput(
-                value = viewModel.value,
-                onValueChange = { input ->
-                    val cleanupInput = input.filter { it.isDigit() || it == ',' || it == '.' }
-                    viewModel.updateValue(cleanupInput)
-                },
-                label = stringResource(R.string.transfer_valueLabel),
-                errorMessage = viewModel.valueErrorMessage,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                prefixIcon = painterResource(R.drawable.ic_money),
-                suffixLabel = stringResource(R.string.transfer_valueSuffix),
-                visualTransformation = NumberFormatTransformation(),
-                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
-            )
-            if (viewModel.isHoursWorkedEditable) {
+                )
                 TextInput(
-                    value = viewModel.hoursWorked,
-                    onValueChange = {
-                        viewModel.updateHoursWorked(it)
+                    value = viewModel.value,
+                    onValueChange = { input ->
+                        val cleanupInput = input.filter { it.isDigit() || it == ',' || it == '.' }
+                        viewModel.updateValue(cleanupInput)
                     },
-                    label = stringResource(R.string.transfer_hoursWorkedLabel),
-                    errorMessage = viewModel.hoursWorkedErrorMessage,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-                    prefixIcon = painterResource(R.drawable.ic_time),
-                    suffixLabel = stringResource(R.string.transfer_hoursWorkedSuffix),
+                    label = stringResource(R.string.transfer_valueLabel),
+                    errorMessage = viewModel.valueErrorMessage,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    prefixIcon = painterResource(R.drawable.ic_money),
+                    suffixLabel = stringResource(R.string.transfer_valueSuffix),
+                    visualTransformation = NumberFormatTransformation(),
                     modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
                 )
+                if (viewModel.isHoursWorkedEditable) {
+                    TextInput(
+                        value = viewModel.hoursWorked,
+                        onValueChange = {
+                            viewModel.updateHoursWorked(it)
+                        },
+                        label = stringResource(R.string.transfer_hoursWorkedLabel),
+                        errorMessage = viewModel.hoursWorkedErrorMessage,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                        prefixIcon = painterResource(R.drawable.ic_time),
+                        suffixLabel = stringResource(R.string.transfer_hoursWorkedSuffix),
+                        modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
+                    )
+                }
             }
-            Button(
-                onClick = {
-                    viewModel.save()
-                    onNavigateUp()
-                },
-                enabled = viewModel.isSavable,
-                modifier = Modifier
-                    .padding(vertical = dimensionResource(R.dimen.padding_vertical))
-                    .align(Alignment.End)
+
+
+            //Button:
+            Column(
+                horizontalAlignment = Alignment.End
             ) {
-                Text(stringResource(R.string.button_save))
+                HorizontalDivider()
+                Button(
+                    onClick = {
+                        viewModel.save()
+                        onNavigateUp()
+                    },
+                    enabled = viewModel.isSavable,
+                    modifier = Modifier
+                        .padding(
+                            horizontal = dimensionResource(R.dimen.margin_horizontal),
+                            vertical = dimensionResource(R.dimen.padding_vertical)
+                        )
+                ) {
+                    Text(stringResource(R.string.button_save))
+                }
             }
         }
         if (viewModel.isDatePickerVisible) {

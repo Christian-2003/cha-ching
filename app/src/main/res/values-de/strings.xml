@@ -205,7 +205,7 @@
     <string name="help_clickToActivate">Klicken zum Einblenden</string>
     <string name="help_help">Aktiviere Hilfenachrichten, die du zuvor ausgeblendet hast.</string>
     <string name="help_createType">Neue Kategorie erstellen</string>
-    <string name="help_typesList">List aller Kategorien</string>
+    <string name="help_typesList">Liste aller Kategorien</string>
     <string name="help_createTransfer">Neue Buchung erstellen</string>
     <string name="help_helpList">Liste aller Hilfenachrichten</string>
     <string name="help_trash">Papierkorb</string>

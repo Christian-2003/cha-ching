@@ -182,11 +182,6 @@ private fun SmallAnalysisBudgetDifferenceToLastMonth(
     modifier: Modifier = Modifier
 ) {
     val differenceToPreviousMonth: Double = smallAnalysisResult.currentMonth.budget - smallAnalysisResult.previousMonth.budget
-    val foregroundColor: Color = when {
-        (differenceToPreviousMonth > 0.0) -> MaterialTheme.colorScheme.primary
-        (differenceToPreviousMonth < 0.0) -> MaterialTheme.colorScheme.error
-        else -> MaterialTheme.colorScheme.onSurface
-    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -212,7 +207,11 @@ private fun SmallAnalysisBudgetDifferenceToLastMonth(
             Icon(
                 painter = painterResource(R.drawable.ic_increase),
                 contentDescription = "",
-                tint = foregroundColor,
+                tint = when {
+                    (differenceToPreviousMonth > 0.0) -> MaterialTheme.colorScheme.primary
+                    (differenceToPreviousMonth < 0.0) -> MaterialTheme.colorScheme.error
+                    else -> MaterialTheme.colorScheme.onSurface
+                },
                 modifier = Modifier
                     .size(dimensionResource(R.dimen.image_s))
                     .rotate(if (differenceToPreviousMonth > 0.0) { 0f } else if (differenceToPreviousMonth < 0.0) { 180f } else { 90f })
@@ -226,7 +225,11 @@ private fun SmallAnalysisBudgetDifferenceToLastMonth(
             } else {
                 AnnotatedString.fromHtml(stringResource(R.string.main_analysis_noDiffToLastMonthLabel))
             },
-            color = foregroundColor,
+            color = when {
+                (differenceToPreviousMonth > 0.0) -> MaterialTheme.colorScheme.onPrimaryContainer
+                (differenceToPreviousMonth < 0.0) -> MaterialTheme.colorScheme.onErrorContainer
+                else -> MaterialTheme.colorScheme.onSurface
+            },
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 3,
             textAlign = TextAlign.Center,

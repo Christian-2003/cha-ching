@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -83,97 +86,112 @@ fun TypeScreen(
                     }
                 }
             )
-        }
+        },
+        modifier = Modifier.imePadding()
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(innerPadding)
-                .consumeWindowInsets(innerPadding)
-                .imePadding()
-                .verticalScroll(rememberScrollState())
         ) {
-            AnimatedVisibility(viewModel.isHelpCardVisible) {
-                HelpCard(
-                    text = stringResource(R.string.type_help_create),
-                    onDismiss = {
-                        viewModel.dismissHelpCard()
+            //Scrollable content:
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .imePadding()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                AnimatedVisibility(viewModel.isHelpCardVisible) {
+                    HelpCard(
+                        text = stringResource(R.string.type_help_create),
+                        onDismiss = {
+                            viewModel.dismissHelpCard()
+                        },
+                        modifier = Modifier.padding(
+                            start = dimensionResource(R.dimen.margin_horizontal),
+                            end = dimensionResource(R.dimen.margin_horizontal),
+                            bottom = dimensionResource(R.dimen.padding_vertical),
+                        )
+                    )
+                }
+                TextInput(
+                    value = viewModel.name,
+                    onValueChange = {
+                        viewModel.name = it
                     },
+                    label = stringResource(R.string.type_nameLabel),
                     modifier = Modifier.padding(
                         start = dimensionResource(R.dimen.margin_horizontal),
                         end = dimensionResource(R.dimen.margin_horizontal),
                         bottom = dimensionResource(R.dimen.padding_vertical),
                     )
                 )
-            }
-            TextInput(
-                value = viewModel.name,
-                onValueChange = {
-                    viewModel.name = it
-                },
-                label = stringResource(R.string.type_nameLabel),
-                modifier = Modifier.padding(
-                    start = dimensionResource(R.dimen.margin_horizontal),
-                    end = dimensionResource(R.dimen.margin_horizontal),
-                    bottom = dimensionResource(R.dimen.padding_vertical),
+                Checkbox(
+                    checked = viewModel.isHoursWorkedEditable,
+                    onCheckedChange = {
+                        viewModel.isHoursWorkedEditable = it
+                    },
+                    title = stringResource(R.string.type_hoursWorkedEditableTitle),
+                    text = stringResource(R.string.type_hoursWorkedEditableText)
                 )
-            )
-            Checkbox(
-                checked = viewModel.isHoursWorkedEditable,
-                onCheckedChange = {
-                    viewModel.isHoursWorkedEditable = it
-                },
-                title = stringResource(R.string.type_hoursWorkedEditableTitle),
-                text = stringResource(R.string.type_hoursWorkedEditableText)
-            )
-            Checkbox(
-                checked = viewModel.isSalaryByDefault,
-                onCheckedChange = {
-                    viewModel.isSalaryByDefault = it
-                },
-                title = stringResource(R.string.type_salaryByDefaultTitle),
-                text = stringResource(R.string.type_salaryByDefaultText)
-            )
-            Checkbox(
-                checked = viewModel.isEnabledInQuickAccess,
-                onCheckedChange = {
-                    viewModel.isEnabledInQuickAccess = it
-                },
-                title = stringResource(R.string.type_quickAccessEnabledTitle),
-                text = stringResource(R.string.type_quickAccessEnabledText),
-                onInfoClick = {
-                    viewModel.isQuickAccessHelpVisible = true
-                }
-            )
-            Headline(stringResource(R.string.type_chooseIcon))
-            TypeIconSelection(
-                selected = viewModel.icon,
-                onSelectedChange = { icon ->
-                    viewModel.icon = icon
-                }
-            )
-            Button(
-                onClick = {
-                    viewModel.save()
-                    onNavigateUp()
-                },
-                enabled = viewModel.name.isNotEmpty(),
-                modifier = Modifier.padding(
-                        vertical = dimensionResource(R.dimen.padding_vertical),
-                        horizontal = dimensionResource(R.dimen.margin_horizontal)
-                    )
-                    .align(Alignment.End)
-            ) {
-                Text(
-                    if (viewModel.isCreating) {
-                        stringResource(R.string.button_createType)
-                    } else {
-                        stringResource(R.string.button_save)
+                Checkbox(
+                    checked = viewModel.isSalaryByDefault,
+                    onCheckedChange = {
+                        viewModel.isSalaryByDefault = it
+                    },
+                    title = stringResource(R.string.type_salaryByDefaultTitle),
+                    text = stringResource(R.string.type_salaryByDefaultText)
+                )
+                Checkbox(
+                    checked = viewModel.isEnabledInQuickAccess,
+                    onCheckedChange = {
+                        viewModel.isEnabledInQuickAccess = it
+                    },
+                    title = stringResource(R.string.type_quickAccessEnabledTitle),
+                    text = stringResource(R.string.type_quickAccessEnabledText),
+                    onInfoClick = {
+                        viewModel.isQuickAccessHelpVisible = true
+                    }
+                )
+                Headline(stringResource(R.string.type_chooseIcon))
+                TypeIconSelection(
+                    selected = viewModel.icon,
+                    onSelectedChange = { icon ->
+                        viewModel.icon = icon
                     }
                 )
             }
+
+            //Bottom button:
+            Column(
+                horizontalAlignment = Alignment.End
+            ) {
+                HorizontalDivider()
+                Button(
+                    onClick = {
+                        viewModel.save()
+                        onNavigateUp()
+                    },
+                    enabled = viewModel.name.isNotEmpty(),
+                    modifier = Modifier.padding(
+                        vertical = dimensionResource(R.dimen.padding_vertical),
+                        horizontal = dimensionResource(R.dimen.margin_horizontal)
+                    )
+                ) {
+                    Text(
+                        if (viewModel.isCreating) {
+                            stringResource(R.string.button_createType)
+                        } else {
+                            stringResource(R.string.button_save)
+                        }
+                    )
+                }
+            }
         }
+
+        //Dialog:
         if (viewModel.isQuickAccessHelpVisible) {
             QuickAccessHelp(
                 onDismiss = {
