@@ -10,37 +10,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipAnchorPosition
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
-import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisTab
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOverviewDto
 import java.time.LocalDate
-import kotlin.math.abs
 
 
 /**
@@ -107,7 +94,10 @@ fun OverviewCard(
                 )
             }
             TrendIcon(
-                options = options,
+                tab = when (options) {
+                    DataTabOptions.Incomes -> AnalysisTab.Incomes
+                    DataTabOptions.Expenses -> AnalysisTab.Expenses
+                },
                 currentStart = currentStart,
                 currentEnd = currentEnd,
                 currentValue = overview.sum,
@@ -129,7 +119,10 @@ fun OverviewCard(
                 .height(IntrinsicSize.Min)
         ) {
             OverviewCardAvgItem(
-                options = options,
+                tab = when (options) {
+                    DataTabOptions.Incomes -> AnalysisTab.Incomes
+                    DataTabOptions.Expenses -> AnalysisTab.Expenses
+                },
                 label = stringResource(R.string.analysis_data_transferAvg),
                 currentStart = currentStart,
                 currentEnd = currentEnd,
@@ -146,7 +139,10 @@ fun OverviewCard(
             )
             Box(modifier = Modifier.width(dimensionResource(R.dimen.padding_horizontal)))
             OverviewCardAvgItem(
-                options = options,
+                tab = when (options) {
+                    DataTabOptions.Incomes -> AnalysisTab.Incomes
+                    DataTabOptions.Expenses -> AnalysisTab.Expenses
+                },
                 label = when (precision) {
                     AnalysisPrecision.Month -> stringResource(R.string.analysis_data_monthAvg)
                     AnalysisPrecision.Quarter -> stringResource(R.string.analysis_data_quarterAvg)
@@ -173,7 +169,7 @@ fun OverviewCard(
 /**
  * Item within the overview card that displays the average per month OR per transfer.
  *
- * @param options       Data tab options.
+ * @param tab           Tab on which the item is shown.
  * @param label         Label for the item.
  * @param valueColor    Color with which to display the value.
  * @param currentStart  Start date of the current time span.
@@ -187,8 +183,8 @@ fun OverviewCard(
  * @param modifier      Modifier.
  */
 @Composable
-private fun OverviewCardAvgItem(
-    options: DataTabOptions,
+fun OverviewCardAvgItem(
+    tab: AnalysisTab,
     label: String,
     valueColor: Color,
     currentStart: LocalDate,
@@ -235,7 +231,7 @@ private fun OverviewCardAvgItem(
                     fontWeight = FontWeight.Bold
                 )
                 TrendIcon(
-                    options = options,
+                    tab = tab,
                     currentStart = currentStart,
                     currentEnd = currentEnd,
                     currentValue = currentAvg,
@@ -249,190 +245,5 @@ private fun OverviewCardAvgItem(
                 )
             }
         }
-    }
-}
-
-
-/**
- * Trend icon shows whether a value increases, decreases or stays the same in between the current
- * time span and the previous time span.
- *
- * @param options       Data tab options.
- * @param currentStart  Start date of the current time span.
- * @param currentEnd    End date of the current time span.
- * @param currentValue  Value if the current time span.
- * @param previousStart Start date of the previous time span.
- * @param previousEnd   End date of the previous time span.
- * @param previousValue Value of the previous time span.
- * @param size          Size for the trend icon.
- * @param onFormatValue Callback invoked to format a value.
- * @param onFormatDate  Callback invoked to format a date.
- * @param modifier      Modifier.
- */
-@Composable
-private fun TrendIcon(
-    options: DataTabOptions,
-    currentStart: LocalDate,
-    currentEnd: LocalDate,
-    currentValue: Double,
-    previousStart: LocalDate,
-    previousEnd: LocalDate,
-    previousValue: Double,
-    size: Dp,
-    onFormatValue: (Double) -> String,
-    onFormatDate: (LocalDate) -> String,
-    modifier: Modifier = Modifier
-) {
-    val differenceToPrevious: Double = currentValue - previousValue
-
-    TrendIconTooltip(
-        options = options,
-        currentStart = currentStart,
-        currentEnd = currentEnd,
-        currentValue = currentValue,
-        previousStart = previousStart,
-        previousEnd = previousEnd,
-        previousValue = previousValue,
-        onFormatValue = onFormatValue,
-        onFormatDate = onFormatDate
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = modifier.size(size)
-        ) {
-            Shape(
-                shape = MaterialShapes.Cookie7Sided,
-                color = when {
-                    differenceToPrevious > 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.primaryContainer
-                    differenceToPrevious < 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.errorContainer
-                    differenceToPrevious > 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.errorContainer
-                    differenceToPrevious < 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.primaryContainer
-                    else -> MaterialTheme.colorScheme.surface
-                }
-            )
-            Icon(
-                painter = when {
-                    differenceToPrevious > 0.0 -> painterResource(R.drawable.ic_increase)
-                    differenceToPrevious < 0.0 -> painterResource(R.drawable.ic_decrease)
-                    else -> painterResource(R.drawable.ic_identical)
-                },
-                tint = when {
-                    differenceToPrevious > 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.onPrimaryContainer
-                    differenceToPrevious < 0.0 && options == DataTabOptions.Incomes -> MaterialTheme.colorScheme.onErrorContainer
-                    differenceToPrevious > 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.onErrorContainer
-                    differenceToPrevious < 0.0 && options == DataTabOptions.Expenses -> MaterialTheme.colorScheme.onPrimaryContainer
-                    else -> MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(size / 4)
-            )
-        }
-    }
-}
-
-
-/**
- * Tooltip container for the trend icon.
- *
- * @param options       Data tab options.
- * @param currentStart  Start date of the current time span.
- * @param currentEnd    End date of the current time span.
- * @param currentValue  Value if the current time span.
- * @param previousStart Start date of the previous time span.
- * @param previousEnd   End date of the previous time span.
- * @param previousValue Value of the previous time span.
- * @param onFormatValue Callback invoked to format a value.
- * @param onFormatDate  Callback invoked to format a date.
- * @param content       Composable content for the tooltip container.
- */
-@Composable
-private fun TrendIconTooltip(
-    options: DataTabOptions,
-    currentStart: LocalDate,
-    currentEnd: LocalDate,
-    currentValue: Double,
-    previousStart: LocalDate,
-    previousEnd: LocalDate,
-    previousValue: Double,
-    onFormatValue: (Double) -> String,
-    onFormatDate: (LocalDate) -> String,
-    content: @Composable () -> Unit
-) {
-    val difference: Double = currentValue - previousValue
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-            positioning = TooltipAnchorPosition.Below
-        ),
-        tooltip = {
-            RichTooltip(
-                title = {
-                    Text(
-                        text = when {
-                            difference > 0.0 -> stringResource(R.string.analysis_trend_upTitle, onFormatValue(abs(difference)))
-                            difference < 0.0 -> stringResource(R.string.analysis_trend_downTitle, onFormatValue(abs(difference)))
-                            else -> stringResource(R.string.analysis_trend_identicalTitle, onFormatValue(abs(difference)))
-                        },
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                text = {
-                    Text(
-                        text = AnnotatedString.fromHtml(when {
-                            (options == DataTabOptions.Incomes) && (difference > 0.0) -> stringResource(R.string.analysis_trend_upTextIncomes,
-                                onFormatDate(currentStart),
-                                onFormatDate(currentEnd),
-                                onFormatValue(previousValue),
-                                onFormatValue(currentValue),
-                                onFormatDate(previousStart),
-                                onFormatDate(previousEnd)
-                            )
-                            (options == DataTabOptions.Incomes) && (difference < 0.0) -> stringResource(R.string.analysis_trend_downTextIncomes,
-                                onFormatDate(currentStart),
-                                onFormatDate(currentEnd),
-                                onFormatValue(previousValue),
-                                onFormatValue(currentValue),
-                                onFormatDate(previousStart),
-                                onFormatDate(previousEnd)
-                            )
-                            options == DataTabOptions.Incomes -> stringResource(R.string.analysis_trend_identicalTextIncomes,
-                                onFormatDate(currentStart),
-                                onFormatDate(currentEnd),
-                                onFormatDate(previousStart),
-                                onFormatDate(previousEnd)
-                            )
-                            (options == DataTabOptions.Expenses) && (difference > 0.0) -> stringResource(R.string.analysis_trend_upTextExpenses,
-                                onFormatDate(currentStart),
-                                onFormatDate(currentEnd),
-                                onFormatValue(previousValue),
-                                onFormatValue(currentValue),
-                                onFormatDate(previousStart),
-                                onFormatDate(previousEnd)
-                            )
-                            (options == DataTabOptions.Expenses) && (difference < 0.0) -> stringResource(R.string.analysis_trend_downTextExpenses,
-                                onFormatDate(currentStart),
-                                onFormatDate(currentEnd),
-                                onFormatValue(previousValue),
-                                onFormatValue(currentValue),
-                                onFormatDate(previousStart),
-                                onFormatDate(previousEnd)
-                            )
-                            else -> stringResource(R.string.analysis_trend_identicalTextExpenses,
-                                onFormatDate(currentStart),
-                                onFormatDate(currentEnd),
-                                onFormatDate(previousStart),
-                                onFormatDate(previousEnd)
-                            )
-                        }),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            )
-        },
-        state = rememberTooltipState()
-    ) {
-        content()
     }
 }

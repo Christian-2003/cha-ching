@@ -32,10 +32,10 @@
         <item>Dec %1$s</item>
     </string-array>
     <string-array name="quarters">
-        <item>Q1 %1$d</item>
-        <item>Q2 %1$d</item>
-        <item>Q3 %1$d</item>
-        <item>Q4 %1$d</item>
+        <item>Q1 %1$s</item>
+        <item>Q2 %1$s</item>
+        <item>Q3 %1$s</item>
+        <item>Q4 %1$s</item>
     </string-array>
 
 
@@ -140,8 +140,23 @@
         <item>Incomes</item>
         <item>Expenses</item>
     </string-array>
+    <string name="analysis_filter_title">Filter</string>
+    <string name="analysis_filter_timeSpan">Time span</string>
+    <string name="analysis_filter_timeSpan_currentYear">Current year</string>
+    <string name="analysis_filter_timeSpan_previousYear">Previous year</string>
+    <string name="analysis_filter_timeSpan_custom">Custom</string>
+    <string name="analysis_filter_timeSpan_customValue">%1$s to %2$s</string>
+    <string name="analysis_filter_precision">Precision</string>
+    <string name="analysis_filter_precision_automatic">Auto</string>
+    <string name="analysis_filter_precision_month">Month</string>
+    <string name="analysis_filter_precision_quarter">Quarter</string>
+    <string name="analysis_filter_precision_year">Year</string>
     <string name="analysis_incomes_total">Total incomes</string>
     <string name="analysis_expenses_total">Total expenses</string>
+    <string name="analysis_overview_total">Budget</string>
+    <string name="analysis_overview_budgetPerMonth">Budget by month</string>
+    <string name="analysis_overview_budgetPerQuarter">Budget by quarter</string>
+    <string name="analysis_overview_budgetPerYear">Budget by year</string>
     <string name="analysis_data_transferAvg">Average per transaction</string>
     <string name="analysis_data_monthAvg">Average per month</string>
     <string name="analysis_data_quarterAvg">Average per quarter</string>
@@ -172,12 +187,15 @@
     <string name="analysis_trend_upTitle">Up %1$s from before</string>
     <string name="analysis_trend_upTextIncomes">In the time span from %1$s to %2$s, income rose from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
     <string name="analysis_trend_upTextExpenses">In the time span from %1$s to %2$s, expenses rose from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
+    <string name="analysis_trend_upTextOverview">In the time span from %1$s to %2$s, budget rose from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
     <string name="analysis_trend_downTitle">Down %1$s from before</string>
     <string name="analysis_trend_downTextIncomes">In the time span from %1$s to %2$s, income reduced from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
     <string name="analysis_trend_downTextExpenses">In the time span from %1$s to %2$s, expenses reduced from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
+    <string name="analysis_trend_downTextOverview">In the time span from %1$s to %2$s, budget reduced from &lt;b&gt;%3$s&lt;/b&gt; to &lt;b&gt;%4$s&lt;/b&gt;, compared to the time span from %5$s to %6$s.</string>
     <string name="analysis_trend_identicalTitle">Identical to before</string>
     <string name="analysis_trend_identicalTextIncomes">In the time span from %1$s to %2$s, income stayed the same compared to the time span from %3$s to %4$s.</string>
     <string name="analysis_trend_identicalTextExpenses">In the time span from %1$s to %2$s, expenses stayed the same compared to the time span from %3$s to %4$s.</string>
+    <string name="analysis_trend_identicalTextOverview">In the time span from %1$s to %2$s, budget stayed the same compared to the time span from %3$s to %4$s.</string>
 
 
     <string name="settings_title">Settings</string>
@@ -313,6 +331,7 @@
     <string name="button_restore">Restore</string>
     <string name="button_moveToTrash">Move to trash</string>
     <string name="button_showTrash">Show trash</string>
+    <string name="button_apply">Apply</string>
 
 
     <!-- Widgets -->

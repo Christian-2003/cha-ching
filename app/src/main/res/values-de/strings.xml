@@ -32,10 +32,10 @@
         <item>Dez %1$s</item>
     </string-array>
     <string-array name="quarters">
-        <item>Q1 %1$d</item>
-        <item>Q2 %1$d</item>
-        <item>Q3 %1$d</item>
-        <item>Q4 %1$d</item>
+        <item>Q1 %1$s</item>
+        <item>Q2 %1$s</item>
+        <item>Q3 %1$s</item>
+        <item>Q4 %1$s</item>
     </string-array>
 
 
@@ -270,6 +270,7 @@
     <string name="button_restore">Wiederherstellen</string>
     <string name="button_moveToTrash">In Papierkorb verschieben</string>
     <string name="button_showTrash">Papierkorb anzeigen</string>
+    <string name="button_apply">Anwenden</string>
 
 
     <!-- Widgets -->

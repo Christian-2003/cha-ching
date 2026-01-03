@@ -3,7 +3,6 @@ package de.christian2003.chaching.plugin.presentation.view.analysis.model
 import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
 import de.christian2003.chaching.domain.analysis.large.LargeTimeSpanResult
 import de.christian2003.chaching.domain.analysis.large.LargeTypeResult
-import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
 
 
 /**

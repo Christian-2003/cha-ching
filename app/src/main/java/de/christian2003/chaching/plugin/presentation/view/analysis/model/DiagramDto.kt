@@ -1,8 +1,8 @@
 package de.christian2003.chaching.plugin.presentation.view.analysis.model
 
-import android.util.Log
 import de.christian2003.chaching.domain.analysis.large.LargeTimeSpanResult
-import de.christian2003.chaching.domain.analysis.large.LargeTypeDiagram
+import de.christian2003.chaching.domain.analysis.large.LargeDiagram
+import de.christian2003.chaching.domain.analysis.large.LargeTimeSpan
 import de.christian2003.chaching.domain.analysis.large.LargeTypeResult
 import de.christian2003.chaching.plugin.presentation.ui.composables.chart.ChartColumn
 import java.util.UUID
@@ -60,7 +60,7 @@ data class DiagramDto(
             //Generate column values:
             val columns: List<MutableList<Double>> = (0 until numberOfColumns).map { mutableListOf() }
             filteredTypeResults.forEach { typeResult ->
-                val diagram: LargeTypeDiagram = when (diagramType) {
+                val diagram: LargeDiagram = when (diagramType) {
                     DiagramType.Values -> typeResult.valuesDiagram
                     DiagramType.Cumulated -> typeResult.cumulatedDiagram
                 }
@@ -146,6 +146,27 @@ data class DiagramDto(
             return result
         }
 
+
+        fun getInstance(
+            timeSpan: LargeTimeSpan,
+            labels: List<String>
+        ): DiagramDto {
+            val chartColumns: MutableList<ChartColumn> = mutableListOf()
+            timeSpan.budgetsPerNormalizedDate.values.forEachIndexed { index, value ->
+                val chartColumn = ChartColumn(
+                    values = listOf(value),
+                    label = labels.getOrNull(index) ?: ""
+                )
+                chartColumns.add(chartColumn)
+            }
+
+            val result = DiagramDto(
+                chartColumns = chartColumns,
+                dataLineTypeIds = listOf(UUID(0, 0)) //Diagram does not display types, so we do not need any IDs
+            )
+
+            return result
+        }
     }
 
 }

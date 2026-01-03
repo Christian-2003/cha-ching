@@ -25,10 +25,12 @@ import de.christian2003.chaching.application.usecases.transfer.GetTransfersByTyp
 import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.transfer.TransferValue
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisFilter
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisPeriod
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabDto
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabTypeDto
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.OverviewTabDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.time.format.DateTimeFormatter
@@ -55,10 +57,12 @@ class AnalysisViewModel @Inject constructor(
     private val getTransfersByTypeInTimeSpanUseCase: GetTransfersByTypeInTimeSpanUseCase
 ): AndroidViewModel(application) {
 
-    /**
-     * Period for which to analyze data.
-     */
-    var analysisPeriod: AnalysisPeriod = AnalysisPeriod.CURRENT_YEAR
+    var analysisFilter: AnalysisFilter = AnalysisFilter(
+        period = AnalysisPeriod.CURRENT_YEAR,
+        precision = null
+    )
+
+    var isFilterSheetVisible: Boolean by mutableStateOf(false)
 
     var analysisResult: LargeAnalysisResult? by mutableStateOf(null)
         private set
@@ -67,6 +71,9 @@ class AnalysisViewModel @Inject constructor(
         private set
 
     lateinit var expensesTabData: DataTabDto
+        private set
+
+    lateinit var overviewTabData: OverviewTabDto
         private set
 
     var diagramLabels: List<String> = emptyList()
@@ -93,19 +100,24 @@ class AnalysisViewModel @Inject constructor(
      */
     fun startAnalysis(force: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
         if (analysisResult != null || force) {
-            val periodLength = analysisPeriod.endDate.toEpochDay() - analysisPeriod.startDate.toEpochDay()
-            val precision: AnalysisPrecision = if (periodLength <= 365) {
-                AnalysisPrecision.Month //0 Months - 12 Months
-            } else if (periodLength <= 1825) {
-                AnalysisPrecision.Quarter //13 Months - 5 Years
+            val filter: AnalysisFilter = analysisFilter
+            val precision: AnalysisPrecision = if (filter.precision != null) {
+                filter.precision
             } else {
-                AnalysisPrecision.Year //More than 5 Years
+                val periodLength = filter.period.endDate.toEpochDay() - filter.period.startDate.toEpochDay()
+                if (periodLength <= 365) {
+                    AnalysisPrecision.Month //0 Months - 12 Months
+                } else if (periodLength <= 1825) {
+                    AnalysisPrecision.Quarter //13 Months - 5 Years
+                } else {
+                    AnalysisPrecision.Year //More than 5 Years
+                }
             }
 
-            val result: LargeAnalysisResult = largeAnalysisUseCase.analyze(precision, analysisPeriod.startDate, analysisPeriod.endDate)
+            val result: LargeAnalysisResult = largeAnalysisUseCase.analyze(precision, filter.period.startDate, filter.period.endDate)
 
+            //Transform result to a format that can be used by UI:
             createDiagramLabels(result.currentSpan.normalizedDates, precision)
-
             this@AnalysisViewModel.incomesTabData = DataTabDto.getInstance(
                 options = DataTabOptions.Incomes,
                 analysisResult = result,
@@ -116,6 +128,11 @@ class AnalysisViewModel @Inject constructor(
                 analysisResult = result,
                 diagramLabels = diagramLabels
             )
+            this@AnalysisViewModel.overviewTabData = OverviewTabDto.getInstance(
+                analysisResult = result,
+                diagramLabels = diagramLabels
+            )
+
             this@AnalysisViewModel.analysisResult = result
         }
     }

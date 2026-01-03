@@ -2,7 +2,7 @@ package de.christian2003.chaching.application.analysis.large.algorithms
 
 import de.christian2003.chaching.application.analysis.large.dto.TransformerDateResult
 import de.christian2003.chaching.application.analysis.large.dto.TransformerTypeResult
-import de.christian2003.chaching.domain.analysis.large.LargeTypeDiagram
+import de.christian2003.chaching.domain.analysis.large.LargeDiagram
 import de.christian2003.chaching.domain.analysis.large.LargeTypeHoursWorked
 import de.christian2003.chaching.domain.analysis.large.LargeTypeResult
 import de.christian2003.chaching.domain.analysis.large.LargeTypeValue
@@ -26,8 +26,8 @@ class LargeTypeResultGenerator {
         val valueResult: LargeTypeValue = generateValueResult(typeResult.dateResults)
         val hoursWorkedResult: LargeTypeHoursWorked = generateHoursWorkedResult(typeResult.dateResults)
         val transferCount: Int = getTransferCount(typeResult.dateResults)
-        val valuesDiagram: LargeTypeDiagram = generateValuesDiagram(typeResult.dateResults)
-        val cumulatedDiagram: LargeTypeDiagram = generateCumulatedDiagram(typeResult.dateResults)
+        val valuesDiagram: LargeDiagram = generateValuesDiagram(typeResult.dateResults)
+        val cumulatedDiagram: LargeDiagram = generateCumulatedDiagram(typeResult.dateResults)
 
         val result = LargeTypeResult(
             typeId = typeResult.typeId,
@@ -125,14 +125,14 @@ class LargeTypeResultGenerator {
      * @param dateResults   Date results from which to generate the values diagram.
      * @return              Values diagram.
      */
-    private fun generateValuesDiagram(dateResults: List<TransformerDateResult>): LargeTypeDiagram {
+    private fun generateValuesDiagram(dateResults: List<TransformerDateResult>): LargeDiagram {
         val values: MutableList<Double> = mutableListOf()
 
         dateResults.forEach { dateResult ->
             values.add(centsToEuros(dateResult.sum))
         }
 
-        val result = LargeTypeDiagram(
+        val result = LargeDiagram(
             values = values
         )
 
@@ -146,7 +146,7 @@ class LargeTypeResultGenerator {
      * @param dateResults   Date results from which to generate the cumulated diagram.
      * @return              Cumulated values diagram.
      */
-    private fun generateCumulatedDiagram(dateResults: List<TransformerDateResult>): LargeTypeDiagram {
+    private fun generateCumulatedDiagram(dateResults: List<TransformerDateResult>): LargeDiagram {
         val cumulatedValues: MutableList<Double> = mutableListOf()
         var cumulatedValue = 0
 
@@ -155,7 +155,7 @@ class LargeTypeResultGenerator {
             cumulatedValues.add(centsToEuros(cumulatedValue))
         }
 
-        val result = LargeTypeDiagram(
+        val result = LargeDiagram(
             values = cumulatedValues
         )
 

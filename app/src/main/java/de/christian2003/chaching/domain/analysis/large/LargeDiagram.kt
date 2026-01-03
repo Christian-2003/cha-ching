@@ -9,7 +9,7 @@ package de.christian2003.chaching.domain.analysis.large
  * @param min       Min value in the diagram.
  * @param max       Max value in the diagram.
  */
-data class LargeTypeDiagram(
+data class LargeDiagram(
     val values: List<Double>,
     val min: Double = values.minOrNull() ?: 0.0,
     val max: Double = values.maxOrNull() ?: 0.0

@@ -1,8 +1,10 @@
 package de.christian2003.chaching.application.analysis.large.algorithms
 
+import de.christian2003.chaching.application.analysis.large.LargeAnalysisUseCase_Factory
 import de.christian2003.chaching.application.analysis.large.dto.TransformerDateResult
 import de.christian2003.chaching.application.analysis.large.dto.TransformerResult
 import de.christian2003.chaching.application.analysis.large.dto.TransformerTypeResult
+import de.christian2003.chaching.domain.analysis.large.LargeDiagram
 import de.christian2003.chaching.domain.analysis.large.LargeTimeSpan
 import de.christian2003.chaching.domain.analysis.large.LargeTimeSpanResult
 import de.christian2003.chaching.domain.analysis.large.LargeTypeResult
@@ -37,13 +39,15 @@ class LargeTimeSpanGenerator {
         val normalizedDates: List<LocalDate> = generateNormalizedDates(transformerResult)
         val incomes: LargeTimeSpanResult = generateTimeSpanResult(transformerResult.incomes)
         val expenses: LargeTimeSpanResult = generateTimeSpanResult(transformerResult.expenses)
+        val budgetsPerNormalizedDate: LargeDiagram = generateBudgetsPerNormalizedDate(transformerResult)
 
         val result = LargeTimeSpan(
             start = start,
             end = end,
             normalizedDates = normalizedDates,
             incomes = incomes,
-            expenses = expenses
+            expenses = expenses,
+            budgetsPerNormalizedDate = budgetsPerNormalizedDate
         )
 
         return result
@@ -121,6 +125,54 @@ class LargeTimeSpanGenerator {
         )
 
         return result
+    }
+
+
+    /**
+     * Generates the diagram which contains the budgets for each normalized date.
+     *
+     * @param transformerResult Transformer result.
+     * @return                  Diagram with the budget values.
+     */
+    private fun generateBudgetsPerNormalizedDate(transformerResult: TransformerResult): LargeDiagram {
+        val incomesList: MutableList<Int> = mutableListOf()
+        transformerResult.incomes.firstOrNull()?.dateResults?.forEach { _ -> incomesList.add(0) }
+        incomesList.forEachIndexed { index, value ->
+            transformerResult.incomes.forEach { transformerResult ->
+                incomesList[index] += transformerResult.dateResults.getOrNull(index)?.sum ?: 0
+            }
+        }
+
+        val expensesList: MutableList<Int> = mutableListOf()
+        transformerResult.expenses.firstOrNull()?.dateResults?.forEach { _ -> expensesList.add(0) }
+        expensesList.forEachIndexed { index, value ->
+            transformerResult.expenses.forEach { transformerResult ->
+                expensesList[index] += transformerResult.dateResults.getOrNull(index)?.sum ?: 0
+            }
+        }
+
+        val budgetsList: MutableList<Double> = mutableListOf()
+        incomesList.forEachIndexed { index, incomeValue ->
+            val budget: Double = centsToEuros(incomeValue - (expensesList.getOrNull(index) ?: 0))
+            budgetsList.add(budget)
+        }
+
+        val result = LargeDiagram(
+            values = budgetsList
+        )
+
+        return result
+    }
+
+
+    /**
+     * Converts the passed cents value to euros.
+     *
+     * @param cents Cents value to convert.
+     * @return      Euros.
+     */
+    private fun centsToEuros(cents: Int): Double {
+        return cents.toDouble() / 100.0
     }
 
 }

@@ -18,8 +18,8 @@ data class LargeTypeResult(
     val valueResult: LargeTypeValue,
     val hoursWorkedResult: LargeTypeHoursWorked,
     val transferCount: Int,
-    val valuesDiagram: LargeTypeDiagram,
-    val cumulatedDiagram: LargeTypeDiagram
+    val valuesDiagram: LargeDiagram,
+    val cumulatedDiagram: LargeDiagram
 ) {
 
     /**

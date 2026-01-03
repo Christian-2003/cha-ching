@@ -61,7 +61,7 @@ class AnalysisPeriod(
          */
         val LAST_YEAR = AnalysisPeriod(
             startDate = LocalDate.now().minusYears(2).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1),
-            endDate = LocalDate.now().minusYears(2).with(TemporalAdjusters.lastDayOfMonth())
+            endDate = LocalDate.now().minusYears(1).with(TemporalAdjusters.lastDayOfMonth())
         )
 
     }

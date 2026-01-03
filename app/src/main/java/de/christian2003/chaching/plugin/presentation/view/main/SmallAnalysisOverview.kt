@@ -136,7 +136,7 @@ private fun SmallAnalysisBudgetOverview(
         Text(
             text = onFormatValue(smallAnalysisResult.currentMonth.budget),
             color = when {
-                smallAnalysisResult.currentMonth.budget > 0 -> MaterialTheme.colorScheme.primary
+                smallAnalysisResult.currentMonth.budget > 0 -> MaterialTheme.colorScheme.secondary
                 smallAnalysisResult.currentMonth.budget < 0 -> MaterialTheme.colorScheme.error
                 else -> MaterialTheme.colorScheme.onSurface
             },
