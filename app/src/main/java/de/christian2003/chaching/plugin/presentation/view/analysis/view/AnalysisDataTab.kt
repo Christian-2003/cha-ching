@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -37,6 +38,7 @@ import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.model.TypeShapes
+import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
 import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
@@ -77,140 +79,154 @@ fun AnalysisDataTab(
         DataTabOptions.Expenses -> MaterialTheme.colorScheme.tertiary
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-    ) {
-        item {
-            OverviewCard(
-                options = options,
-                overview = data.overview,
-                valueColor = valueColor,
-                precision = precision,
-                currentStart = analysisResult.currentSpan.start,
-                currentEnd = analysisResult.currentSpan.end,
-                previousStart = analysisResult.previousSpan.start,
-                previousEnd = analysisResult.previousSpan.end,
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onFormatDate = {
-                    viewModel.formatDate(it)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.margin_horizontal),
-                        vertical = dimensionResource(R.dimen.padding_vertical)
-                    )
-            )
-        }
-        item {
-            Headline(
-                title = when (options) {
-                    DataTabOptions.Incomes -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramValues)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramValues)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramValues)
+    if (data.overview.sum <= 0.0) {
+        //No data to show:
+        EmptyPlaceholder(
+            title = when (options) {
+                DataTabOptions.Incomes -> stringResource(R.string.analysis_emptyPlaceholder_titleIncomes)
+                DataTabOptions.Expenses -> stringResource(R.string.analysis_emptyPlaceholder_titleExpenses)
+            },
+            subtitle = stringResource(R.string.analysis_emptyPlaceholder_subtitle),
+            painter = painterResource(R.drawable.el_analysis),
+            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
+        )
+    }
+    else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+        ) {
+            item {
+                OverviewCard(
+                    options = options,
+                    overview = data.overview,
+                    valueColor = valueColor,
+                    precision = precision,
+                    currentStart = analysisResult.currentSpan.start,
+                    currentEnd = analysisResult.currentSpan.end,
+                    previousStart = analysisResult.previousSpan.start,
+                    previousEnd = analysisResult.previousSpan.end,
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onFormatDate = {
+                        viewModel.formatDate(it)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(
+                            horizontal = dimensionResource(R.dimen.margin_horizontal),
+                            vertical = dimensionResource(R.dimen.padding_vertical)
+                        )
+                )
+            }
+            item {
+                Headline(
+                    title = when (options) {
+                        DataTabOptions.Incomes -> when (precision) {
+                            AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramValues)
+                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramValues)
+                            AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramValues)
+                        }
+                        DataTabOptions.Expenses -> when (precision) {
+                            AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramValues)
+                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramValues)
+                            AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramValues)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                )
+            }
+            item {
+                DataLineDiagram(
+                    options = options,
+                    diagram = data.valuesDiagram,
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onQueryType = {
+                        viewModel.queryType(it)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                )
+            }
+            item {
+                Headline(
+                    title = when (options) {
+                        DataTabOptions.Incomes -> when (precision) {
+                            AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramCumulated)
+                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramCumulated)
+                            AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramCumulated)
+                        }
+                        DataTabOptions.Expenses -> when (precision) {
+                            AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramCumulated)
+                            AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramCumulated)
+                            AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramCumulated)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                )
+            }
+            item {
+                DataLineDiagram(
+                    options = options,
+                    diagram = data.cumulatedDiagram,
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onQueryType = {
+                        viewModel.queryType(it)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                )
+            }
+            item {
+                Headline(
+                    title = stringResource(R.string.analysis_data_typesListTitle),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .clip(RoundedCornerShape(
+                            topStart = 24.dp,
+                            topEnd = 24.dp
+                        ))
+                        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                )
+            }
+            itemsIndexed(data.types) { index, type ->
+                TypeResultItem(
+                    typeResult = type,
+                    valueColor = valueColor,
+                    isFirst = index == 0,
+                    isLast = index == data.types.size - 1,
+                    onClick = {
+                        viewModel.displayType(type)
+                    },
+                    onFormatValue = {
+                        viewModel.formatValue(it)
+                    },
+                    onQueryType = {
+                        viewModel.queryType(it)
                     }
-                    DataTabOptions.Expenses -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramValues)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramValues)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramValues)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-            )
-        }
-        item {
-            DataLineDiagram(
-                options = options,
-                diagram = data.valuesDiagram,
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onQueryType = {
-                    viewModel.queryType(it)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
-            )
-        }
-        item {
-            Headline(
-                title = when (options) {
-                    DataTabOptions.Incomes -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_incomes_monthDiagramCumulated)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_incomes_quarterDiagramCumulated)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_incomes_yearDiagramCumulated)
-                    }
-                    DataTabOptions.Expenses -> when (precision) {
-                        AnalysisPrecision.Month -> stringResource(R.string.analysis_expenses_monthDiagramCumulated)
-                        AnalysisPrecision.Quarter -> stringResource(R.string.analysis_expenses_quarterDiagramCumulated)
-                        AnalysisPrecision.Year -> stringResource(R.string.analysis_expenses_yearDiagramCumulated)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-            )
-        }
-        item {
-            DataLineDiagram(
-                options = options,
-                diagram = data.cumulatedDiagram,
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onQueryType = {
-                    viewModel.queryType(it)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
-            )
-        }
-        item {
-            Headline(
-                title = stringResource(R.string.analysis_data_typesListTitle),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .clip(RoundedCornerShape(
-                        topStart = 24.dp,
-                        topEnd = 24.dp
-                    ))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-            )
-        }
-        itemsIndexed(data.types) { index, type ->
-            TypeResultItem(
-                typeResult = type,
-                valueColor = valueColor,
-                isFirst = index == 0,
-                isLast = index == data.types.size - 1,
-                onClick = {
-                    viewModel.displayType(type)
-                },
-                onFormatValue = {
-                    viewModel.formatValue(it)
-                },
-                onQueryType = {
-                    viewModel.queryType(it)
-                }
-            )
-        }
-        item {
-            Box(
-                modifier = Modifier.height(bottomPadding)
-            )
+                )
+            }
+            item {
+                Box(
+                    modifier = Modifier.height(bottomPadding)
+                )
+            }
         }
     }
 

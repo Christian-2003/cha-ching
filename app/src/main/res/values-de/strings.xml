@@ -128,13 +128,70 @@
 
 
     <string name="analysis_title">Analyse</string>
-    <string name="analysis_other">Sonstige</string>
-    <string name="analysis_total">Gesamt</string>
-    <string name="analysis_average">Durchschnitt</string>
-    <string name="analysis_period_currentYear">Aktuelles Jahr</string>
-    <string name="analysis_period_lastYear">Letztes Jahr</string>
-    <string name="analysis_period_custom">Eigener Zeitraum</string>
-    <string name="analysis_period_customValue">%1$s - %2$s</string>
+    <string-array name="analysis_tabs">
+        <item>Übersicht</item>
+        <item>Einkommen</item>
+        <item>Ausgaben</item>
+    </string-array>
+    <string name="analysis_filter_title">Filter</string>
+    <string name="analysis_filter_timeSpan">Zeitspanne</string>
+    <string name="analysis_filter_timeSpan_currentYear">Aktuelles Jahr</string>
+    <string name="analysis_filter_timeSpan_previousYear">Letztes Jahr</string>
+    <string name="analysis_filter_timeSpan_custom">Eigene</string>
+    <string name="analysis_filter_timeSpan_customValue">%1$s bis %2$s</string>
+    <string name="analysis_filter_precision">Genauigkeit</string>
+    <string name="analysis_filter_precision_automatic">Auto</string>
+    <string name="analysis_filter_precision_month">Monat</string>
+    <string name="analysis_filter_precision_quarter">Quartal</string>
+    <string name="analysis_filter_precision_year">Jahr</string>
+    <string name="analysis_emptyPlaceholder_titleIncomes">Keine Einkommen</string>
+    <string name="analysis_emptyPlaceholder_titleExpenses">Keine Ausgaben</string>
+    <string name="analysis_emptyPlaceholder_subtitle">Analyseergebnisse werden hier angezeigt</string>
+    <string name="analysis_incomes_total">Gesamte Einkommen</string>
+    <string name="analysis_expenses_total">Gesamte Ausgaben</string>
+    <string name="analysis_overview_total">Nettoeinkommen</string>
+    <string name="analysis_overview_budgetPerMonth">Nettoeinkommen nach Monat</string>
+    <string name="analysis_overview_budgetPerQuarter">Nettoeinkommen nach Quartal</string>
+    <string name="analysis_overview_budgetPerYear">Nettoeinkommen nach Jahr</string>
+    <string name="analysis_data_transferAvg">Durchschnitt pro Buchung</string>
+    <string name="analysis_data_monthAvg">Durchschnitt pro Monat</string>
+    <string name="analysis_data_quarterAvg">Durchschnitt pro Quartal</string>
+    <string name="analysis_data_yearAvg">Durchschnitt pro Jahr</string>
+    <string name="analysis_data_typesListTitle">Kategorien</string>
+    <plurals name="analysis_data_typeListTransferCount">
+        <item quantity="one">%1$d Buchung</item>
+        <item quantity="other">%1$d Buchungen</item>
+    </plurals>
+    <string name="analysis_incomes_monthDiagramValues">Einkommen nach Monat</string>
+    <string name="analysis_expenses_monthDiagramValues">Ausgaben nach Monat</string>
+    <string name="analysis_types_monthDiagramValues">%1$s nach Monat</string>
+    <string name="analysis_incomes_quarterDiagramValues">Einkommen nach Quartal</string>
+    <string name="analysis_expenses_quarterDiagramValues">Ausgaben nach Quartal</string>
+    <string name="analysis_types_quarterDiagramValues">%1$s nach Quartal</string>
+    <string name="analysis_incomes_yearDiagramValues">Einkommen nach Jahr</string>
+    <string name="analysis_expenses_yearDiagramValues">Ausgaben nach Jahr</string>
+    <string name="analysis_types_yearDiagramValues">%1$s nach Jahr</string>
+    <string name="analysis_incomes_monthDiagramCumulated">Kumulierte Einkommen nach Monat</string>
+    <string name="analysis_expenses_monthDiagramCumulated">Kumulierte Ausgaben nach Monat</string>
+    <string name="analysis_incomes_quarterDiagramCumulated">Kumulierte Einkommen nach Quartal</string>
+    <string name="analysis_expenses_quarterDiagramCumulated">Kumulierte Ausgaben nach Quartal</string>
+    <string name="analysis_incomes_yearDiagramCumulated">Kumulierte Einkommen nach Jahr</string>
+    <string name="analysis_expenses_yearDiagramCumulated">Kumulierte Ausgaben nach Jahr</string>
+    <string name="analysis_types_diagramDifference">Änderung zur vorheriger Zeitspanne</string>
+    <string name="analysis_types_transfers">Buchungen</string>
+    <string name="analysis_types_payPerHour">%1$s / h</string>
+    <string name="analysis_trend_upTitle">%1$s mehr als vorher</string>
+    <string name="analysis_trend_upTextIncomes">In der Zeitspanne von %1$s bis %2$s ist dein Einkommen von &lt;b&gt;%3$s&lt;/b&gt; auf &lt;b&gt;%4$s&lt;/b&gt; gestiegen, verglichen mit dem Zeitraum von %5$s bis %6$s.</string>
+    <string name="analysis_trend_upTextExpenses">In der Zeitspanne von %1$s bis %2$s sind deine Ausgaben von &lt;b&gt;%3$s&lt;/b&gt; auf &lt;b&gt;%4$s&lt;/b&gt; gestiegen, verglichen mit dem Zeitraum von %5$s bis %6$s.</string>
+    <string name="analysis_trend_upTextOverview">In der Zeitspanne von %1$s bis %2$s ist dein Nettoeinkommen von &lt;b&gt;%3$s&lt;/b&gt; auf &lt;b&gt;%4$s&lt;/b&gt; gestiegen, verglichen mit dem Zeitraum von %5$s bis %6$s.</string>
+    <string name="analysis_trend_downTitle">%1$s weniger als vorher</string>
+    <string name="analysis_trend_downTextIncomes">In der Zeitspanne von %1$s bis %2$s ist dein Einkommen von &lt;b&gt;%3$s&lt;/b&gt; auf &lt;b&gt;%4$s&lt;/b&gt; gesunken, verglichen mit dem Zeitraum von %5$s bis %6$s.</string>
+    <string name="analysis_trend_downTextExpenses">In der Zeitspanne von %1$s bis %2$s sind deine Ausgaben von &lt;b&gt;%3$s&lt;/b&gt; auf &lt;b&gt;%4$s&lt;/b&gt; gesunken, verglichen mit dem Zeitraum von %5$s bis %6$s.</string>
+    <string name="analysis_trend_downTextOverview">In der Zeitspanne von %1$s bis %2$s ist dein Nettoeinkommen von &lt;b&gt;%3$s&lt;/b&gt; auf &lt;b&gt;%4$s&lt;/b&gt; gesunken, verglichen mit dem Zeitraum von %5$s bis %6$s.</string>
+    <string name="analysis_trend_identicalTitle">Genau wie vorher</string>
+    <string name="analysis_trend_identicalTextIncomes">In der Zeitspanne von %1$s bis %2$s ist dein Einkommen identisch verglichen mit dem Zeitraum von %3$s bis %4$s.</string>
+    <string name="analysis_trend_identicalTextExpenses">In der Zeitspanne von %1$s bis %2$s sind deine Ausgaben identisch verglichen mit dem Zeitraum von %3$s bis %4$s.</string>
+    <string name="analysis_trend_identicalTextOverview">In der Zeitspanne von %1$s bis %2$s ist dein Nettoeinkommen identisch verglichen mit dem Zeitraum von %3$s bis %4$s.</string>
 
 
     <string name="settings_title">Einstellungen</string>

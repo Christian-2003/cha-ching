@@ -128,13 +128,6 @@
 
 
     <string name="analysis_title">Analysis</string>
-    <string name="analysis_other">Other</string>
-    <string name="analysis_total">Total</string>
-    <string name="analysis_average">Average</string>
-    <string name="analysis_period_currentYear">Current year</string>
-    <string name="analysis_period_lastYear">Last year</string>
-    <string name="analysis_period_custom">Custom</string>
-    <string name="analysis_period_customValue">%1$s - %2$s</string>
     <string-array name="analysis_tabs">
         <item>Overview</item>
         <item>Incomes</item>
@@ -151,6 +144,9 @@
     <string name="analysis_filter_precision_month">Month</string>
     <string name="analysis_filter_precision_quarter">Quarter</string>
     <string name="analysis_filter_precision_year">Year</string>
+    <string name="analysis_emptyPlaceholder_titleIncomes">No incomes</string>
+    <string name="analysis_emptyPlaceholder_titleExpenses">No expenses</string>
+    <string name="analysis_emptyPlaceholder_subtitle">Analysis results are displayed here</string>
     <string name="analysis_incomes_total">Total incomes</string>
     <string name="analysis_expenses_total">Total expenses</string>
     <string name="analysis_overview_total">Budget</string>

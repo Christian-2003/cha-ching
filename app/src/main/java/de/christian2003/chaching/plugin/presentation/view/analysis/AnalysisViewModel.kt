@@ -193,7 +193,7 @@ class AnalysisViewModel @Inject constructor(
                     labels.add(label)
                 }
                 AnalysisPrecision.Year -> {
-                    val label: String = normalizedDate.year.toString()
+                    val label: String = normalizedDate.format(formatter)
                     labels.add(label)
                 }
             }

@@ -326,7 +326,7 @@ fun ChaChingThemeGlance(
 	content: @Composable() () -> Unit
 ) {
 	val colors = ColorProviders(
-		light = if(dynamicColor) {
+		light = if (dynamicColor) {
 			dynamicLightColorScheme(context)
 		} else {
 			when(contrast) {
@@ -335,7 +335,7 @@ fun ChaChingThemeGlance(
 				ThemeContrast.High -> highContrastLightColorScheme
 			}
 		},
-		dark = if(dynamicColor) {
+		dark = if (dynamicColor) {
 			dynamicDarkColorScheme(context)
 		} else {
 			when(contrast) {
