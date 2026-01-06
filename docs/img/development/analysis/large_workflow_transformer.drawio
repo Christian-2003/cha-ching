@@ -1,0 +1,112 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0" version="29.2.9">
+  <diagram name="Page-1" id="tPM5u_qGdXuNq6M-KGy8">
+    <mxGraphModel dx="1188" dy="609" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="noDXV381131okplp-J4J-14" edge="1" parent="1" source="noDXV381131okplp-J4J-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Start" vertex="1">
+          <mxGeometry height="40" width="100" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-15" edge="1" parent="1" source="noDXV381131okplp-J4J-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Create lists for incomes and expenses" vertex="1">
+          <mxGeometry height="40" width="100" x="120" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-16" edge="1" parent="1" source="noDXV381131okplp-J4J-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-24" connectable="0" parent="noDXV381131okplp-J4J-16" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Next type" vertex="1">
+          <mxGeometry relative="1" x="-0.4929" as="geometry">
+            <mxPoint x="4" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-23" edge="1" parent="1" source="noDXV381131okplp-J4J-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-27" connectable="0" parent="noDXV381131okplp-J4J-23" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Finish" vertex="1">
+          <mxGeometry relative="1" x="-0.4571" y="-2" as="geometry">
+            <mxPoint x="18" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="&lt;div&gt;For each&lt;/div&gt;&lt;div&gt;type&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="80" x="240" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-21" edge="1" parent="1" source="noDXV381131okplp-J4J-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="840" y="60" />
+              <mxPoint x="840" y="10" />
+              <mxPoint x="230" y="10" />
+            </Array>
+            <mxPoint x="230" y="60.28571428571428" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Generate result for type" vertex="1">
+          <mxGeometry height="40" width="100" x="610" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-18" edge="1" parent="1" source="noDXV381131okplp-J4J-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-26" connectable="0" parent="noDXV381131okplp-J4J-18" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Next date" vertex="1">
+          <mxGeometry relative="1" x="-0.1143" y="-1" as="geometry">
+            <mxPoint x="26" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-20" edge="1" parent="1" source="noDXV381131okplp-J4J-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-25" connectable="0" parent="noDXV381131okplp-J4J-20" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Finish" vertex="1">
+          <mxGeometry relative="1" x="-0.05" as="geometry">
+            <mxPoint x="-3" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-6" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="&lt;div&gt;For each&lt;/div&gt;&lt;div&gt;date&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="80" x="490" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-17" edge="1" parent="1" source="noDXV381131okplp-J4J-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Create list of date results" vertex="1">
+          <mxGeometry height="40" width="100" x="360" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-19" edge="1" parent="1" source="noDXV381131okplp-J4J-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="230" />
+              <mxPoint x="470" y="230" />
+            </Array>
+            <mxPoint x="470" y="60" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-29" edge="1" parent="1" source="noDXV381131okplp-J4J-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Create single item for date" vertex="1">
+          <mxGeometry height="40" width="100" x="480" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="End" vertex="1">
+          <mxGeometry height="40" width="100" x="230" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Add item to list of dates" vertex="1">
+          <mxGeometry height="40" width="100" x="480" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Add result to list of incomes or expenses" vertex="1">
+          <mxGeometry height="40" width="100" x="730" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-31" edge="1" parent="1" source="noDXV381131okplp-J4J-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-33" edge="1" parent="1" source="noDXV381131okplp-J4J-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="noDXV381131okplp-J4J-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="noDXV381131okplp-J4J-32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Return lists for incomes and expenses" vertex="1">
+          <mxGeometry height="40" width="100" x="230" y="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

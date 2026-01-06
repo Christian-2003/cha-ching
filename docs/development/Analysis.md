@@ -33,8 +33,6 @@ The following workflow illustrates how the analysis works internally:
 ### 1.2 Analysis Steps
 This section describes each of the analysis steps that are mentioned [above](#11-workflow).
 
-<br/>
-
 #### 1.2.1 Query Clusters
 First, the analysis queries the two latest clusters from the database. The query to get a cluster looks as follows:, where `:date` is the epoch day from which to begin searching for the latest cluster:
 ```sql
@@ -109,24 +107,76 @@ no data should return empty result | :green_circle: Passing
 ## 2 Large Analysis
 The large analysis is the mroe powerful out of the two analysis algorithms used in Cha Ching. This section describes the large analysis.
 
+<br/>
+
 ### 2.1 Workflow
 The following workflow illustrates how the analysis works internally:
 ![Large analysis workflow](../img/development/analysis/large_workflow.drawio.svg)
 
+<br/>
+
 ### 2.2 Analysis Steps
 This section describes each of the analysis steps that are mentioned [above](#21-workflow).
 
-#### 2.2.1 Analysis Data Summary
-The first step of the analysis is the summary of the data and the converting into a suitable format, as described by the following workflow:
+#### 2.2.1 Query Transfers
+In the first step, the data for the analysis is queried from the database. For each time span, the analysis use case executes two database queries through a repository.  
+The first query is used to get a list of all types, while the second query is used to get all transfers within the specified time span.
 
-![Analysis flow summarizer](../img/development/analysis/analysis_flow_summarizer.drawio.svg)
+The following code shows the SQL query used to get all relevant transfers:
+```sql
+SELECT * FROM transfers t
+WHERE valueDate BETWEEN :startEpochDay AND :endEpochDay
+    AND NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type)
+ORDER BY valueDate DESC
+```
+_`:startEpochDay`: Epoch day at which the time span begins_  
+_`:endEpochDay`: Epoch day at which the time span ends_  
 
-First, all transfers are groubed by type.
-The transfers for each type are then grouped by a normalized date and summarized afterwards. The normalized date is determined based on the analysis precision. The resulting list of summarized data (for each normalized date) is then trimmed. This makes sure that in between a start and end date, each normalized date has exactly one item inside the list.
+The query addresses the following concerns:
+* **Time constraints:** The condition `valueDate BETWEEN :startEpochDay AND :endEpochDay` assures that only transfers within the specified time span are returned.
+* **Disregard deleted types:** Transfers of types that were moved to the trash are disregarded from the analysis through the condition `NOT EXISTS (SELECT 1 FROM deletedTypes d WHERE d.typeId = t.type)`.
+* **Result order:** The resulting list of transfers is ordered by the value date through `ORDER BY valueDate DESC`. This is not strictly required, since the analysis use case needs to iterate through every transfer. However, this can increase the speed of the analysis use case.
 
-The following schematic describes the result of the summarizer:
+#### 2.2.2 Analysis Data Summary
+After querying relevant data, the next step of the analysis summarizes the data, as described by the following workflow:
 
-![Analysis result summarizer](../img/development/analysis/analysis_result_summarizer.drawio.svg)
+![Large workflow summarizer](../img/development/analysis/large_workflow_summarizer.drawio.svg)
+
+First, all transfers are grouped by type - hence the summarizer returns the results mapped to each type.  
+For each type, the summarizers groupes the transfers by normalized date and summarizes their data. The summarized data includes the following data per normalized date (per type):
+* Count of transfers
+* Sum of value
+* Sum of hours worked
+
+This data is generated both for incomes and expenses separately.
+
+Next, the resulting list of summarizes per normalized date is padded. This makes sure that for each normalized date, there is exactly one item in this list.
+
+The result of the summarizer can be described by the following UML diagram:
+![Large UML classes summarizer](../img/development/analysis/large_uml_classes_summarizer.drawio.svg)
+
+As seen above, the summarized data is generated separately for incomes and expenses. Incomes and expenses are grouped together for a single normalized date.  
+The entire sumamrizer returns multiple `SummarizerGroupedTypeResult`-instances, each of which is mapped to a single type as follows: `Map<UUID, SummarizerGroupedTypeResult` (The map key is the unique ID of the type).
+
+#### 2.2.3 Summary Transformation
+The [summarizer](#222-analysis-data-summary) returns data mapped by type. For the further analysis, this format is not suitable. Therefore, we implement a transformer that transforms the data to a more suitable format. The following workflow describes the inner workings of the transformer:
+![Large workflow transformer](../img/development/analysis/large_workflow_transformer.drawio.svg)
+
+As described by the workflow, the transformer iterates through all types. For each type, the transformer iterates through the list of results for the normalized dates. Each of the results is added to a list, which is then returned as final result for the type. The final type-result is then added to the lists of incomes OR expenses (whether to transform incomes or expenses).
+
+To conclude, the transformer transforms the result from:
+```
+Type -> Date -> Incomes / Expenses -> Actual values
+```
+to:
+```
+Incomes / Expenses -> Type -> Date -> Actual values
+```
+
+The transformer returns the following:
+![Large UML classes transformer](../img/development/analysis/large_uml_classes_transformer.drawio.svg)
+
+<br/>
 
 ### 2.3 Final Result
 The final result of the large analysis is described by the following UML diagram:
