@@ -5,15 +5,15 @@ import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -357,32 +357,21 @@ private fun QuickAccessHelp(
             shape = MaterialTheme.shapes.extraLarge
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(24.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                //Title:
-                Text(
-                    text = stringResource(R.string.type_quickAccessHelp_title),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-
-                //Content:
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                //Preview icon:
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
                         .padding(
-                            top = 16.dp,
-                            bottom = 24.dp
+                            start = 24.dp,
+                            top = 24.dp,
+                            end = 24.dp,
+                            bottom = 16.dp
                         )
                 ) {
-                    Text(
-                        text = stringResource(R.string.type_quickAccessHelp_text),
-                        modifier = Modifier.fillMaxWidth()
-                    )
                     Image(
                         painter = painter,
                         contentDescription = "",
@@ -390,10 +379,34 @@ private fun QuickAccessHelp(
                     )
                 }
 
+                HorizontalDivider()
+
+                //Scrollable content:
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 24.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.type_quickAccessHelp_title),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.type_quickAccessHelp_text),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
                 //Close button:
                 TextButton(
                     onClick = onDismiss,
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .align(Alignment.End)
                 ) {
                     Text(stringResource(R.string.button_close))
                 }

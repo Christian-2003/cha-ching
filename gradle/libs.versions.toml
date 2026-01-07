@@ -2,7 +2,6 @@
 agp = "8.6.1"
 animationGraphics = "1.8.3"
 apkupdaterLibrary = "v2.1.0"
-composeCharts = "0.1.0"
 coilCompose = "2.7.0"
 coreSplashscreen = "1.0.1"
 glanceAppwidget = "1.1.1"
@@ -59,7 +58,6 @@ kotlinx-coroutines-android = {group = "org.jetbrains.kotlinx", name = "kotlinx-c
 apkupdater-library = { group = "com.github.supersu-man", name = "apkupdater-library", version.ref = "apkupdaterLibrary" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coilCompose" }
-compose-charts = { group = "io.github.ehsannarmani", name = "compose-charts", version.ref = "composeCharts" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
