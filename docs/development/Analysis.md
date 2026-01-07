@@ -204,10 +204,10 @@ The final result of the large analysis is described by the following UML diagram
 The result contains two instances of `LargeTimeSpan`, each of which contains the analysis result for a single time span. One of these instances contains the result for the time span that is selected by the user, while the other contains the result for another time span with the same length that ends exactly where the other time span starts. This second result is used to compare data and establish trends, as can be seen in the user interface:
 
 <div>
-    <img src="../img/development/analysis/large_example_result_overview.png" width="300"/>
-    <img src="../img/development/analysis/large_example_result_incomes.png" width="300"/>
-    <img src="../img/development/analysis/large_example_result_expenses.png" width="300"/>
-    <img src="../img/development/analysis/large_example_result_type.png" width="300"/>
+    <img src="../img/development/analysis/large_example_result_overview.png" width="256" style="vertical-align: top;"/>
+    <img src="../img/development/analysis/large_example_result_incomes.png" width="256" style="vertical-align: top;"/>
+    <img src="../img/development/analysis/large_example_result_expenses.png" width="256" style="vertical-align: top;"/>
+    <img src="../img/development/analysis/large_example_result_type.png" width="256" style="vertical-align: top;"/>
 </div>
 
 The analysis time period, as well as precision can be selected through the filter icon:
