@@ -15,7 +15,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,7 +51,7 @@ fun ColumnChart(
     negativeColors: List<Color> = positiveColors,
     columnHeight: Dp = 256.dp
 ) {
-    val positiveMaxValue: Double = rememberSaveable {
+    val positiveMaxValue: Double = remember(columns) {
         columns.maxOfOrNull { row ->
             var sum = 0.0
             row.values.forEach { value ->
@@ -62,7 +62,7 @@ fun ColumnChart(
             return@maxOfOrNull sum
         } ?: 0.0
     }
-    val negativeMaxValue: Double = rememberSaveable {
+    val negativeMaxValue: Double = remember(columns) {
         columns.minOfOrNull { row ->
             var sum = 0.0
             row.values.forEach { value ->
