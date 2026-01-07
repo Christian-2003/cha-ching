@@ -1,19 +1,19 @@
 <img src="../img/icon.png" height="150" align="right">
 
 # Analysis
-This document describes the analysis algorithm used in Cha Ching.
-
-> [!NOTE]
-> This document is currently WIP.
+This document describes the analysis algorithms used in Cha Ching. The app employs two different analysis algorithms: One small and one large algorithm, both for different purposes.
 
 ### Table of Contents
 1. [Small Analysis](#1-small-analysis)
-    1. [Workflow](#11-workflow)
-    2. [Analysis Steps](#12-analysis-steps)
-    3. [Final Result](#13-final-result)
-    4. [Test Strategy](#14-test-strategy)
+    * [Workflow](#11-workflow)
+    * [Analysis Steps](#12-analysis-steps)
+    * [Final Result](#13-final-result)
+    * [Test Strategy](#14-test-strategy)
 2. [Large Analysis](#2-large-analysis)
-
+    * [Workflow](#21-workflow)
+    * [Analysis Steps](#22-analysis-steps)
+    * [Final Result](#23-final-result)
+    * [Test Strategy](#24-test-strategy)
 
 <br/>
 
@@ -176,15 +176,59 @@ Incomes / Expenses -> Type -> Date -> Actual values
 The transformer returns the following:
 ![Large UML classes transformer](../img/development/analysis/large_uml_classes_transformer.drawio.svg)
 
+#### 2.2.4 Result Generation
+After the result has been transformed, the [Analysis result](#23-final-result) is being generated. For this, the analysis use case employs multiple generators, each of which is resonsible for generating a specific set of class-instances.
+
+The `LargeTypeResultGenerator` is responsible for generating an instance of `LargeTypeResult` and all classes that are referenced. With each call, the generator generates such an instance for a single type.
+
+The `LargeTimeSpanGenerator` is responsible for generating an instance of `LargeTimeSpan` and all classes that are referenced. For this, the generator uses `LargeTypeResultGenerator` internally to generate the `LargeTypeResult` instances. With each call, the generator generates such an instance for a single time span. This means that this generator is called a total of two times: Once for each time span.
+
+Finally, the `LargeAnalysisUseCase` orchestrates the analysis, which does also include the generation of the analysis result.
+
 <br/>
 
 ### 2.3 Final Result
 The final result of the large analysis is described by the following UML diagram:
 ![Large analysis workflow](../img/development/analysis/large_uml_classes.drawio.svg)
 
+The result contains two instances of `LargeTimeSpan`, each of which contains the analysis result for a single time span. One of these instances contains the result for the time span that is selected by the user, while the other contains the result for another time span with the same length that ends exactly where the other time span starts. This second result is used to compare data and establish trends, as can be seen in the user interface:
+<div>
+    <img src="../img/development/analysis/large_example_result_overview.png" height="512"/>
+    <img src="../img/development/analysis/large_example_result_incomes.png" height="512"/>
+    <img src="../img/development/analysis/large_example_result_expenses.png" height="512"/>
+    <img src="../img/development/analysis/large_example_result_type.png" height="512"/>
+</div>
+
+The analysis time period, as well as precision can be selected through the filter icon:
+<img src="../img/development/analysis/large_example_filters.png" height="512"/>
+
+<br/>
+
+## 2.4 Test Strategy
+The large analysis is implemented using multiple components. Each of these components needs to be tested individually, so that improper behavior can be detected more closely.
+
+Currently, the following test cases are implemented for each component:
+
+Component |Test | State
+--- | --- | ---
+`AnalysisDataSummarizer` | monthlySummaryWithData | :green_circle: Passing
+`AnalysisDataSummarizer` | quarterlySummaryWithData | :green_circle: Passing
+`AnalysisDataSummarizer` | yearlySummaryWithData | :green_circle: Passing
+`AnalysisDataSummarizer` | summaryWithoutData | :green_circle: Passing
+`AnalysisDataTransformer` | transform regular data without special cases should return | :green_circle: Passing
+`LargeTypeResultGenerator` | generate from regular data without special cases should return | :green_circle: Passing
+`LargeTypeResultGenerator` | generate with no data should return empty result | :green_circle: Passing
+`LargeTypeResultGenerator` | generate with single date result should return | :green_circle: Passing
+`LargeTypeResultGenerator` | generate with no transfer count should return empty result | :green_circle: Passing
+`LargeTypeSpanGenerator` | generate with regular data without special cases should return | :green_circle: Passing
+`LargeTypeSpanGenerator` | generate with no data should returnn | :green_circle: Passing
+`LargeTypeSpanGenerator` | generate with only incomes should return | :green_circle: Passing
+`LargeTypeSpanGenerator` | generate with only expenses should return | :green_circle: Passing
+`LargeTypeSpanGenerator` | generate with only one TransformerTypeResult should return | :green_circle: Passing
+
 <br/>
 
 ***
 
-2025-12-31  
+2025-01-07  
 &copy; Christian-2003
