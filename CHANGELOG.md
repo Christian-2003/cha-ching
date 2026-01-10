@@ -2,6 +2,27 @@
 
 # Changelog
 
+## 1.3.0 (2025-01-10)
+
+###### Release Highlights
+Regular expenses can be tracked, updates to analysis as well as major changes to user interface.
+
+###### Features
+* Add possibility to track regular expenses, such as taxes or insurance payments.
+* When deleting a type, it is now moved to a trash bin instead of a permanent deletion. This prevents user from accidentally deleting a type and it's associated transfers.
+* Change user interface to match new Material Design 3 Expressive guidelines.
+* Rework app widget, to include incomes, expenses and budget.
+* App widgets can be customized through settings.
+* Add setting to enable the global color scheme.
+* Add setting to change the contrast of theme colors.
+* Add custom generator for diagram colors that uses theme colors as seed and adapts to theme changes.
+* Deleted types are included in backups.
+* Analysis now compares current time span with previous time span.
+* Analysis now regards expenses and calculates budget.
+* User can select analysis precision through filters.
+
+<br/>
+
 ## 1.2.1 (2025-09-29)
 
 ###### Release Highlights
