@@ -5,7 +5,7 @@
 ![GitHub](https://img.shields.io/github/issues/Christian-2003/cha-ching?color=purple)
 ![GitHub](https://img.shields.io/github/repo-size/Christian-2003/cha-ching?color=blue)
 
-Do you want to know how much money you have earned? Cha Ching makes you store all your incomes, such as salaries or bonuses, on your Android device locally.
+Do you want to know how much money you have earned? Cha Ching makes you store all your incomes and regular expenses, such as salaries, bonuses, taxes or insurance payments - all on your Android device locally.
 
 <div align="center">
     <img src="docs/img/preview_1.png" height="390">
@@ -25,10 +25,10 @@ Do you want to know how much money you have earned? Cha Ching makes you store al
 <br/>
 
 ## Description
-Cha Ching allows you to store your incomes on your device locally. You can configure the type of income, such as salaries, vacation pay, bonuses or sick pay.
+Cha Ching allows you to store your incomes and regular expenses on your device locally. You can configure the type of transactions, such as salaries, bonuses, taxes or insurance payments.
 
 ###### Technologies Used
-The application is developed with Jetpack Compose using Android Studio IDE (version Meerkat Feature Drop). Therefore, the app is built using Gradle.
+The application is developed with Jetpack Compose using Android Studio IDE. Therefore, the app is built using Gradle.
 
 The app uses Material Design 3 Expressive to implement a comfortable user interface that is visually pleasing. Users should be able to work with the user interface of the app intuitively.
 
@@ -58,7 +58,8 @@ In order to install the app on your Android device, consider the following steps
 7. Now, the app has been installed successfully.
 
 ###### First Steps
-The app includes an onboarding feature. Reproduce the steps described during onboarding in order to get familiar with the app.
+The app includes an onboarding feature. Go through the onboarding process and select the types of transactions you want to track at the end. On the main screen, you can add transactions for the selected types through the "+" button at the bottom right hand corner.  
+You can add custom types of transactions as well through the "Categories"-button. 
 
 <br/>
 
@@ -93,10 +94,13 @@ The project will be developed in English.
     <img src="docs/img/img_3.png" height="390">
     <img src="docs/img/img_4.png" height="390">
     <img src="docs/img/img_5.png" height="390">
+    <img src="docs/img/img_6.png" height="390">
+    <img src="docs/img/img_7.png" height="390">
+    <img src="docs/img/img_8.png" height="390">
 </div>
 
 <br/>
 
 ***
-2025-06-06  
+2025-01-10  
 &copy; Christian-2003
