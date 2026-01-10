@@ -1,5 +1,6 @@
 package de.christian2003.chaching.plugin.infrastructure.backup
 
+import de.christian2003.chaching.plugin.infrastructure.backup.dto.DeletedTypeDto
 import de.christian2003.chaching.plugin.infrastructure.backup.dto.TransferDto
 import de.christian2003.chaching.plugin.infrastructure.backup.dto.TypeDto
 import kotlinx.serialization.SerialName
@@ -14,6 +15,9 @@ data class BackupData(
 
     @SerialName("types")
     val types: List<TypeDto>,
+
+    @SerialName("deletedTypes")
+    val deletedTypes: List<DeletedTypeDto> = listOf(),
 
     @SerialName("transfers")
     val transfers: List<TransferDto>

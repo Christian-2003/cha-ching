@@ -36,13 +36,20 @@ class ChaChingRepository @Inject constructor(
 	/**
 	 * Imports the data passed as arguments based on the specified import strategy.
 	 *
-	 * @param transfers         List of transfers to import
-	 * @param types             List of types to import
+	 * @param transfers         List of transfers to import.
+	 * @param types             List of types to import.
+	 * @param deletedTypes		List of deleted types to import.
 	 * @param importStrategy    Indicates what should happen to existing data during import.
 	 */
-	override suspend fun importFromBackup(transfers: List<Transfer>, types: List<Type>, importStrategy: ImportStrategy) {
+	override suspend fun importFromBackup(
+		transfers: List<Transfer>,
+		types: List<Type>,
+		deletedTypes: List<DeletedType>,
+		importStrategy: ImportStrategy
+	) {
 		val transferEntities: MutableList<TransferEntity> = mutableListOf()
 		val typeEntities: MutableList<TypeEntity> = mutableListOf()
+		val deletedTypeEntities: MutableList<DeletedTypeEntity> = mutableListOf()
 
 		transfers.forEach { transfer ->
 			transferEntities.add(transferMapper.toEntity(transfer))
@@ -50,20 +57,27 @@ class ChaChingRepository @Inject constructor(
 		types.forEach { type ->
 			typeEntities.add(typeMapper.toEntity(type))
 		}
+		deletedTypes.forEach { deletedType ->
+			deletedTypeEntities.add(deletedTypeMapper.toEntity(deletedType))
+		}
 
 		when (importStrategy) {
 			ImportStrategy.DELETE_EXISTING_DATA -> {
 				transferDao.deleteAll()
+				deletedTypeDao.deleteAll()
 				typeDao.deleteAll()
 				typeDao.insertAndIgnore(typeEntities)
+				deletedTypeDao.insertAndIgnore(deletedTypeEntities)
 				transferDao.insertAndIgnore(transferEntities)
 			}
 			ImportStrategy.REPLACE_EXISTING_DATA -> {
 				typeDao.upsert(typeEntities)
+				deletedTypeDao.upsert(deletedTypeEntities)
 				transferDao.upsert(transferEntities)
 			}
 			ImportStrategy.IGNORE_EXISTING_DATA -> {
 				typeDao.insertAndIgnore(typeEntities)
+				deletedTypeDao.insertAndIgnore(deletedTypeEntities)
 				transferDao.insertAndIgnore(transferEntities)
 			}
 		}

@@ -3,7 +3,9 @@ package de.christian2003.chaching.plugin.infrastructure.db
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import de.christian2003.chaching.plugin.infrastructure.db.entities.DeletedTypeEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -45,11 +47,36 @@ interface DeletedTypeDao {
 
 
     /**
+     * Inserts the entities to the table and ignores conflicts.
+     *
+     * @param entities  Entities to insert.
+     */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAndIgnore(entities: List<DeletedTypeEntity>)
+
+
+    /**
+     * Upserts the entities to the table.
+     *
+     * @param entities  Entities to upsert.
+     */
+    @Upsert
+    suspend fun upsert(entities: List<DeletedTypeEntity>)
+
+
+    /**
      * Deletes the DeletedTypeEntity-row from the table.
      *
      * @param entity    Entity to delete.
      */
     @Delete
     suspend fun delete(entity: DeletedTypeEntity)
+
+
+    /**
+     * Deletes all rows from the table
+     */
+    @Query("DELETE FROM deletedTypes")
+    suspend fun deleteAll()
 
 }
