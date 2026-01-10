@@ -249,7 +249,7 @@
 
 
     <string name="trash_title">Trash bin</string>
-    <string name="trash_deletedLabel">Deleted %1$s</string>
+    <string name="trash_deletedLabel">Deleted on %1$s</string>
     <string name="trash_emptyPlaceholder_title">Trash bin empty</string>
     <string name="trash_emptyPlaceholder_subtitle">Categories that were deleted are shown here</string>
     <string name="trash_help">From here, you can permanently delete or restore categories that you have removed earlier.</string>

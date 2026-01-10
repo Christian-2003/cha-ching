@@ -16,8 +16,8 @@ android {
 		applicationId = "de.christian2003.chaching"
 		minSdk = 34
 		targetSdk = 35
-		versionCode = 8
-		versionName = "1.3.0-pre1"
+		versionCode = 9
+		versionName = "1.3.0"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables {
 			useSupportLibrary = true
@@ -112,7 +112,6 @@ dependencies {
 	implementation(libs.okhttp)
 	implementation(libs.androidx.hilt.navigation.compose)
 	implementation(libs.hilt.android)
-	implementation(libs.icu4j)
 
 	testImplementation(libs.junit)
 	testImplementation(libs.mockito.kotlin)

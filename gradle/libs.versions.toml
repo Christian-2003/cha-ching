@@ -61,7 +61,6 @@ coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coilCompose
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-icu4j = { group = "com.ibm.icu", name = "icu4j", version.ref = "icu4j" }
 
 #Test
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

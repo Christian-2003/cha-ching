@@ -81,7 +81,7 @@ class TrashViewModel @Inject constructor(
 
 
     fun formatDateTime(dateTime: LocalDateTime): String {
-        return dateTimeFormatterService.formatRelative(dateTime)
+        return dateTimeFormatterService.format(dateTime)
     }
 
 
