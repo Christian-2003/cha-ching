@@ -13,6 +13,7 @@ import de.christian2003.chaching.application.repository.AnalysisRepository
 import de.christian2003.chaching.application.repository.AppsRepository
 import de.christian2003.chaching.application.repository.TransferRepository
 import de.christian2003.chaching.application.repository.TypeRepository
+import de.christian2003.chaching.application.repository.UpdateRepository
 import de.christian2003.chaching.application.services.DateTimeFormatterService
 import de.christian2003.chaching.application.services.NormalizedDateConverterService
 import de.christian2003.chaching.application.services.ValueFormatterService
@@ -20,6 +21,7 @@ import de.christian2003.chaching.plugin.infrastructure.backup.JsonBackupService
 import de.christian2003.chaching.plugin.infrastructure.db.ChaChingRepository
 import de.christian2003.chaching.plugin.infrastructure.rest.HttpClientProvider
 import de.christian2003.chaching.plugin.infrastructure.rest.apps.AppsRestRepository
+import de.christian2003.chaching.plugin.infrastructure.rest.update.UpdateRestRepository
 import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
@@ -55,6 +57,11 @@ abstract class BindingsModule {
     abstract fun provideAppsRepository(
         impl: AppsRestRepository
     ): AppsRepository
+
+    @Binds
+    abstract fun provideUpdateRepository(
+        impl: UpdateRestRepository
+    ): UpdateRepository
 
     @Binds
     abstract fun bindBackupService(

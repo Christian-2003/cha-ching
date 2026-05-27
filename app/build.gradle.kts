@@ -16,8 +16,8 @@ android {
 		applicationId = "de.christian2003.chaching"
 		minSdk = 34
 		targetSdk = 35
-		versionCode = 9
-		versionName = "1.3.0"
+		versionCode = 8 //10
+		versionName = "1.3.1-pre1"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		vectorDrawables {
 			useSupportLibrary = true
@@ -101,7 +101,6 @@ dependencies {
 	implementation(libs.kotlinx.coroutines.android)
 	implementation(libs.androidx.lifecycle.viewmodel.compose)
 	implementation(libs.androidx.navigation.compose)
-	implementation(libs.apkupdater.library)
 	implementation(libs.androidx.core.splashscreen)
 	implementation(libs.coil.compose)
 	implementation(libs.coil.svg)

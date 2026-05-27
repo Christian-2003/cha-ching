@@ -37,6 +37,7 @@
         <item>Q3 %1$s</item>
         <item>Q4 %1$s</item>
     </string-array>
+    <string name="update_download_title">Cha Ching Aktualisierung</string>
 
 
     <string name="main_overview_otherTypes">Sonstiges</string>
@@ -146,6 +147,7 @@
     <string name="analysis_filter_precision_year">Jahr</string>
     <string name="analysis_emptyPlaceholder_titleIncomes">Keine Einkommen</string>
     <string name="analysis_emptyPlaceholder_titleExpenses">Keine Ausgaben</string>
+    <string name="analysis_emptyPlaceholder_titleOverview">Keine Daten</string>
     <string name="analysis_emptyPlaceholder_subtitle">Analyseergebnisse werden hier angezeigt</string>
     <string name="analysis_incomes_total">Gesamte Einkommen</string>
     <string name="analysis_expenses_total">Gesamte Ausgaben</string>

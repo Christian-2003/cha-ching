@@ -1,5 +1,6 @@
 package de.christian2003.chaching.plugin.presentation.view.main
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,11 +16,12 @@ import de.christian2003.chaching.application.usecases.transfer.GetAllTransfersUs
 import de.christian2003.chaching.application.usecases.transfer.GetRecentTransfersUseCase
 import de.christian2003.chaching.application.usecases.type.GetAllTypesNotInTrashUseCase
 import de.christian2003.chaching.application.usecases.type.GetTypeByIdUseCase
+import de.christian2003.chaching.application.usecases.update.IsUpdateAvailableUseCase
+import de.christian2003.chaching.application.usecases.update.RequestDownloadUpdateUseCase
 import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.domain.analysis.small.SmallAnalysisResult
 import de.christian2003.chaching.domain.transfer.TransferValue
-import de.christian2003.chaching.plugin.infrastructure.update.UpdateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
@@ -49,24 +51,15 @@ class MainViewModel @Inject constructor(
 	getAllTypesNotInTrashUseCase: GetAllTypesNotInTrashUseCase,
 	getRecentTransfersUseCase: GetRecentTransfersUseCase,
 	getAllTransfersUseCase: GetAllTransfersUseCase,
+	isUpdateAvailableUseCase: IsUpdateAvailableUseCase,
 	private val deleteTransferUseCase: DeleteTransferUseCase,
 	private val smallAnalysisUseCase: SmallAnalysisUseCase,
 	private val getTypeByIdUseCase: GetTypeByIdUseCase,
 	private val getTypeForTransferService: GetTypeForTransferService,
 	private val valueFormatterService: ValueFormatterService,
-	private val dateTimeFormatterService: DateTimeFormatterService
+	private val dateTimeFormatterService: DateTimeFormatterService,
+	private val requestDownloadUpdateUseCase: RequestDownloadUpdateUseCase
 ): ViewModel() {
-
-	/**
-	 * Indicates whether the view model is initialized.
-	 */
-	private var isInitialized: Boolean = false
-
-	/**
-	 * Stores the update manager.
-	 */
-	private lateinit var updateManager: UpdateManager
-
 
 	/**
 	 * List of all types that are not in trash.
@@ -101,19 +94,8 @@ class MainViewModel @Inject constructor(
 		getAllTransfersUseCase.getAllTransfers().onEach {
 			startAnalysis()
 		}.launchIn(viewModelScope)
-	}
-
-
-	/**
-	 * Instantiates the view model.
-	 *
-	 * @param updateManager	Update manager.
-	 */
-	fun init(updateManager: UpdateManager) {
-		isUpdateAvailable = updateManager.isUpdateAvailable
-		if (!isInitialized) {
-			this@MainViewModel.updateManager = updateManager
-			isInitialized = true
+		viewModelScope.launch(Dispatchers.IO) {
+			isUpdateAvailable = isUpdateAvailableUseCase.isUpdateAvailable()
 		}
 	}
 
@@ -156,8 +138,8 @@ class MainViewModel @Inject constructor(
 	/**
 	 * Requests the download of the new version of the app (if available).
 	 */
-	fun requestDownload() {
-		updateManager.requestDownload()
+	fun requestDownload() = viewModelScope.launch {
+		requestDownloadUpdateUseCase.requestDownload()
 	}
 
 

@@ -29,7 +29,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.christian2003.chaching.plugin.infrastructure.update.UpdateManager
 import de.christian2003.chaching.plugin.presentation.ui.theme.ChaChingTheme
 import de.christian2003.chaching.plugin.presentation.view.help.HelpScreen
 import de.christian2003.chaching.plugin.presentation.view.help.HelpViewModel
@@ -72,9 +71,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-	private var updateManager: UpdateManager? = null
-
-
 	/**
 	 * Instantiates the app on state changes.
 	 *
@@ -82,11 +78,6 @@ class MainActivity : ComponentActivity() {
 	 */
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-
-		//Update manager:
-		if (updateManager == null) {
-			updateManager = UpdateManager.getInstance(this)
-		}
 
 		//Splash screen:
 		val splashScreen = installSplashScreen()
@@ -115,8 +106,7 @@ class MainActivity : ComponentActivity() {
         )
 		setContent {
 			ChaChing(
-                destination = destination,
-				updateManager = updateManager!!
+                destination = destination
 			)
 		}
 	}
@@ -139,12 +129,10 @@ class MainActivity : ComponentActivity() {
  * Root composable for the ChaChing-app.
  *
  * @param destination   Optional destination to which to navigate immediately after showing the screen:
- * @param updateManager	Update manager which detects app updates.
  */
 @Composable
 fun ChaChing(
-    destination: String?,
-    updateManager: UpdateManager
+    destination: String?
 ) {
 	val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
@@ -191,9 +179,6 @@ fun ChaChing(
 
             composable("main") {
                 val viewModel: MainViewModel = hiltViewModel()
-                viewModel.init(
-                    updateManager = updateManager
-                )
                 MainScreen(
                     viewModel = viewModel,
                     onNavigateToTransfers = {
