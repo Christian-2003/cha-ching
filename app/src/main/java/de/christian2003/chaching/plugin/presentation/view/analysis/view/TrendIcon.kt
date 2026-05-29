@@ -24,6 +24,7 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.Dp
 import de.christian2003.chaching.R
 import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
+import de.christian2003.chaching.plugin.presentation.ui.theme.successColors
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisTab
 import java.time.LocalDate
 import kotlin.math.abs
@@ -79,11 +80,11 @@ fun TrendIcon(
             Shape(
                 shape = MaterialShapes.Cookie7Sided,
                 color = when {
-                    differenceToPrevious > 0.0 && tab == AnalysisTab.Incomes -> MaterialTheme.colorScheme.primaryContainer
+                    differenceToPrevious > 0.0 && tab == AnalysisTab.Incomes -> MaterialTheme.successColors.successContainer
                     differenceToPrevious < 0.0 && tab == AnalysisTab.Incomes -> MaterialTheme.colorScheme.errorContainer
                     differenceToPrevious > 0.0 && tab == AnalysisTab.Expenses -> MaterialTheme.colorScheme.errorContainer
-                    differenceToPrevious < 0.0 && tab == AnalysisTab.Expenses -> MaterialTheme.colorScheme.primaryContainer
-                    differenceToPrevious > 0.0 && tab == AnalysisTab.Overview -> MaterialTheme.colorScheme.primaryContainer
+                    differenceToPrevious < 0.0 && tab == AnalysisTab.Expenses -> MaterialTheme.successColors.successContainer
+                    differenceToPrevious > 0.0 && tab == AnalysisTab.Overview -> MaterialTheme.successColors.successContainer
                     differenceToPrevious < 0.0 && tab == AnalysisTab.Overview -> MaterialTheme.colorScheme.errorContainer
                     else -> MaterialTheme.colorScheme.surface
                 }
@@ -95,11 +96,11 @@ fun TrendIcon(
                     else -> painterResource(R.drawable.ic_identical)
                 },
                 tint = when {
-                    differenceToPrevious > 0.0 && tab == AnalysisTab.Incomes -> MaterialTheme.colorScheme.onPrimaryContainer
+                    differenceToPrevious > 0.0 && tab == AnalysisTab.Incomes -> MaterialTheme.successColors.onSuccessContainer
                     differenceToPrevious < 0.0 && tab == AnalysisTab.Incomes -> MaterialTheme.colorScheme.onErrorContainer
                     differenceToPrevious > 0.0 && tab == AnalysisTab.Expenses -> MaterialTheme.colorScheme.onErrorContainer
-                    differenceToPrevious < 0.0 && tab == AnalysisTab.Expenses -> MaterialTheme.colorScheme.onPrimaryContainer
-                    differenceToPrevious > 0.0 && tab == AnalysisTab.Overview -> MaterialTheme.colorScheme.onPrimaryContainer
+                    differenceToPrevious < 0.0 && tab == AnalysisTab.Expenses -> MaterialTheme.successColors.onSuccessContainer
+                    differenceToPrevious > 0.0 && tab == AnalysisTab.Overview -> MaterialTheme.successColors.onSuccessContainer
                     differenceToPrevious < 0.0 && tab == AnalysisTab.Overview -> MaterialTheme.colorScheme.onErrorContainer
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 },

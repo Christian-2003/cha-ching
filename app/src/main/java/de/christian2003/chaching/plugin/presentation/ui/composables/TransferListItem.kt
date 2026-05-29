@@ -42,6 +42,7 @@ import de.christian2003.chaching.domain.transfer.Transfer
 import de.christian2003.chaching.domain.transfer.TransferValue
 import de.christian2003.chaching.domain.type.Type
 import de.christian2003.chaching.plugin.presentation.model.TypeShapes
+import de.christian2003.chaching.plugin.presentation.ui.theme.successColors
 import java.time.LocalDate
 
 
@@ -135,7 +136,7 @@ fun TransferListItem(
                     text = onFormatValue(transfer.transferValue),
                     style = MaterialTheme.typography.bodyMedium,
                     color = if (transfer.transferValue.isSalary) {
-                        MaterialTheme.colorScheme.onPrimaryContainer
+                        MaterialTheme.successColors.onSuccessContainer
                     } else {
                         MaterialTheme.colorScheme.onSurface
                     },
@@ -143,7 +144,7 @@ fun TransferListItem(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.extraLargeIncreased)
                         .background(if (transfer.transferValue.isSalary) {
-                            MaterialTheme.colorScheme.primaryContainer
+                            MaterialTheme.successColors.successContainer
                         } else {
                             Color.Transparent
                         })

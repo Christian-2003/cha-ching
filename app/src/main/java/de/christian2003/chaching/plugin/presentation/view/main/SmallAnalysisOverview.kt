@@ -45,6 +45,7 @@ import de.christian2003.chaching.plugin.presentation.model.ChartColorGenerator
 import de.christian2003.chaching.plugin.presentation.model.TypeShapes
 import de.christian2003.chaching.plugin.presentation.ui.composables.Shape
 import de.christian2003.chaching.plugin.presentation.ui.theme.isDarkTheme
+import de.christian2003.chaching.plugin.presentation.ui.theme.successColors
 import java.util.UUID
 import kotlin.math.abs
 
@@ -187,7 +188,7 @@ private fun SmallAnalysisBudgetDifferenceToLastMonth(
         modifier = modifier
             .clip(MaterialTheme.shapes.extraLarge)
             .background(when {
-                (differenceToPreviousMonth > 0.0) -> MaterialTheme.colorScheme.primaryContainer
+                (differenceToPreviousMonth > 0.0) -> MaterialTheme.successColors.successContainer
                 (differenceToPreviousMonth < 0.0) -> MaterialTheme.colorScheme.errorContainer
                 else -> MaterialTheme.colorScheme.surfaceContainer
             })
@@ -208,7 +209,7 @@ private fun SmallAnalysisBudgetDifferenceToLastMonth(
                 painter = painterResource(R.drawable.ic_increase),
                 contentDescription = "",
                 tint = when {
-                    (differenceToPreviousMonth > 0.0) -> MaterialTheme.colorScheme.primary
+                    (differenceToPreviousMonth > 0.0) -> MaterialTheme.successColors.success
                     (differenceToPreviousMonth < 0.0) -> MaterialTheme.colorScheme.error
                     else -> MaterialTheme.colorScheme.onSurface
                 },
@@ -226,7 +227,7 @@ private fun SmallAnalysisBudgetDifferenceToLastMonth(
                 AnnotatedString.fromHtml(stringResource(R.string.main_analysis_noDiffToLastMonthLabel))
             },
             color = when {
-                (differenceToPreviousMonth > 0.0) -> MaterialTheme.colorScheme.onPrimaryContainer
+                (differenceToPreviousMonth > 0.0) -> MaterialTheme.successColors.onSuccessContainer
                 (differenceToPreviousMonth < 0.0) -> MaterialTheme.colorScheme.onErrorContainer
                 else -> MaterialTheme.colorScheme.onSurface
             },
@@ -355,10 +356,10 @@ private fun SmallAnalysisDataDifferenceToPreviousMonth(
         modifier = modifier
             .clip(MaterialTheme.shapes.extraExtraLarge)
             .background(when {
-                (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.colorScheme.primaryContainer
+                (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.successColors.successContainer
                 (differenceToPreviousMonth < 0.0) && isSalary -> MaterialTheme.colorScheme.errorContainer
                 (differenceToPreviousMonth > 0.0) && !isSalary -> MaterialTheme.colorScheme.errorContainer
-                (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.colorScheme.primaryContainer
+                (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.successColors.successContainer
                 else -> MaterialTheme.colorScheme.surfaceContainerHighest
             })
     ) {
@@ -381,10 +382,10 @@ private fun SmallAnalysisDataDifferenceToPreviousMonth(
                 painter = painterResource(R.drawable.ic_increase),
                 contentDescription = "",
                 tint = when {
-                    (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.colorScheme.primary
+                    (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.successColors.success
                     (differenceToPreviousMonth < 0.0) && isSalary -> MaterialTheme.colorScheme.error
                     (differenceToPreviousMonth > 0.0) && !isSalary -> MaterialTheme.colorScheme.error
-                    (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.colorScheme.primary
+                    (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.successColors.success
                     else -> MaterialTheme.colorScheme.onSurface
                 },
                 modifier = Modifier
@@ -401,10 +402,10 @@ private fun SmallAnalysisDataDifferenceToPreviousMonth(
                 AnnotatedString.fromHtml(stringResource(R.string.main_analysis_noDiffToLastMonthLabel))
             },
             color = when {
-                (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.colorScheme.onPrimaryContainer
+                (differenceToPreviousMonth > 0.0) && isSalary -> MaterialTheme.successColors.onSuccessContainer
                 (differenceToPreviousMonth < 0.0) && isSalary -> MaterialTheme.colorScheme.onErrorContainer
                 (differenceToPreviousMonth > 0.0) && !isSalary -> MaterialTheme.colorScheme.onErrorContainer
-                (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.colorScheme.onPrimaryContainer
+                (differenceToPreviousMonth < 0.0) && !isSalary -> MaterialTheme.successColors.onSuccessContainer
                 else -> MaterialTheme.colorScheme.onSurface
             },
             style = MaterialTheme.typography.bodyMedium,

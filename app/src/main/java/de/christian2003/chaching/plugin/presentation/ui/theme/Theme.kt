@@ -2,6 +2,7 @@ package de.christian2003.chaching.plugin.presentation.ui.theme
 
 import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
@@ -9,6 +10,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
@@ -279,7 +281,7 @@ fun ChaChingTheme(
 	contrast: ThemeContrast = ThemeContrast.Normal,
 	content: @Composable() () -> Unit
 ) {
-	val colorScheme = when {
+	val colorScheme: ColorScheme = when {
 		dynamicColor -> {
 			val context = LocalContext.current
 			if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -296,11 +298,29 @@ fun ChaChingTheme(
 		}
 	}
 
+	val successScheme: SuccessColorScheme = when {
+		darkTheme -> when (contrast) {
+			ThemeContrast.High -> successHighContrastDarkColorScheme
+			ThemeContrast.Medium -> successMediumContrastDarkColorScheme
+			ThemeContrast.Normal -> successDarkScheme
+		}
+		else -> when (contrast) {
+			ThemeContrast.High -> successHighContrastLightColorScheme
+			ThemeContrast.Medium -> successMediumContrastLightColorScheme
+			ThemeContrast.Normal -> successLightScheme
+		}
+	}
+
 	MaterialExpressiveTheme(
 		colorScheme = colorScheme,
-		typography = AppTypography,
-		content = content
-	)
+		typography = AppTypography
+	) {
+		CompositionLocalProvider(
+			LocalSuccessColors provides successScheme
+		) {
+			content()
+		}
+	}
 }
 
 
