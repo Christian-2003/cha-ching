@@ -32,7 +32,9 @@ import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTab
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabTypeDto
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.OverviewTabDto
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import java.time.format.DateTimeFormatter
 
 
@@ -156,15 +158,24 @@ class AnalysisViewModel @Inject constructor(
     }
 
 
-    fun displayType(type: DataTabTypeDto) {
+    fun displayType(type: DataTabTypeDto, options: DataTabOptions) {
         displayedTypeInfo = type
         val analysisResult: LargeAnalysisResult? = analysisResult
         if (analysisResult != null) {
-            transfersOfDisplayedType = getTransfersByTypeInTimeSpanUseCase.getTransfersByTypeInTimeSpan(
+            val transfersByTypeInTimeSpan: Flow<List<Transfer>> = getTransfersByTypeInTimeSpanUseCase.getTransfersByTypeInTimeSpan(
                 typeId = type.typeId,
                 start = analysisResult.currentSpan.start,
                 end = analysisResult.currentSpan.end
             )
+
+            transfersOfDisplayedType = transfersByTypeInTimeSpan.map { transfers ->
+                transfers.filter { transfer ->
+                    when (options) {
+                        DataTabOptions.Incomes -> transfer.transferValue.isSalary
+                        DataTabOptions.Expenses -> !transfer.transferValue.isSalary
+                    }
+                }
+            }
         }
     }
 

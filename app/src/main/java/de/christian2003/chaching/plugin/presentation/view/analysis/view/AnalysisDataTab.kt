@@ -212,7 +212,7 @@ fun AnalysisDataTab(
                     isFirst = index == 0,
                     isLast = index == data.types.size - 1,
                     onClick = {
-                        viewModel.displayType(type)
+                        viewModel.displayType(type, options)
                     },
                     onFormatValue = {
                         viewModel.formatValue(it)
