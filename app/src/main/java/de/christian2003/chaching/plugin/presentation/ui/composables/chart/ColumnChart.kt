@@ -131,6 +131,10 @@ private fun ChartYAxis(
     val hasNegativeValues: Boolean = negativeMaxValue < 0.0
 
     val totalValue: Double = positiveMaxValue + abs(negativeMaxValue)
+    if ((positiveMaxValue / totalValue).toFloat().isNaN()) {
+        return
+    }
+
     val positiveChartHeight: Dp = columnHeight * (positiveMaxValue / totalValue).toFloat()
     val negativeChartHeight: Dp = columnHeight * (abs(negativeMaxValue) / totalValue).toFloat()
     val baseline = positiveChartHeight

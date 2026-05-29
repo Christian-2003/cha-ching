@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -26,11 +27,13 @@ import de.christian2003.chaching.R
 import de.christian2003.chaching.domain.analysis.extensive.AnalysisPrecision
 import de.christian2003.chaching.domain.analysis.large.LargeAnalysisResult
 import de.christian2003.chaching.plugin.presentation.model.ChartColorGenerator
+import de.christian2003.chaching.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.chaching.plugin.presentation.ui.composables.Headline
 import de.christian2003.chaching.plugin.presentation.ui.composables.chart.ColumnChart
 import de.christian2003.chaching.plugin.presentation.ui.theme.isDarkTheme
 import de.christian2003.chaching.plugin.presentation.view.analysis.AnalysisViewModel
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.AnalysisTab
+import de.christian2003.chaching.plugin.presentation.view.analysis.model.DataTabOptions
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.DiagramDto
 import de.christian2003.chaching.plugin.presentation.view.analysis.model.OverviewTabDto
 import java.time.LocalDate
@@ -45,54 +48,66 @@ fun AnalysisOverviewTab(
     if (analysisResult == null) {
         return
     }
-    val overviewData: OverviewTabDto = viewModel.overviewTabData
-    val precision: AnalysisPrecision = analysisResult.metadata.precision
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        BudgetOverview(
-            precision = precision,
-            currentStart = analysisResult.currentSpan.start,
-            currentEnd = analysisResult.currentSpan.end,
-            currentBudget = overviewData.currentBudget,
-            currentAvg = overviewData.currentAvgBudgetPerNormalizedDate,
-            previousStart = analysisResult.previousSpan.start,
-            previousEnd = analysisResult.previousSpan.end,
-            previousBudget = overviewData.previousBudget,
-            previousAvg = overviewData.previousAvgBudgetPerNormalizedDate,
-            onFormatValue = {
-                viewModel.formatValue(it)
-            },
-            onFormatDate = {
-                viewModel.formatDate(it)
-            },
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
+    if (analysisResult.currentSpan.incomes.totalSum <= 0.0 && analysisResult.currentSpan.expenses.totalSum <= 0.0) {
+        //No data to show:
+        EmptyPlaceholder(
+            title = stringResource(R.string.analysis_emptyPlaceholder_titleOverview),
+            subtitle = stringResource(R.string.analysis_emptyPlaceholder_subtitle),
+            painter = painterResource(R.drawable.el_analysis),
+            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
+        )
+    }
+    else {
+        val overviewData: OverviewTabDto = viewModel.overviewTabData
+        val precision: AnalysisPrecision = analysisResult.metadata.precision
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            BudgetOverview(
+                precision = precision,
+                currentStart = analysisResult.currentSpan.start,
+                currentEnd = analysisResult.currentSpan.end,
+                currentBudget = overviewData.currentBudget,
+                currentAvg = overviewData.currentAvgBudgetPerNormalizedDate,
+                previousStart = analysisResult.previousSpan.start,
+                previousEnd = analysisResult.previousSpan.end,
+                previousBudget = overviewData.previousBudget,
+                previousAvg = overviewData.previousAvgBudgetPerNormalizedDate,
+                onFormatValue = {
+                    viewModel.formatValue(it)
+                },
+                onFormatDate = {
+                    viewModel.formatDate(it)
+                },
+                modifier = Modifier.padding(
+                    horizontal = dimensionResource(R.dimen.margin_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                )
             )
-        )
 
-        Headline(
-            title = when(precision) {
-                AnalysisPrecision.Month -> stringResource(R.string.analysis_overview_budgetPerMonth)
-                AnalysisPrecision.Quarter -> stringResource(R.string.analysis_overview_budgetPerQuarter)
-                AnalysisPrecision.Year -> stringResource(R.string.analysis_overview_budgetPerYear)
-            }
-        )
+            Headline(
+                title = when(precision) {
+                    AnalysisPrecision.Month -> stringResource(R.string.analysis_overview_budgetPerMonth)
+                    AnalysisPrecision.Quarter -> stringResource(R.string.analysis_overview_budgetPerQuarter)
+                    AnalysisPrecision.Year -> stringResource(R.string.analysis_overview_budgetPerYear)
+                }
+            )
 
-        BudgetsDiagram(
-            diagram = overviewData.budgetByNormalizedDateDiagram,
-            onFormatValue = {
-                viewModel.formatValue(it)
-            }
-        )
+            BudgetsDiagram(
+                diagram = overviewData.budgetByNormalizedDateDiagram,
+                onFormatValue = {
+                    viewModel.formatValue(it)
+                }
+            )
 
-        Box(
-            modifier = Modifier.height(bottomPadding)
-        )
+            Box(
+                modifier = Modifier.height(bottomPadding)
+            )
+        }
     }
 }
 
