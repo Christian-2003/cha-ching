@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import de.christian2003.chaching.R
 
 
@@ -23,8 +24,7 @@ import de.christian2003.chaching.R
  * @param title                 Title of the headline.
  * @param modifier              Modifier.
  * @param isEyecatcherVisible   Whether an eyecatcher is displayed for the endIcon.
- * @param indentToPrefixIcon    Whether to indent the headline with the same start padding used with
- *                              a prefix icon on GenericTextButton.
+ * @param indentation           Indentation of the headline text.
  * @param endIcon               End icon for the headline.
  * @param onClick               Callback invoked once the headline is clicked.
  */
@@ -33,7 +33,7 @@ fun Headline(
     title: String,
     modifier: Modifier = Modifier,
     isEyecatcherVisible: Boolean = false,
-    indentToPrefixIcon: Boolean = false,
+    indentation: HeadlineIndentation = HeadlineIndentation.None,
     endIcon: Painter? = null,
     onClick: (() -> Unit)? = null
 ) {
@@ -41,16 +41,17 @@ fun Headline(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = dimensionResource(R.dimen.padding_vertical))
             .clickable(onClick != null) {
                 onClick!!()
             }
             .padding(
-                start = if (indentToPrefixIcon) {
-                        dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal)
-                    } else {
-                        dimensionResource(R.dimen.margin_horizontal)
-                    },
+                start = when (indentation) {
+                    HeadlineIndentation.None -> dimensionResource(R.dimen.margin_horizontal)
+                    HeadlineIndentation.NoneNoPadding -> { 0.dp }
+                    HeadlineIndentation.TextLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.padding_horizontal)
+                    HeadlineIndentation.PrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal) * 2
+                    HeadlineIndentation.TextInputPrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal)
+                },
                 top = dimensionResource(R.dimen.padding_vertical),
                 end = dimensionResource(R.dimen.margin_horizontal),
                 bottom = dimensionResource(R.dimen.padding_vertical)
@@ -74,11 +75,27 @@ fun Headline(
                     modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
                 )
                 if (isEyecatcherVisible) {
-                    Eyecatcher(
-                        eyecatcherDefaults = EyecatcherDefaults.helpEyecatcherDefaults
-                    )
+                    Eyecatcher()
                 }
             }
         }
     }
+}
+
+
+/**
+ * Indentations for the headline.
+ *
+ * @property None                       No indentation.
+ * @property NoneNoPadding              No indentation and no horizontal padding.
+ * @property TextLevel                  Indentation to the text of list items.
+ * @property PrefixIconLevel            Indentation to the prefix icon of list items.
+ * @property TextInputPrefixIconLevel   Indentation to the text field with prefix icon.
+ */
+enum class HeadlineIndentation {
+    None,
+    NoneNoPadding,
+    TextLevel,
+    PrefixIconLevel,
+    TextInputPrefixIconLevel
 }

@@ -10,6 +10,7 @@ n/a
 ###### Features
 * Large analysis no longer crashes if budget for timespan is negative.
 * Add new icons for transfer types.
+* Change indentation for headlines on `SettingsScreen` to better align with other texts.
 
 <br/>
 

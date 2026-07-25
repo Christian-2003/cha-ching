@@ -59,6 +59,7 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import de.christian2003.chaching.domain.apps.AppItem
+import de.christian2003.chaching.plugin.presentation.ui.composables.HeadlineIndentation
 import de.christian2003.chaching.plugin.presentation.ui.composables.ListItemContainer
 import de.christian2003.chaching.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.chaching.plugin.presentation.ui.theme.ThemeContrast
@@ -163,6 +164,8 @@ fun SettingsScreen(
             item {
                 Headline(
                     title = stringResource(R.string.settings_customization),
+                    indentation = HeadlineIndentation.PrefixIconLevel,
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
                 )
                 SettingsItemSwitch(
                     title = stringResource(R.string.settings_customization_globalThemeTitle),
@@ -204,6 +207,8 @@ fun SettingsScreen(
             item {
                 Headline(
                     title = stringResource(R.string.settings_data),
+                    indentation = HeadlineIndentation.PrefixIconLevel,
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
                 )
                 SettingsItemButton(
                     setting = stringResource(R.string.settings_data_typesTitle),
@@ -252,6 +257,8 @@ fun SettingsScreen(
             item {
                 Headline(
                     title = stringResource(R.string.settings_help),
+                    indentation = HeadlineIndentation.PrefixIconLevel,
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
                 )
                 SettingsItemButton(
                     setting = stringResource(R.string.settings_help_helpMessagesTitle),
@@ -276,6 +283,8 @@ fun SettingsScreen(
             item {
                 Headline(
                     title = stringResource(R.string.settings_about),
+                    indentation = HeadlineIndentation.PrefixIconLevel,
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
                 )
                 SettingsItemButton(
                     setting = stringResource(R.string.settings_about_licensesTitle),
@@ -645,6 +654,8 @@ private fun AppsSection(
         ) {
             Headline(
                 title = stringResource(R.string.settings_apps),
+                indentation = HeadlineIndentation.PrefixIconLevel,
+                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
             )
             apps.forEachIndexed { index, app ->
                 ListItemContainer(
