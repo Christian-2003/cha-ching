@@ -28,9 +28,6 @@ data class LargeDiagram(
             require(max == 0.0) { "Max value must be 0.0 because diagram is empty" }
         }
         require(min <= max) { "Min value must be smaller than max value" }
-        values.forEach { value ->
-            require(value >= 0.0) { "All values must not be negative" }
-        }
     }
 
 }

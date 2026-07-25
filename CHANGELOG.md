@@ -8,7 +8,7 @@
 n/a
 
 ###### Features
-* n/a
+* Large analysis no longer crashes if budget for timespan is negative.
 
 <br/>
 
