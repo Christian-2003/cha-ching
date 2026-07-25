@@ -2,6 +2,16 @@
 
 # Changelog
 
+## 1.3.2 (XXXX-XX-XX)
+
+###### Release Highlights
+n/a
+
+###### Features
+* n/a
+
+<br/>
+
 ## 1.3.1 (2026-07-25)
 
 ###### Release Highlights
