@@ -25,7 +25,7 @@ Bugfixes and UX improvements.
 
 <br/>
 
-## 1.3.0 (2025-10-01)
+## 1.3.0 (2026-01-10)
 
 ###### Release Highlights
 Regular expenses can be tracked, updates to analysis as well as major changes to user interface.
