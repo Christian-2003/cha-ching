@@ -2,7 +2,20 @@
 
 # Changelog
 
-## 1.3.0 (2025-01-10)
+## 1.3.1 (2026-07-25)
+
+###### Release Highlights
+Bugfixes and UX improvements.
+
+###### Features
+* APK updates are no longer tracked and downloaded through GitHub. Instead, a custom REST API is used.
+* Analysis no longer crashes if timespan without data is selected. Instead, an empty placeholder is displayed.
+* `AnalysisTypeSheet` now only displays incomes OR expenses of transfers (depending on context of sheet).
+* Incomes and positive trends are now displayed with green color instead of MD primary color.
+
+<br/>
+
+## 1.3.0 (2025-10-01)
 
 ###### Release Highlights
 Regular expenses can be tracked, updates to analysis as well as major changes to user interface.
