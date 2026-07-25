@@ -9,6 +9,7 @@ n/a
 
 ###### Features
 * Large analysis no longer crashes if budget for timespan is negative.
+* Add new icons for transfer types.
 
 <br/>
 

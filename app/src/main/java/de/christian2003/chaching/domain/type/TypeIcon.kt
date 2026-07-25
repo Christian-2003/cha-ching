@@ -32,6 +32,16 @@ enum class TypeIcon(
 
     SHARES(R.drawable.type_shares),
 
-    VACATION(R.drawable.type_vacation)
+    VACATION(R.drawable.type_vacation),
+
+    ELDERLY(R.drawable.type_elderly),
+
+    CRYPTO(R.drawable.type_crypto),
+
+    HOUSE(R.drawable.type_house),
+
+    SAVINGS(R.drawable.type_savings),
+
+    MONEY(R.drawable.type_money)
 
 }
