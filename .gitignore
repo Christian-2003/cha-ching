@@ -11,9 +11,13 @@
 /.idea/AndroidProjectSystem.xml
 /.idea/other.xml
 /.idea/runConfigurations.xml
+/.kotlin/errors/*
+/app/release/*
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+
+/releases/*
